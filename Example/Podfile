@@ -1,0 +1,10 @@
+target 'TBStateMachine', :exclusive => true do
+  pod "TBStateMachine", :path => "../"
+end
+
+target 'Tests', :exclusive => true do
+  pod "TBStateMachine", :path => "../"
+
+  pod 'Specta', '~> 0.2.1'
+  pod 'Expecta'
+end
