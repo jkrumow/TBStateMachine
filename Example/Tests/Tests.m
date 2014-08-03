@@ -68,7 +68,7 @@ afterEach(^{
 
 describe(@"Will throw exceptions when configured improperly.", ^{
     
-    it(@"throws TBStateMachineException when state object has wrong type.", ^{
+    it(@"throws TBStateMachineException when state object does not implement the TBStateMachineNode protocol.", ^{
         id object = [[NSObject alloc] init];
         NSArray *states = @[stateA, stateB, object];
         expect(^{
@@ -85,7 +85,7 @@ describe(@"Will throw exceptions when configured improperly.", ^{
         
     });
     
-    it(@"throws TBStateMachineException when initial state has not been set.", ^{
+    it(@"throws TBStateMachineException when initial state has not been defined before setup.", ^{
         NSArray *states = @[stateA, stateB];
         [stateMachine setStates:states];
         
@@ -192,7 +192,7 @@ describe(@"Will handle events.", ^{
 
 describe(@"Will allow re-entry of states when configured properly.", ^{
     
-    it(@"re-enters a state when configured.", ^{
+    it(@"re-enters a state when allowed by configured.", ^{
         
         NSArray *states = @[stateA, stateB];
         
@@ -242,7 +242,7 @@ describe(@"Will allow re-entry of states when configured properly.", ^{
         expect(nextStateB).to.equal(stateB);
     });
     
-    it(@"throws an exception when re-entering a state is not allowed.", ^{
+    it(@"throws an exception on re-entering a state when not allowed by configuration.", ^{
         
         NSArray *states = @[stateA, stateB];
         
@@ -288,9 +288,9 @@ describe(@"Will allow re-entry of states when configured properly.", ^{
     
 });
 
-describe(@"Will allow sub statemachines.", ^{
+describe(@"Will manage sub statemachines.", ^{
     
-    it(@"can switch into sub state machines and out of it.", ^{
+    it(@"can handle events to switch into and out of sub statemachines.", ^{
         
         __block id<TBStateMachineNode> previousStateA;
         __block TBStateMachineTransition *transitionEnterA;
@@ -406,7 +406,7 @@ describe(@"Will allow sub statemachines.", ^{
 
 describe(@"Will allow parallel states and state machines.", ^{
     
-    it(@"can switch into parallel states and state machines and out of it.", ^{
+    it(@"can handle events to switch into and out of parallel states and statemachines.", ^{
         
         __block id<TBStateMachineNode> previousStateA;
         __block TBStateMachineTransition *previousStateTransitionA;
