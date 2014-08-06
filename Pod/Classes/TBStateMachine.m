@@ -123,12 +123,12 @@
         transition = [_currentState handleEvent:event];
     }
     if (transition && transition.destinationState) {
-        
         if ([_priv_states objectForKey:transition.destinationState.name]) {
             [self switchState:transition.destinationState transition:transition];
         } else {
             // exit current state
             [self switchState:nil transition:transition];
+            
             // bubble up to parent statemachine
             return transition;
         }
