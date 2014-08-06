@@ -70,6 +70,9 @@
         
         // first come first serve
         nextParentTransition = [stateMachineNode handleEvent:event];
+        if (nextParentTransition) {
+            break;
+        }
     }
     // return first parent state
     return nextParentTransition;

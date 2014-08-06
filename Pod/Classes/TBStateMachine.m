@@ -122,7 +122,7 @@
     if (_currentState) {
         transition = [_currentState handleEvent:event];
     }
-    if (transition) {
+    if (transition && transition.destinationState) {
         
         if ([_priv_states objectForKey:transition.destinationState.name]) {
             [self switchState:transition.destinationState transition:transition];

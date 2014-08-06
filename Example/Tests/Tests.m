@@ -66,7 +66,7 @@ afterEach(^{
     parallelStates = nil;
 });
 
-describe(@"Will throw exceptions when configured improperly.", ^{
+describe(@"TBStateMachine will throw exceptions when configured improperly.", ^{
     
     it(@"throws TBStateMachineException when state object does not implement the TBStateMachineNode protocol.", ^{
         id object = [[NSObject alloc] init];
@@ -96,7 +96,7 @@ describe(@"Will throw exceptions when configured improperly.", ^{
     
 });
 
-describe(@"Will correctly set up and tear down statemachine.", ^{
+describe(@"TBStateMachine will correctly set up and tear down statemachine.", ^{
     
     it(@"enters into initial state and exits it", ^{
         
@@ -133,7 +133,7 @@ describe(@"Will correctly set up and tear down statemachine.", ^{
     
 });
 
-describe(@"Will handle events.", ^{
+describe(@"TBStateMachine will handle events.", ^{
     
     it(@"handles an event and switches to the specified state.", ^{
         
@@ -190,7 +190,7 @@ describe(@"Will handle events.", ^{
     
 });
 
-describe(@"Will allow re-entry of states when configured properly.", ^{
+describe(@"TBStateMachine will allow re-entry of states when configured properly.", ^{
     
     it(@"re-enters a state when allowed by configured.", ^{
         
@@ -288,7 +288,7 @@ describe(@"Will allow re-entry of states when configured properly.", ^{
     
 });
 
-describe(@"Will manage sub statemachines.", ^{
+describe(@"TBStateMachine will manage sub statemachines nesting instances of TBStateMachine.", ^{
     
     it(@"can handle events to switch into and out of sub statemachines.", ^{
         
@@ -404,7 +404,7 @@ describe(@"Will manage sub statemachines.", ^{
     
 });
 
-describe(@"Will allow parallel states and state machines.", ^{
+describe(@"TBStateMachine will allow parallel states and state machines using TBStateMachineParallelWrapper.", ^{
     
     it(@"can handle events to switch into and out of parallel states and statemachines.", ^{
         
