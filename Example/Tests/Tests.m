@@ -66,7 +66,8 @@ afterEach(^{
     parallelStates = nil;
 });
 
-describe(@"TBStateMachine will throw exceptions when configured improperly.", ^{
+
+describe(@"TBStateMachine", ^{
     
     it(@"throws TBStateMachineException when state object does not implement the TBStateMachineNode protocol.", ^{
         id object = [[NSObject alloc] init];
@@ -93,10 +94,6 @@ describe(@"TBStateMachine will throw exceptions when configured improperly.", ^{
             [stateMachine setUp];
         }).to.raise(TBStateMachineException);
     });
-    
-});
-
-describe(@"TBStateMachine will correctly set up and tear down statemachine.", ^{
     
     it(@"enters into initial state and exits it", ^{
         
@@ -130,10 +127,6 @@ describe(@"TBStateMachine will correctly set up and tear down statemachine.", ^{
         expect(transitionExitA.sourceState).to.equal(stateA);
         expect(transitionExitA.destinationState).to.beNil;
     });
-    
-});
-
-describe(@"TBStateMachine will handle events.", ^{
     
     it(@"handles an event and switches to the specified state.", ^{
         
@@ -188,13 +181,9 @@ describe(@"TBStateMachine will handle events.", ^{
         expect(transition.destinationState).to.equal(stateC);
     });
     
-});
-
-describe(@"TBStateMachine will allow re-entry of states when configured properly.", ^{
-    
     it(@"re-enters a state when allowed by configured.", ^{
         
-        NSArray *states = @[stateA, stateB];
+        NSArray *states = @[stateA];
         
         __block TBStateMachineState *previousStateA;
         [stateA setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
@@ -205,24 +194,10 @@ describe(@"TBStateMachine will allow re-entry of states when configured properly
         [stateA setExitBlock:^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
             nextStateA = nextState;
         }];
-        
-        __block TBStateMachineState *previousStateB;
-        [stateB setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
-            previousStateB = previousState;
-        }];
-        
-        __block TBStateMachineState *nextStateB;
-        [stateB setExitBlock:^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
-            nextStateB = nextState;
-        }];
-        
+
+        __block typeof (stateB) weakStateA = stateA;
         [stateA addEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
-            return stateB;
-        }];
-        
-        __block typeof (stateB) weakStateB = stateB;
-        [stateB addEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
-            return weakStateB;
+            return weakStateA;
         }];
         
         [stateMachine setStates:states];
@@ -230,21 +205,16 @@ describe(@"TBStateMachine will allow re-entry of states when configured properly
         
         stateMachine.allowReentrantStates = YES;
         [stateMachine setUp];
-        [stateMachine handleEvent:eventA];
-        
-        expect(previousStateA).to.beNil;
-        expect(nextStateA).to.equal(stateB);
-        expect(previousStateB).to.equal(stateA);
         
         [stateMachine handleEvent:eventA];
         
-        expect(previousStateB).to.equal(stateB);
-        expect(nextStateB).to.equal(stateB);
+        expect(previousStateA).to.equal(stateA);
+        expect(nextStateA).to.equal(stateA);
     });
     
     it(@"throws an exception on re-entering a state when not allowed by configuration.", ^{
         
-        NSArray *states = @[stateA, stateB];
+        NSArray *states = @[stateA];
         
         __block TBStateMachineState *previousStateA;
         [stateA setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
@@ -256,18 +226,9 @@ describe(@"TBStateMachine will allow re-entry of states when configured properly
             nextStateA = nextState;
         }];
         
-        __block TBStateMachineState *previousStateB;
-        [stateB setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
-            previousStateB = previousState;
-        }];
-        
+        __block typeof (stateB) weakStateA = stateA;
         [stateA addEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
-            return stateB;
-        }];
-        
-        __block typeof (stateB) weakStateB = stateB;
-        [stateB addEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
-            return weakStateB;
+            return weakStateA;
         }];
         
         stateMachine.allowReentrantStates = NO;
@@ -275,20 +236,11 @@ describe(@"TBStateMachine will allow re-entry of states when configured properly
         [stateMachine setInitialState:stateA];
         
         [stateMachine setUp];
-        [stateMachine handleEvent:eventA];
-        
-        expect(previousStateA).to.beNil;
-        expect(nextStateA).to.equal(stateB);
-        expect(previousStateB).to.equal(stateA);
         
         expect(^{
             [stateMachine handleEvent:eventA];
         }).to.raise(TBStateMachineException);
     });
-    
-});
-
-describe(@"TBStateMachine will manage sub statemachines nesting instances of TBStateMachine.", ^{
     
     it(@"can handle events to switch into and out of sub statemachines.", ^{
         
@@ -401,11 +353,7 @@ describe(@"TBStateMachine will manage sub statemachines nesting instances of TBS
         expect(nextStateA).to.equal(stateB);
         expect(previousStateB).to.equal(stateA);
     });
-    
-});
-
-describe(@"TBStateMachine will allow parallel states and state machines using TBStateMachineParallelWrapper.", ^{
-    
+        
     it(@"can handle events to switch into and out of parallel states and statemachines.", ^{
         
         __block id<TBStateMachineNode> previousStateA;
