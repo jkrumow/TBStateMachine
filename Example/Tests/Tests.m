@@ -10,7 +10,8 @@
 
 SpecBegin(StateMachine)
 
-NSString * const EVENT_NAME = @"DummyEvent";
+NSString * const EVENT_NAME_A = @"DummyEventA";
+NSString * const EVENT_NAME_B = @"DummyEventB";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
@@ -23,10 +24,12 @@ __block TBStateMachineState *stateE;
 __block TBStateMachineState *stateF;
 __block TBStateMachineState *stateG;
 __block TBStateMachineEvent *eventA;
+__block TBStateMachineEvent *eventB;
 __block TBStateMachine *subStateMachineA;
 __block TBStateMachine *subStateMachineB;
 __block TBStateMachineParallelWrapper *parallelStates;
-__block NSDictionary *eventData;
+__block NSDictionary *eventDataA;
+__block NSDictionary *eventDataB;
 
 beforeEach(^{
     stateMachine = [[TBStateMachine alloc] initWithName:@"StateMachine"];
@@ -37,8 +40,12 @@ beforeEach(^{
     stateE = [[TBStateMachineState alloc] initWithName:@"StateE"];
     stateF = [[TBStateMachineState alloc] initWithName:@"StateF"];
     stateG = [[TBStateMachineState alloc] initWithName:@"StateG"];
-    eventData = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-    eventA = [[TBStateMachineEvent alloc] initWithName:EVENT_NAME data:eventData];
+    
+    eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
+    eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
+    eventA = [[TBStateMachineEvent alloc] initWithName:EVENT_NAME_A data:eventDataA];
+    eventB = [[TBStateMachineEvent alloc] initWithName:EVENT_NAME_B data:eventDataB];
+    
     subStateMachineA = [[TBStateMachine alloc] initWithName:@"SubStateMachineA"];
     subStateMachineB = [[TBStateMachine alloc] initWithName:@"SubStateMachineB"];
     parallelStates = [[TBStateMachineParallelWrapper alloc] initWithName:@"ParallelWrapper"];
@@ -57,15 +64,165 @@ afterEach(^{
     stateF = nil;
     stateG = nil;
     
-    eventData = nil;
+    eventDataA = nil;
+    eventDataB = nil;
     eventA = nil;
+    eventB = nil;
     
     [subStateMachineA tearDown];
     [subStateMachineB tearDown];
+    subStateMachineA = nil;
     subStateMachineB = nil;
     parallelStates = nil;
 });
 
+describe(@"TBStateMachineState", ^{
+    
+    it(@"registers TBStateMachineEventBlock instances by the name of a provided TBStateMachineEvent instance.", ^{
+        
+        [stateA addEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event) {
+            return nil;
+        }];
+        
+        NSDictionary *registeredEvents = stateA.eventHandlers;
+        expect(registeredEvents.allKeys).to.haveCountOf(1);
+        expect(registeredEvents).to.contain(eventA.name);
+    });
+    
+    it(@"handles events by returning nil or a TBStateMachineTransition containing source and destination state.", ^{
+        
+        [stateA addEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event) {
+            return nil;
+        }];
+        
+        [stateA addEvent:eventB handler:^id<TBStateMachineNode>(TBStateMachineEvent *event) {
+            return stateB;
+        }];
+        
+        TBStateMachineTransition *resultA = [stateA handleEvent:eventA];
+        expect(resultA).to.beNil;
+        
+        TBStateMachineTransition *resultB = [stateA handleEvent:eventB];
+        expect(resultB.sourceState).to.equal(stateA);
+        expect(resultB.destinationState).to.equal(stateB);
+    });
+});
+
+describe(@"TBStateMachineParallelWrapper", ^{
+
+    it(@"throws TBStateMachineException when state object does not implement the TBStateMachineNode protocol.", ^{
+        id object = [[NSObject alloc] init];
+        NSArray *states = @[stateA, stateB, object];
+        expect(^{
+            [parallelStates setStates:states];
+        }).to.raise(TBStateMachineException);
+    });
+    
+    it(@"switches states on all registered states", ^{
+    
+        __block id<TBStateMachineNode> previousStateA;
+        __block TBStateMachineTransition *previousStateTransitionA;
+        [stateA setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
+            previousStateA = previousState;
+            previousStateTransitionA = transition;
+        }];
+        
+        __block TBStateMachineState *nextStateA;
+        [stateA setExitBlock:^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
+            nextStateA = nextState;
+        }];
+        
+        __block TBStateMachineState *previousStateB;
+        [stateB setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
+            previousStateB = previousState;
+        }];
+        
+        __block id<TBStateMachineNode> nextStateB;
+        [stateB setExitBlock:^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
+            nextStateB = nextState;
+        }];
+        
+        __block TBStateMachineState *previousStateC;
+        [stateC setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
+            previousStateC = previousState;
+        }];
+        
+        __block TBStateMachineState *nextStateC;
+        [stateC setExitBlock:^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
+            nextStateC = nextState;
+        }];
+        
+        __block TBStateMachineState *previousStateD;
+        [stateD setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
+            previousStateD = previousState;
+        }];
+        
+        __block TBStateMachineState *nextStateD;
+        [stateD setExitBlock:^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
+            nextStateD = nextState;
+        }];
+        
+        
+        NSArray *parallelSubStateMachines = @[stateA, stateB, stateC, stateD];
+        [parallelStates setStates:parallelSubStateMachines];
+        
+        [parallelStates enter:stateF transition:nil];
+
+        expect(previousStateA).to.equal(stateF);
+        expect(previousStateB).to.equal(stateF);
+        expect(previousStateC).to.equal(stateF);
+        expect(previousStateD).to.equal(stateF);
+        
+        [parallelStates exit:stateE transition:nil];
+        
+        expect(nextStateA).to.equal(stateE);
+        expect(nextStateB).to.equal(stateE);
+        expect(nextStateC).to.equal(stateE);
+        expect(nextStateD).to.equal(stateE);
+    });
+    
+    it(@"handles events on all registered states and will return the first valid follow-up state returned by the contained states.", ^{
+        
+        __block BOOL stateAHasHandledEvent = NO;
+        [stateA addEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event) {
+            stateAHasHandledEvent = YES;
+            return nil;
+        }];
+        
+        __block BOOL stateBHasHandledEvent = NO;
+        [stateB addEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event) {
+            stateBHasHandledEvent = YES;
+            return nil;
+        }];
+        
+        __block BOOL stateCHasHandledEvent = NO;
+        [stateC addEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event) {
+            stateCHasHandledEvent = YES;
+            return stateE;
+        }];
+        
+        __block BOOL stateDHasHandledEvent = NO;
+        [stateD addEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event) {
+            stateDHasHandledEvent = YES;
+            return stateF;
+        }];
+        
+        NSArray *states = @[stateA, stateB, stateC, stateD];
+        [parallelStates setStates:states];
+        TBStateMachineTransition *result = [parallelStates handleEvent:eventA];
+        
+        expect(stateAHasHandledEvent).to.equal(YES);
+        expect(stateBHasHandledEvent).to.equal(YES);
+        expect(stateCHasHandledEvent).to.equal(YES);
+        expect(stateDHasHandledEvent).to.equal(YES);
+        
+        expect(result).toNot.beNil;
+        expect(result.sourceState).to.equal(stateC);
+        expect(result.destinationState).to.equal(stateE);
+    });
+
+
+});
 
 describe(@"TBStateMachine", ^{
     
@@ -195,7 +352,7 @@ describe(@"TBStateMachine", ^{
             nextStateA = nextState;
         }];
 
-        __block typeof (stateB) weakStateA = stateA;
+        __block typeof (stateA) weakStateA = stateA;
         [stateA addEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
             return weakStateA;
         }];
@@ -226,7 +383,7 @@ describe(@"TBStateMachine", ^{
             nextStateA = nextState;
         }];
         
-        __block typeof (stateB) weakStateA = stateA;
+        __block typeof (stateA) weakStateA = stateA;
         [stateA addEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
             return weakStateA;
         }];

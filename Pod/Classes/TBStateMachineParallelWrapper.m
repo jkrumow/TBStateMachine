@@ -69,9 +69,9 @@
     for (id<TBStateMachineNode> stateMachineNode in _priv_parallelStates) {
         
         // first come first serve
-        nextParentTransition = [stateMachineNode handleEvent:event];
-        if (nextParentTransition) {
-            break;
+        TBStateMachineTransition *result = [stateMachineNode handleEvent:event];
+        if (result.destinationState && nextParentTransition == nil) {
+            nextParentTransition = result;
         }
     }
     // return first parent state
