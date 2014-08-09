@@ -16,6 +16,15 @@
 @interface TBStateMachineParallelWrapper : NSObject <TBStateMachineNode>
 
 /**
+ *  Creates a `TBStateMachineParallelWrapper` instance from a given name.
+ *
+ *  @param name The specified parallel wrapper name.
+ *
+ *  @return The parallel wrapper instance.
+ */
++ (TBStateMachineParallelWrapper *)parallelWrapperWithName:(NSString *)name;
+
+/**
  *  Initializes a `TBStateMachineParallelWrapper` with a specified name.
  *
  *  @param name The name of this wrapper. Must be unique.

@@ -12,7 +12,7 @@
 
 @interface TBStateMachineParallelWrapper ()
 
-@property (nonatomic, strong) NSString *name;
+@property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
 @property (nonatomic, strong) NSOperationQueue *parallelQueue;
 
@@ -20,12 +20,17 @@
 
 @implementation TBStateMachineParallelWrapper
 
++ (TBStateMachineParallelWrapper *)parallelWrapperWithName:(NSString *)name;
+{
+	return [[TBStateMachineParallelWrapper alloc] initWithName:name];
+}
+
 - (instancetype)initWithName:(NSString *)name
 {
     self = [super init];
     if (self) {
-        _name = name;
-        _priv_parallelStates = [[NSMutableArray alloc] init];
+        _name = name.copy;
+        _priv_parallelStates = [NSMutableArray new];
     }
     return self;
 }
@@ -42,11 +47,6 @@
             @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
         }
     }
-}
-
-- (NSString *)stateName
-{
-	return _name;
 }
 
 - (void)enter:(id<TBStateMachineNode>)previousState transition:(TBStateMachineTransition *)transition

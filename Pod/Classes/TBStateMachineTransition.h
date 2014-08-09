@@ -40,11 +40,6 @@ typedef void (^TBStateMachineTransitionBlock)(id<TBStateMachineNode>, id<TBState
 @property (nonatomic, strong, readonly) NSMutableDictionary *eventHandlers;
 
 /**
- *  Returns `YES` when the travel block is still being executed.
- */
-@property (nonatomic, assign, readonly, getter = isTravelling) BOOL travelling;
-
-/**
  *  Creates a `TBStateMachineTransition` instance from a given source and destination state.
  *
  *  @param sourceState The specified source state

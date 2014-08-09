@@ -10,9 +10,7 @@
 
 @interface TBStateMachineState ()
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) TBStateMachineStateBlock enterBlock;
-@property (nonatomic, strong) TBStateMachineStateBlock exitBlock;
+@property (nonatomic, copy) NSString *name;
 
 - (BOOL)_canHandleEvent:(TBStateMachineEvent *)event;
 
@@ -20,9 +18,14 @@
 
 @implementation TBStateMachineState
 
++ (TBStateMachineState *)stateWithName:(NSString *)name;
+{
+    return [[TBStateMachineState alloc] initWithName:name];
+}
+
 + (TBStateMachineState *)stateWithName:(NSString *)name enterBlock:(TBStateMachineStateBlock)enterBlock exitBlock:(TBStateMachineStateBlock)exitBlock;
 {
-	TBStateMachineState *state = [[TBStateMachineState alloc] initWithName:name];
+	TBStateMachineState *state = [TBStateMachineState stateWithName:name];
     [state setEnterBlock:enterBlock];
     [state setExitBlock:exitBlock];
     return state;
@@ -32,25 +35,20 @@
 {
     self = [super init];
     if (self) {
-        _name = name;
-        _eventHandlers = [[NSMutableDictionary alloc] init];
+        _name = name.copy;
+        _eventHandlers = [NSMutableDictionary new];
     }
     return self;
 }
 
-- (void)addEvent:(TBStateMachineEvent *)event handler:(TBStateMachineEventBlock)handler
+- (void)registerEvent:(TBStateMachineEvent *)event handler:(TBStateMachineEventBlock)handler
 {
     [_eventHandlers setObject:handler forKey:event.name];
 }
 
-- (void)setEnterBlock:(TBStateMachineStateBlock)enterBlock
+- (void)unregisterEvent:(TBStateMachineEvent *)event;
 {
-    _enterBlock = enterBlock;
-}
-
-- (void)setExitBlock:(TBStateMachineStateBlock)exitBlock
-{
-    _exitBlock = exitBlock;
+	[_eventHandlers removeObjectForKey:event.name];
 }
 
 - (BOOL)_canHandleEvent:(TBStateMachineEvent *)event
@@ -59,11 +57,6 @@
 }
 
 #pragma mark - TBStateMachineNode
-
-- (NSString *)stateName
-{
-    return _name;
-}
 
 - (void)enter:(id<TBStateMachineNode>)previousState transition:(TBStateMachineTransition *)transition
 {

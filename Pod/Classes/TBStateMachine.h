@@ -24,7 +24,7 @@
 /**
  *  The state machine's name.
  */
-@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 /**
  *  Set to `YES` to allow states to re-enter themselves.
@@ -40,6 +40,15 @@
  *  The current state the state machine resides in. Set to `nil` if the state machine currently travels a transition.
  */
 @property (nonatomic, strong, readonly) id<TBStateMachineNode> currentState;
+
+/**
+ *  Creates a `TBStateMachine` instance from a given name.
+ *
+ *  @param name The specified state machine name.
+ *
+ *  @return The state machine instance.
+ */
++ (TBStateMachine *)stateMachineWithName:(NSString *)name;
 
 /**
  *  Initializes a `TBStateMachine` with a specified name.

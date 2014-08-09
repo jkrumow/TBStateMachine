@@ -28,12 +28,31 @@ typedef id<TBStateMachineNode> (^TBStateMachineEventBlock)(TBStateMachineEvent *
 /**
  *  The event's name.
  */
-@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 /**
  *  Optional user data that can be transmitted by the event.
  */
 @property (nonatomic, strong, readonly) NSDictionary *data;
+
+/**
+ *  Creates a `TBStateMachineEvent` instance from a given name.
+ *
+ *  @param name The specified event name.
+ *
+ *  @return The event instance.
+ */
++ (TBStateMachineEvent *)eventWithName:(NSString *)name;
+
+/**
+ *  Creates a `TBStateMachineEvent` instance from a given name and data.
+ *
+ *  @param name The specified event name.
+ *  @param ∂ata The specified event data.
+ *
+ *  @return The event instance.
+ */
++ (TBStateMachineEvent *)eventWithName:(NSString *)name data:(NSDictionary *)data;
 
 /**
  *  Initializes a `TBStateMachineEvent` with a specified name.

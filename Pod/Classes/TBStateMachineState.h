@@ -26,16 +26,35 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode>, TBStateMachineT
 @interface TBStateMachineState : NSObject<TBStateMachineNode>
 
 /**
+ *  Block that is executed when the state is entered.
+ */
+@property (nonatomic, strong) TBStateMachineStateBlock enterBlock;
+
+/**
+ *  Block that is executed when the state is exited.
+ */
+@property (nonatomic, strong) TBStateMachineStateBlock exitBlock;
+
+/**
  *  All `TBStateMachineEvent` instances added to this state instance.
  */
 @property (nonatomic, strong, readonly) NSMutableDictionary *eventHandlers;
 
 /**
+ *  Creates a `TBStateMachineState` instance from a given name.
+ *
+ *  @param name The specified state name.
+ *
+ *  @return The state object.
+ */
++ (TBStateMachineState *)stateWithName:(NSString *)name;
+
+/**
  *  Creates a `TBStateMachineState` instance from a given name, enter and exit block.
  *
- *  @param name       The specified state name
- *  @param enterBlock The specified enter block
- *  @param exitBlock  The specified exit block
+ *  @param name       The specified state name.
+ *  @param enterBlock The specified enter block.
+ *  @param exitBlock  The specified exit block.
  *
  *  @return The state object
  */
@@ -51,12 +70,19 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode>, TBStateMachineT
 - (instancetype)initWithName:(NSString *)name;
 
 /**
- *  Adds a `TBStateMachineEvent` object.
+ *  Registers a `TBStateMachineEvent` object.
  *
  *  @param event   The given TBStateMachineEvent object.
  *  @param handler The corresponding `TBStateMachineEventBlock`.
  */
-- (void)addEvent:(TBStateMachineEvent *)event handler:(TBStateMachineEventBlock)handler;
+- (void)registerEvent:(TBStateMachineEvent *)event handler:(TBStateMachineEventBlock)handler;
+
+/**
+ *  Unregisteres a `TBStateMachineEvent` object.
+ *
+ *  @param event   The given TBStateMachineEvent object.
+ */
+- (void)unregisterEvent:(TBStateMachineEvent *)event;
 
 /**
  *  Sets the block that will be executed when the state is entered.

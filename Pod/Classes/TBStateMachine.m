@@ -10,7 +10,6 @@
 
 @interface TBStateMachine ()
 
-@property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong, readonly) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSOperationQueue *workerQueue;
 
@@ -20,14 +19,19 @@
 
 @implementation TBStateMachine
 
++ (TBStateMachine *)stateMachineWithName:(NSString *)name;
+{
+	return [[TBStateMachine alloc] initWithName:name];
+}
+
 - (instancetype)initWithName:(NSString *)name
 {
     self = [super init];
     if (self) {
-        _name = name;
-        _priv_states = [[NSMutableDictionary alloc] init];
+        _name = name.copy;
+        _priv_states = [NSMutableDictionary new];
         _allowReentrantStates = NO;
-        _workerQueue = [[NSOperationQueue alloc] init];
+        _workerQueue = [NSOperationQueue new];
         _workerQueue.maxConcurrentOperationCount = 1;
     }
     return self;
@@ -100,11 +104,6 @@
 }
 
 #pragma mark - TBStateMachineNode
-
-- (NSString *)stateName
-{
-    return _name;
-}
 
 - (void)enter:(id<TBStateMachineNode>)previousState transition:(TBStateMachineTransition *)transition
 {
