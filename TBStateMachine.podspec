@@ -1,14 +1,14 @@
 Pod::Spec.new do |s|
   s.name             = "TBStateMachine"
-  s.version          = "0.1.0"
-  s.summary          = "A statemachine implementation on Objective-C."
+  s.version          = "0.9.0"
+  s.summary          = "A lightweight statemachine implementation in Objective-C."
   s.description      = <<-DESC
-                       A statemachine implementation on Objective-C.
+                       A lightweight statemachine implementation in Objective-C.
 
                        Features:
-                       * feature this
-                       * feature that
-                       * feature those
+                       * nested and parallel states
+                       * event handling
+                       * block based API
                        
                        DESC
   s.homepage         = "https://github.com/tarbrain/TBStateMachine"

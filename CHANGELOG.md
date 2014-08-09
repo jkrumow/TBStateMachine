@@ -1,8 +1,11 @@
 # TBStateMachine CHANGELOG
 
-## 1.0.0
+## 0.9.0
 
-* initial release
-* features
-* features
-* features
+A lightweight statemachine implementation in Objective-C.
+
+### Features
+
+* nested and parallel states
+* event handling
+* block based API

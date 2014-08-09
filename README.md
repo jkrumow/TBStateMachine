@@ -39,7 +39,6 @@ stateA.exitBlock = ^(TBStateMachineState *nextState, TBStateMachineTransition *t
        
 };
 
-TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
 [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
     
     // ...
