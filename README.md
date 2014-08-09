@@ -25,23 +25,22 @@ it, simply add the following line to your Podfile:
 
 Create state objects, set enter and exit blocks and event handler:
 
-```objective-c
-TBStateMachineState *stateA = [[TBStateMachineState alloc] initWithName:@"StateA"];
-[stateA setEnterBlock:^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
+```
+TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
+stateA.enterBlock = ^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
         
     // ...
        
-}];
+};
     
-[stateA setExitBlock:^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
+stateA.exitBlock = ^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
         
     // ...
        
-}];
+};
 
-NSDictionary *eventData = // ...
-TBStateMachineEvent *eventA = [[TBStateMachineEvent alloc] initWithName:@"EventA" data:eventData];
-[stateA addEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
+TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
+[stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
     
     // ...
         
@@ -52,16 +51,15 @@ TBStateMachineEvent *eventA = [[TBStateMachineEvent alloc] initWithName:@"EventA
 
 Create a state machine instance:
 
-```objective-c
-TBStateMachine *stateMachine = [[TBStateMachine alloc] initWithName:@"StateMachine"];
+```
+TBStateMachine *stateMachine = [TBStateMachine stateMachineWithName:@"StateMachine"];
 ```
 
 Add states and set state machine up:
 
-```objective-c
-NSArray *states = @[stateA, stateB, ...];
-[stateMachine setStates:states];
-[stateMachine setInitialState:stateA];
+```
+stateMachine.states = @[stateA, stateB, ...];
+stateMachine.initialState = stateA;
 [stateMachine setup];
 ```
 
@@ -69,14 +67,12 @@ NSArray *states = @[stateA, stateB, ...];
 
 A TBStateMachine can also be nested as a sub state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
 
-```objective-c
-NSArray *subStates = @[stateC, stateD];
-TBStateMachine *subStateMachine = [[TBStateMachine alloc] initWithName:@"SubStateMachine"];
-[subStateMachine setStates:subStates];
-[subStateMachine setInitialState:stateC];
+```
+TBStateMachine *subStateMachine = [TBStateMachine stateMachineWithName:@"SubStateMachine"];
+subStateMachine.states = @[stateC, stateD];
+subStateMachine.initialState = stateC;
 
-NSArray *states = @[stateA, stateB, subStateMachine];
-[stateMachine setStates:states];
+stateMachine.states = @[stateA, stateB, subStateMachine];
 ```
 
 You do not need to call `- (void)setup` and `- (void)tearDown` since the implementations of `-(void)enter:transition:` and `- (void)exit:transition:` will do that.
@@ -85,32 +81,30 @@ You do not need to call `- (void)setup` and `- (void)tearDown` since the impleme
 
 To run multiple states and sub state machines use the `TBStateMachineParallelWrapper`:
 
-```objective-c
-TBStateMachineParallelWrapper *parallelWrapper = [[TBStateMachineParallelWrapper alloc] initWithName:@"ParallelWrapper"];
-NSArray *parallelStates = @[stateC, stateD, subStateMachine];
-[parallelWrapper setStates:parallelStates];
+```
+TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
+parallelWrapper.states = @[stateC, stateD, subStateMachine];
     
-NSArray *states = @[stateA, stateB, parallelWrapper];
-[stateMachine setStates:states];
+stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
 
 ### Switching states
 
 Manual switching:
 
-```objective-c
+```
 [stateMachine switchState:stateB];
 ```
 
 Switching in an event handler block:
 
-```objective-c
-__block weakSelf = self;
-[stateA addEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
+```
+[stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
     
-    // ...
+    NSDictionary *data = event.data;
+    // evaluate event data ...
       
-    return weakSelf.stateB;
+    return stateB;
 }];
 ```
 
@@ -118,7 +112,9 @@ __block weakSelf = self;
 
 To send an event:
 
-```objective-c
+```
+NSDictionary *userInfo = @{@"message" : @"foobar", @"code", @[8]};
+TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA" data:userInfo];
 [stateMachine handleEvent:eventA];
 ```
 

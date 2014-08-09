@@ -121,15 +121,14 @@ describe(@"TBStateMachineParallelWrapper", ^{
     it(@"switches states on all registered states", ^{
         
         __block id<TBStateMachineNode> previousStateA;
-        __block TBStateMachineTransition *previousStateTransitionA;
+        stateA.enterBlock = ^(id<TBStateMachineNode> previousState, TBStateMachineTransition *transition) {
+            previousStateA = previousState;
+        };
+        
         __block TBStateMachineState *nextStateA;
-        TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"stateA"
-                                                              enterBlock:^(id<TBStateMachineNode> previousState, TBStateMachineTransition *transition) {
-                                                                  previousStateA = previousState;
-                                                                  previousStateTransitionA = transition;
-                                                              } exitBlock:^(id<TBStateMachineNode>nextState, TBStateMachineTransition *transition) {
-                                                                  nextStateA = nextState;
-                                                              }];
+        stateA.exitBlock = ^(id<TBStateMachineNode>nextState, TBStateMachineTransition *transition) {
+            nextStateA = nextState;
+        };
         
         __block TBStateMachineState *previousStateB;
         stateB.enterBlock = ^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
