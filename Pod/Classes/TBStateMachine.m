@@ -11,10 +11,9 @@
 @interface TBStateMachine ()
 
 @property (nonatomic, strong, readonly) NSMutableDictionary *priv_states;
-@property (nonatomic, strong) NSOperationQueue *workerQueue;
+@property (nonatomic, strong) NSOperationQueue *serialQueue;
 
-- (void)switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data;
-
+- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data;
 @end
 
 @implementation TBStateMachine
@@ -30,8 +29,8 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _workerQueue = [NSOperationQueue new];
-        _workerQueue.maxConcurrentOperationCount = 1;
+        _serialQueue = [NSOperationQueue new];
+        _serialQueue.maxConcurrentOperationCount = 1;
     }
     return self;
 }
@@ -39,7 +38,7 @@
 - (void)setUp
 {
 	if (_initialState) {
-        [self switchState:_initialState data:nil];
+        [self _switchState:_initialState data:nil];
     } else {
         @throw [NSException tb_nonExistingStateException:@"nil"];
     }
@@ -48,7 +47,7 @@
 - (void)tearDown
 {
     if (_currentState) {
-        [self switchState:nil data:nil];
+        [self _switchState:nil data:nil];
     }
     _currentState = nil;
     [_priv_states removeAllObjects];
@@ -82,7 +81,7 @@
     }
 }
 
-- (void)switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data
+- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data
 {
     // leave current state
     if (_currentState) {
@@ -121,10 +120,10 @@
     }
     if (transition && transition.destinationState) {
         if ([_priv_states objectForKey:transition.destinationState.name]) {
-            [self switchState:transition.destinationState data:data];
+            [self _switchState:transition.destinationState data:data];
         } else {
             // exit current state
-            [self switchState:nil data:data];
+            [self _switchState:nil data:data];
             
             // bubble up to parent statemachine
             return transition;

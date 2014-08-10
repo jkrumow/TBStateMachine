@@ -125,8 +125,6 @@ Return values will bubble up to the parent (sub) state machine.
 
 Julian Krumow, julian.krumow@tarbrain.com
 
-Thanks to [mask](https://github.com/mask) and [monolar](https://github.com/monolar) for technical and academic advice.
-
 ## License
 
 TBStateMachine is available under the MIT license. See the LICENSE file for more info.

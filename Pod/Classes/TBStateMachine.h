@@ -17,7 +17,7 @@
 /**
  *  This class represents a state machine.
  *
- * TODO: add features etc.
+ *  Supports events, nested states machines and transitions.
  */
 @interface TBStateMachine : NSObject <TBStateMachineNode>
 
@@ -27,12 +27,12 @@
 @property (nonatomic, copy, readonly) NSString *name;
 
 /**
- *  The initial state of the state machine. Must be set before calling @see -setup.
+ *  The initial state of the state machine. Must be set before calling -setup.
  */
 @property (nonatomic, strong, readonly) id<TBStateMachineNode> initialState;
 
 /**
- *  The current state the state machine resides in. Set to `nil` if the state machine currently travels a transition.
+ *  The current state the state machine resides in. Set to be nil before -setUp and after -tearDown being called.
  */
 @property (nonatomic, strong, readonly) id<TBStateMachineNode> currentState;
 
@@ -55,7 +55,7 @@
 - (instancetype)initWithName:(NSString *)name;
 
 /**
- *  Starts up the state machine. Will switch into the state defined by @see -setInitialState:.
+ *  Starts up the state machine. Will switch into the state defined by -setInitialState:.
  *
  *  Throws a `TBStateMachineException` if initial state has not been set beforehand.
  */
@@ -85,7 +85,7 @@
 /**
  *  Sets the initial state of the state machine.
  *
- *  Throws a `TBStateMachineException` if state has not been set through @see -setStates:.
+ *  Throws a `TBStateMachineException` if state has not been set through -setStates:.
  *
  *  @param initialState A given state object.
  */

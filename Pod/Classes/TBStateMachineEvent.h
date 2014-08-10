@@ -19,7 +19,7 @@
  *
  *  @return The next state switch to.
  */
-typedef id<TBStateMachineNode> (^TBStateMachineEventBlock)(TBStateMachineEvent *, NSDictionary *);
+typedef id<TBStateMachineNode> (^TBStateMachineEventBlock)(TBStateMachineEvent *event, NSDictionary *data);
 
 /**
  *  This class represents an event in a state machine.

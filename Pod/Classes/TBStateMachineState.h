@@ -13,12 +13,12 @@
 #import "TBStateMachineNode.h"
 
 /**
- *  This type represents a block that is executed on entrance and exit of a `TBStateMachineState`.
+ *  This type represents a block that is executed on entry and exit of a `TBStateMachineState`.
  *
  *  @param id<TBStateMachineNode> Either the previous state (when entering) or the next state (when exiting)
  *  @param NSDictionary The payload data.
  */
-typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode>, NSDictionary *);
+typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> state, NSDictionary *data);
 
 /**
  *  This class represents a state in a state machine.

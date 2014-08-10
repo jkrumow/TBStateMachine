@@ -12,14 +12,6 @@
 @protocol TBStateMachineNode;
 
 /**
- *  This type represents a block that is executed when travelling or cancelling a `TBStateMachineTransition`.
- *
- *  @param id<TBStateMachineNode> The previous state
- *  @param id<TBStateMachineNode> The next state
- */
-typedef void (^TBStateMachineTransitionBlock)(id<TBStateMachineNode>, id<TBStateMachineNode>);
-
-/**
  *  This class represents a transition in a state machine.
  */
 @interface TBStateMachineTransition : NSObject
