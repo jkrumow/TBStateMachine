@@ -40,15 +40,4 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
  */
 + (NSException *)tb_nonExistingStateException:(NSString *)stateName;
 
-/**
- *  Thrown when a specified `TBStateMachineNode` can not be re-entered.
- *
- *  The `reason:` string will contain the name of the state.
- *
- *  @param stateName The name of the specified `TBStateMachineNode`.
- *
- *  @return The NSException instance.
- */
-+ (NSException *)tb_reEntryStateDisallowedException:(NSString *)stateName;
-
 @end

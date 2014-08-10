@@ -23,14 +23,6 @@
     return [[TBStateMachineState alloc] initWithName:name];
 }
 
-+ (TBStateMachineState *)stateWithName:(NSString *)name enterBlock:(TBStateMachineStateBlock)enterBlock exitBlock:(TBStateMachineStateBlock)exitBlock;
-{
-	TBStateMachineState *state = [TBStateMachineState stateWithName:name];
-    [state setEnterBlock:enterBlock];
-    [state setExitBlock:exitBlock];
-    return state;
-}
-
 - (instancetype)initWithName:(NSString *)name
 {
     self = [super init];
@@ -53,7 +45,7 @@
 
 - (BOOL)_canHandleEvent:(TBStateMachineEvent *)event
 {
-    return ([_eventHandlers objectForKey:event.name] != nil);
+    return ([_eventHandlers objectForKey:event.name]);
 }
 
 #pragma mark - TBStateMachineNode

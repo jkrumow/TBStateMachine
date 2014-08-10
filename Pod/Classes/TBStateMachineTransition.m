@@ -14,14 +14,9 @@
 + (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState
 {
 	TBStateMachineTransition *transition = [TBStateMachineTransition new];
-    [transition setSourceState:sourceState destinationState:destinationState];
+    transition.sourceState = sourceState;
+    transition.destinationState = destinationState;
     return transition;
-}
-
-- (void)setSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState
-{
-	_sourceState = sourceState;
-    _destinationState = destinationState;
 }
 
 - (NSString *)name

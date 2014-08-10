@@ -27,12 +27,12 @@ typedef void (^TBStateMachineTransitionBlock)(id<TBStateMachineNode>, id<TBState
 /**
  *  The source state.
  */
-@property (nonatomic, weak, readonly) id<TBStateMachineNode> sourceState;
+@property (nonatomic, weak) id<TBStateMachineNode> sourceState;
 
 /**
  *  The destination state.
  */
-@property (nonatomic, weak, readonly) id<TBStateMachineNode> destinationState;
+@property (nonatomic, weak) id<TBStateMachineNode> destinationState;
 
 /**
  *  All `TBStateMachineEvent` instances added to this transition instance.
@@ -48,14 +48,6 @@ typedef void (^TBStateMachineTransitionBlock)(id<TBStateMachineNode>, id<TBState
  *  @return The transition object
  */
 + (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState;
-
-/**
- *  Adds two TBStateMachineState objects as source and destination states.
- *
- *  @param sourceState      The given source state.
- *  @param destinationState The given destination state.
- */
-- (void)setSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState;
 
 - (NSString *)name;
 

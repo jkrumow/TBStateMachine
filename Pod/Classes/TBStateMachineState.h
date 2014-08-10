@@ -50,17 +50,6 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode>, NSDictionary *)
 + (TBStateMachineState *)stateWithName:(NSString *)name;
 
 /**
- *  Creates a `TBStateMachineState` instance from a given name, enter and exit block.
- *
- *  @param name       The specified state name.
- *  @param enterBlock The specified enter block.
- *  @param exitBlock  The specified exit block.
- *
- *  @return The state object
- */
-+ (TBStateMachineState *)stateWithName:(NSString *)name enterBlock:(TBStateMachineStateBlock)enterBlock exitBlock:(TBStateMachineStateBlock)exitBlock;
-
-/**
  *  Initializes a `TBStateMachineState` with a specified name.
  *
  *  @param name The name of the state. Must be unique.
@@ -83,19 +72,5 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode>, NSDictionary *)
  *  @param event   The given TBStateMachineEvent object.
  */
 - (void)unregisterEvent:(TBStateMachineEvent *)event;
-
-/**
- *  Sets the block that will be executed when the state is entered.
- *
- *  @param enterBlock The given `TBStateMachineStateBlock`.
- */
-- (void)setEnterBlock:(TBStateMachineStateBlock)enterBlock;
-
-/**
- *  Sets the block that will be executed when the state is exited.
- *
- *  @param exitBlock The given `TBStateMachineStateBlock`.
- */
-- (void)setExitBlock:(TBStateMachineStateBlock)exitBlock;
 
 @end

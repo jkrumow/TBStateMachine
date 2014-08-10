@@ -27,11 +27,6 @@
 @property (nonatomic, copy, readonly) NSString *name;
 
 /**
- *  Set to `YES` to allow states to re-enter themselves.
- */
-@property (nonatomic, assign) BOOL allowReentrantStates;
-
-/**
  *  The initial state of the state machine. Must be set before calling @see -setup.
  */
 @property (nonatomic, strong, readonly) id<TBStateMachineNode> initialState;
@@ -70,14 +65,6 @@
  *  Leaves the current state or cancelles the current transition. Shuts down the state machine.
  */
 - (void)tearDown;
-
-/**
- *  Sets all states the state machine will manage.
- *
- *  Throws `TBStateMachineException` if states do not conform to the `TBStateMachineNode` protocol.
- *
- *  @param states An NSArray containing all state objects.
- */
 
 /**
  *  Returns the states the state machine manages.

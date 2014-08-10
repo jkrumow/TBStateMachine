@@ -30,7 +30,6 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _allowReentrantStates = NO;
         _workerQueue = [NSOperationQueue new];
         _workerQueue.maxConcurrentOperationCount = 1;
     }
@@ -85,10 +84,6 @@
 
 - (void)switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data
 {
-    if (!_allowReentrantStates && state == _currentState) {
-        @throw [NSException tb_reEntryStateDisallowedException:state.name];
-    }
-    
     // leave current state
     if (_currentState) {
         [_currentState exit:state data:data];
