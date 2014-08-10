@@ -281,7 +281,44 @@ describe(@"TBStateMachine", ^{
         expect(dataExitA[EVENT_DATA_KEY]).to.beNil;
     });
     
-    it(@"handles an event and switches to the specified state and transmits payload passed with the event.", ^{
+    it(@"handles an event and switches to the specified state.", ^{
+        
+        NSArray *states = @[stateA, stateB];
+        
+        __block TBStateMachineState *previousStateA;
+        stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+            previousStateA = previousState;
+        };
+        
+        __block TBStateMachineState *nextStateA;
+        stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+            nextStateA = nextState;
+        };
+        
+        __block TBStateMachineState *previousStateB;
+        stateB.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+            previousStateB = previousState;
+        };
+        
+        __block TBStateMachineEvent *receivedEvent;
+        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+            receivedEvent = event;
+            return stateB;
+        }];
+        
+        stateMachine.states = states;
+        stateMachine.initialState = stateA;
+        [stateMachine setUp];
+        
+        // enters state B
+        [stateMachine handleEvent:eventA];
+        
+        expect(previousStateA).to.beNil;
+        expect(nextStateA).to.equal(stateB);
+        expect(previousStateB).to.equal(stateA);
+    });
+    
+    it(@"passes event data into the enter and exit blocks of the involved states.", ^{
         
         NSArray *states = @[stateA, stateB];
         
@@ -318,7 +355,7 @@ describe(@"TBStateMachine", ^{
         expect(previousStateA).to.beNil;
         expect(nextStateA).to.equal(stateB);
         expect(previousStateB).to.equal(stateA);
-        expect(previousStateBData).toNot.beNil;
+        expect(previousStateBData).to.equal(eventDataA);
         expect(previousStateBData.allKeys).haveCountOf(1);
         expect(previousStateBData[EVENT_DATA_KEY]).toNot.beNil;
         expect(previousStateBData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
