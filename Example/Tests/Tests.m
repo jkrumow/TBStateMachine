@@ -106,6 +106,7 @@ describe(@"TBStateMachineState", ^{
         expect(resultB.sourceState).to.equal(stateA);
         expect(resultB.destinationState).to.equal(stateB);
     });
+    
 });
 
 describe(@"TBStateMachineParallelWrapper", ^{
@@ -179,7 +180,7 @@ describe(@"TBStateMachineParallelWrapper", ^{
         expect(nextStateD).to.equal(stateE);
     });
     
-    it(@"handles events on all registered states and will return the first valid follow-up state returned by the contained states.", ^{
+    it(@"handles events on all registered states until the first valid follow-up state is returned.", ^{
         
         __block BOOL stateAHasHandledEvent = NO;
         [stateA registerEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event, NSDictionary *data) {
@@ -212,13 +213,12 @@ describe(@"TBStateMachineParallelWrapper", ^{
         expect(stateAHasHandledEvent).to.equal(YES);
         expect(stateBHasHandledEvent).to.equal(YES);
         expect(stateCHasHandledEvent).to.equal(YES);
-        expect(stateDHasHandledEvent).to.equal(YES);
+        expect(stateDHasHandledEvent).to.equal(NO);
         
         expect(result).toNot.beNil;
         expect(result.sourceState).to.equal(stateC);
         expect(result.destinationState).to.equal(stateE);
     });
-    
     
 });
 
