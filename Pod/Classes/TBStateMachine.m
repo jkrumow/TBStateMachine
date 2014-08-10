@@ -13,7 +13,7 @@
 @property (nonatomic, strong, readonly) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSOperationQueue *workerQueue;
 
-- (void)switchState:(id<TBStateMachineNode>)state transition:(TBStateMachineTransition *)transition;
+- (void)switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data;
 
 @end
 
@@ -40,8 +40,7 @@
 - (void)setUp
 {
 	if (_initialState) {
-        TBStateMachineTransition *transition = [TBStateMachineTransition transitionWithSourceState:nil destinationState:_initialState];
-        [self switchState:_initialState transition:transition];
+        [self switchState:_initialState data:nil];
     } else {
         @throw [NSException tb_nonExistingStateException:@"nil"];
     }
@@ -50,8 +49,7 @@
 - (void)tearDown
 {
     if (_currentState) {
-        TBStateMachineTransition *transition = [TBStateMachineTransition transitionWithSourceState:_currentState destinationState:nil];
-        [self switchState:nil transition:transition];
+        [self switchState:nil data:nil];
     }
     _currentState = nil;
     [_priv_states removeAllObjects];
@@ -85,7 +83,7 @@
     }
 }
 
-- (void)switchState:(id<TBStateMachineNode>)state transition:(TBStateMachineTransition *)transition
+- (void)switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data
 {
     if (!_allowReentrantStates && state == _currentState) {
         @throw [NSException tb_reEntryStateDisallowedException:state.name];
@@ -93,40 +91,45 @@
     
     // leave current state
     if (_currentState) {
-        [_currentState exit:state transition:transition];
+        [_currentState exit:state data:data];
     }
     
     id<TBStateMachineNode> oldState = _currentState;
     _currentState = state;
     if (_currentState) {
-        [_currentState enter:oldState transition:transition];
+        [_currentState enter:oldState data:data];
     }
 }
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState transition:(TBStateMachineTransition *)transition
+- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
 {
 	[self setUp];
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState transition:(TBStateMachineTransition *)transition
+- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
 {
     [self tearDown];
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
 {
+    return [self handleEvent:event data:nil];
+}
+
+- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
     TBStateMachineTransition *transition;
     if (_currentState) {
-        transition = [_currentState handleEvent:event];
+        transition = [_currentState handleEvent:event data:data];
     }
     if (transition && transition.destinationState) {
         if ([_priv_states objectForKey:transition.destinationState.name]) {
-            [self switchState:transition.destinationState transition:transition];
+            [self switchState:transition.destinationState data:data];
         } else {
             // exit current state
-            [self switchState:nil transition:transition];
+            [self switchState:nil data:data];
             
             // bubble up to parent statemachine
             return transition;

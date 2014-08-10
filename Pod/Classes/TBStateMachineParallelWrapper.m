@@ -49,27 +49,32 @@
     }
 }
 
-- (void)enter:(id<TBStateMachineNode>)previousState transition:(TBStateMachineTransition *)transition
+- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
 {
 	for (id<TBStateMachineNode> stateMachineNode in _priv_parallelStates) {
-        [stateMachineNode enter:previousState transition:transition];
+        [stateMachineNode enter:previousState data:data];
     }
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState transition:(TBStateMachineTransition *)transition
+- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
 {
 	for (id<TBStateMachineNode> stateMachineNode in _priv_parallelStates) {
-        [stateMachineNode exit:nextState transition:transition];
+        [stateMachineNode exit:nextState data:data];
     }
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
 {
+    return [self handleEvent:event data:nil];
+}
+
+- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
     TBStateMachineTransition *nextParentTransition = nil;
     for (id<TBStateMachineNode> stateMachineNode in _priv_parallelStates) {
         
         // first come first serve
-        TBStateMachineTransition *result = [stateMachineNode handleEvent:event];
+        TBStateMachineTransition *result = [stateMachineNode handleEvent:event data:data];
         if (result.destinationState && nextParentTransition == nil) {
             nextParentTransition = result;
         }

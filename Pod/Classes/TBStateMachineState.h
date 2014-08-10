@@ -16,9 +16,9 @@
  *  This type represents a block that is executed on entrance and exit of a `TBStateMachineState`.
  *
  *  @param id<TBStateMachineNode> Either the previous state (when entering) or the next state (when exiting)
- *  @param TBStateMachineTransition* The current `TBStateMachineTransition` leading from or to the exxecution of this block. Can be `nil`.
+ *  @param NSDictionary The payload data.
  */
-typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode>, TBStateMachineTransition *);
+typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode>, NSDictionary *);
 
 /**
  *  This class represents a state in a state machine.

@@ -58,25 +58,30 @@
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState transition:(TBStateMachineTransition *)transition
+- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
 {
     if (_enterBlock) {
-        _enterBlock(previousState, transition);
+        _enterBlock(previousState, data);
     }
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState transition:(TBStateMachineTransition *)transition
+- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
 {
     if (_exitBlock) {
-        _exitBlock(nextState, transition);
+        _exitBlock(nextState, data);
     }
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
 {
+    return [self handleEvent:event data:nil];
+}
+
+- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
 	if ([self _canHandleEvent:event]) {
         TBStateMachineEventBlock handler = [_eventHandlers objectForKey:event.name];
-        id<TBStateMachineNode> nextState = handler(event);
+        id<TBStateMachineNode> nextState = handler(event, data);
         return [TBStateMachineTransition transitionWithSourceState:self destinationState:nextState];
     }
     return nil;

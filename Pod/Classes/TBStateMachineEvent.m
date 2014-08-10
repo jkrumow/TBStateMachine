@@ -12,21 +12,14 @@
 
 + (TBStateMachineEvent *)eventWithName:(NSString *)name
 {
-	return [[TBStateMachineEvent alloc] initWithName:name data:nil];
+	return [[TBStateMachineEvent alloc] initWithName:name];
 }
 
-+ (TBStateMachineEvent *)eventWithName:(NSString *)name data:(NSDictionary *)data
-{
-	return [[TBStateMachineEvent alloc] initWithName:name data:data];
-}
-
-
-- (instancetype)initWithName:(NSString *)name data:(NSDictionary *)data
+- (instancetype)initWithName:(NSString *)name
 {
     self = [super init];
     if (self) {
         _name = name.copy;
-        _data = data;
     }
     return self;
 }

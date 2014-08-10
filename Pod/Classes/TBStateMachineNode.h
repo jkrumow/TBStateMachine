@@ -31,17 +31,17 @@
  *  Executes the enter block of the state.
  *
  *  @param previousState The previous state.
- *  @param transition    The transition from the previous state.
+ *  @param data          The payload data.
  */
-- (void)enter:(id<TBStateMachineNode>)previousState transition:(TBStateMachineTransition *)transition;
+- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data;
 
 /**
  *  Executes the exit block of the state.
  *
- *  @param nextState  The next state.
- *  @param transition The transition to the next state.
+ *  @param nextState The next state.
+ *  @param data      The payload data.
  */
-- (void)exit:(id<TBStateMachineNode>)nextState transition:(TBStateMachineTransition *)transition;
+- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data;
 
 /**
  *  Receives a specified `TBStateMachineEvent` instance.
@@ -52,5 +52,16 @@
  *  @return The next state or `nil`.
  */
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event;
+
+/**
+ *  Receives a specified `TBStateMachineEvent` instance.
+ *  If the node contains the matching `TBStateMachineEvent` instance the corresponding `TBStateMachineEventBlock` is executed.
+ *
+ *  @param event The given `TBStateMachineEvent` instance.
+ *  @param data  The payload data.
+ *
+ *  @return The next state or `nil`.
+ */
+- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 
 @end
