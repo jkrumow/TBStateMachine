@@ -31,8 +31,8 @@ __block TBStateMachineParallelWrapper *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
-__block id<TBStateMachineNode>(^eventHandler)(NSString *, NSString *);
-__block void(^enterHandler)();
+__block id<TBStateMachineNode>(^processEventData)(NSDictionary *);
+__block void(^processEntranceData)(NSString *, NSDictionary *);
 
 describe(@"TBStateMachineState", ^{
     
@@ -740,13 +740,24 @@ describe(@"TBStateMachine", ^{
     
     it(@"handles events sent concurrently from multiple threads", ^AsyncBlock{
         
+        // sequence of states as seen by the event handler.
         __block NSMutableString *inputSequence = @"".mutableCopy;
+        
+        // sequence of states which as they will be actually entered.
         __block NSMutableString *outputSequence = @"".mutableCopy;
         
         NSString *destinationStates = @"abcd";
         
-        enterHandler = ^void(NSString *enteredStateMoniker) {
-            [outputSequence appendString:enteredStateMoniker];
+        // processes the data received in event handler blocks of states.
+        processEntranceData = ^void(NSString *enteredState, NSDictionary *data) {
+            if (data == nil) {
+                return;
+            }
+            
+            [outputSequence appendString:enteredState];
+            
+            // entered state should be identical to moniker transmitted in event data.
+            expect(data[@"val"]).to.equal(enteredState);
             
             // call example finished when maximum number of transitions has been performed.
             if (inputSequence.length == destinationStates.length) {
@@ -754,7 +765,9 @@ describe(@"TBStateMachine", ^{
             }
         };
         
-        eventHandler = ^id<TBStateMachineNode>(NSString *nextState, NSString *currentState) {
+        // processes the data received in enter blocks of states.
+        processEventData = ^id<TBStateMachineNode>(NSDictionary *data) {
+            NSString *nextState = data[@"val"];
             [inputSequence appendString:nextState];
             
             if ([nextState isEqualToString:@"a"]) {
@@ -772,59 +785,50 @@ describe(@"TBStateMachine", ^{
             return nil;
         };
         
+        // state machine setup
         stateA.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-            if (data) {
-                NSString *character = data[@"val"];
-                enterHandler(character);
-            }
+            processEntranceData(@"a", data);
         };
         
         stateB.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-            NSString *character = data[@"val"];
-            enterHandler(character);
+            processEntranceData(@"b", data);
         };
         
         stateC.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-            NSString *character = data[@"val"];
-            enterHandler(character);
+            processEntranceData(@"c", data);
         };
         
         stateD.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-            NSString *character = data[@"val"];
-            enterHandler(character);
+            processEntranceData(@"d", data);
         };
         
         [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            NSString *character = data[@"val"];
-            return eventHandler(character, @"a");
+            return processEventData(data);
         }];
         
         [stateB registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            NSString *character = data[@"val"];
-            return eventHandler(character, @"b");
+            return processEventData(data);
         }];
         
         [stateC registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            NSString *character = data[@"val"];
-            return eventHandler(character, @"c");
+            return processEventData(data);
         }];
         
         [stateD registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            NSString *character = data[@"val"];
-            return eventHandler(character, @"d");
+            return processEventData(data);
         }];
         
         stateMachine.states = @[stateA, stateB, stateC, stateD];
         stateMachine.initialState = stateA;
         [stateMachine setUp];
         
-        // switch states asynchonuously
+        // send all events concurrently.
         dispatch_apply(destinationStates.length, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t idx) {
             NSString *stateName = [destinationStates substringWithRange:NSMakeRange(idx, 1)];
             [stateMachine handleEvent:eventA data:@{@"val" : stateName}];
         });
         
-        // sequence of characters transmitted in event data should be identical to character received in data parameter of entered state.
+        // sequence of states triggered by sent events should be identical sequence of actually entered states.
         expect(inputSequence).will.equal(outputSequence);
         
     });
