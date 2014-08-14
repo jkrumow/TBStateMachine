@@ -23,6 +23,8 @@ it, simply add the following line to your Podfile:
 
 ## Usage
 
+### Basic Setup
+
 Create state objects, set enter and exit blocks and event handler:
 
 ```
@@ -43,7 +45,7 @@ stateA.exitBlock = ^(TBStateMachineState *nextState, TBStateMachineTransition *t
     
     // ...
         
-    return // another state object or nil
+    return // another node or nil
 }];
 ```
 
@@ -62,7 +64,7 @@ stateMachine.initialState = stateA;
 [stateMachine setup];
 ```
 
-### Sub state machines
+### Sub State Machines
 
 A TBStateMachine can also be nested as a sub state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
 
@@ -82,20 +84,14 @@ To run multiple states and sub state machines use the `TBStateMachineParallelWra
 
 ```
 TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
-parallelWrapper.states = @[stateC, stateD, subStateMachine];
+parallelWrapper.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
     
 stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
 
-### Switching states
+### Switching States
 
-Manual switching:
-
-```
-[stateMachine switchState:stateB];
-```
-
-Switching in an event handler block:
+To configure an event handler:
 
 ```
 [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
@@ -107,18 +103,13 @@ Switching in an event handler block:
 }];
 ```
 
-### Event handling
-
-To send an event:
+To send the event:
 
 ```
 NSDictionary *userInfo = @{@"message" : @"foobar", @"code", @[8]};
 TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA" data:userInfo];
 [stateMachine handleEvent:eventA];
 ```
-
-The top-most state object will execute the event (if it implements a handler for it).
-Return values will bubble up to the parent (sub) state machine.
 
 
 ## Author
