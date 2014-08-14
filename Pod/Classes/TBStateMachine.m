@@ -116,7 +116,6 @@
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
     __block TBStateMachineTransition *transition = nil;
-    
     dispatch_sync(_eventQueue, ^{
         transition = [self _handleEvent:event data:data];
     });

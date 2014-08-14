@@ -1,5 +1,5 @@
 //
-//  NSException+TBStateMachine.h
+//  NSException+TBStateMachine.m
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
