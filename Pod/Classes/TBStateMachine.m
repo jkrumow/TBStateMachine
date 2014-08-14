@@ -11,9 +11,11 @@
 @interface TBStateMachine ()
 
 @property (nonatomic, strong, readonly) NSMutableDictionary *priv_states;
-@property (nonatomic, strong) NSOperationQueue *serialQueue;
+@property (nonatomic, assign) dispatch_queue_t eventQueue;
 
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data;
+- (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
+
 @end
 
 @implementation TBStateMachine
@@ -29,8 +31,7 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _serialQueue = [NSOperationQueue new];
-        _serialQueue.maxConcurrentOperationCount = 1;
+        _eventQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.EventQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -113,6 +114,17 @@
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
+    __block TBStateMachineTransition *transition = nil;
+    
+    dispatch_sync(_eventQueue, ^{
+        transition = [self _handleEvent:event data:data];
+    });
+    
+    return transition;
+}
+
+- (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
     TBStateMachineTransition *transition;
     if (_currentState) {
