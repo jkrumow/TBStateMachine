@@ -31,6 +31,8 @@ __block TBStateMachineParallelWrapper *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
+__block id<TBStateMachineNode>(^eventHandler)(NSString *, NSString *);
+__block void(^enterHandler)();
 
 describe(@"TBStateMachineState", ^{
     
@@ -736,132 +738,96 @@ describe(@"TBStateMachine", ^{
         expect(previousStateDataA[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
     });
     
-    
-    /*
-    it(@"handles multhreaded events", ^AsyncBlock{
-    
-        __block NSMutableString *characters = @"".mutableCopy;
-        __block NSMutableString *states = @"".mutableCopy;
+    it(@"handles events sent concurrently from multiple threads", ^AsyncBlock{
         
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            NSString *character = data[@"val"];
-            [characters appendString:character];
-            [states appendString:@"a"];
+        __block NSMutableString *inputSequence = @"".mutableCopy;
+        __block NSMutableString *outputSequence = @"".mutableCopy;
+        
+        NSString *destinationStates = @"abcd";
+        
+        enterHandler = ^void(NSString *enteredStateMoniker) {
+            [outputSequence appendString:enteredStateMoniker];
             
-            if (characters.length == 4) {
+            // call example finished when maximum number of transitions has been performed.
+            if (inputSequence.length == destinationStates.length) {
                 done();
             }
+        };
+        
+        eventHandler = ^id<TBStateMachineNode>(NSString *nextState, NSString *currentState) {
+            [inputSequence appendString:nextState];
             
-            if ([character isEqualToString:@"a"]) {
+            if ([nextState isEqualToString:@"a"]) {
                 return stateA;
             }
-            if ([character isEqualToString:@"b"]) {
+            if ([nextState isEqualToString:@"b"]) {
                 return stateB;
             }
-            if ([character isEqualToString:@"c"]) {
+            if ([nextState isEqualToString:@"c"]) {
                 return stateC;
             }
-            if ([character isEqualToString:@"d"]) {
+            if ([nextState isEqualToString:@"d"]) {
                 return stateD;
             }
             return nil;
+        };
+        
+        stateA.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+            if (data) {
+                NSString *character = data[@"val"];
+                enterHandler(character);
+            }
+        };
+        
+        stateB.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+            NSString *character = data[@"val"];
+            enterHandler(character);
+        };
+        
+        stateC.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+            NSString *character = data[@"val"];
+            enterHandler(character);
+        };
+        
+        stateD.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+            NSString *character = data[@"val"];
+            enterHandler(character);
+        };
+        
+        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+            NSString *character = data[@"val"];
+            return eventHandler(character, @"a");
         }];
         
         [stateB registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
             NSString *character = data[@"val"];
-            [characters appendString:character];
-            [states appendString:@"b"];
-            
-            NSLog(@"%@", characters);
-            if (characters.length == 4) {
-                done();
-            }
-            
-            if ([character isEqualToString:@"a"]) {
-                return stateA;
-            }
-            if ([character isEqualToString:@"b"]) {
-                return stateB;
-            }
-            if ([character isEqualToString:@"c"]) {
-                return stateC;
-            }
-            if ([character isEqualToString:@"d"]) {
-                return stateD;
-            }
-            return nil;
+            return eventHandler(character, @"b");
         }];
         
         [stateC registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
             NSString *character = data[@"val"];
-            [characters appendString:character];
-            [states appendString:@"c"];
-            
-            if (characters.length == 4) {
-                done();
-            }
-            
-            if ([character isEqualToString:@"a"]) {
-                return stateA;
-            }
-            if ([character isEqualToString:@"b"]) {
-                return stateB;
-            }
-            if ([character isEqualToString:@"c"]) {
-                return stateC;
-            }
-            if ([character isEqualToString:@"d"]) {
-                return stateD;
-            }
-            return nil;
+            return eventHandler(character, @"c");
         }];
         
         [stateD registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
             NSString *character = data[@"val"];
-            [characters appendString:character];
-            [states appendString:@"d"];
-            
-            if (characters.length == 4) {
-                done();
-            }
-            
-            if ([character isEqualToString:@"a"]) {
-                return stateA;
-            }
-            if ([character isEqualToString:@"b"]) {
-                return stateB;
-            }
-            if ([character isEqualToString:@"c"]) {
-                return stateC;
-            }
-            if ([character isEqualToString:@"d"]) {
-                return stateD;
-            }
-            return nil;
+            return eventHandler(character, @"d");
         }];
         
         stateMachine.states = @[stateA, stateB, stateC, stateD];
         stateMachine.initialState = stateA;
         [stateMachine setUp];
         
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [stateMachine handleEvent:eventA data:@{@"val" : @"a"}];
-        });
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [stateMachine handleEvent:eventA data:@{@"val" : @"b"}];
-        });
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [stateMachine handleEvent:eventA data:@{@"val" : @"c"}];
-        });
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [stateMachine handleEvent:eventA data:@{@"val" : @"d"}];
+        // switch states asynchonuously
+        dispatch_apply(destinationStates.length, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t idx) {
+            NSString *stateName = [destinationStates substringWithRange:NSMakeRange(idx, 1)];
+            [stateMachine handleEvent:eventA data:@{@"val" : stateName}];
         });
         
-        expect([characters substringFromIndex:1]).will.equal([states substringToIndex:states.length-2]);
-    
+        // sequence of characters transmitted in event data should be identical to character received in data parameter of entered state.
+        expect(inputSequence).will.equal(outputSequence);
+        
     });
-    */
     
 });
 
