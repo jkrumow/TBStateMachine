@@ -40,4 +40,15 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
  */
 + (NSException *)tb_nonExistingStateException:(NSString *)stateName;
 
+/**
+ *  Thrown when no initial state has been set on the state machine.
+ *
+ *  The `reason:` string will contain the name of the state machine.
+ *
+ *  @param stateName The name of the specified `TBStateMachine` instance.
+ *
+ *  @return The NSException instance.
+ */
++ (NSException *)tb_noInitialStateException:(NSString *)stateName;
+
 @end

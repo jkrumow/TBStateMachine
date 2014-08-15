@@ -13,6 +13,7 @@ NSString * const TBStateMachineException = @"TBStateMachineException";
 
 static NSString * const TBNotImplementedNodeProtocolExceptionReason = @"The specified object '%@' must implement protocol TBStateMachineProtocol.";
 static NSString * const TBNonExistingStateExceptionReason = @"The specified state '%@' does not exist.";
+static NSString * const TBNoInitialStateExceptionReason = @"Initial state needs to be set on %@.";
 
 
 @implementation NSException (TBStateMachine)
@@ -25,6 +26,11 @@ static NSString * const TBNonExistingStateExceptionReason = @"The specified stat
 + (NSException *)tb_nonExistingStateException:(NSString *)stateName
 {
 	return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateName] userInfo:nil];
+}
+
++ (NSException *)tb_noInitialStateException:(NSString *)stateMachineName;
+{
+	return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateMachineName] userInfo:nil];
 }
 
 @end
