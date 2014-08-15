@@ -299,7 +299,7 @@ describe(@"TBStateMachine", ^{
         
     });
     
-    it(@"throws TBStateMachineException when initial state has not been defined before setup.", ^{
+    it(@"throws TBStateMachineException when initial state has not been set before setup.", ^{
         NSArray *states = @[stateA, stateB];
         stateMachine.states = states;
         
@@ -308,20 +308,49 @@ describe(@"TBStateMachine", ^{
         }).to.raise(TBStateMachineException);
     });
     
-    it(@"enters into initial state and exits it", ^{
+    it(@"enters initial state on set up.", ^{
         
         NSArray *states = @[stateA, stateB];
         
         __block TBStateMachineState *previousStateA;
         __block NSDictionary *dataEnterA;
+        __block BOOL wasEnterExecuted = NO;
+        __block BOOL wasExitExecuted = NO;
+        
         stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+            wasEnterExecuted = YES;
             previousStateA = previousState;
             dataEnterA = data;
         };
         
+        stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+            wasExitExecuted = YES;
+        };
+        
+        stateMachine.states = states;
+        stateMachine.initialState = stateA;
+        [stateMachine setUp];
+        
+        expect(wasEnterExecuted).to.equal(YES);
+        expect(previousStateA).to.beNil;
+        expect(dataEnterA).to.beNil;
+        expect(wasExitExecuted).to.equal(NO);
+    });
+
+    it(@"exits initial state on tear down.", ^{
+        
+        NSArray *states = @[stateA, stateB];
+        
+        __block BOOL wasEnterExecuted = NO;
+        stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+            wasEnterExecuted = YES;
+        };
+        
         __block TBStateMachineState *nextStateA;
         __block NSDictionary *dataExitA;
+        __block BOOL wasExitExecuted = NO;
         stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+            wasExitExecuted = YES;
             nextStateA = nextState;
             dataExitA = data;
         };
@@ -330,13 +359,17 @@ describe(@"TBStateMachine", ^{
         stateMachine.initialState = stateA;
         [stateMachine setUp];
         
-        expect(previousStateA).to.beNil;
-        expect(dataEnterA[EVENT_DATA_KEY]).to.beNil;
+        expect(wasEnterExecuted).to.equal(YES);
+        expect(wasExitExecuted).to.equal(NO);
+        
+        wasEnterExecuted = NO;
         
         [stateMachine tearDown];
         
         expect(nextStateA).to.beNil;
-        expect(dataExitA[EVENT_DATA_KEY]).to.beNil;
+        expect(dataExitA).to.beNil;
+        expect(wasEnterExecuted).to.equal(NO);
+        expect(wasExitExecuted).to.equal(YES);
     });
     
     it(@"handles an event and switches to the specified state.", ^{
@@ -376,19 +409,34 @@ describe(@"TBStateMachine", ^{
         expect(previousStateB).to.equal(stateA);
     });
     
-    it(@"passes event data into the enter and exit blocks of the involved states.", ^{
+    it(@"passes event data into the event handler block of the involved state.", ^{
         
         NSArray *states = @[stateA, stateB];
         
-        __block TBStateMachineState *previousStateA;
-        stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
-            previousStateA = previousState;
-        };
+        __block TBStateMachineEvent *receivedEvent;
+        __block NSDictionary *receivedData;
+        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+            receivedEvent = event;
+            receivedData = data;
+            return stateB;
+        }];
         
-        __block TBStateMachineState *nextStateA;
-        stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-            nextStateA = nextState;
-        };
+        stateMachine.states = states;
+        stateMachine.initialState = stateA;
+        [stateMachine setUp];
+        
+        // enters state B
+        [stateMachine handleEvent:eventA data:eventDataA];
+        
+        expect(receivedEvent).to.equal(eventA);
+        expect(receivedData).to.equal(eventDataA);
+        expect(receivedData[EVENT_DATA_KEY]).toNot.beNil;
+        expect(receivedData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
+    });
+
+    it(@"passes event data into the enter and exit blocks of the involved states.", ^{
+        
+        NSArray *states = @[stateA, stateB];
         
         __block TBStateMachineState *previousStateB;
         __block NSDictionary *previousStateBData;
@@ -410,8 +458,6 @@ describe(@"TBStateMachine", ^{
         // enters state B
         [stateMachine handleEvent:eventA data:eventDataA];
         
-        expect(previousStateA).to.beNil;
-        expect(nextStateA).to.equal(stateB);
         expect(previousStateB).to.equal(stateA);
         expect(previousStateBData).to.equal(eventDataA);
         expect(previousStateBData.allKeys).haveCountOf(1);
@@ -465,7 +511,7 @@ describe(@"TBStateMachine", ^{
         expect(nextStateA).to.equal(stateA);
     });
     
-    it(@"can handle events to switch into and out of sub statemachines.", ^{
+    it(@"can handle events to switch into and out of sub-state machines.", ^{
         
         __block id<TBStateMachineNode> previousStateA;
         __block NSDictionary *dataEnterA;
@@ -575,7 +621,7 @@ describe(@"TBStateMachine", ^{
         expect(previousStateB).to.equal(stateA);
     });
     
-    it(@"can handle events to switch into and out of parallel states and statemachines.", ^{
+    it(@"can handle events to switch into and out of parallel states and state machines.", ^{
         
         __block id<TBStateMachineNode> previousStateA;
         __block NSDictionary *previousStateDataA;
