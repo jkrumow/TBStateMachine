@@ -4,6 +4,18 @@
 [![License](https://img.shields.io/cocoapods/l/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![Platform](https://img.shields.io/cocoapods/p/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 
+An event-driven hierarchical (finite) state machine.
+
+## Features
+
+* light-weight implementation
+* state objects
+* event handling
+* thread safe event handling and switching
+* nestible states machines (sub-state machines)
+* wrapper class for parallel states and state machines
+* block based API
+
 ## Example Project
 
 To run the example project, clone the repo, and run `pod install` from the `Example` directory first.
@@ -23,19 +35,19 @@ it, simply add the following line to your Podfile:
 
 ## Usage
 
-### Basic Setup
+### Configuration
 
-Create state objects, set enter and exit blocks and event handler:
+Create state objects, set enter and exit blocks and register event handlers:
 
 ```
 TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
-stateA.enterBlock = ^(TBStateMachineState *previousState, TBStateMachineTransition *transition) {
+stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
         
     // ...
        
 };
     
-stateA.exitBlock = ^(TBStateMachineState *nextState, TBStateMachineTransition *transition) {
+stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
         
     // ...
        
@@ -45,10 +57,9 @@ stateA.exitBlock = ^(TBStateMachineState *nextState, TBStateMachineTransition *t
     
     // ...
         
-    return // another node or nil
+    return // the follow-up node or nil
 }];
 ```
-
 
 Create a state machine instance:
 
@@ -64,9 +75,11 @@ stateMachine.initialState = stateA;
 [stateMachine setup];
 ```
 
-### Sub State Machines
+The state machine will immediately enter the initial state.
 
-A TBStateMachine can also be nested as a sub state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
+### Sub-State Machines
+
+TBStateMachine instances can also be nested as sub-state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
 
 ```
 TBStateMachine *subStateMachine = [TBStateMachine stateMachineWithName:@"SubStateMachine"];
@@ -76,22 +89,24 @@ subStateMachine.initialState = stateC;
 stateMachine.states = @[stateA, stateB, subStateMachine];
 ```
 
-You do not need to call `- (void)setup` and `- (void)tearDown` since the implementations of `-(void)enter:transition:` and `- (void)exit:transition:` will do that.
+You do not need to call `- (void)setup` and `- (void)tearDown` since they are wrapped by `-(void)enter:transition:` and `- (void)exit:transition:`.
 
 ### Parallel States and State Machines
 
-To run multiple states and sub state machines use the `TBStateMachineParallelWrapper`:
+To run multiple states and sub-state machines you can use the `TBStateMachineParallelWrapper`:
 
 ```
 TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
-parallelWrapper.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
+parallelWrapper.states = @[subStateMachineA, subStateMachineB, stateZ];
     
 stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
 
+**Notice:** When sending events into the TBStateMachineParallelWrapper instance each node will handle the event, but only the follow-up node which was returned first to the wrapper will switch out of the parallel state.
+
 ### Switching States
 
-To configure an event handler:
+Register an event handler which returns a valid node**:
 
 ```
 [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
@@ -99,14 +114,14 @@ To configure an event handler:
     NSDictionary *data = event.data;
     // evaluate event data ...
       
-    return stateB;
+    return // the follow-up node or nil
 }];
 ```
 
-To send the event:
+Send the event:
 
 ```
-NSDictionary *userInfo = @{@"message" : @"foobar", @"code", @[8]};
+NSDictionary *userInfo = @{@"message" : @"abcde", @"code", @[12345]};
 TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA" data:userInfo];
 [stateMachine handleEvent:eventA];
 ```
