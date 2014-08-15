@@ -45,7 +45,7 @@
 
 - (BOOL)_canHandleEvent:(TBStateMachineEvent *)event
 {
-    return ([_eventHandlers objectForKey:event.name]);
+    return ([_eventHandlers objectForKey:event.name] != nil);
 }
 
 #pragma mark - TBStateMachineNode
