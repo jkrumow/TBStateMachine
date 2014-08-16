@@ -12,6 +12,9 @@
 
 /**
  *  This class wraps multiple `TBStateMachineNode` instances and processes them in parallel.
+ *
+ *  **Attention:** actions will be executed on different background threads.
+ *  Make sure your event, enter and exit handler code is dispatched back onto the right queue.
  */
 @interface TBStateMachineParallelWrapper : NSObject <TBStateMachineNode>
 
