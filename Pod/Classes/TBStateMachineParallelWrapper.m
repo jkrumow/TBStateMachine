@@ -14,7 +14,6 @@
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
-@property (nonatomic, assign) dispatch_queue_t parallelQueue;
 
 @end
 
@@ -31,7 +30,6 @@
     if (self) {
         _name = name.copy;
         _priv_parallelStates = [NSMutableArray new];
-        _parallelQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.ParallelWrapperQueue", DISPATCH_QUEUE_CONCURRENT);
     }
     return self;
 }
@@ -52,20 +50,20 @@
 
 - (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
 {
-	dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
-        
-        id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode enter:previousState data:data];
-    });
+    @synchronized(self) {
+        for (id<TBStateMachineNode> stateMachineNode in _priv_parallelStates) {
+            [stateMachineNode enter:previousState data:data];
+        }
+    }
 }
 
 - (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
 {
-    dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
-        
-        id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode exit:nextState data:data];
-    });
+    @synchronized(self) {
+        for (id<TBStateMachineNode> stateMachineNode in _priv_parallelStates) {
+            [stateMachineNode exit:nextState data:data];
+        }
+    }
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
@@ -75,15 +73,17 @@
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
-    __block TBStateMachineTransition *nextTransition = nil;
-    dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
-        
-        id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        TBStateMachineTransition *transition = [stateMachineNode handleEvent:event data:data];
-        if (transition.destinationState && nextTransition == nil) {
-            nextTransition = transition;
+    TBStateMachineTransition *nextTransition = nil;
+    
+    @synchronized(self) {
+        for (id<TBStateMachineNode> stateMachineNode in _priv_parallelStates) {
+            
+            TBStateMachineTransition *transition = [stateMachineNode handleEvent:event data:data];
+            if (transition.destinationState && nextTransition == nil) {
+                nextTransition = transition;
+            }
         }
-    });
+    }
     
     // return follow-up state.
     return nextTransition;
