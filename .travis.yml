@@ -2,6 +2,6 @@
 
 language: objective-c
 before_install:
-	- cd Example && pod install && cd $TRAVIS_BUILD_DIR
+- cd Example && pod install && cd $TRAVIS_BUILD_DIR
 script:
 - xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
