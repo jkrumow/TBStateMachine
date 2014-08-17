@@ -39,6 +39,8 @@
 /**
  *  Creates a `TBStateMachine` instance from a given name.
  *
+ *  Throws a `TBStateMachineException` when name is nil or an empty string.
+ *
  *  @param name The specified state machine name.
  *
  *  @return The state machine instance.
@@ -47,6 +49,8 @@
 
 /**
  *  Initializes a `TBStateMachine` with a specified name.
+ *
+ *  Throws a `TBStateMachineException` when name is nil or an empty string.
  *
  *  @param name The name of the state machine. Must be unique.
  *

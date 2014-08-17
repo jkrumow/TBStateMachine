@@ -7,6 +7,7 @@
 //
 
 #import "TBStateMachineEvent.h"
+#import "NSException+TBStateMachine.h"
 
 @implementation TBStateMachineEvent
 
@@ -17,6 +18,9 @@
 
 - (instancetype)initWithName:(NSString *)name
 {
+    if (name == nil || [name isEqualToString:@""]) {
+        @throw [NSException tb_noNameForEventException];
+    }
     self = [super init];
     if (self) {
         _name = name.copy;

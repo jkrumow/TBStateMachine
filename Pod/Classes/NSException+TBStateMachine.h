@@ -51,4 +51,18 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
  */
 + (NSException *)tb_noInitialStateException:(NSString *)stateName;
 
+/**
+ *  Thrown when no name was given to a `TBStateMachineNode` instance.
+ *
+ *  @return The NSException instance.
+ */
++ (NSException *)tb_noNameForNodeException;
+
+/**
+ *  Thrown when no name was given to a `TBStateMachineEvent` instance.
+ *
+ *  @return The NSException instance.
+ */
++ (NSException *)tb_noNameForEventException;
+
 @end

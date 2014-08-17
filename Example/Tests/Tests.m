@@ -52,6 +52,21 @@ describe(@"TBStateMachineState", ^{
         eventB = nil;
     });
     
+    it (@"throws a TBStateMachineException when name is nil.", ^{
+        
+        expect(^{
+            stateA = [TBStateMachineState stateWithName:nil];
+        }).to.raise(TBStateMachineException);
+        
+    });
+    
+    it (@"throws a TBStateMachineException when name is an empty string.", ^{
+        
+        expect(^{
+            stateA = [TBStateMachineState stateWithName:@""];
+        }).to.raise(TBStateMachineException);
+        
+    });
     
     it(@"registers TBStateMachineEventBlock instances by the name of a provided TBStateMachineEvent instance.", ^{
         
@@ -113,7 +128,24 @@ describe(@"TBStateMachineParallelWrapper", ^{
     });
     
     
+    it (@"throws a TBStateMachineException when name is nil.", ^{
+        
+        expect(^{
+            parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:nil];
+        }).to.raise(TBStateMachineException);
+        
+    });
+    
+    it (@"throws a TBStateMachineException when name is an empty string.", ^{
+        
+        expect(^{
+            parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@""];
+        }).to.raise(TBStateMachineException);
+        
+    });
+    
     it(@"throws TBStateMachineException when state object does not implement the TBStateMachineNode protocol.", ^{
+        
         id object = [[NSObject alloc] init];
         NSArray *states = @[stateA, stateB, object];
         expect(^{
@@ -235,6 +267,26 @@ describe(@"TBStateMachineParallelWrapper", ^{
     
 });
 
+describe(@"TBStateMachineEvent", ^{
+
+    it (@"throws a TBStateMachineException when name is nil.", ^{
+        
+        expect(^{
+            eventA = [TBStateMachineEvent eventWithName:nil];
+        }).to.raise(TBStateMachineException);
+        
+    });
+    
+    it (@"throws a TBStateMachineException when name is an empty string.", ^{
+        
+        expect(^{
+            eventA = [TBStateMachineEvent eventWithName:@""];
+        }).to.raise(TBStateMachineException);
+        
+    });
+
+});
+
 describe(@"TBStateMachine", ^{
     
     beforeEach(^{
@@ -282,6 +334,22 @@ describe(@"TBStateMachine", ^{
         parallelStates = nil;
     });
     
+    it (@"throws a TBStateMachineException when name is nil.", ^{
+        
+        expect(^{
+            stateMachine = [TBStateMachine stateMachineWithName:nil];
+        }).to.raise(TBStateMachineException);
+        
+    });
+    
+    it (@"throws a TBStateMachineException when name is an empty string.", ^{
+        
+        expect(^{
+            stateMachine = [TBStateMachine stateMachineWithName:@""];
+        }).to.raise(TBStateMachineException);
+        
+    });
+
     it(@"throws TBStateMachineException when state object does not implement the TBStateMachineNode protocol.", ^{
         id object = [[NSObject alloc] init];
         NSArray *states = @[stateA, stateB, object];

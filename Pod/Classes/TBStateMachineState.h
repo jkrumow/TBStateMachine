@@ -43,6 +43,8 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> state, NSDiction
 /**
  *  Creates a `TBStateMachineState` instance from a given name.
  *
+ *  Throws a `TBStateMachineException` when name is nil or an empty string.
+ *
  *  @param name The specified state name.
  *
  *  @return The state object.
@@ -51,6 +53,8 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> state, NSDiction
 
 /**
  *  Initializes a `TBStateMachineState` with a specified name.
+ *
+ *  Throws a `TBStateMachineException` when name is nil or an empty string.
  *
  *  @param name The name of the state. Must be unique.
  *

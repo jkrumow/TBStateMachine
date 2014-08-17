@@ -21,6 +21,8 @@
 /**
  *  Creates a `TBStateMachineParallelWrapper` instance from a given name.
  *
+ *  Throws a `TBStateMachineException` when name is nil or an empty string.
+ *
  *  @param name The specified parallel wrapper name.
  *
  *  @return The parallel wrapper instance.
@@ -29,6 +31,8 @@
 
 /**
  *  Initializes a `TBStateMachineParallelWrapper` with a specified name.
+ *
+ *  Throws a `TBStateMachineException` when name is nil or an empty string.
  *
  *  @param name The name of this wrapper. Must be unique.
  *

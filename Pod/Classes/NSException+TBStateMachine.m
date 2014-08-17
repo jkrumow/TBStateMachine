@@ -14,6 +14,8 @@ NSString * const TBStateMachineException = @"TBStateMachineException";
 static NSString * const TBNotImplementedNodeProtocolExceptionReason = @"The specified object '%@' must implement protocol TBStateMachineProtocol.";
 static NSString * const TBNonExistingStateExceptionReason = @"The specified state '%@' does not exist.";
 static NSString * const TBNoInitialStateExceptionReason = @"Initial state needs to be set on %@.";
+static NSString * const TBNonameForNodeExceptionReason = @"Node needs to have a valid name.";
+static NSString * const TBNonameForEventExceptionReason = @"Event needs to have a valid name.";
 
 
 @implementation NSException (TBStateMachine)
@@ -31,6 +33,16 @@ static NSString * const TBNoInitialStateExceptionReason = @"Initial state needs 
 + (NSException *)tb_noInitialStateException:(NSString *)stateMachineName;
 {
 	return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateMachineName] userInfo:nil];
+}
+
++ (NSException *)tb_noNameForNodeException;
+{
+	return [NSException exceptionWithName:TBStateMachineException reason:TBNonameForNodeExceptionReason userInfo:nil];
+}
+
++ (NSException *)tb_noNameForEventException;
+{
+	return [NSException exceptionWithName:TBStateMachineException reason:TBNonameForEventExceptionReason userInfo:nil];
 }
 
 @end

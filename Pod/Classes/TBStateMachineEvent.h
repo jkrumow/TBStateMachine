@@ -34,6 +34,8 @@ typedef id<TBStateMachineNode> (^TBStateMachineEventBlock)(TBStateMachineEvent *
 /**
  *  Creates a `TBStateMachineEvent` instance from a given name.
  *
+ *  Throws a `TBStateMachineException` when name is nil or an empty string.
+ *
  *  @param name The specified event name.
  *
  *  @return The event instance.
@@ -42,6 +44,8 @@ typedef id<TBStateMachineNode> (^TBStateMachineEventBlock)(TBStateMachineEvent *
 
 /**
  *  Initializes a `TBStateMachineEvent` with a specified name.
+ *
+ *  Throws a `TBStateMachineException` when name is nil or an empty string.
  *
  *  @param name The name of this event. Must be unique.
  *
