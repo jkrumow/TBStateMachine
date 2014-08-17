@@ -51,6 +51,7 @@ stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
     // ...
        
 };
+```
 
 Create a state machine instance:
 
