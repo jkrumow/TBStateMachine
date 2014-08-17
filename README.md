@@ -11,7 +11,7 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 
 * lightweight implementation
 * thread safe event handling and switching
-* nested state machines (sub-state machines)
+* nested state machines
 * wrapper for parallel states and state machines
 * block based API
 
@@ -52,14 +52,6 @@ stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
        
 };
 
-[stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
-    
-    // ...
-        
-    return // the follow-up node or nil
-}];
-```
-
 Create a state machine instance:
 
 ```objective-c
@@ -76,6 +68,27 @@ stateMachine.initialState = stateA;
 
 The state machine will immediately enter the initial state.
 
+### Switching States
+
+Register an event handler which returns a valid node:
+
+```objective-c
+[stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+
+    // the follow-up node or nil
+    return stateB;
+}];
+```
+
+Send the event:
+
+```objective-c
+NSValue *frame = [NSValue valueWithCGRect:CGRectMake(0.0, 0.0,100.0, 50.0)];
+NSDictionary *payload = @{@"text" : @"abcdef", @"frame", frame};
+TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
+[stateMachine handleEvent:eventA data:payload];
+```
+
 ### Sub-State Machines
 
 TBStateMachine instances can also be nested as sub-state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
@@ -88,11 +101,11 @@ subStateMachine.initialState = stateC;
 stateMachine.states = @[stateA, stateB, subStateMachine];
 ```
 
-You do not need to call `- (void)setup` and `- (void)tearDown` since they are wrapped by `-(void)enter:data:` and `- (void)exit:data:`.
+You do not need to call `- (void)setup` and `- (void)tearDown` on the sub-state machine since these methods will be called by the super-state machine.
 
 ### Parallel States and State Machines
 
-To run multiple states and sub-state machines you can use the `TBStateMachineParallelWrapper`:
+To run multiple states and sub-state machines in parallel you will use the `TBStateMachineParallelWrapper`:
 
 ```objective-c
 TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
@@ -102,28 +115,24 @@ stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
 
 **Concurrency:**
-Actions will be executed in parallel on different background threads. Make sure your event, enter and exit handler code is dispatched back onto the right queue.
-
-### Switching States
-
-Register an event handler which returns a valid node:
+Event handlers, enter and exit handlers will be executed in parallel on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
 
 ```objective-c
-[stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
+stateZ.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
     
-    NSDictionary *data = event.data;
-    // evaluate event data ...
-      
-    return // the follow-up node or nil
-}];
-```
-
-Send the event:
-
-```objective-c
-NSDictionary *userInfo = @{@"message" : @"abcde", @"code", @[12345]};
-TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA" data:userInfo];
-[stateMachine handleEvent:eventA];
+    // evaluate payload data
+    NSString *text = data[@"text"];
+    NSValue *frameValue = data[@"frame"];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+        CGRect frame = [frameValue CGRectValue];
+        UILabel *label = [[UILabel alloc]initWithFrame:frame)];
+        label.text = text;
+    
+    });
+       
+};
 ```
 
 
