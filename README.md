@@ -9,7 +9,7 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 
 ## Features
 
-* light-weight implementation
+* lightweight implementation
 * thread safe event handling and switching
 * nested state machines (sub-state machines)
 * wrapper for parallel states and state machines
