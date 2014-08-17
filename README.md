@@ -39,7 +39,7 @@ it, simply add the following line to your Podfile:
 
 Create state objects, set enter and exit blocks and register event handlers:
 
-```
+```objective-c
 TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
 stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
         
@@ -63,13 +63,13 @@ stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
 
 Create a state machine instance:
 
-```
+```objective-c
 TBStateMachine *stateMachine = [TBStateMachine stateMachineWithName:@"StateMachine"];
 ```
 
 Add states and set state machine up:
 
-```
+```objective-c
 stateMachine.states = @[stateA, stateB, ...];
 stateMachine.initialState = stateA;
 [stateMachine setup];
@@ -81,7 +81,7 @@ The state machine will immediately enter the initial state.
 
 TBStateMachine instances can also be nested as sub-state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
 
-```
+```objective-c
 TBStateMachine *subStateMachine = [TBStateMachine stateMachineWithName:@"SubStateMachine"];
 subStateMachine.states = @[stateC, stateD];
 subStateMachine.initialState = stateC;
@@ -95,7 +95,7 @@ You do not need to call `- (void)setup` and `- (void)tearDown` since they are wr
 
 To run multiple states and sub-state machines you can use the `TBStateMachineParallelWrapper`:
 
-```
+```objective-c
 TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
 parallelWrapper.states = @[subStateMachineA, subStateMachineB, stateZ];
     
@@ -112,7 +112,7 @@ Actions will be executed in parallel on different background threads. Make sure 
 
 Register an event handler which returns a valid node**:
 
-```
+```objective-c
 [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
     
     NSDictionary *data = event.data;
@@ -124,7 +124,7 @@ Register an event handler which returns a valid node**:
 
 Send the event:
 
-```
+```objective-c
 NSDictionary *userInfo = @{@"message" : @"abcde", @"code", @[12345]};
 TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA" data:userInfo];
 [stateMachine handleEvent:eventA];
