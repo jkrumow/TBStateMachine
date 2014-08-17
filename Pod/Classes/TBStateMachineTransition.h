@@ -29,10 +29,10 @@
 /**
  *  Creates a `TBStateMachineTransition` instance from a given source and destination state.
  *
- *  @param sourceState The specified source state
- *  @param destinationState  The specified destination state
+ *  @param sourceState The specified source state.
+ *  @param destinationState  The specified destination state.
  *
- *  @return The transition object
+ *  @return The transition object.
  */
 + (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState;
 
