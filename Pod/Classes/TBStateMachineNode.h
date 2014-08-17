@@ -12,16 +12,17 @@
 @class TBStateMachineTransition;
 
 /**
- *  This protocol defines a node in a state machine. Nodes are objects that can represent states or sub state machines.
- *  and can be switched by the state machine.
+ *  This protocol defines a node in a state machine.
  *
+ *  Classes which implement this protocol can represent states or sub-state machines
+ *  and can be managed by state machine.
  */
 @protocol TBStateMachineNode <NSObject>
 
 /**
  *  Returns the node's name.
  *
- *  Classes that implement this method must return a unique name.
+ *  Classes which implement this method must return a unique name.
  *
  *  @return The name as a string.
  */
@@ -45,7 +46,8 @@
 
 /**
  *  Receives a specified `TBStateMachineEvent` instance.
- *  If the node contains the matching `TBStateMachineEvent` instance the corresponding `TBStateMachineEventBlock` is executed.
+ *
+ *  If the node recognizes the given `TBStateMachineEvent` the corresponding `TBStateMachineEventBlock` is executed.
  *
  *  @param event The given `TBStateMachineEvent` instance.
  *
@@ -54,8 +56,10 @@
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event;
 
 /**
- *  Receives a specified `TBStateMachineEvent` instance.
- *  If the node contains the matching `TBStateMachineEvent` instance the corresponding `TBStateMachineEventBlock` is executed.
+ *  Receives a specified `TBStateMachineEvent` instance and payload dictionary.
+ *
+ *  If the node recognizes the given `TBStateMachineEvent` the corresponding `TBStateMachineEventBlock` is executed
+ *  and the paylod data is passed into the block.
  *
  *  @param event The given `TBStateMachineEvent` instance.
  *  @param data  The payload data.

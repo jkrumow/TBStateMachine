@@ -27,11 +27,6 @@
 @property (nonatomic, weak) id<TBStateMachineNode> destinationState;
 
 /**
- *  All `TBStateMachineEvent` instances added to this transition instance.
- */
-@property (nonatomic, strong, readonly) NSMutableDictionary *eventHandlers;
-
-/**
  *  Creates a `TBStateMachineTransition` instance from a given source and destination state.
  *
  *  @param sourceState The specified source state
@@ -41,6 +36,11 @@
  */
 + (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState;
 
+/**
+ *  The transition's name.
+ *
+ *  @return the name.
+ */
 - (NSString *)name;
 
 @end

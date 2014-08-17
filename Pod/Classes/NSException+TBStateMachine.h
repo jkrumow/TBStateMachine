@@ -8,13 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-/**
- *  Defines the name of NSExceptions thrown by `TBStateMachine`.
- */
 FOUNDATION_EXPORT NSString * const TBStateMachineException;
 
 /**
- *  This category defines methods to create NSException instances with name defined by the constant `TBStateMachineException`.
+ *  This category adds class methods to create NSException instances thrown by the TBStateMachine library.
  */
 @interface NSException (TBStateMachine)
 

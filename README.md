@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/cocoapods/l/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![Platform](https://img.shields.io/cocoapods/p/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 
-An event-driven hierarchical (finite) state machine.
+A lightweight event-driven hierarchical finite state machine implementation in Objective-C.
 
 ## Features
 
@@ -12,8 +12,8 @@ An event-driven hierarchical (finite) state machine.
 * state objects
 * event handling
 * thread safe event handling and switching
-* nestible states machines (sub-state machines)
-* wrapper class for parallel states and state machines
+* nested state machines (sub-state machines)
+* wrapper for parallel states and state machines
 * block based API
 
 ## Example Project
@@ -102,7 +102,11 @@ parallelWrapper.states = @[subStateMachineA, subStateMachineB, stateZ];
 stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
 
-**Notice:** When sending events into the TBStateMachineParallelWrapper instance each node will handle the event, but only the follow-up node which was returned first to the wrapper will switch out of the parallel state.
+**Notice:**
+When sending events into the TBStateMachineParallelWrapper instance each node will handle the event, but only the follow-up node which was returned first to the wrapper will switch out of the parallel state.
+
+**Concurrency:**
+Actions will be executed in parallel on different background threads. Make sure your event, enter and exit handler code is dispatched back onto the right queue.
 
 ### Switching States
 

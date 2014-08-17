@@ -17,7 +17,15 @@
 /**
  *  This class represents a hierarchical finite state machine.
  *
- *  Supports events, nested states machines and transitions.
+ *  It supports events, nested and parallel state machines.
+ *
+ *  To set the state machine up properly:
+ *
+ *  - set at least one state via -setStates:
+ *  - set an initial state (which has already been added to the state machine) via -setInitialState:
+ *  - call -setUp to activate the state machine
+ *  - call -tearDown to deactivate the state machine
+ *
  */
 @interface TBStateMachine : NSObject <TBStateMachineNode>
 
@@ -27,7 +35,7 @@
 @property (nonatomic, copy, readonly) NSString *name;
 
 /**
- *  The initial state of the state machine. Must be set before calling -setup.
+ *  The initial state of the state machine. Must be set before calling -setUp.
  */
 @property (nonatomic, strong, readonly) id<TBStateMachineNode> initialState;
 
@@ -61,19 +69,19 @@
 /**
  *  Starts up the state machine. Will switch into the state defined by -setInitialState:.
  *
- *  Throws a `TBStateMachineException` if initial state has not been set beforehand.
+ *  Throws `TBStateMachineException` if initial state has not been set beforehand.
  */
 - (void)setUp;
 
 /**
- *  Leaves the current state or cancelles the current transition. Shuts down the state machine.
+ *  Leaves the current state and shuts down the state machine.
  */
 - (void)tearDown;
 
 /**
  *  Returns the states the state machine manages.
  *
- *  @return An NSArray containing all `TBStateMachineNode` instances
+ *  @return An NSArray containing all `TBStateMachineNode` instances.
  */
 - (NSArray *)states;
 
@@ -89,7 +97,7 @@
 /**
  *  Sets the initial state of the state machine.
  *
- *  Throws a `TBStateMachineException` if state has not been set through -setStates:.
+ *  Throws `TBStateMachineException` if state has not been set through -setStates:.
  *
  *  @param initialState A given state object.
  */
