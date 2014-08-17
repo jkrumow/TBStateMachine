@@ -57,7 +57,7 @@
 
 - (NSArray *)states
 {
-    return [_priv_states allValues];
+    return [NSArray arrayWithArray:_priv_states.allValues];
 }
 
 - (void)setStates:(NSArray *)states
