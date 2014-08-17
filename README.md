@@ -87,7 +87,7 @@ subStateMachine.initialState = stateC;
 stateMachine.states = @[stateA, stateB, subStateMachine];
 ```
 
-You do not need to call `- (void)setup` and `- (void)tearDown` since they are wrapped by `-(void)enter:transition:` and `- (void)exit:transition:`.
+You do not need to call `- (void)setup` and `- (void)tearDown` since they are wrapped by `-(void)enter:data:` and `- (void)exit:data:`.
 
 ### Parallel States and State Machines
 
