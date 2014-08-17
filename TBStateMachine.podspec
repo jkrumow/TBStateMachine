@@ -1,15 +1,9 @@
 Pod::Spec.new do |s|
   s.name             = "TBStateMachine"
-  s.version          = "1.0.0"
-  s.summary          = "A lightweight implementation of a hierarchical finite state machine in Objective-C."
+  s.version          = "0.9.0"
+  s.summary          = "A lightweight implementation of a hierarchical state machine in Objective-C."
   s.description      = <<-DESC
-                       A lightweight implementation of a hierarchical finite state machine in Objective-C.
-
-                       Features:
-                       * nested and parallel states and sub state machines
-                       * event handling
-                       * block based API
-                       * threadsafe usage
+                       A lightweight implementation of a hierarchical state machine in Objective-C.
                        
                        DESC
   s.homepage         = "https://github.com/tarbrain/TBStateMachine"

@@ -15,7 +15,7 @@
 #import "NSException+TBStateMachine.h"
 
 /**
- *  This class represents a hierarchical finite state machine.
+ *  This class represents a hierarchical state machine.
  *
  *  It supports events, nested and parallel state machines.
  *
