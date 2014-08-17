@@ -100,15 +100,12 @@ parallelWrapper.states = @[subStateMachineA, subStateMachineB, stateZ];
 stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
 
-**Notice:**
-When sending events into the TBStateMachineParallelWrapper instance each node will handle the event, but only the follow-up node which was returned first to the wrapper will switch out of the parallel state.
-
 **Concurrency:**
 Actions will be executed in parallel on different background threads. Make sure your event, enter and exit handler code is dispatched back onto the right queue.
 
 ### Switching States
 
-Register an event handler which returns a valid node**:
+Register an event handler which returns a valid node:
 
 ```objective-c
 [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event) {
