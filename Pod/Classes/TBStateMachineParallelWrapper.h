@@ -17,8 +17,8 @@
  *  which was returned first to the wrapper will switch out of the parallel state.
  *
  *  **Concurrency:**
- *  Actions will be executed in parallel on different background threads.
- *  Make sure your event, enter and exit handler code is dispatched back onto the right queue.
+ *  Event handlers, enter and exit handlers will be executed on a background queue.
+ *  Make sure the code in these blocks is dispatched back onto the right queue.
  */
 @interface TBStateMachineParallelWrapper : NSObject <TBStateMachineNode>
 

@@ -10,7 +10,14 @@
 
 @interface TBStateMachine ()
 
-@property (nonatomic, strong, readonly) NSMutableDictionary *priv_states;
+#if OS_OBJECT_USE_OBJC
+@property (strong, nonatomic) dispatch_queue_t eventQueue;
+#else
+@property (assign, nonatomic) dispatch_queue_t eventQueue;
+#endif
+
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, strong) NSMutableDictionary *priv_states;
 
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
@@ -33,8 +40,17 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
+        _eventQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.EventQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
+}
+
+- (void)dealloc
+{
+#if !OS_OBJECT_USE_OBJC
+    dispatch_release(_eventQueue);
+    _eventQueue = nil;
+#endif
 }
 
 - (void)setUp
@@ -116,11 +132,11 @@
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
-    TBStateMachineTransition *transition = nil;
+    __block TBStateMachineTransition *transition = nil;
     
-    @synchronized(self) {
+    dispatch_sync(_eventQueue, ^{
         transition = [self _handleEvent:event data:data];
-    }
+    });
     
     return transition;
 }

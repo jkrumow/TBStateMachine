@@ -26,13 +26,11 @@
  *  - call -setUp to activate the state machine
  *  - call -tearDown to deactivate the state machine
  *
+ *  **Concurrency:**
+ *  Event handlers, enter and exit handlers will be executed on a background queue.
+ *  Make sure the code in these blocks is dispatched back onto the right queue.
  */
 @interface TBStateMachine : NSObject <TBStateMachineNode>
-
-/**
- *  The state machine's name.
- */
-@property (nonatomic, copy, readonly) NSString *name;
 
 /**
  *  The initial state of the state machine. Must be set before calling -setUp.
