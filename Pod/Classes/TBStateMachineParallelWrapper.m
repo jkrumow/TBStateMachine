@@ -39,6 +39,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    dispatch_release(_parallelQueue);
+}
+
 - (void)setStates:(NSArray *)states
 {
     [_priv_parallelStates removeAllObjects];
