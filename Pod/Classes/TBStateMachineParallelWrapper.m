@@ -14,7 +14,12 @@
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
-@property (nonatomic, assign) dispatch_queue_t parallelQueue;
+
+#if OS_OBJECT_USE_OBJC
+@property (strong, nonatomic) dispatch_queue_t parallelQueue;
+#else
+@property (assign, nonatomic) dispatch_queue_t parallelQueue;
+#endif
 
 @end
 
