@@ -41,7 +41,10 @@
 
 - (void)dealloc
 {
+    #if !OS_OBJECT_USE_OBJC
     dispatch_release(_parallelQueue);
+    _parallelQueue = nil;
+    #endif
 }
 
 - (void)setStates:(NSArray *)states
