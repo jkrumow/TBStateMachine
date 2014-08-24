@@ -47,6 +47,8 @@
 	[_eventHandlers removeObjectForKey:event.name];
 }
 
+#pragma mark - private methods
+
 - (BOOL)_canHandleEvent:(TBStateMachineEvent *)event
 {
     return ([_eventHandlers objectForKey:event.name] != nil);

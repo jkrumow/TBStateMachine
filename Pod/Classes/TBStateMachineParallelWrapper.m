@@ -16,9 +16,9 @@
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
 
 #if OS_OBJECT_USE_OBJC
-@property (strong, nonatomic) dispatch_queue_t parallelQueue;
+@property (nonatomic, strong) dispatch_queue_t parallelQueue;
 #else
-@property (assign, nonatomic) dispatch_queue_t parallelQueue;
+@property (nonatomic, assign) dispatch_queue_t parallelQueue;
 #endif
 
 @end
@@ -66,6 +66,8 @@
     }
 }
 
+#pragma mark - TBStateMachineNode
+
 - (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
 {
 	dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
@@ -104,6 +106,5 @@
     // return follow-up state.
     return nextTransition;
 }
-
 
 @end

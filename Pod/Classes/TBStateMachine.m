@@ -11,9 +11,9 @@
 @interface TBStateMachine ()
 
 #if OS_OBJECT_USE_OBJC
-@property (strong, nonatomic) dispatch_queue_t eventQueue;
+@property (nonatomic, strong) dispatch_queue_t eventQueue;
 #else
-@property (assign, nonatomic) dispatch_queue_t eventQueue;
+@property (nonatomic, assign) dispatch_queue_t eventQueue;
 #endif
 
 @property (nonatomic, copy) NSString *name;
@@ -99,9 +99,11 @@
     }
 }
 
+#pragma mark - private methods
+
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data
 {
-    // leave current state
+    // exit current state
     if (_currentState) {
         [_currentState exit:state data:data];
     }
@@ -111,6 +113,26 @@
     if (_currentState) {
         [_currentState enter:oldState data:data];
     }
+}
+
+- (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
+    TBStateMachineTransition *transition;
+    if (_currentState) {
+        transition = [_currentState handleEvent:event data:data];
+    }
+    if (transition && transition.destinationState) {
+        if ([_priv_states objectForKey:transition.destinationState.name]) {
+            [self _switchState:transition.destinationState data:data];
+        } else {
+            // exit current state
+            [self _switchState:nil data:data];
+            
+            // bubble up to parent statemachine
+            return transition;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - TBStateMachineNode
@@ -139,26 +161,6 @@
     });
     
     return transition;
-}
-
-- (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
-{
-    TBStateMachineTransition *transition;
-    if (_currentState) {
-        transition = [_currentState handleEvent:event data:data];
-    }
-    if (transition && transition.destinationState) {
-        if ([_priv_states objectForKey:transition.destinationState.name]) {
-            [self _switchState:transition.destinationState data:data];
-        } else {
-            // exit current state
-            [self _switchState:nil data:data];
-            
-            // bubble up to parent statemachine
-            return transition;
-        }
-    }
-    return nil;
 }
 
 @end

@@ -268,7 +268,7 @@ describe(@"TBStateMachineParallelWrapper", ^{
 });
 
 describe(@"TBStateMachineEvent", ^{
-
+    
     it (@"throws a TBStateMachineException when name is nil.", ^{
         
         expect(^{
@@ -284,7 +284,7 @@ describe(@"TBStateMachineEvent", ^{
         }).to.raise(TBStateMachineException);
         
     });
-
+    
 });
 
 describe(@"TBStateMachine", ^{
@@ -349,7 +349,7 @@ describe(@"TBStateMachine", ^{
         }).to.raise(TBStateMachineException);
         
     });
-
+    
     it(@"throws TBStateMachineException when state object does not implement the TBStateMachineNode protocol.", ^{
         id object = [[NSObject alloc] init];
         NSArray *states = @[stateA, stateB, object];
@@ -404,7 +404,7 @@ describe(@"TBStateMachine", ^{
         expect(dataEnterA).to.beNil;
         expect(wasExitExecuted).to.equal(NO);
     });
-
+    
     it(@"exits initial state on tear down.", ^{
         
         NSArray *states = @[stateA, stateB];
@@ -501,7 +501,7 @@ describe(@"TBStateMachine", ^{
         expect(receivedData[EVENT_DATA_KEY]).toNot.beNil;
         expect(receivedData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
     });
-
+    
     it(@"passes event data into the enter and exit blocks of the involved states.", ^{
         
         NSArray *states = @[stateA, stateB];
