@@ -15,9 +15,16 @@
 #import "NSException+TBStateMachine.h"
 
 /**
- *  This class represents a hierarchical state machine.
+ *  This class represents a hierarchical finite state machine.
  *
- *  It supports events, nested and parallel state machines.
+ *  The state machine is able to switch between nodes.
+ *  A node can be:
+ *
+ *  - a simple state - represented by `TBStateMachineState`
+ *  - a sub-state machine - represented by `TBStateMachine`
+ *  - a wrapper for multiple parallel nodes - represented by `TBStateMachineParallelWrapper`
+ *
+ *  All classes mentioned above implement the `TBStateMachineNode` protocol.
  *
  *  To set the state machine up properly:
  *

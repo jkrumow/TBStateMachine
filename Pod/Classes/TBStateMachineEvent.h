@@ -14,8 +14,8 @@
 /**
  *  This type represents a block that is executed when a given `TBStateMachineEvent` can be successfully handled by a `TBStateMachineNode` instance.
  *
- *  @param id<TBStateMachineNode> The corresponding `TBStateMachineEvent` that is handled.
- *  @param NSDictionary The payload data.
+ *  @param event The corresponding `TBStateMachineEvent` that is handled.
+ *  @param data The payload data.
  *
  *  @return The next state switch to.
  */

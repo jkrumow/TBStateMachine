@@ -14,8 +14,7 @@
 /**
  *  This protocol defines a node in a state machine.
  *
- *  Classes which implement this protocol can represent states or sub-state machines
- *  and can be managed by state machine.
+ *  Classes which implement this protocol can be managed by state machine.
  */
 @protocol TBStateMachineNode <NSObject>
 
