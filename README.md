@@ -9,7 +9,6 @@ A lightweight event-driven finite hierarchical state machine implementation in O
 
 ## Features
 
-* lightweight implementation
 * thread safe event handling and switching
 * nested state machines
 * wrapper for parallel states and state machines
