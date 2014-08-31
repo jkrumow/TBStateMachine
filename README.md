@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/cocoapods/v/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![License](https://img.shields.io/cocoapods/l/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![Platform](https://img.shields.io/cocoapods/p/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
-[![Build Status](https://travis-ci.org/tarbrain/TBStateMachine.svg?branch=master)](https://travis-ci.org/tarbrain/TBStateMachine)
+[![Build Status](https://img.shields.io/travis/tarbrain/TBStateMachine/master.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 
 A lightweight event-driven finite hierarchical state machine implementation in Objective-C.
 
