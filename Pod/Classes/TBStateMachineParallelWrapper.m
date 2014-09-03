@@ -27,7 +27,7 @@
 
 + (TBStateMachineParallelWrapper *)parallelWrapperWithName:(NSString *)name;
 {
-	return [[TBStateMachineParallelWrapper alloc] initWithName:name];
+    return [[TBStateMachineParallelWrapper alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name
@@ -70,7 +70,7 @@
 
 - (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
 {
-	dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
+    dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
         id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
         [stateMachineNode enter:previousState data:data];

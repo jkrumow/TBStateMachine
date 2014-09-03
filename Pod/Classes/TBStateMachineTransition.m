@@ -13,7 +13,7 @@
 
 + (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState
 {
-	TBStateMachineTransition *transition = [TBStateMachineTransition new];
+    TBStateMachineTransition *transition = [TBStateMachineTransition new];
     transition.sourceState = sourceState;
     transition.destinationState = destinationState;
     return transition;

@@ -44,7 +44,7 @@
 
 - (void)unregisterEvent:(TBStateMachineEvent *)event;
 {
-	[_eventHandlers removeObjectForKey:event.name];
+    [_eventHandlers removeObjectForKey:event.name];
 }
 
 #pragma mark - private methods
@@ -77,7 +77,7 @@
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
-	if ([self _canHandleEvent:event]) {
+    if ([self _canHandleEvent:event]) {
         TBStateMachineEventBlock handler = [_eventHandlers objectForKey:event.name];
         id<TBStateMachineNode> nextState = handler(event, data);
         return [TBStateMachineTransition transitionWithSourceState:self destinationState:nextState];

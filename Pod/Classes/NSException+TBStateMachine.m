@@ -27,22 +27,22 @@ static NSString * const TBNoNameForEventExceptionReason = @"Event needs to have 
 
 + (NSException *)tb_nonExistingStateException:(NSString *)stateName
 {
-	return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateName] userInfo:nil];
+    return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateName] userInfo:nil];
 }
 
 + (NSException *)tb_noInitialStateException:(NSString *)stateMachineName;
 {
-	return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateMachineName] userInfo:nil];
+    return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateMachineName] userInfo:nil];
 }
 
 + (NSException *)tb_noNameForNodeException;
 {
-	return [NSException exceptionWithName:TBStateMachineException reason:TBNoNameForNodeExceptionReason userInfo:nil];
+    return [NSException exceptionWithName:TBStateMachineException reason:TBNoNameForNodeExceptionReason userInfo:nil];
 }
 
 + (NSException *)tb_noNameForEventException;
 {
-	return [NSException exceptionWithName:TBStateMachineException reason:TBNoNameForEventExceptionReason userInfo:nil];
+    return [NSException exceptionWithName:TBStateMachineException reason:TBNoNameForEventExceptionReason userInfo:nil];
 }
 
 @end

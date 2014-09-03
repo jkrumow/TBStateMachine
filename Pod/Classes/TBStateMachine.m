@@ -28,7 +28,7 @@
 
 + (TBStateMachine *)stateMachineWithName:(NSString *)name;
 {
-	return [[TBStateMachine alloc] initWithName:name];
+    return [[TBStateMachine alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name
@@ -55,7 +55,7 @@
 
 - (void)setUp
 {
-	if (_initialState) {
+    if (_initialState) {
         [self _switchState:_initialState data:nil];
     } else {
         @throw [NSException tb_nonExistingStateException:@"nil"];
@@ -139,7 +139,7 @@
 
 - (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
 {
-	[self setUp];
+    [self setUp];
 }
 
 - (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data

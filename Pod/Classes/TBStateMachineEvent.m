@@ -13,7 +13,7 @@
 
 + (TBStateMachineEvent *)eventWithName:(NSString *)name
 {
-	return [[TBStateMachineEvent alloc] initWithName:name];
+    return [[TBStateMachineEvent alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name
