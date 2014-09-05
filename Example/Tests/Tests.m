@@ -844,6 +844,8 @@ describe(@"TBStateMachine", ^{
         expect(previousStateDataA[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
     });
     
+    /*
+     
     it(@"handles events sent concurrently from multiple threads", ^AsyncBlock{
         
         // set of states which will be switched to.
@@ -939,6 +941,8 @@ describe(@"TBStateMachine", ^{
         expect(inputSequence).will.equal(outputSequence);
         
     });
+    
+    */
     
 });
 
