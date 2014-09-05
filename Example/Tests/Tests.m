@@ -67,8 +67,8 @@ describe(@"TBStateMachineState", ^{
     
     it(@"registers TBStateMachineEventBlock instances by the name of a provided TBStateMachineEvent instance.", ^{
         
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event, NSDictionary *data) {
-            return nil;
+        [stateA registerEvent:eventA target:nil action:^void(TBStateMachineEvent *event, NSDictionary *data) {
+            
         }];
         
         NSDictionary *registeredEvents = stateA.eventHandlers;
@@ -78,12 +78,12 @@ describe(@"TBStateMachineState", ^{
     
     it(@"handles events by returning nil or a TBStateMachineTransition containing source and destination state.", ^{
         
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event, NSDictionary *data) {
-            return nil;
+        [stateA registerEvent:eventA target:nil action:^void(TBStateMachineEvent *event, NSDictionary *data) {
+            
         }];
         
-        [stateA registerEvent:eventB handler:^id<TBStateMachineNode>(TBStateMachineEvent *event, NSDictionary *data) {
-            return stateB;
+        [stateA registerEvent:eventB target:stateB action:^void(TBStateMachineEvent *event, NSDictionary *data) {
+            
         }];
         
         TBStateMachineTransition *resultA = [stateA handleEvent:eventA];
@@ -214,27 +214,23 @@ describe(@"TBStateMachineParallelWrapper", ^{
     it(@"handles events on all registered states until the first valid follow-up state is returned.", ^{
         
         __block BOOL stateAHasHandledEvent = NO;
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event, NSDictionary *data) {
+        [stateA registerEvent:eventA target:nil action:^void(TBStateMachineEvent *event, NSDictionary *data) {
             stateAHasHandledEvent = YES;
-            return nil;
         }];
         
         __block BOOL stateBHasHandledEvent = NO;
-        [stateB registerEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event, NSDictionary *data) {
+        [stateB registerEvent:eventA target:nil action:^void(TBStateMachineEvent *event, NSDictionary *data) {
             stateBHasHandledEvent = YES;
-            return nil;
         }];
         
         __block BOOL stateCHasHandledEvent = NO;
-        [stateC registerEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event, NSDictionary *data) {
+        [stateC registerEvent:eventA target:stateE action:^void(TBStateMachineEvent *event, NSDictionary *data) {
             stateCHasHandledEvent = YES;
-            return stateE;
         }];
         
         __block BOOL stateDHasHandledEvent = NO;
-        [stateD registerEvent:eventA handler:^id<TBStateMachineNode>(TBStateMachineEvent *event, NSDictionary *data) {
+        [stateD registerEvent:eventA target:stateF action:^void(TBStateMachineEvent *event, NSDictionary *data) {
             stateDHasHandledEvent = YES;
-            return stateF;
         }];
         
         NSArray *states = @[stateA, stateB, stateC, stateD];
@@ -457,9 +453,8 @@ describe(@"TBStateMachine", ^{
         };
         
         __block TBStateMachineEvent *receivedEvent;
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+        [stateA registerEvent:eventA target:stateB action:^void (TBStateMachineEvent *event, NSDictionary *data) {
             receivedEvent = event;
-            return stateB;
         }];
         
         stateMachine.states = states;
@@ -480,10 +475,9 @@ describe(@"TBStateMachine", ^{
         
         __block TBStateMachineEvent *receivedEvent;
         __block NSDictionary *receivedData;
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+        [stateA registerEvent:eventA target:stateB action:^void (TBStateMachineEvent *event, NSDictionary *data) {
             receivedEvent = event;
             receivedData = data;
-            return stateB;
         }];
         
         stateMachine.states = states;
@@ -511,9 +505,8 @@ describe(@"TBStateMachine", ^{
         };
         
         __block TBStateMachineEvent *receivedEvent;
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+        [stateA registerEvent:eventA target:stateB action:^void (TBStateMachineEvent *event, NSDictionary *data) {
             receivedEvent = event;
-            return stateB;
         }];
         
         stateMachine.states = states;
@@ -534,8 +527,8 @@ describe(@"TBStateMachine", ^{
         
         NSArray *states = @[stateA, stateB];
         
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return stateC;
+        [stateA registerEvent:eventA target:stateC action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
         stateMachine.states = states;
@@ -560,9 +553,8 @@ describe(@"TBStateMachine", ^{
             nextStateA = nextState;
         };
         
-        __block typeof (stateA) weakStateA = stateA;
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return weakStateA;
+//        __block typeof (stateA) weakStateA = stateA;
+        [stateA registerEvent:eventA target:stateA action:^void (TBStateMachineEvent *event, NSDictionary *data) {
         }];
         
         stateMachine.states = states;
@@ -601,12 +593,12 @@ describe(@"TBStateMachine", ^{
             dataExitD = data;
         };
         
-        [stateC registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return stateD;
+        [stateC registerEvent:eventA target:stateD action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
-        [stateD registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return stateA;
+        [stateD registerEvent:eventA target:stateA action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
         NSArray *subStates = @[stateC, stateD];
@@ -636,12 +628,12 @@ describe(@"TBStateMachine", ^{
             nextStateB = nextState;
         };
         
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return stateB;
+        [stateA registerEvent:eventA target:stateB action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
-        [stateB registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return subStateMachineA;
+        [stateB registerEvent:eventA target:subStateMachineA action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
         NSArray *states = @[stateA, stateB, subStateMachineA];
@@ -777,34 +769,33 @@ describe(@"TBStateMachine", ^{
             nextStateB = nextState;
         };
         
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return stateB;
+        [stateA registerEvent:eventA target:stateB action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
-        [stateB registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return parallelStates;
+        [stateB registerEvent:eventA target:parallelStates action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
-        [stateC registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return stateD;
+        [stateC registerEvent:eventA target:stateD action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
-        [stateD registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return nil;
+        [stateD registerEvent:eventA target:nil action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
-        [stateE registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return stateF;
+        [stateE registerEvent:eventA target:stateF action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
-        [stateF registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-            return stateA;
+        [stateF registerEvent:eventA target:stateA action:^void (TBStateMachineEvent *event, NSDictionary *data) {
+
         }];
         
         __block TBStateMachineEvent *receivedEventG;
-        [stateG registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+        [stateG registerEvent:eventA target:nil action:^void (TBStateMachineEvent *event, NSDictionary *data) {
             receivedEventG = event;
-            return nil;
         }];
         
         NSArray *states = @[stateA, stateB, parallelStates];
@@ -918,19 +909,19 @@ describe(@"TBStateMachine", ^{
             processEntranceData(@"d", data);
         };
         
-        [stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+        [stateA registerEvent:eventA target:nil action:^void (TBStateMachineEvent *event, NSDictionary *data) {
             return processEventData(data);
         }];
         
-        [stateB registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+        [stateB registerEvent:eventA target:nil action:^void (TBStateMachineEvent *event, NSDictionary *data) {
             return processEventData(data);
         }];
         
-        [stateC registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+        [stateC registerEvent:eventA target:nil action:^void (TBStateMachineEvent *event, NSDictionary *data) {
             return processEventData(data);
         }];
         
-        [stateD registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+        [stateD registerEvent:eventA target:nil action:^void (TBStateMachineEvent *event, NSDictionary *data) {
             return processEventData(data);
         }];
         

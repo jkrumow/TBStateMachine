@@ -37,9 +37,10 @@
     return self;
 }
 
-- (void)registerEvent:(TBStateMachineEvent *)event handler:(TBStateMachineEventBlock)handler
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action
 {
-    [_eventHandlers setObject:handler forKey:event.name];
+    NSDictionary *eventHandler = @{@"target" : target, @"action" : action};
+    [_eventHandlers setObject:eventHandler forKey:event.name];
 }
 
 - (void)unregisterEvent:(TBStateMachineEvent *)event;
@@ -78,8 +79,12 @@
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
     if ([self _canHandleEvent:event]) {
-        TBStateMachineEventBlock handler = [_eventHandlers objectForKey:event.name];
-        id<TBStateMachineNode> nextState = handler(event, data);
+        NSDictionary *eventHandler = [_eventHandlers objectForKey:event.name];
+        TBStateMachineActionBlock action = eventHandler[@"action"];
+        if (action) {
+            action(event, data);
+        }
+        id<TBStateMachineNode> nextState = eventHandler[@"target"];
         return [TBStateMachineTransition transitionWithSourceState:self destinationState:nextState];
     }
     return nil;
