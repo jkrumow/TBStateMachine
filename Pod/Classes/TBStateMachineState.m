@@ -39,7 +39,12 @@
 
 - (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action
 {
-    NSDictionary *eventHandler = @{@"target" : target, @"action" : action};
+    
+    NSMutableDictionary *eventHandler = [NSMutableDictionary new];
+    if (target) {
+        eventHandler[@"target"] = target;
+    }
+    eventHandler[@"action"] = action;
     [_eventHandlers setObject:eventHandler forKey:event.name];
 }
 
