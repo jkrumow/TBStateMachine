@@ -6,7 +6,7 @@
 [![Build Status](https://img.shields.io/travis/tarbrain/TBStateMachine/master.svg?style=flat)](https://travis-ci.org/tarbrain/TBStateMachine)
 
 
-A lightweight event-driven finite hierarchical state machine implementation in Objective-C.
+A lightweight event-driven hierarchical state machine implementation in Objective-C.
 
 ## Features
 
