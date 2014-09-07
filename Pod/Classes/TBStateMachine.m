@@ -11,13 +11,14 @@
 @interface TBStateMachine ()
 
 #if OS_OBJECT_USE_OBJC
-@property (nonatomic, strong) dispatch_queue_t eventQueue;
+@property (nonatomic, strong) dispatch_queue_t eventDispatchQueue;
 #else
-@property (nonatomic, assign) dispatch_queue_t eventQueue;
+@property (nonatomic, assign) dispatch_queue_t eventDispatchQueue;
 #endif
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
+@property (nonatomic, strong) NSMutableArray *eventQueue;
 
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
@@ -40,7 +41,8 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _eventQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.EventQueue", DISPATCH_QUEUE_SERIAL);
+        _eventQueue = [NSMutableArray new];
+        _eventDispatchQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.eventDispatchQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -48,8 +50,8 @@
 - (void)dealloc
 {
 #if !OS_OBJECT_USE_OBJC
-    dispatch_release(_eventQueue);
-    _eventQueue = nil;
+    dispatch_release(_eventDispatchQueue);
+    _eventDispatchQueue = nil;
 #endif
 }
 
@@ -165,7 +167,7 @@
 {
     __block TBStateMachineTransition *transition = nil;
     
-    dispatch_sync(_eventQueue, ^{
+    dispatch_sync(_eventDispatchQueue, ^{
         transition = [self _handleEvent:event data:data];
     });
     
