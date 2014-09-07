@@ -667,9 +667,7 @@ describe(@"TBStateMachine", ^{
             nextStateA = nextState;
         };
         
-        //        __block typeof (stateA) weakStateA = stateA;
-        [stateA registerEvent:eventA target:stateA action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-        }];
+        [stateA registerEvent:eventA target:stateA];
         
         stateMachine.states = states;
         stateMachine.initialState = stateA;
@@ -707,13 +705,8 @@ describe(@"TBStateMachine", ^{
             dataExitD = data;
         };
         
-        [stateC registerEvent:eventA target:stateD action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
-        
-        [stateD registerEvent:eventA target:stateA action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
+        [stateC registerEvent:eventA target:stateD];
+        [stateD registerEvent:eventA target:stateA];
         
         NSArray *subStates = @[stateC, stateD];
         subStateMachineA.states = subStates;
@@ -742,13 +735,8 @@ describe(@"TBStateMachine", ^{
             nextStateB = nextState;
         };
         
-        [stateA registerEvent:eventA target:stateB action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
-        
-        [stateB registerEvent:eventA target:subStateMachineA action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
+        [stateA registerEvent:eventA target:stateB];
+        [stateB registerEvent:eventA target:subStateMachineA];
         
         NSArray *states = @[stateA, stateB, subStateMachineA];
         stateMachine.states = states;
@@ -887,25 +875,11 @@ describe(@"TBStateMachine", ^{
             
         }];
         
-        [stateB registerEvent:eventA target:parallelStates action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
-        
-        [stateC registerEvent:eventA target:stateD action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
-        
-        [stateD registerEvent:eventA target:nil action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
-        
-        [stateE registerEvent:eventA target:stateF action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
-        
-        [stateF registerEvent:eventA target:stateA action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
-            
-        }];
+        [stateB registerEvent:eventA target:parallelStates];
+        [stateC registerEvent:eventA target:stateD];
+        [stateD registerEvent:eventA target:nil];
+        [stateE registerEvent:eventA target:stateF];
+        [stateF registerEvent:eventA target:stateA];
         
         __block id<TBStateMachineNode> receivedEventG;
         [stateG registerEvent:eventA target:nil action:^void (id<TBStateMachineNode> nextState, NSDictionary *data) {
