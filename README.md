@@ -71,15 +71,29 @@ The state machine will immediately enter the initial state.
 
 ### Switching States
 
-Register an event handler which returns a valid node:
+Register an event handler from a given event and target state:
 
 ```objective-c
-[stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
-
-    // the follow-up node or nil
-    return stateB;
-}];
+[stateA registerEvent:eventA target:stateB];
 ```
+
+Register an event handler from a given event, target state, action and guard block:
+
+```objective-c
+[stateA registerEvent:eventA
+               target:stateB
+               action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                   
+                   // ...
+                   
+               }
+                guard:^BOOL(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                   
+                   return // YES or NO
+               }];
+```
+
+
 
 Send the event:
 
@@ -120,7 +134,7 @@ stateMachine.states = @[stateA, stateB, parallelWrapper];
 Event handlers, enter and exit handlers will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
 
 ```objective-c
-stateZ.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
     
     // evaluate payload data
     NSString *text = data[@"text"];
