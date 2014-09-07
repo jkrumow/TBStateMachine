@@ -11,6 +11,7 @@
 #import "TBStateMachineState.h"
 #import "TBStateMachineTransition.h"
 #import "TBStateMachineEvent.h"
+#import "TBStateMachineEventHandler.h"
 #import "TBStateMachineParallelWrapper.h"
 #import "NSException+TBStateMachine.h"
 

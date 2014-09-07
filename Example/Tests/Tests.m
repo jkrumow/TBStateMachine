@@ -246,7 +246,7 @@ describe(@"TBStateMachineEvent", ^{
     it (@"throws a TBStateMachineException when name is nil.", ^{
         
         expect(^{
-            eventA = [TBStateMachineEvent eventWithName:nil];
+            [TBStateMachineEvent eventWithName:nil];
         }).to.raise(TBStateMachineException);
         
     });
@@ -254,7 +254,27 @@ describe(@"TBStateMachineEvent", ^{
     it (@"throws a TBStateMachineException when name is an empty string.", ^{
         
         expect(^{
-            eventA = [TBStateMachineEvent eventWithName:@""];
+            [TBStateMachineEvent eventWithName:@""];
+        }).to.raise(TBStateMachineException);
+        
+    });
+    
+});
+
+describe(@"TBStateMachineEventHandler", ^{
+    
+    it (@"throws a TBStateMachineException when name is nil.", ^{
+        
+        expect(^{
+            [TBStateMachineEventHandler eventHandlerWithName:nil target:nil action:nil guard:nil];
+        }).to.raise(TBStateMachineException);
+        
+    });
+    
+    it (@"throws a TBStateMachineException when name is an empty string.", ^{
+        
+        expect(^{
+            [TBStateMachineEventHandler eventHandlerWithName:@"" target:nil action:nil guard:nil];
         }).to.raise(TBStateMachineException);
         
     });
