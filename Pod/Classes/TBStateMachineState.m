@@ -8,6 +8,7 @@
 
 #import "TBStateMachineState.h"
 #import "NSException+TBStateMachine.h"
+#import "TBStateMachineEventHandler.h"
 
 @interface TBStateMachineState ()
 
@@ -37,14 +38,19 @@
     return self;
 }
 
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target
+{
+    [self registerEvent:event target:target action:nil guard:nil];
+}
+
 - (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action
 {
-    
-    NSMutableDictionary *eventHandler = [NSMutableDictionary new];
-    if (target) {
-        eventHandler[@"target"] = target;
-    }
-    eventHandler[@"action"] = action;
+    [self registerEvent:event target:target action:action guard:nil];
+}
+
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
+{
+    TBStateMachineEventHandler *eventHandler = [TBStateMachineEventHandler eventHandlerWithName:event.name target:target action:action guard:guard];
     [_eventHandlers setObject:eventHandler forKey:event.name];
 }
 
@@ -84,13 +90,8 @@
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
     if ([self _canHandleEvent:event]) {
-        NSDictionary *eventHandler = [_eventHandlers objectForKey:event.name];
-        TBStateMachineActionBlock action = eventHandler[@"action"];
-        if (action) {
-            action(event, data);
-        }
-        id<TBStateMachineNode> nextState = eventHandler[@"target"];
-        return [TBStateMachineTransition transitionWithSourceState:self destinationState:nextState];
+        TBStateMachineEventHandler *eventHandler = [_eventHandlers objectForKey:event.name];
+        return [TBStateMachineTransition transitionWithSourceState:self destinationState:eventHandler.target action:eventHandler.action guard:eventHandler.guard];
     }
     return nil;
 }

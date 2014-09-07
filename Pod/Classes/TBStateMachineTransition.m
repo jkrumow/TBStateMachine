@@ -11,12 +11,21 @@
 
 @implementation TBStateMachineTransition
 
-+ (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState
++ (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
 {
-    TBStateMachineTransition *transition = [TBStateMachineTransition new];
-    transition.sourceState = sourceState;
-    transition.destinationState = destinationState;
-    return transition;
+    return [[TBStateMachineTransition alloc] initWithSourceState:sourceState destinationState:destinationState action:action guard:guard];
+}
+
+- (instancetype)initWithSourceState:()sourceState destinationState:()destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
+{
+    self = [super init];
+    if (self) {
+        _sourceState = sourceState;
+        _destinationState = destinationState;
+        _action = action;
+        _guard = guard;
+    }
+    return self;
 }
 
 - (NSString *)name

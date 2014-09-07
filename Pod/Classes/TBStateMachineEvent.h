@@ -8,18 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+
 @class TBStateMachineEvent;
 @protocol TBStateMachineNode;
 
-/**
- *  This type represents a block that is executed when a given `TBStateMachineEvent` can be successfully handled by a `TBStateMachineNode` instance.
- *
- *  @param event The corresponding `TBStateMachineEvent` that is handled.
- *  @param data The payload data.
- *
- *  @return The next state switch to.
- */
-typedef void(^TBStateMachineActionBlock)(TBStateMachineEvent *event, NSDictionary *data);
 
 /**
  *  This class represents an event in a state machine.
