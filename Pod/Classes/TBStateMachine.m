@@ -1,4 +1,4 @@
-    //
+//
 //  TBStateMachine.m
 //  TBStateMachine
 //
@@ -19,7 +19,7 @@
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 
-- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock) action guard:(TBStateMachineGuardBlock)guard;
+- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 
 @end
@@ -56,7 +56,7 @@
 - (void)setUp
 {
     if (_initialState) {
-        [self _switchState:_initialState data:nil action:nil guard:nil];
+        [self _switchState:_initialState data:nil action:nil];
     } else {
         @throw [NSException tb_nonExistingStateException:@"nil"];
     }
@@ -65,7 +65,7 @@
 - (void)tearDown
 {
     if (_currentState) {
-        [self _switchState:nil data:nil action:nil guard:nil];
+        [self _switchState:nil data:nil action:nil];
     }
     _currentState = nil;
     [_priv_states removeAllObjects];
@@ -101,7 +101,7 @@
 
 #pragma mark - private methods
 
-- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock) action guard:(TBStateMachineGuardBlock)guard
+- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
 {
     // exit current state
     if (_currentState) {
@@ -131,11 +131,11 @@
             TBStateMachineActionBlock action = transition.action;
             TBStateMachineGuardBlock guard = transition.guard;
             if (guard == nil || guard(transition.destinationState, data)) {
-                [self _switchState:transition.destinationState data:data action:action guard:guard];
+                [self _switchState:transition.destinationState data:data action:action];
             }
         } else {
             // exit current state
-            [self _switchState:nil data:data action:nil guard:nil];
+            [self _switchState:nil data:data action:nil];
             
             // bubble up to parent statemachine
             return transition;
