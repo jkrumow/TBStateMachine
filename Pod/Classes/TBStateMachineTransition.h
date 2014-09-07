@@ -11,17 +11,20 @@
 
 @protocol TBStateMachineNode;
 
-
 /**
- *  This type represents a block that is executed when a given `TBStateMachineEvent` can be successfully handled by a `TBStateMachineNode` instance.
+ *  This type represents an action of a given `TBStateMachineTransition`.
  *
- *  @param event The corresponding `TBStateMachineEvent` that is handled.
- *  @param data The payload data.
- *
- *  @return The next state switch to.
+ *  @param nextState The follow-up `TBStateMachineNode`.
+ *  @param data      The payload data.
  */
 typedef void(^TBStateMachineActionBlock)(id<TBStateMachineNode> nextState, NSDictionary *data);
 
+/**
+ *  This type represents a guard function of a given `TBStateMachineTransition`.
+ *
+ *  @param nextState The follow-up `TBStateMachineNode`.
+ *  @param data      The payload data.
+ */
 typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> nextState, NSDictionary *data);
 
 
@@ -40,15 +43,23 @@ typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> nextState, NSDict
  */
 @property (nonatomic, weak, readonly) id<TBStateMachineNode> destinationState;
 
+/**
+ *  The action associated with the transition.
+ */
 @property (nonatomic, strong, readonly) TBStateMachineActionBlock action;
 
+/**
+ *  The guard function associated with the transition.
+ */
 @property (nonatomic, strong, readonly) TBStateMachineGuardBlock guard;
 
 /**
- *  Creates a `TBStateMachineTransition` instance from a given source and destination state.
+ *  Creates a `TBStateMachineTransition` instance from a given source and destination state, action and guard.
  *
- *  @param sourceState The specified source state.
- *  @param destinationState  The specified destination state.
+ *  @param sourceState      The specified source state.
+ *  @param destinationState The specified destination state.
+ *  @param action           The action associated with this transition.
+ *  @param guard            The guard function associated with the transition.
  *
  *  @return The transition object.
  */

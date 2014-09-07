@@ -73,19 +73,21 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> state, NSDiction
 /**
  *  Registers a `TBStateMachineEvent` object.
  *
- *  @param event   The given TBStateMachineEvent object.
+ *  @param event  The given TBStateMachineEvent object.
  *  @param target The follow-up `TBStateMachineNode`.
+ *  @param action The action associated with this event.
  */
 - (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action;
 
 /**
  *  Registers a `TBStateMachineEvent` object.
  *
- *  @param event   The given TBStateMachineEvent object.
+ *  @param event  The given TBStateMachineEvent object.
  *  @param target The follow-up `TBStateMachineNode`.
+ *  @param action The action associated with this event.
+ *  @param guard  The guard function associated with this event.
  */
 - (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
-
 
 /**
  *  Unregisteres a `TBStateMachineEvent` object.
