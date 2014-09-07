@@ -397,6 +397,8 @@ describe(@"TBStateMachine", ^{
         stateMachine.initialState = stateA;
         [stateMachine setUp];
         
+        expect(stateMachine.currentState).to.equal(stateA);
+        
         expect(wasEnterExecuted).to.equal(YES);
         expect(previousStateA).to.beNil;
         expect(dataEnterA).to.beNil;
@@ -425,12 +427,16 @@ describe(@"TBStateMachine", ^{
         stateMachine.initialState = stateA;
         [stateMachine setUp];
         
+        expect(stateMachine.currentState).to.equal(stateA);
+        
         expect(wasEnterExecuted).to.equal(YES);
         expect(wasExitExecuted).to.equal(NO);
         
         wasEnterExecuted = NO;
         
         [stateMachine tearDown];
+        
+        expect(stateMachine.currentState).to.beNil;
         
         expect(nextStateA).to.beNil;
         expect(dataExitA).to.beNil;
@@ -463,8 +469,12 @@ describe(@"TBStateMachine", ^{
         stateMachine.initialState = stateA;
         [stateMachine setUp];
         
+        expect(stateMachine.currentState).to.equal(stateA);
+        
         // enters state B
         [stateMachine handleEvent:eventA];
+        
+        expect(stateMachine.currentState).to.equal(stateB);
         
         expect(previousStateA).to.beNil;
         expect(nextStateA).to.equal(stateB);
@@ -563,19 +573,25 @@ describe(@"TBStateMachine", ^{
         expect(didExecuteEnterB).to.equal(NO);
     });
     
-    it(@"passes next state and event data into the action of the involved state.", ^{
+    it(@"passes next state and event data into the guard function and transition action of the involved state.", ^{
         
         NSArray *states = @[stateA, stateB];
         
         __block id<TBStateMachineNode> nextStateAction;
-        __block NSDictionary *receivedData;
+        __block NSDictionary *receivedDataAction;
+        __block id<TBStateMachineNode> nextStateGuard;
+        __block NSDictionary *receivedDataGuard;
         [stateA registerEvent:eventA
                        target:stateB
                        action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
                            nextStateAction = nextState;
-                           receivedData = data;
+                           receivedDataAction = data;
                        }
-                        guard:nil];
+                        guard:^BOOL(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                            nextStateGuard = nextState;
+                            receivedDataGuard = data;
+                            return YES;
+                        }];
         
         stateMachine.states = states;
         stateMachine.initialState = stateA;
@@ -585,9 +601,14 @@ describe(@"TBStateMachine", ^{
         [stateMachine handleEvent:eventA data:eventDataA];
         
         expect(nextStateAction).to.equal(stateB);
-        expect(receivedData).to.equal(eventDataA);
-        expect(receivedData[EVENT_DATA_KEY]).toNot.beNil;
-        expect(receivedData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
+        expect(receivedDataAction).to.equal(eventDataA);
+        expect(receivedDataAction[EVENT_DATA_KEY]).toNot.beNil;
+        expect(receivedDataAction[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
+        
+        expect(nextStateGuard).to.equal(stateB);
+        expect(receivedDataGuard).to.equal(eventDataA);
+        expect(receivedDataGuard[EVENT_DATA_KEY]).toNot.beNil;
+        expect(receivedDataGuard[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
     });
     
     it(@"passes next state and event data into the enter and exit blocks of the involved states.", ^{
