@@ -534,17 +534,17 @@ describe(@"TBStateMachine", ^{
         
         NSArray *states = @[stateA, stateB];
         
-        __block BOOL didExecuteEnterA;
+        __block BOOL didExecuteEnterA = NO;
         stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
             didExecuteEnterA = YES;
         };
         
-        __block BOOL didExecuteExitA;
+        __block BOOL didExecuteExitA = NO;
         stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
             didExecuteExitA = YES;
         };
         
-        __block BOOL didExecuteEnterB;
+        __block BOOL didExecuteEnterB = NO;
         stateB.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
             didExecuteEnterB = YES;
         };
