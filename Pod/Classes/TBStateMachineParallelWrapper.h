@@ -45,11 +45,18 @@
 - (instancetype)initWithName:(NSString *)name;
 
 /**
- *  Sets the `TBStateMachineNode` instances to wrap.
+ *  Returns the state machines the parallel wrapper manages.
  *
- *  Throws `TBStateMachineException` if the instances are not of type `TBStateMachineNode`.
+ *  @return An NSArray containing all `TBStateMachine` instances.
+ */
+- (NSArray *)states;
+
+/**
+ *  Sets the `TBStateMachine` instances to wrap.
  *
- *  @param states An array of `TBStateMachineNode` instances.
+ *  Throws `TBStateMachineException` if the instances are not of type `TBStateMachine`.
+ *
+ *  @param states An array of `TBStateMachine` instances.
  */
 - (void)setStates:(NSArray *)states;
 

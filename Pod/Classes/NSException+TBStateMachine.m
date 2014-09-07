@@ -16,6 +16,7 @@ static NSString * const TBNonExistingStateExceptionReason = @"The specified stat
 static NSString * const TBNoInitialStateExceptionReason = @"Initial state needs to be set on %@.";
 static NSString * const TBNoNameForNodeExceptionReason = @"Node needs to have a valid name.";
 static NSString * const TBNoNameForEventExceptionReason = @"Event needs to have a valid name.";
+static NSString * const TBNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBStateMachine.";
 
 
 @implementation NSException (TBStateMachine)
@@ -30,19 +31,24 @@ static NSString * const TBNoNameForEventExceptionReason = @"Event needs to have 
     return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateName] userInfo:nil];
 }
 
-+ (NSException *)tb_noInitialStateException:(NSString *)stateMachineName;
++ (NSException *)tb_noInitialStateException:(NSString *)stateMachineName
 {
     return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateMachineName] userInfo:nil];
 }
 
-+ (NSException *)tb_noNameForNodeException;
++ (NSException *)tb_noNameForNodeException
 {
     return [NSException exceptionWithName:TBStateMachineException reason:TBNoNameForNodeExceptionReason userInfo:nil];
 }
 
-+ (NSException *)tb_noNameForEventException;
++ (NSException *)tb_noNameForEventException
 {
     return [NSException exceptionWithName:TBStateMachineException reason:TBNoNameForEventExceptionReason userInfo:nil];
+}
+
++ (NSException *)tb_notAStateMachineException:(id)object
+{
+    return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNotAStateMachineExceptionReason, object] userInfo:nil];
 }
 
 @end

@@ -46,10 +46,15 @@
 
 - (void)dealloc
 {
-    #if !OS_OBJECT_USE_OBJC
+#if !OS_OBJECT_USE_OBJC
     dispatch_release(_parallelQueue);
     _parallelQueue = nil;
-    #endif
+#endif
+}
+
+- (NSArray *)states
+{
+    return [NSArray arrayWithArray:_priv_parallelStates];
 }
 
 - (void)setStates:(NSArray *)states
@@ -57,11 +62,11 @@
     [_priv_parallelStates removeAllObjects];
     
     for (id object in states) {
-        if ([object conformsToProtocol:@protocol(TBStateMachineNode)])  {
+        if ([object isKindOfClass:[TBStateMachine class]]) {
             id<TBStateMachineNode> stateMachineNode = object;
             [_priv_parallelStates addObject:stateMachineNode];
         } else {
-            @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
+            @throw ([NSException tb_notAStateMachineException:object]);
         }
     }
 }

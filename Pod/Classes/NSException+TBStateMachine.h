@@ -62,4 +62,15 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
  */
 + (NSException *)tb_noNameForEventException;
 
+/**
+ *  Thrown when a given object is not of type `TBStateMachine`.
+ *
+ *  The `reason:` string will contain a description of the object.
+ *
+ *  @param object The object in question.
+ *
+ *  @return The NSException instance.
+ */
++ (NSException *)tb_notAStateMachineException:(id)object;
+
 @end
