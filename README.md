@@ -118,13 +118,13 @@ stateMachine.states = @[stateA, stateB, subStateMachine];
 
 You do not need to call `- (void)setup` and `- (void)tearDown` on the sub-state machine since these methods will be called by the super-state machine.
 
-### Parallel States and State Machines
+### Parallel State Machines
 
-To run multiple states and sub-state machines in parallel you will use the `TBStateMachineParallelWrapper`:
+To run multiple state machines in parallel you will use the `TBStateMachineParallelWrapper`:
 
 ```objective-c
 TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
-parallelWrapper.states = @[subStateMachineA, subStateMachineB, stateZ];
+parallelWrapper.states = @[subStateMachineA, subStateMachineB, stateMachineC];
     
 stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
