@@ -124,7 +124,7 @@ To run multiple state machines in parallel you will use the `TBStateMachineParal
 
 ```objective-c
 TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
-parallelWrapper.states = @[subStateMachineA, subStateMachineB, stateMachineC];
+parallelWrapper.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
     
 stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
