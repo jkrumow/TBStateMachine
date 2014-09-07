@@ -1,4 +1,4 @@
-//
+    //
 //  TBStateMachine.m
 //  TBStateMachine
 //
@@ -108,6 +108,10 @@
         [_currentState exit:state data:data];
     }
     
+    if (action) {
+        action(state, data);
+    }
+    
     id<TBStateMachineNode> oldState = _currentState;
     _currentState = state;
     if (_currentState) {
@@ -125,9 +129,6 @@
         if ([_priv_states objectForKey:transition.destinationState.name]) {
             
             TBStateMachineActionBlock action = transition.action;
-            if (action) {
-                action(transition.destinationState, data);
-            }
             TBStateMachineGuardBlock guard = transition.guard;
             if (guard == nil || guard(transition.destinationState, data)) {
                 [self _switchState:transition.destinationState data:data action:action guard:guard];
