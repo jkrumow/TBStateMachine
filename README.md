@@ -131,7 +131,7 @@ stateMachine.states = @[stateA, stateB, parallelWrapper];
 
 ### Concurrency
 
-Event handlers, enter and exit handlers will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
+Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
 
 ```objective-c
 stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {

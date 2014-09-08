@@ -10,7 +10,7 @@
 - (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
 ```
 
-- events processing follows RTC-model. The state machine will queue all event it receives until processing of the current state has finished.
+- events processing follows RTC-model. The state machine will queue all events it receives until processing of the current state has finished.
 
 - transitions from substate to substate of different submachine are possible now ()using LCA-algorithm).
 
