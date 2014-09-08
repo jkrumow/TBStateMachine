@@ -11,16 +11,19 @@
 @interface TBStateMachine ()
 
 #if OS_OBJECT_USE_OBJC
-@property (nonatomic, strong) dispatch_queue_t eventQueue;
+@property (nonatomic, strong) dispatch_queue_t eventDispatchQueue;
 #else
-@property (nonatomic, assign) dispatch_queue_t eventQueue;
+@property (nonatomic, assign) dispatch_queue_t eventDispatchQueue;
 #endif
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
+@property (nonatomic, strong) NSMutableArray *eventQueue;
+@property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
+- (void)_handleNextEvent;
 
 @end
 
@@ -40,7 +43,9 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _eventQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.EventQueue", DISPATCH_QUEUE_SERIAL);
+        _eventQueue = [NSMutableArray new];
+        _processesEvent = NO;
+        _eventDispatchQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.eventDispatchQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -48,8 +53,8 @@
 - (void)dealloc
 {
 #if !OS_OBJECT_USE_OBJC
-    dispatch_release(_eventQueue);
-    _eventQueue = nil;
+    dispatch_release(_eventDispatchQueue);
+    _eventDispatchQueue = nil;
 #endif
 }
 
@@ -99,6 +104,38 @@
     }
 }
 
+- (void)scheduleEvent:(TBStateMachineEvent *)event
+{
+    [self scheduleEvent:event data:nil];
+}
+
+- (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
+    @synchronized(_eventQueue) {
+        
+        NSDictionary *queuedEvent = nil;
+        if (data) {
+            queuedEvent = @{@"event" : event, @"data" : data};
+        } else {
+            queuedEvent = @{@"event" : event};
+        }
+        
+        [_eventQueue addObject:queuedEvent];
+        
+        if (self.isProcessingEvent) {
+            NSLog(@"Queuing event %@", event.name);
+        } else {
+            while (_eventQueue.count > 0) {
+                NSLog(@"%lu more scheduled events to handle.", (unsigned long)_eventQueue.count);
+                
+                dispatch_sync(_eventDispatchQueue, ^{
+                    [self _handleNextEvent];
+                });
+            }
+        }
+    }
+}
+
 #pragma mark - private methods
 
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
@@ -144,6 +181,17 @@
     return nil;
 }
 
+- (void)_handleNextEvent
+{
+    if (_eventQueue.count > 0) {
+        self.processesEvent = YES;
+        NSDictionary *queuedEvent = _eventQueue[0];
+        [_eventQueue removeObject:queuedEvent];
+        [self handleEvent:queuedEvent[@"event"] data:queuedEvent[@"data"]];
+        self.processesEvent = NO;
+    }
+}
+
 #pragma mark - TBStateMachineNode
 
 - (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
@@ -163,13 +211,7 @@
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
-    __block TBStateMachineTransition *transition = nil;
-    
-    dispatch_sync(_eventQueue, ^{
-        transition = [self _handleEvent:event data:data];
-    });
-    
-    return transition;
+    return [self _handleEvent:event data:data];
 }
 
 @end

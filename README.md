@@ -101,8 +101,10 @@ Send the event:
 NSValue *frame = [NSValue valueWithCGRect:CGRectMake(0.0, 0.0,100.0, 50.0)];
 NSDictionary *payload = @{@"text" : @"abcdef", @"frame", frame};
 TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
-[stateMachine handleEvent:eventA data:payload];
+[stateMachine scheduleEvent:eventA data:payload];
 ```
+
+The state machine will queue all events it receives until processing of the current state has finished.
 
 ### Sub-State Machines
 
@@ -131,7 +133,7 @@ stateMachine.states = @[stateA, stateB, parallelWrapper];
 
 ### Concurrency
 
-Event handlers, enter and exit handlers will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
+Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
 
 ```objective-c
 stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
