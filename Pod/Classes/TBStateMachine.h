@@ -109,4 +109,8 @@
  */
 - (void)setInitialState:(id<TBStateMachineNode>)initialState;
 
+- (void)scheduleEvent:(TBStateMachineEvent *)event;
+
+- (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
+
 @end
