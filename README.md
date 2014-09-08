@@ -101,8 +101,10 @@ Send the event:
 NSValue *frame = [NSValue valueWithCGRect:CGRectMake(0.0, 0.0,100.0, 50.0)];
 NSDictionary *payload = @{@"text" : @"abcdef", @"frame", frame};
 TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
-[stateMachine handleEvent:eventA data:payload];
+[stateMachine scheduleEvent:eventA data:payload];
 ```
+
+The state machine will queue all events it receives until processing of the current state has finished.
 
 ### Sub-State Machines
 
