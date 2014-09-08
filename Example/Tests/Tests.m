@@ -23,7 +23,7 @@ __block TBStateMachineState *stateC;
 __block TBStateMachineState *stateD;
 __block TBStateMachineState *stateE;
 __block TBStateMachineState *stateF;
-__block TBStateMachineState *stateG;
+
 __block TBStateMachineEvent *eventA;
 __block TBStateMachineEvent *eventB;
 __block TBStateMachineEvent *eventC;
@@ -294,7 +294,6 @@ describe(@"TBStateMachine", ^{
         stateD = [TBStateMachineState stateWithName:@"d"];
         stateE = [TBStateMachineState stateWithName:@"e"];
         stateF = [TBStateMachineState stateWithName:@"f"];
-        stateG = [TBStateMachineState stateWithName:@"g"];
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
@@ -318,7 +317,6 @@ describe(@"TBStateMachine", ^{
         stateD = nil;
         stateE = nil;
         stateF = nil;
-        stateG = nil;
         
         eventDataA = nil;
         eventDataB = nil;
@@ -945,7 +943,8 @@ describe(@"TBStateMachine", ^{
                                                    @"stateC_action",
                                                    @"stateA_enter"];
             
-            __block NSMutableArray *executionSequence = [NSMutableArray new];
+            NSMutableArray *executionSequence = [NSMutableArray new];
+            
             __block NSUInteger enteredCount = 0;
             __block NSUInteger guardExecutedCount = 0;
             stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
@@ -1023,91 +1022,111 @@ describe(@"TBStateMachine", ^{
         
         it(@"handles events sent concurrently from multiple threads", ^AsyncBlock {
             
-            done();
-            /*
-             // set of states which will be switched to.
-             NSString *destinationStates = @"abcd";
-             
-             // sequence of states as seen by the event handler.
-             __block NSMutableString *inputSequence = [NSMutableString stringWithString:@""];
-             
-             // sequence of states as they will be actually entered.
-             __block NSMutableString *outputSequence = [NSMutableString stringWithString:@""];
-             
-             // processes the data received in event handler blocks of states.
-             __block id<TBStateMachineNode>(^processEventData)(NSDictionary *) = ^id<TBStateMachineNode>(NSDictionary *data) {
-             NSString *nextState = data[@"val"];
-             [inputSequence appendString:nextState];
-             
-             if ([nextState isEqualToString:@"a"]) {
-             return stateA;
-             }
-             if ([nextState isEqualToString:@"b"]) {
-             return stateB;
-             }
-             if ([nextState isEqualToString:@"c"]) {
-             return stateC;
-             }
-             if ([nextState isEqualToString:@"d"]) {
-             return stateD;
-             }
-             return nil;
-             };
-             
-             // processes the data received in enter blocks of states.
-             __block void(^processEntranceData)(NSString *, NSDictionary *) = ^void(NSString *enteredState, NSDictionary *data) {
-             if (data == nil) {
-             return;
-             }
-             
-             //[outputSequence appendString:enteredState];
-             [outputSequence appendString:data[@"val"]];
-             
-             // entered state should be identical to moniker transmitted in event data.
-             expect(data[@"val"]).to.equal(enteredState);
-             
-             // call example finished when maximum number of transitions has been performed.
-             if (outputSequence.length == destinationStates.length) {
-             done();
-             }
-             };
-             
-             // setup main state machine.
-             stateA.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-             processEntranceData(@"a", data);
-             };
-             
-             stateB.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-             processEntranceData(@"b", data);
-             };
-             
-             stateC.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-             processEntranceData(@"c", data);
-             };
-             
-             stateD.enterBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
-             processEntranceData(@"d", data);
-             };
-             
-             [stateA registerEvent:eventA target:stateB];
-             [stateB registerEvent:eventA target:stateC];
-             [stateC registerEvent:eventA target:stateD];
-             [stateD registerEvent:eventA target:stateA];
-             
-             stateMachine.states = @[stateA, stateB, stateC, stateD];
-             stateMachine.initialState = stateA;
-             [stateMachine setUp];
-             
-             // send all events concurrently.
-             dispatch_apply(destinationStates.length, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t idx) {
-             NSString *stateName = [destinationStates substringWithRange:NSMakeRange(idx, 1)];
-             [stateMachine scheduleEvent:eventA data:@{@"val" : stateName}];
-             });
-             
-             // the sequence of states triggered by sent events should be identical to the sequence of actually entered states.
-             expect(inputSequence).will.equal(outputSequence);
-             
-             */
+            
+            NSArray *expectedExecutionSequenceA = @[@"stateA_exit",
+                                                   @"stateA_action",
+                                                   @"stateB_enter"];
+            
+            NSArray *expectedExecutionSequenceB = @[@"stateB_exit",
+                                                    @"stateB_action",
+                                                    @"stateC_enter"];
+            
+            NSArray *expectedExecutionSequenceC = @[@"stateC_exit",
+                                                    @"stateC_action",
+                                                    @"stateD_enter"];
+            
+            NSArray *expectedExecutionSequenceD = @[@"stateD_exit",
+                                                    @"stateD_action",
+                                                    @"stateA_enter"];
+            
+            NSArray *expectedExecutionSequences = @[expectedExecutionSequenceA,
+                                                    expectedExecutionSequenceB,
+                                                    expectedExecutionSequenceC,
+                                                    expectedExecutionSequenceD];
+            
+            NSMutableArray *executionSequences = [NSMutableArray new];
+            
+            __block NSUInteger enteredCount = 0;
+            stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateA_enter"];
+                enteredCount++;
+                
+                // quit if we have finished the roundtrip and arrived back in stateA.
+                if (enteredCount == 2) {
+                    done();
+                }
+            };
+            
+            stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateA_exit"];
+            };
+            
+            stateB.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateB_enter"];
+            };
+            
+            stateB.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateB_exit"];
+            };
+            
+            stateC.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateC_enter"];
+            };
+            
+            stateC.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateC_exit"];
+            };
+            
+            stateD.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateD_enter"];
+            };
+            
+            stateD.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateD_exit"];
+            };
+            
+            [stateA registerEvent:eventA target:stateB action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateA_action"];
+            }];
+            
+            [stateB registerEvent:eventA target:stateC action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateB_action"];
+            }];
+            
+            [stateC registerEvent:eventA target:stateD action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateC_action"];
+            }];
+            
+            [stateD registerEvent:eventA target:stateA action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                NSMutableArray *executionSequence = data[@"sequence"];
+                [executionSequence addObject:@"stateD_action"];
+            }];
+            
+            
+            NSArray *states = @[stateA, stateB, stateC, stateD];
+            stateMachine.states = states;
+            stateMachine.initialState = stateA;
+            [stateMachine setUp];
+            
+            // send all events concurrently.
+            dispatch_apply(4, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t idx) {
+                NSMutableArray *executionSequence = [NSMutableArray new];
+                [executionSequences addObject:executionSequence];
+                [stateMachine scheduleEvent:eventA data:@{@"sequence" : executionSequence}];
+            });
+            
+            expect(expectedExecutionSequences).to.equal(executionSequences);
             
         });
         

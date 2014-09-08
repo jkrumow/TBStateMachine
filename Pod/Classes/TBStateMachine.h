@@ -34,9 +34,6 @@
  *  - call -setUp to activate the state machine
  *  - call -tearDown to deactivate the state machine
  *
- *  **Concurrency:**
- *  Actions, guards, enter and exit blocks will be executed on a background queue.
- *  Make sure the code in these blocks is dispatched back onto the right queue.
  */
 @interface TBStateMachine : NSObject <TBStateMachineNode>
 
