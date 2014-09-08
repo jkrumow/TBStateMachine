@@ -13,6 +13,7 @@
 @interface TBStateMachineParallelWrapper ()
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, weak) TBStateMachine *parentState;
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
 
 #if OS_OBJECT_USE_OBJC
@@ -64,6 +65,7 @@
     for (id object in states) {
         if ([object isKindOfClass:[TBStateMachine class]]) {
             id<TBStateMachineNode> stateMachineNode = object;
+            [stateMachineNode setParentState:self.parentState];
             [_priv_parallelStates addObject:stateMachineNode];
         } else {
             @throw ([NSException tb_notAStateMachineException:object]);

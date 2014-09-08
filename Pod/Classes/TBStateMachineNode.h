@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class TBStateMachine;
 @class TBStateMachineEvent;
 @class TBStateMachineTransition;
 
@@ -26,6 +27,10 @@
  *  @return The name as a string.
  */
 - (NSString *)name;
+
+- (TBStateMachine *)parentState;
+
+- (void)setParentState:(TBStateMachine *)parentStateMachine;
 
 /**
  *  Executes the enter block of the state.

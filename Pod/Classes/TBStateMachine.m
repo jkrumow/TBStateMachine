@@ -17,11 +17,13 @@
 #endif
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, weak) TBStateMachine *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
+- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
@@ -88,6 +90,7 @@
     for (id object in states) {
         if ([object conformsToProtocol:@protocol(TBStateMachineNode)])  {
             id<TBStateMachineNode> state = object;
+            [state setParentState:self];
             [_priv_states setObject:state forKey:state.name];
         } else {
             @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
@@ -156,6 +159,35 @@
     }
 }
 
+- (NSMutableArray *)_getPathFromState:(id<TBStateMachineNode>)state path:(NSMutableArray *)path
+{
+    if (path == nil) {
+        path = [NSMutableArray new];
+    }
+    [path addObject:state];
+    
+    if (state.parentState) {
+        id<TBStateMachineNode> parentState = state.parentState;
+        path = [self _getPathFromState:parentState path:path];
+    }
+    return path;
+}
+
+- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState
+{
+    NSArray *sourcePath = [self _getPathFromState:sourceState path:nil];
+    NSArray *destinationPath = [self _getPathFromState:destinationState path:nil];
+    for (id<TBStateMachineNode> state in sourcePath) {
+        if (![state isKindOfClass:[TBStateMachine class]]) {
+            continue;
+        }
+        if ([destinationPath containsObject:state]) {
+            return state;
+        }
+    }
+    return self;
+}
+
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
     TBStateMachineTransition *transition;
@@ -163,12 +195,15 @@
         transition = [_currentState handleEvent:event data:data];
     }
     if (transition && transition.destinationState) {
+        
+        // TODO: evaluate path to deep-switch into.
         if ([_priv_states objectForKey:transition.destinationState.name]) {
             
             TBStateMachineActionBlock action = transition.action;
             TBStateMachineGuardBlock guard = transition.guard;
             if (guard == nil || guard(transition.destinationState, data)) {
-                [self _switchState:transition.destinationState data:data action:action];
+                TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+                [lowestCommonAncestor _switchState:transition.destinationState data:data action:action];
             }
         } else {
             // exit current state
