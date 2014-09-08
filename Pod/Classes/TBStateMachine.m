@@ -23,6 +23,7 @@
 
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
+- (void)_handleNextEvent;
 
 @end
 
@@ -166,13 +167,21 @@
     if (self.isProcessingEvent) {
         NSLog(@"Queuing event %@", event.name);
     } else {
-        for (int i=0; i < _eventQueue.count; i++) {
-            self.processesEvent = YES;
-            NSDictionary *queuedEvent = _eventQueue[i];
-            [_eventQueue removeObject:queuedEvent];
-            [self handleEvent:queuedEvent[@"event"] data:queuedEvent[@"data"]];
-            self.processesEvent = NO;
+        while (_eventQueue.count > 0) {
+            NSLog(@"%lu more scheduled events to handle.", (unsigned long)_eventQueue.count);
+            [self _handleNextEvent];
         }
+    }
+}
+
+- (void)_handleNextEvent
+{
+    if (_eventQueue.count > 0) {
+        self.processesEvent = YES;
+        NSDictionary *queuedEvent = _eventQueue[0];
+        [_eventQueue removeObject:queuedEvent];
+        [self handleEvent:queuedEvent[@"event"] data:queuedEvent[@"data"]];
+        self.processesEvent = NO;
     }
 }
 
