@@ -83,7 +83,6 @@ describe(@"TBStateMachineState", ^{
     it(@"handles events by returning nil or a TBStateMachineTransition containing source and destination state.", ^{
         
         [stateA registerEvent:eventA target:nil];
-        
         [stateA registerEvent:eventB target:stateB];
         
         TBStateMachineTransition *resultA = [stateA handleEvent:eventA];
@@ -224,7 +223,6 @@ describe(@"TBStateMachineParallelWrapper", ^{
         expect(validSourceStates).contain(result.sourceState);
         NSArray *validDestinationStates = @[stateC, stateD];
         expect(validDestinationStates).contain(result.destinationState);
-        
         
         if (result.sourceState == stateA) {
             expect(result.destinationState).to.equal(stateC);

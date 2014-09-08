@@ -104,6 +104,38 @@
     }
 }
 
+- (void)scheduleEvent:(TBStateMachineEvent *)event
+{
+    [self scheduleEvent:event data:nil];
+}
+
+- (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
+    @synchronized(_eventQueue) {
+        
+        NSDictionary *queuedEvent = nil;
+        if (data) {
+            queuedEvent = @{@"event" : event, @"data" : data};
+        } else {
+            queuedEvent = @{@"event" : event};
+        }
+        
+        [_eventQueue addObject:queuedEvent];
+        
+        if (self.isProcessingEvent) {
+            NSLog(@"Queuing event %@", event.name);
+        } else {
+            while (_eventQueue.count > 0) {
+                NSLog(@"%lu more scheduled events to handle.", (unsigned long)_eventQueue.count);
+                
+                dispatch_sync(_eventDispatchQueue, ^{
+                    [self _handleNextEvent];
+                });
+            }
+        }
+    }
+}
+
 #pragma mark - private methods
 
 - (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
@@ -147,35 +179,6 @@
         }
     }
     return nil;
-}
-
-- (void)scheduleEvent:(TBStateMachineEvent *)event
-{
-    [self scheduleEvent:event data:nil];
-}
-
-- (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
-{
-    @synchronized(_eventQueue) {
-        
-        NSDictionary *queuedEvent = nil;
-        if (data) {
-            queuedEvent = @{@"event" : event, @"data" : data};
-        } else {
-            queuedEvent = @{@"event" : event};
-        }
-        
-        [_eventQueue addObject:queuedEvent];
-        
-        if (self.isProcessingEvent) {
-            NSLog(@"Queuing event %@", event.name);
-        } else {
-            while (_eventQueue.count > 0) {
-                NSLog(@"%lu more scheduled events to handle.", (unsigned long)_eventQueue.count);
-                [self _handleNextEvent];
-            }
-        }
-    }
 }
 
 - (void)_handleNextEvent
