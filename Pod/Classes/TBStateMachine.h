@@ -123,4 +123,6 @@
  */
 - (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 
+- (void)switchToPath:(NSArray *)path data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
+
 @end

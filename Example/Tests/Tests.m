@@ -876,8 +876,8 @@ describe(@"TBStateMachine", ^{
             // moves to state D
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateB).to.equal(stateC);
-            expect(previousStateC).to.beNil;
+            expect(nextStateB).to.beNil;
+            expect(previousStateD).to.beNil;
         });
         
         it(@"can switch into and out of parallel state machines.", ^{

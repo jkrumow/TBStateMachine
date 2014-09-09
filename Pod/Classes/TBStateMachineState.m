@@ -69,17 +69,17 @@
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
+- (void)enter:(NSArray *)path data:(NSDictionary *)data
 {
     if (_enterBlock) {
-        _enterBlock(previousState, data);
+        _enterBlock(path[0], data);
     }
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
+- (void)exit:(NSArray *)path data:(NSDictionary *)data
 {
     if (_exitBlock) {
-        _exitBlock(nextState, data);
+        _exitBlock(path[0], data);
     }
 }
 

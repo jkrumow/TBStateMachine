@@ -22,8 +22,8 @@
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
-- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
-- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState;
+- (NSMutableArray *)_getPathFromState:(id<TBStateMachineNode>)state path:(NSMutableArray *)path;
+- (NSArray *)_findLowestCommonAncestorForSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
@@ -63,7 +63,7 @@
 - (void)setUp
 {
     if (_initialState) {
-        [self _switchState:_initialState data:nil action:nil];
+        [self switchToPath:@[_initialState] data:nil action:nil];
     } else {
         @throw [NSException tb_nonExistingStateException:@"nil"];
     }
@@ -72,7 +72,7 @@
 - (void)tearDown
 {
     if (_currentState) {
-        [self _switchState:nil data:nil action:nil];
+        [self switchToPath:nil data:nil action:nil];
     }
     _currentState = nil;
     [_priv_states removeAllObjects];
@@ -141,11 +141,24 @@
 
 #pragma mark - private methods
 
-- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
+- (void)switchToPath:(NSArray *)path data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
 {
+    NSMutableArray *localPath = nil;
+    
+    // extract state from path
+    id<TBStateMachineNode> state = nil;
+    if (path && path.count > 0) {
+        localPath = path.mutableCopy;
+        
+        if (localPath[0] == self) {
+            [localPath removeObjectAtIndex:0];
+        }
+        state = localPath[0];
+    }
+    
     // exit current state
     if (_currentState) {
-        [_currentState exit:state data:data];
+        [_currentState exit:localPath data:data];
     }
     
     if (action) {
@@ -155,7 +168,16 @@
     id<TBStateMachineNode> oldState = _currentState;
     _currentState = state;
     if (_currentState) {
-        [_currentState enter:oldState data:data];
+        if ([_currentState isKindOfClass:[TBStateMachineState class]]) {
+            if (oldState != nil) {
+                [_currentState enter:@[oldState] data:data];
+            } else {
+                [_currentState enter:nil data:data];
+            }
+        } else {
+            [localPath removeObjectAtIndex:0];
+            [_currentState enter:localPath data:data];
+        }
     }
 }
 
@@ -164,7 +186,7 @@
     if (path == nil) {
         path = [NSMutableArray new];
     }
-    [path addObject:state];
+    [path insertObject:state atIndex:0];
     
     if (state.parentState) {
         id<TBStateMachineNode> parentState = state.parentState;
@@ -173,19 +195,23 @@
     return path;
 }
 
-- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState
+- (NSArray *)_findLowestCommonAncestorForSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState
 {
     NSArray *sourcePath = [self _getPathFromState:sourceState path:nil];
     NSArray *destinationPath = [self _getPathFromState:destinationState path:nil];
-    for (id<TBStateMachineNode> state in sourcePath) {
+    
+    for (NSInteger i=sourcePath.count-1; i >= 0; i--) {
+        id<TBStateMachineNode> state = sourcePath[i];
         if (![state isKindOfClass:[TBStateMachine class]]) {
             continue;
         }
         if ([destinationPath containsObject:state]) {
-            return state;
+            NSUInteger index = [destinationPath indexOfObject:state];
+            NSArray *subarray = [destinationPath subarrayWithRange:NSMakeRange(index, destinationPath.count - index)];
+            return subarray;
         }
     }
-    return self;
+    return @[self];
 }
 
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
@@ -196,18 +222,17 @@
     }
     if (transition && transition.destinationState) {
         
-        // TODO: evaluate path to deep-switch into.
         if ([_priv_states objectForKey:transition.destinationState.name]) {
             
             TBStateMachineActionBlock action = transition.action;
             TBStateMachineGuardBlock guard = transition.guard;
             if (guard == nil || guard(transition.destinationState, data)) {
-                TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
-                [lowestCommonAncestor _switchState:transition.destinationState data:data action:action];
+                NSArray *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+                [lowestCommonAncestor[0] switchToPath:lowestCommonAncestor data:data action:action];
             }
         } else {
             // exit current state
-            [self _switchState:nil data:data action:nil];
+            [self switchToPath:nil data:data action:nil];
             
             // bubble up to parent statemachine
             return transition;
@@ -229,14 +254,30 @@
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
+- (void)enter:(NSArray *)path data:(NSDictionary *)data
 {
-    [self setUp];
+    id<TBStateMachineNode> previousState = nil;
+    if (path && path.count > 0) {
+        previousState = path[0];
+    }
+    if (previousState == nil) {
+        [self setUp];
+    } else {
+        [self switchToPath:path data:data action:nil];
+    }
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
+- (void)exit:(NSArray *)path data:(NSDictionary *)data
 {
-    [self tearDown];
+    id<TBStateMachineNode> nextState = nil;
+    if (path && path.count > 0) {
+        nextState = path[0];
+    }
+    if (nextState == _initialState) {
+        [self tearDown];
+    } else {
+        [self switchToPath:path data:data action:nil];
+    }
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event

@@ -64,9 +64,7 @@
     
     for (id object in states) {
         if ([object isKindOfClass:[TBStateMachine class]]) {
-            id<TBStateMachineNode> stateMachineNode = object;
-            [stateMachineNode setParentState:self.parentState];
-            [_priv_parallelStates addObject:stateMachineNode];
+            [_priv_parallelStates addObject:object];
         } else {
             @throw ([NSException tb_notAStateMachineException:object]);
         }
@@ -75,21 +73,29 @@
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
+- (void)setParentState:(TBStateMachine *)parentState
+{
+    _parentState = parentState;
+    for (id<TBStateMachineNode> node in _priv_parallelStates) {
+        node.parentState = _parentState;
+    }
+}
+
+- (void)enter:(NSArray *)path data:(NSDictionary *)data
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
         id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode enter:previousState data:data];
+        [stateMachineNode enter:path data:data];
     });
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
+- (void)exit:(NSArray *)path data:(NSDictionary *)data
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
         id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode exit:nextState data:data];
+        [stateMachineNode exit:path data:data];
     });
 }
 

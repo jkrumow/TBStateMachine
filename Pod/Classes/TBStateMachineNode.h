@@ -38,7 +38,7 @@
  *  @param previousState The previous state.
  *  @param data          The payload data.
  */
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data;
+- (void)enter:(NSArray *)path data:(NSDictionary *)data;
 
 /**
  *  Executes the exit block of the state.
@@ -46,7 +46,7 @@
  *  @param nextState The next state.
  *  @param data      The payload data.
  */
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data;
+- (void)exit:(NSArray *)path data:(NSDictionary *)data;
 
 /**
  *  Receives a specified `TBStateMachineEvent` instance.
