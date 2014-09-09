@@ -256,11 +256,7 @@
 
 - (void)enter:(NSArray *)path data:(NSDictionary *)data
 {
-    id<TBStateMachineNode> previousState = nil;
-    if (path && path.count > 0) {
-        previousState = path[0];
-    }
-    if (previousState == nil) {
+    if (path == nil || path.count == 0) {
         [self setUp];
     } else {
         [self switchToPath:path data:data action:nil];
@@ -269,11 +265,7 @@
 
 - (void)exit:(NSArray *)path data:(NSDictionary *)data
 {
-    id<TBStateMachineNode> nextState = nil;
-    if (path && path.count > 0) {
-        nextState = path[0];
-    }
-    if (nextState == _initialState) {
+    if (path == nil || path.count == 0) {
         [self tearDown];
     } else {
         [self switchToPath:path data:data action:nil];
