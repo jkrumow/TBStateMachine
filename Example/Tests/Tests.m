@@ -189,12 +189,12 @@ describe(@"TBStateMachineParallelWrapper", ^{
         NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
         parallelStates.states = parallelSubStateMachines;
         
-        [parallelStates enter:nil data:nil];
+        [parallelStates enter:nil destinationState:nil data:nil];
         
         expect(enteredStateA).to.equal(YES);
         expect(enteredStateB).to.equal(YES);
         
-        [parallelStates exit:nil data:nil];
+        [parallelStates exit:nil destinationState:nil data:nil];
         
         expect(exitedStateA).to.equal(YES);
         expect(exitedStateB).to.equal(YES);
@@ -214,7 +214,7 @@ describe(@"TBStateMachineParallelWrapper", ^{
         NSArray *states = @[subStateMachineA, subStateMachineB];
         parallelStates.states = states;
         
-        [parallelStates enter:nil data:nil];
+        [parallelStates enter:nil destinationState:nil data:nil];
         TBStateMachineTransition *result = [parallelStates handleEvent:eventA];
         
         expect(result).toNot.beNil;
@@ -510,11 +510,11 @@ describe(@"TBStateMachine", ^{
             __block BOOL didExecuteAction = NO;
             [stateA registerEvent:eventA
                            target:stateB
-                           action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                           action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                                didExecuteAction = YES;
                                [executionOrder appendString:@"-action"];
                            }
-                            guard:^BOOL(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                            guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                                 [executionOrder appendString:@"guard"];
                                 return YES;
                             }];
@@ -555,10 +555,10 @@ describe(@"TBStateMachine", ^{
             __block BOOL didExecuteAction = NO;
             [stateA registerEvent:eventA
                            target:stateB
-                           action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                           action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                                didExecuteAction = YES;
                            }
-                            guard:^BOOL(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                            guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                                 return NO;
                             }];
             
@@ -586,12 +586,12 @@ describe(@"TBStateMachine", ^{
             __block NSDictionary *receivedDataGuard;
             [stateA registerEvent:eventA
                            target:stateB
-                           action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
-                               nextStateAction = nextState;
+                           action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+                               nextStateAction = destinationState;
                                receivedDataAction = data;
                            }
-                            guard:^BOOL(id<TBStateMachineNode> nextState, NSDictionary *data) {
-                                nextStateGuard = nextState;
+                            guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+                                nextStateGuard = destinationState;
                                 receivedDataGuard = data;
                                 return YES;
                             }];
@@ -751,7 +751,7 @@ describe(@"TBStateMachine", ^{
             };
             
             [stateA registerEvent:eventA target:stateB];
-            [stateB registerEvent:eventA target:subStateMachineA];
+            [stateB registerEvent:eventA target:stateC];
             
             NSArray *states = @[stateA, stateB, subStateMachineA];
             stateMachine.states = states;
@@ -1055,19 +1055,19 @@ describe(@"TBStateMachine", ^{
                 [executionSequence addObject:@"stateC_exit"];
             };
             
-            [stateA registerEvent:eventA target:stateB action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+            [stateA registerEvent:eventA target:stateB action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_action"];
                 [stateMachine scheduleEvent:eventB];
-            } guard:^BOOL(id<TBStateMachineNode> nextState, NSDictionary *data) {
+            } guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 guardExecutedCount++;
                 return (enteredCount == 1);
             }];
             
-            [stateB registerEvent:eventB target:stateC action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+            [stateB registerEvent:eventB target:stateC action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_action"];
             }];
             
-            [stateC registerEvent:eventC target:stateA action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+            [stateC registerEvent:eventC target:stateA action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateC_action"];
             }];
             
@@ -1159,19 +1159,19 @@ describe(@"TBStateMachine", ^{
                 [executionSequence addObject:@"stateD_exit"];
             };
             
-            [stateA registerEvent:eventA target:stateB action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+            [stateA registerEvent:eventA target:stateB action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_action"];
             }];
             
-            [stateB registerEvent:eventA target:stateC action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+            [stateB registerEvent:eventA target:stateC action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_action"];
             }];
             
-            [stateC registerEvent:eventA target:stateD action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+            [stateC registerEvent:eventA target:stateD action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateC_action"];
             }];
             
-            [stateD registerEvent:eventA target:stateA action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+            [stateD registerEvent:eventA target:stateA action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateD_action"];
             }];
             

@@ -81,21 +81,21 @@
     }
 }
 
-- (void)enter:(NSArray *)path data:(NSDictionary *)data
+- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
         id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode enter:path data:data];
+        [stateMachineNode enter:sourceState destinationState:destinationState data:data];
     });
 }
 
-- (void)exit:(NSArray *)path data:(NSDictionary *)data
+- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
         id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode exit:path data:data];
+        [stateMachineNode exit:sourceState destinationState:destinationState data:data];
     });
 }
 

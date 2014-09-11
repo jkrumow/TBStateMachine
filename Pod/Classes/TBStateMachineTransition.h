@@ -17,7 +17,7 @@
  *  @param nextState The follow-up `TBStateMachineNode`.
  *  @param data      The payload data.
  */
-typedef void(^TBStateMachineActionBlock)(id<TBStateMachineNode> nextState, NSDictionary *data);
+typedef void(^TBStateMachineActionBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);
 
 /**
  *  This type represents a guard function of a given `TBStateMachineTransition`.
@@ -25,7 +25,7 @@ typedef void(^TBStateMachineActionBlock)(id<TBStateMachineNode> nextState, NSDic
  *  @param nextState The follow-up `TBStateMachineNode`.
  *  @param data      The payload data.
  */
-typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> nextState, NSDictionary *data);
+typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);
 
 
 /**

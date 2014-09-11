@@ -123,6 +123,8 @@
  */
 - (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 
-- (void)switchToPath:(NSArray *)path data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
+- (void)switchState:(id<TBStateMachineNode>)state destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
+
+- (NSMutableArray *)getPathForState:(id<TBStateMachineNode>)state path:(NSMutableArray *)path;
 
 @end
