@@ -22,7 +22,7 @@
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
-- (NSArray *)_findLowestCommonAncestorForSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState;
+- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
@@ -142,16 +142,6 @@
 
 - (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
 {
-    // evaluate state and find next state to switch to
-    id<TBStateMachineNode> nextState = nil;
-    
-    if (destinationState) {
-        NSArray *path = [self getPathForState:destinationState path:nil];
-        if (path.count > 1) {
-            nextState = path[1];
-        }
-    }
-    
     // exit current state
     if (_currentState) {
         [_currentState exit:sourceState destinationState:destinationState data:data];
@@ -162,51 +152,39 @@
     }
     
     id<TBStateMachineNode> oldState = _currentState;
-    _currentState = nextState;
+    _currentState = destinationState;
     if (_currentState) {
-        if ([_currentState isKindOfClass:[TBStateMachineState class]]) {
-            if (oldState != nil) {
-                [_currentState enter:oldState destinationState:destinationState data:data];
-            } else {
-                [_currentState enter:sourceState destinationState:destinationState data:data];
-            }
-        } else {
-            [_currentState enter:sourceState destinationState:destinationState data:data];
-        }
+        [_currentState enter:oldState destinationState:_currentState data:data];
     }
 }
 
-- (NSMutableArray *)getPathForState:(id<TBStateMachineNode>)state path:(NSMutableArray *)path
+- (NSArray *)getPath
 {
-    if (path == nil) {
-        path = [NSMutableArray new];
-    }
-    [path insertObject:state atIndex:0];
-    
-    if (state.parentState) {
-        id<TBStateMachineNode> parentState = state.parentState;
-        path = [self getPathForState:parentState path:path];
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
     }
     return path;
 }
 
-- (NSArray *)_findLowestCommonAncestorForSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState
+- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState
 {
-    NSArray *sourcePath = [self getPathForState:sourceState path:nil];
-    NSArray *destinationPath = [self getPathForState:destinationState path:nil];
+    NSArray *sourcePath = [sourceState getPath];
+    NSArray *destinationPath = [destinationState getPath];
     
-    for (NSInteger i=sourcePath.count-1; i >= 0; i--) {
-        id<TBStateMachineNode> state = sourcePath[i];
-        if (![state isKindOfClass:[TBStateMachine class]]) {
+    for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
+        id<TBStateMachineNode> node = sourcePath[i];
+        if (![node isKindOfClass:[TBStateMachine class]]) {
             continue;
         }
-        if ([destinationPath containsObject:state]) {
-            NSUInteger index = [destinationPath indexOfObject:state];
-            NSArray *subarray = [destinationPath subarrayWithRange:NSMakeRange(index, destinationPath.count - index)];
-            return subarray;
+        TBStateMachine *stateMachine = node;
+        if ([destinationPath containsObject:stateMachine]) {
+            return stateMachine;
         }
     }
-    return @[self];
+    return self;
 }
 
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
@@ -217,21 +195,21 @@
     }
     if (transition && transition.destinationState) {
         
-        //if ([_priv_states objectForKey:transition.destinationState.name]) {
-        
-        TBStateMachineActionBlock action = transition.action;
-        TBStateMachineGuardBlock guard = transition.guard;
-        if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
-            NSArray *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
-            [lowestCommonAncestor[0] switchState:_currentState destinationState:transition.destinationState data:data action:action];
+        if ([_priv_states objectForKey:transition.destinationState.name]) {
+            
+            TBStateMachineActionBlock action = transition.action;
+            TBStateMachineGuardBlock guard = transition.guard;
+            if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
+                TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+                [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
+            }
+        } else {
+            // exit current state
+            [self switchState:_currentState destinationState:nil data:data action:nil];
+            
+            // bubble up to parent statemachine
+            return transition;
         }
-        //        } else {
-        //            // exit current state
-        //            [self switchState:nil data:data action:nil];
-        //
-        //            // bubble up to parent statemachine
-        //            return transition;
-        //        }
     }
     return nil;
 }
@@ -251,7 +229,7 @@
 
 - (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
-    if (destinationState == nil) {
+    if (destinationState == self) {
         [self setUp];
     } else {
         [self switchState:sourceState destinationState:destinationState data:data action:nil];

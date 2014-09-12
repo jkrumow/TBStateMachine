@@ -9,6 +9,7 @@
 #import "TBStateMachineState.h"
 #import "NSException+TBStateMachine.h"
 #import "TBStateMachineEventHandler.h"
+#import "TBStateMachine.h"
 
 @interface TBStateMachineState ()
 
@@ -59,6 +60,19 @@
 {
     [_eventHandlers removeObjectForKey:event.name];
 }
+
+
+- (NSArray *)getPath
+{
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
+    }
+    return path;
+}
+
 
 #pragma mark - private methods
 

@@ -41,6 +41,11 @@ describe(@"TBStateMachineState", ^{
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventA = [TBStateMachineEvent eventWithName:EVENT_NAME_A];
         eventB = [TBStateMachineEvent eventWithName:EVENT_NAME_B];
+        
+        stateMachine = [TBStateMachine stateMachineWithName:@"stateMachine"];
+        subStateMachineA = [TBStateMachine stateMachineWithName:@"stateMachineA"];
+        subStateMachineB = [TBStateMachine stateMachineWithName:@"stateMachineB"];
+        parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@"parallelStates"];
     });
     
     afterEach(^{
@@ -49,6 +54,11 @@ describe(@"TBStateMachineState", ^{
         eventDataB = nil;
         eventA = nil;
         eventB = nil;
+        
+        stateMachine = nil;
+        subStateMachineA = nil;
+        subStateMachineB = nil;
+        parallelStates = nil;
     });
     
     describe(@"Exception handling on setup.", ^{
@@ -91,6 +101,22 @@ describe(@"TBStateMachineState", ^{
         TBStateMachineTransition *resultB = [stateA handleEvent:eventB];
         expect(resultB.sourceState).to.equal(stateA);
         expect(resultB.destinationState).to.equal(stateB);
+    });
+    
+    it(@"returns its path inside the state machine hierarchy", ^{
+    
+        subStateMachineB.states = @[stateA];
+        subStateMachineA.states = @[subStateMachineB];
+        parallelStates.states = @[subStateMachineA];
+        stateMachine.states = @[parallelStates];
+        stateMachine.initialState = parallelStates;
+    
+        NSArray *path = [stateA getPath];
+        
+        expect(path.count).to.equal(3);
+        expect(path[0]).to.equal(stateMachine);
+        expect(path[1]).to.equal(subStateMachineA);
+        expect(path[2]).to.equal(subStateMachineB);
     });
     
 });
@@ -157,7 +183,7 @@ describe(@"TBStateMachineParallelWrapper", ^{
         });
         
     });
-    
+     
     it(@"switches states on all registered states", ^{
         
         __block BOOL enteredStateA = NO;
@@ -199,6 +225,7 @@ describe(@"TBStateMachineParallelWrapper", ^{
         expect(exitedStateA).to.equal(YES);
         expect(exitedStateB).to.equal(YES);
     });
+
     
     it(@"handles events on all registered states until the first valid follow-up state is returned.", ^{
         
@@ -751,7 +778,7 @@ describe(@"TBStateMachine", ^{
             };
             
             [stateA registerEvent:eventA target:stateB];
-            [stateB registerEvent:eventA target:stateC];
+            [stateB registerEvent:eventA target:subStateMachineA];
             
             NSArray *states = @[stateA, stateB, subStateMachineA];
             stateMachine.states = states;
@@ -766,7 +793,7 @@ describe(@"TBStateMachine", ^{
             expect(nextStateA).to.equal(stateB);
             expect(previousStateB).to.equal(stateA);
             
-            // moves to state C
+            // moves to sub machine A which enters C
             [stateMachine scheduleEvent:eventA];
             
             expect(nextStateB).to.equal(subStateMachineA);
@@ -796,7 +823,7 @@ describe(@"TBStateMachine", ^{
             expect(nextStateA).to.equal(stateB);
             expect(previousStateB).to.equal(stateA);
         });
-        
+
         it(@"can deeply switch into and out of sub-state machines using lowest common ancestor algorithm.", ^{
             
             // setup sub-state machine A
@@ -879,7 +906,7 @@ describe(@"TBStateMachine", ^{
             expect(nextStateB).to.beNil;
             expect(previousStateD).to.beNil;
         });
-        
+
         it(@"can switch into and out of parallel state machines.", ^{
             
             // setup sub-machine A
@@ -997,7 +1024,6 @@ describe(@"TBStateMachine", ^{
             
             expect(nextStateE).to.equal(stateF);
             expect(previousStateF).to.equal(stateE);
-            //        expect(receivedEventG).to.equal(eventA);
             
             [stateMachine scheduleEvent:eventA data:eventDataA];
             
@@ -1007,8 +1033,9 @@ describe(@"TBStateMachine", ^{
             expect(previousStateA).to.beNil;
             expect(previousStateDataA[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
         });
+
     });
-    
+
     describe(@"Concurrency", ^{
         
         it(@"queues up events if an event is currently handled", ^{
@@ -1189,9 +1216,8 @@ describe(@"TBStateMachine", ^{
             expect(executionSequence).to.equal(expectedExecutionSequence);
             
         });
-        
+         
     });
-    
 });
 
 SpecEnd

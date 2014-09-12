@@ -71,6 +71,17 @@
     }
 }
 
+- (NSArray *)getPath
+{
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
+    }
+    return path;
+}
+
 #pragma mark - TBStateMachineNode
 
 - (void)setParentState:(TBStateMachine *)parentState
@@ -85,8 +96,12 @@
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode enter:sourceState destinationState:destinationState data:data];
+        TBStateMachine *stateMachine = _priv_parallelStates[idx];
+        if (destinationState == nil || self) {
+            [stateMachine setUp];
+        } else {
+            [stateMachine exit:sourceState destinationState:destinationState data:data];
+        }
     });
 }
 
@@ -94,8 +109,12 @@
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode exit:sourceState destinationState:destinationState data:data];
+        TBStateMachine *stateMachine = _priv_parallelStates[idx];
+        if (destinationState == nil) {
+            [stateMachine tearDown];
+        } else {
+            [stateMachine exit:sourceState destinationState:destinationState data:data];
+        }
     });
 }
 
