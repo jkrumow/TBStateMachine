@@ -14,15 +14,17 @@
 /**
  *  This type represents an action of a given `TBStateMachineTransition`.
  *
- *  @param nextState The follow-up `TBStateMachineNode`.
- *  @param data      The payload data.
+ *  @param sourceState      The source `TBStateMachineNode`.
+ *  @param destinationState The destination `TBStateMachineNode`.
+ *  @param data             The payload data.
  */
 typedef void(^TBStateMachineActionBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);
 
 /**
  *  This type represents a guard function of a given `TBStateMachineTransition`.
  *
- *  @param nextState The follow-up `TBStateMachineNode`.
+ *  @param sourceState      The source `TBStateMachineNode`.
+ *  @param destinationState The destination `TBStateMachineNode`.
  *  @param data      The payload data.
  */
 typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);

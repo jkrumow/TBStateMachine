@@ -28,8 +28,18 @@
  */
 - (NSString *)name;
 
+/**
+ *  Returns the path of the node inside the state machine hierarchy.
+ *
+ *  @return An array containing all parent TBStateMachine instances - top state machine at index 0.
+ */
 - (NSMutableArray *)getPath;
 
+/**
+ *  Returns the parent state machine.
+ *
+ *  @return THe parent TBStateMachine instance.
+ */
 - (TBStateMachine *)parentState;
 
 - (void)setParentState:(TBStateMachine *)parentStateMachine;
@@ -37,16 +47,18 @@
 /**
  *  Executes the enter block of the state.
  *
- *  @param previousState The previous state.
- *  @param data          The payload data.
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
+ *  @param data             The payload data.
  */
 - (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data;
 
 /**
  *  Executes the exit block of the state.
  *
- *  @param nextState The next state.
- *  @param data      The payload data.
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
+ *  @param data             The payload data.
  */
 - (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data;
 
