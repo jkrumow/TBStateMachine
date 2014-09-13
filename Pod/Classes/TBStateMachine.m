@@ -173,7 +173,7 @@
             return stateMachine;
         }
     }
-    return self;
+    return nil;
 }
 
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
@@ -188,11 +188,8 @@
         TBStateMachineGuardBlock guard = transition.guard;
         if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
             TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
-            
             if (lowestCommonAncestor) {
                 [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
-            } else {
-                return transition;
             }
         }
     }
