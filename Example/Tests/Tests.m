@@ -886,8 +886,11 @@ describe(@"TBStateMachine", ^{
             subStateMachineB.states = subStatesB;
             subStateMachineB.initialState = stateC;
             
+            // setup parallel wrapper
+            parallelStates.states = @[subStateMachineB];
+            
             // setup main state machine
-            NSArray *states = @[subStateMachineA, subStateMachineB];
+            NSArray *states = @[subStateMachineA, parallelStates];
             stateMachine.states = states;
             stateMachine.initialState = subStateMachineA;
             [stateMachine setUp];
