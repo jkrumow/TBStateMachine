@@ -184,20 +184,16 @@
     }
     if (transition && transition.destinationState) {
         
-        if ([_priv_states objectForKey:transition.destinationState.name]) {
+        TBStateMachineActionBlock action = transition.action;
+        TBStateMachineGuardBlock guard = transition.guard;
+        if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
+            TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
             
-            TBStateMachineActionBlock action = transition.action;
-            TBStateMachineGuardBlock guard = transition.guard;
-            if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
-                TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+            if (lowestCommonAncestor) {
                 [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
+            } else {
+                return transition;
             }
-        } else {
-            // exit current state
-            [self switchState:_currentState destinationState:nil data:data action:nil];
-            
-            // bubble up to parent statemachine
-            return transition;
         }
     }
     return nil;
