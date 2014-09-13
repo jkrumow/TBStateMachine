@@ -9,10 +9,12 @@
 #import "TBStateMachineState.h"
 #import "NSException+TBStateMachine.h"
 #import "TBStateMachineEventHandler.h"
+#import "TBStateMachine.h"
 
 @interface TBStateMachineState ()
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, weak) TBStateMachine *parentState;
 
 - (BOOL)_canHandleEvent:(TBStateMachineEvent *)event;
 
@@ -68,17 +70,28 @@
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
+- (NSArray *)getPath
+{
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
+    }
+    return path;
+}
+
+- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     if (_enterBlock) {
-        _enterBlock(previousState, data);
+        _enterBlock(sourceState, destinationState, data);
     }
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
+- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     if (_exitBlock) {
-        _exitBlock(nextState, data);
+        _exitBlock(destinationState, destinationState, data);
     }
 }
 

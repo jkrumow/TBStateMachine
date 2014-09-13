@@ -123,4 +123,14 @@
  */
 - (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 
+/**
+ *  Switches from a given source state into a specified destination state.
+ *
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
+ *  @param data             The payload data.
+ *  @param action           The transition action.
+ */
+- (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
+
 @end

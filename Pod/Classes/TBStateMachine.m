@@ -17,11 +17,12 @@
 #endif
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, weak) TBStateMachine *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
-- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
+- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
@@ -61,7 +62,7 @@
 - (void)setUp
 {
     if (_initialState) {
-        [self _switchState:_initialState data:nil action:nil];
+        [self switchState:nil destinationState:_initialState data:nil action:nil];
     } else {
         @throw [NSException tb_nonExistingStateException:@"nil"];
     }
@@ -70,7 +71,7 @@
 - (void)tearDown
 {
     if (_currentState) {
-        [self _switchState:nil data:nil action:nil];
+        [self switchState:nil destinationState:nil data:nil action:nil];
     }
     _currentState = nil;
     [_priv_states removeAllObjects];
@@ -88,6 +89,7 @@
     for (id object in states) {
         if ([object conformsToProtocol:@protocol(TBStateMachineNode)])  {
             id<TBStateMachineNode> state = object;
+            [state setParentState:self];
             [_priv_states setObject:state forKey:state.name];
         } else {
             @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
@@ -136,24 +138,42 @@
     }
 }
 
-#pragma mark - private methods
-
-- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
+- (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
 {
     // exit current state
     if (_currentState) {
-        [_currentState exit:state data:data];
+        [_currentState exit:sourceState destinationState:destinationState data:data];
     }
     
     if (action) {
-        action(state, data);
+        action(sourceState, destinationState, data);
     }
     
     id<TBStateMachineNode> oldState = _currentState;
-    _currentState = state;
+    _currentState = destinationState;
     if (_currentState) {
-        [_currentState enter:oldState data:data];
+        [_currentState enter:oldState destinationState:_currentState data:data];
     }
+}
+
+#pragma mark - private methods
+
+- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState
+{
+    NSArray *sourcePath = [sourceState getPath];
+    NSArray *destinationPath = [destinationState getPath];
+    
+    for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
+        id<TBStateMachineNode> node = sourcePath[i];
+        if (![node isKindOfClass:[TBStateMachine class]]) {
+            continue;
+        }
+        TBStateMachine *stateMachine = node;
+        if ([destinationPath containsObject:stateMachine]) {
+            return stateMachine;
+        }
+    }
+    return self;
 }
 
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
@@ -163,16 +183,18 @@
         transition = [_currentState handleEvent:event data:data];
     }
     if (transition && transition.destinationState) {
+        
         if ([_priv_states objectForKey:transition.destinationState.name]) {
             
             TBStateMachineActionBlock action = transition.action;
             TBStateMachineGuardBlock guard = transition.guard;
-            if (guard == nil || guard(transition.destinationState, data)) {
-                [self _switchState:transition.destinationState data:data action:action];
+            if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
+                TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+                [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
             }
         } else {
             // exit current state
-            [self _switchState:nil data:data action:nil];
+            [self switchState:_currentState destinationState:nil data:data action:nil];
             
             // bubble up to parent statemachine
             return transition;
@@ -194,14 +216,33 @@
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
+- (NSArray *)getPath
 {
-    [self setUp];
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
+    }
+    return path;
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
+- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
-    [self tearDown];
+    if (destinationState == self) {
+        [self setUp];
+    } else {
+        [self switchState:sourceState destinationState:destinationState data:data action:nil];
+    }
+}
+
+- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
+{
+    if (destinationState == nil) {
+        [self tearDown];
+    } else {
+        [self switchState:sourceState destinationState:destinationState data:data action:nil];
+    }
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
