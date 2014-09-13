@@ -61,6 +61,14 @@
     [_eventHandlers removeObjectForKey:event.name];
 }
 
+#pragma mark - private methods
+
+- (BOOL)_canHandleEvent:(TBStateMachineEvent *)event
+{
+    return ([_eventHandlers objectForKey:event.name] != nil);
+}
+
+#pragma mark - TBStateMachineNode
 
 - (NSArray *)getPath
 {
@@ -72,16 +80,6 @@
     }
     return path;
 }
-
-
-#pragma mark - private methods
-
-- (BOOL)_canHandleEvent:(TBStateMachineEvent *)event
-{
-    return ([_eventHandlers objectForKey:event.name] != nil);
-}
-
-#pragma mark - TBStateMachineNode
 
 - (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {

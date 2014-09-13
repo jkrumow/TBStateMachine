@@ -138,8 +138,6 @@
     }
 }
 
-#pragma mark - private methods
-
 - (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
 {
     // exit current state
@@ -158,16 +156,7 @@
     }
 }
 
-- (NSArray *)getPath
-{
-    NSMutableArray *path = [NSMutableArray new];
-    TBStateMachine *node = self.parentState;
-    while (node) {
-        [path insertObject:node atIndex:0];
-        node = node.parentState;
-    }
-    return path;
-}
+#pragma mark - private methods
 
 - (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState
 {
@@ -226,6 +215,17 @@
 }
 
 #pragma mark - TBStateMachineNode
+
+- (NSArray *)getPath
+{
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
+    }
+    return path;
+}
 
 - (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {

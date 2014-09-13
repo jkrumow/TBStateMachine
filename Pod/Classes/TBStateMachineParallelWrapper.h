@@ -60,6 +60,4 @@
  */
 - (void)setStates:(NSArray *)states;
 
-- (NSArray *)getPath;
-
 @end

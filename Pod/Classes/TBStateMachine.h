@@ -125,6 +125,4 @@
 
 - (void)switchState:(id<TBStateMachineNode>)state destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
 
-- (NSMutableArray *)getPath;
-
 @end

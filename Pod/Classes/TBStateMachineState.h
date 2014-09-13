@@ -96,6 +96,4 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> state, NSDiction
  */
 - (void)unregisterEvent:(TBStateMachineEvent *)event;
 
-- (NSMutableArray *)getPath;
-
 @end

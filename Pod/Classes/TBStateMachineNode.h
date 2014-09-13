@@ -28,6 +28,8 @@
  */
 - (NSString *)name;
 
+- (NSMutableArray *)getPath;
+
 - (TBStateMachine *)parentState;
 
 - (void)setParentState:(TBStateMachine *)parentStateMachine;

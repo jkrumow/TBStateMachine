@@ -71,6 +71,8 @@
     }
 }
 
+#pragma mark - TBStateMachineNode
+
 - (NSArray *)getPath
 {
     NSMutableArray *path = [NSMutableArray new];
@@ -81,8 +83,6 @@
     }
     return path;
 }
-
-#pragma mark - TBStateMachineNode
 
 - (void)setParentState:(TBStateMachine *)parentState
 {
