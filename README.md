@@ -11,8 +11,9 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 ## Features
 
 * block based API
-* nesting of state machines
-* wrapper for parallel sub state machines
+* nested state machines (sub state machines)
+* wrapper for parallel state machines (orthogonal regions)
+* guards and transitions and actions
 * thread safe event handling and switching
 * state switching using lowest common ancestor algorithm (LCA)
 
@@ -72,13 +73,13 @@ The state machine will immediately enter the initial state.
 
 ### Switching States
 
-Register an event handler from a given event and target state:
+You can register an event handler from a given event and target state:
 
 ```objective-c
 [stateA registerEvent:eventA target:stateB];
 ```
 
-Register an event handler from a given event, target state, action and guard block:
+You can also register an event handler with additional action and guard blocks:
 
 ```objective-c
 [stateA registerEvent:eventA 
@@ -94,8 +95,6 @@ Register an event handler from a given event, target state, action and guard blo
                }];
 ```
 
-
-
 Send the event:
 
 ```objective-c
@@ -107,7 +106,7 @@ TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
 
 The state machine will queue all events it receives until processing of the current state has finished.
 
-### Sub-State Machines
+### Nested State Machines
 
 TBStateMachine instances can also be nested as sub-state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
 
@@ -154,7 +153,6 @@ stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode>
 };
 ```
 
-
 ## Author
 
 Julian Krumow, julian.krumow@tarbrain.com
@@ -162,4 +160,3 @@ Julian Krumow, julian.krumow@tarbrain.com
 ## License
 
 TBStateMachine is available under the MIT license. See the LICENSE file for more info.
-
