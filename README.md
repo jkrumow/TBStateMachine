@@ -10,10 +10,11 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 
 ## Features
 
-* thread safe event handling and switching
-* nested state machines
-* wrapper for parallel states and state machines
 * block based API
+* nesting of state machines
+* wrapper for parallel sub state machines
+* thread safe event handling and switching
+* state switching using lowest common ancestor algorithm (LCA)
 
 ## Example Project
 
