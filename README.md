@@ -38,7 +38,7 @@ it, simply add the following line to your Podfile:
 
 ### Configuration
 
-Create state objects, set enter and exit blocks and register event handlers:
+Create state objects, set enter and exit blocks:
 
 ```objective-c
 TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
@@ -98,8 +98,7 @@ You can also register an event handler with additional action and guard blocks:
 Send the event:
 
 ```objective-c
-NSValue *frame = [NSValue valueWithCGRect:CGRectMake(0.0, 0.0,100.0, 50.0)];
-NSDictionary *payload = @{@"text" : @"abcdef", @"frame", frame};
+NSDictionary *payload = // ...
 TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
 [stateMachine scheduleEvent:eventA data:payload];
 ```
@@ -140,12 +139,9 @@ stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode>
     
     // evaluate payload data
     NSString *text = data[@"text"];
-    NSValue *frameValue = data[@"frame"];
     
     dispatch_async(dispatch_get_main_queue(), ^{
     
-        CGRect frame = [frameValue CGRectValue];
-        UILabel *label = [[UILabel alloc]initWithFrame:frame)];
         label.text = text;
     
     });
