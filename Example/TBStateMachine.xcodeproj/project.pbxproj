@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A6C67E1EE074EF7B9F3DB6B /* libPods-TBStateMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92468FFB7995400DA10E71AF /* libPods-TBStateMachine.a */; };
+		15B1453819BCFDA700924D92 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 15B1453719BCFDA700924D92 /* CHANGELOG.md */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		15B1453719BCFDA700924D92 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* TBStateMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBStateMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -178,6 +180,7 @@
 			children = (
 				9DC2BD94630C4C24B2A9E9DE /* TBStateMachine.podspec */,
 				EE25D86ED8294FBD9000D76C /* README.md */,
+				15B1453719BCFDA700924D92 /* CHANGELOG.md */,
 				E3051BECA66A486CA6E2E47E /* LICENSE */,
 			);
 			name = "Podspec Metadata";
@@ -265,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5A4195388D20070C39A /* Main_iPad.storyboard in Resources */,
+				15B1453819BCFDA700924D92 /* CHANGELOG.md in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,

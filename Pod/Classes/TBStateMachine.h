@@ -11,6 +11,7 @@
 #import "TBStateMachineState.h"
 #import "TBStateMachineTransition.h"
 #import "TBStateMachineEvent.h"
+#import "TBStateMachineEventHandler.h"
 #import "TBStateMachineParallelWrapper.h"
 #import "NSException+TBStateMachine.h"
 
@@ -33,9 +34,6 @@
  *  - call -setUp to activate the state machine
  *  - call -tearDown to deactivate the state machine
  *
- *  **Concurrency:**
- *  Event handlers, enter and exit handlers will be executed on a background queue.
- *  Make sure the code in these blocks is dispatched back onto the right queue.
  */
 @interface TBStateMachine : NSObject <TBStateMachineNode>
 
@@ -107,5 +105,32 @@
  *  @param initialState A given state object.
  */
 - (void)setInitialState:(id<TBStateMachineNode>)initialState;
+
+/**
+ *  Schedules an event.
+ *  The state machine will queue all events it receives until processing of the current state has finished.
+ *
+ *  @param event The given `TBStateMachineEvent` instance.
+ */
+- (void)scheduleEvent:(TBStateMachineEvent *)event;
+
+/**
+ *  Schedules an event with a given payload.
+ *  The state machine will queue all events it receives until processing of the current state has finished.
+ *
+ *  @param event The given `TBStateMachineEvent` instance.
+ *  @param data  The payload data.
+ */
+- (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
+
+/**
+ *  Switches from a given source state into a specified destination state.
+ *
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
+ *  @param data             The payload data.
+ *  @param action           The transition action.
+ */
+- (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
 
 @end

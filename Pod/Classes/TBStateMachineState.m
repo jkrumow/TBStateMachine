@@ -8,10 +8,13 @@
 
 #import "TBStateMachineState.h"
 #import "NSException+TBStateMachine.h"
+#import "TBStateMachineEventHandler.h"
+#import "TBStateMachine.h"
 
 @interface TBStateMachineState ()
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, weak) TBStateMachine *parentState;
 
 - (BOOL)_canHandleEvent:(TBStateMachineEvent *)event;
 
@@ -37,9 +40,20 @@
     return self;
 }
 
-- (void)registerEvent:(TBStateMachineEvent *)event handler:(TBStateMachineEventBlock)handler
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target
 {
-    [_eventHandlers setObject:handler forKey:event.name];
+    [self registerEvent:event target:target action:nil guard:nil];
+}
+
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action
+{
+    [self registerEvent:event target:target action:action guard:nil];
+}
+
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
+{
+    TBStateMachineEventHandler *eventHandler = [TBStateMachineEventHandler eventHandlerWithName:event.name target:target action:action guard:guard];
+    [_eventHandlers setObject:eventHandler forKey:event.name];
 }
 
 - (void)unregisterEvent:(TBStateMachineEvent *)event;
@@ -56,17 +70,28 @@
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
+- (NSArray *)getPath
+{
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
+    }
+    return path;
+}
+
+- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     if (_enterBlock) {
-        _enterBlock(previousState, data);
+        _enterBlock(sourceState, destinationState, data);
     }
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
+- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     if (_exitBlock) {
-        _exitBlock(nextState, data);
+        _exitBlock(destinationState, destinationState, data);
     }
 }
 
@@ -78,9 +103,8 @@
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
     if ([self _canHandleEvent:event]) {
-        TBStateMachineEventBlock handler = [_eventHandlers objectForKey:event.name];
-        id<TBStateMachineNode> nextState = handler(event, data);
-        return [TBStateMachineTransition transitionWithSourceState:self destinationState:nextState];
+        TBStateMachineEventHandler *eventHandler = [_eventHandlers objectForKey:event.name];
+        return [TBStateMachineTransition transitionWithSourceState:self destinationState:eventHandler.target action:eventHandler.action guard:eventHandler.guard];
     }
     return nil;
 }

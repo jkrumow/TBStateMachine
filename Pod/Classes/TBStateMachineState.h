@@ -15,10 +15,11 @@
 /**
  *  This type represents a block that is executed on entry and exit of a `TBStateMachineState`.
  *
- *  @param state Either the previous state (when entering) or the next state (when exiting)
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
  *  @param data The payload data.
  */
-typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> state, NSDictionary *data);
+typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);
 
 /**
  *  This class represents a state in a state machine.
@@ -65,10 +66,29 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> state, NSDiction
 /**
  *  Registers a `TBStateMachineEvent` object.
  *
- *  @param event   The given TBStateMachineEvent object.
- *  @param handler The corresponding `TBStateMachineEventBlock`.
+ *  @param event  The given TBStateMachineEvent object.
+ *  @param target The follow-up `TBStateMachineNode`.
  */
-- (void)registerEvent:(TBStateMachineEvent *)event handler:(TBStateMachineEventBlock)handler;
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target;
+
+/**
+ *  Registers a `TBStateMachineEvent` object.
+ *
+ *  @param event  The given TBStateMachineEvent object.
+ *  @param target The follow-up `TBStateMachineNode`.
+ *  @param action The action associated with this event.
+ */
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action;
+
+/**
+ *  Registers a `TBStateMachineEvent` object.
+ *
+ *  @param event  The given TBStateMachineEvent object.
+ *  @param target The follow-up `TBStateMachineNode`.
+ *  @param action The action associated with this event.
+ *  @param guard  The guard function associated with this event.
+ */
+- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
 
 /**
  *  Unregisteres a `TBStateMachineEvent` object.

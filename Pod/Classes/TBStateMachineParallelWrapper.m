@@ -13,6 +13,7 @@
 @interface TBStateMachineParallelWrapper ()
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, weak) TBStateMachine *parentState;
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
 
 #if OS_OBJECT_USE_OBJC
@@ -46,10 +47,15 @@
 
 - (void)dealloc
 {
-    #if !OS_OBJECT_USE_OBJC
+#if !OS_OBJECT_USE_OBJC
     dispatch_release(_parallelQueue);
     _parallelQueue = nil;
-    #endif
+#endif
+}
+
+- (NSArray *)states
+{
+    return [NSArray arrayWithArray:_priv_parallelStates];
 }
 
 - (void)setStates:(NSArray *)states
@@ -57,32 +63,58 @@
     [_priv_parallelStates removeAllObjects];
     
     for (id object in states) {
-        if ([object conformsToProtocol:@protocol(TBStateMachineNode)])  {
-            id<TBStateMachineNode> stateMachineNode = object;
-            [_priv_parallelStates addObject:stateMachineNode];
+        if ([object isKindOfClass:[TBStateMachine class]]) {
+            [_priv_parallelStates addObject:object];
         } else {
-            @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
+            @throw ([NSException tb_notAStateMachineException:object]);
         }
     }
 }
 
 #pragma mark - TBStateMachineNode
 
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
+- (NSArray *)getPath
+{
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
+    }
+    return path;
+}
+
+- (void)setParentState:(TBStateMachine *)parentState
+{
+    _parentState = parentState;
+    for (id<TBStateMachineNode> node in _priv_parallelStates) {
+        node.parentState = _parentState;
+    }
+}
+
+- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode enter:previousState data:data];
+        TBStateMachine *stateMachine = _priv_parallelStates[idx];
+        if (destinationState == nil || self) {
+            [stateMachine setUp];
+        } else {
+            [stateMachine exit:sourceState destinationState:destinationState data:data];
+        }
     });
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
+- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        id<TBStateMachineNode> stateMachineNode = _priv_parallelStates[idx];
-        [stateMachineNode exit:nextState data:data];
+        TBStateMachine *stateMachine = _priv_parallelStates[idx];
+        if (destinationState == nil) {
+            [stateMachine tearDown];
+        } else {
+            [stateMachine exit:sourceState destinationState:destinationState data:data];
+        }
     });
 }
 

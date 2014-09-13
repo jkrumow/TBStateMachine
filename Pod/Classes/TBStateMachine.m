@@ -11,16 +11,20 @@
 @interface TBStateMachine ()
 
 #if OS_OBJECT_USE_OBJC
-@property (nonatomic, strong) dispatch_queue_t eventQueue;
+@property (nonatomic, strong) dispatch_queue_t eventDispatchQueue;
 #else
-@property (nonatomic, assign) dispatch_queue_t eventQueue;
+@property (nonatomic, assign) dispatch_queue_t eventDispatchQueue;
 #endif
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, weak) TBStateMachine *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
+@property (nonatomic, strong) NSMutableArray *eventQueue;
+@property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
-- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data;
+- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
+- (void)_handleNextEvent;
 
 @end
 
@@ -40,7 +44,9 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _eventQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.EventQueue", DISPATCH_QUEUE_SERIAL);
+        _eventQueue = [NSMutableArray new];
+        _processesEvent = NO;
+        _eventDispatchQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.eventDispatchQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -48,15 +54,15 @@
 - (void)dealloc
 {
 #if !OS_OBJECT_USE_OBJC
-    dispatch_release(_eventQueue);
-    _eventQueue = nil;
+    dispatch_release(_eventDispatchQueue);
+    _eventDispatchQueue = nil;
 #endif
 }
 
 - (void)setUp
 {
     if (_initialState) {
-        [self _switchState:_initialState data:nil];
+        [self switchState:nil destinationState:_initialState data:nil action:nil];
     } else {
         @throw [NSException tb_nonExistingStateException:@"nil"];
     }
@@ -65,7 +71,7 @@
 - (void)tearDown
 {
     if (_currentState) {
-        [self _switchState:nil data:nil];
+        [self switchState:nil destinationState:nil data:nil action:nil];
     }
     _currentState = nil;
     [_priv_states removeAllObjects];
@@ -83,6 +89,7 @@
     for (id object in states) {
         if ([object conformsToProtocol:@protocol(TBStateMachineNode)])  {
             id<TBStateMachineNode> state = object;
+            [state setParentState:self];
             [_priv_states setObject:state forKey:state.name];
         } else {
             @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
@@ -99,20 +106,74 @@
     }
 }
 
-#pragma mark - private methods
+- (void)scheduleEvent:(TBStateMachineEvent *)event
+{
+    [self scheduleEvent:event data:nil];
+}
 
-- (void)_switchState:(id<TBStateMachineNode>)state data:(NSDictionary *)data
+- (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
+    @synchronized(_eventQueue) {
+        
+        NSDictionary *queuedEvent = nil;
+        if (data) {
+            queuedEvent = @{@"event" : event, @"data" : data};
+        } else {
+            queuedEvent = @{@"event" : event};
+        }
+        
+        [_eventQueue addObject:queuedEvent];
+        
+        if (self.isProcessingEvent) {
+            NSLog(@"Queuing event %@", event.name);
+        } else {
+            while (_eventQueue.count > 0) {
+                NSLog(@"%lu more scheduled events to handle.", (unsigned long)_eventQueue.count);
+                
+                dispatch_sync(_eventDispatchQueue, ^{
+                    [self _handleNextEvent];
+                });
+            }
+        }
+    }
+}
+
+- (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
 {
     // exit current state
     if (_currentState) {
-        [_currentState exit:state data:data];
+        [_currentState exit:sourceState destinationState:destinationState data:data];
+    }
+    
+    if (action) {
+        action(sourceState, destinationState, data);
     }
     
     id<TBStateMachineNode> oldState = _currentState;
-    _currentState = state;
+    _currentState = destinationState;
     if (_currentState) {
-        [_currentState enter:oldState data:data];
+        [_currentState enter:oldState destinationState:_currentState data:data];
     }
+}
+
+#pragma mark - private methods
+
+- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState
+{
+    NSArray *sourcePath = [sourceState getPath];
+    NSArray *destinationPath = [destinationState getPath];
+    
+    for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
+        id<TBStateMachineNode> node = sourcePath[i];
+        if (![node isKindOfClass:[TBStateMachine class]]) {
+            continue;
+        }
+        TBStateMachine *stateMachine = node;
+        if ([destinationPath containsObject:stateMachine]) {
+            return stateMachine;
+        }
+    }
+    return self;
 }
 
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
@@ -122,11 +183,18 @@
         transition = [_currentState handleEvent:event data:data];
     }
     if (transition && transition.destinationState) {
+        
         if ([_priv_states objectForKey:transition.destinationState.name]) {
-            [self _switchState:transition.destinationState data:data];
+            
+            TBStateMachineActionBlock action = transition.action;
+            TBStateMachineGuardBlock guard = transition.guard;
+            if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
+                TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+                [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
+            }
         } else {
             // exit current state
-            [self _switchState:nil data:data];
+            [self switchState:_currentState destinationState:nil data:data action:nil];
             
             // bubble up to parent statemachine
             return transition;
@@ -135,16 +203,46 @@
     return nil;
 }
 
-#pragma mark - TBStateMachineNode
-
-- (void)enter:(id<TBStateMachineNode>)previousState data:(NSDictionary *)data
+- (void)_handleNextEvent
 {
-    [self setUp];
+    if (_eventQueue.count > 0) {
+        self.processesEvent = YES;
+        NSDictionary *queuedEvent = _eventQueue[0];
+        [_eventQueue removeObject:queuedEvent];
+        [self handleEvent:queuedEvent[@"event"] data:queuedEvent[@"data"]];
+        self.processesEvent = NO;
+    }
 }
 
-- (void)exit:(id<TBStateMachineNode>)nextState data:(NSDictionary *)data
+#pragma mark - TBStateMachineNode
+
+- (NSArray *)getPath
 {
-    [self tearDown];
+    NSMutableArray *path = [NSMutableArray new];
+    TBStateMachine *node = self.parentState;
+    while (node) {
+        [path insertObject:node atIndex:0];
+        node = node.parentState;
+    }
+    return path;
+}
+
+- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
+{
+    if (destinationState == self) {
+        [self setUp];
+    } else {
+        [self switchState:sourceState destinationState:destinationState data:data action:nil];
+    }
+}
+
+- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
+{
+    if (destinationState == nil) {
+        [self tearDown];
+    } else {
+        [self switchState:sourceState destinationState:destinationState data:data action:nil];
+    }
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
@@ -154,13 +252,7 @@
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
-    __block TBStateMachineTransition *transition = nil;
-    
-    dispatch_sync(_eventQueue, ^{
-        transition = [self _handleEvent:event data:data];
-    });
-    
-    return transition;
+    return [self _handleEvent:event data:data];
 }
 
 @end

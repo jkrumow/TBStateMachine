@@ -10,10 +10,12 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 
 ## Features
 
-* thread safe event handling and switching
-* nested state machines
-* wrapper for parallel states and state machines
 * block based API
+* nested state machines (sub state machines)
+* wrapper for parallel state machines (orthogonal regions)
+* guards and transitions and actions
+* thread safe event handling and switching
+* state switching using lowest common ancestor algorithm (LCA)
 
 ## Example Project
 
@@ -40,13 +42,13 @@ Create state objects, set enter and exit blocks and register event handlers:
 
 ```objective-c
 TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
-stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
         
     // ...
        
 };
     
-stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
         
     // ...
        
@@ -71,14 +73,26 @@ The state machine will immediately enter the initial state.
 
 ### Switching States
 
-Register an event handler which returns a valid node:
+You can register an event handler from a given event and target state:
 
 ```objective-c
-[stateA registerEvent:eventA handler:^id<TBStateMachineNode> (TBStateMachineEvent *event, NSDictionary *data) {
+[stateA registerEvent:eventA target:stateB];
+```
 
-    // the follow-up node or nil
-    return stateB;
-}];
+You can also register an event handler with additional action and guard blocks:
+
+```objective-c
+[stateA registerEvent:eventA 
+               target:stateB
+               action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+                   
+                   // ...
+                   
+               }
+                guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+                   
+                   return // YES or NO;
+               }];
 ```
 
 Send the event:
@@ -87,10 +101,12 @@ Send the event:
 NSValue *frame = [NSValue valueWithCGRect:CGRectMake(0.0, 0.0,100.0, 50.0)];
 NSDictionary *payload = @{@"text" : @"abcdef", @"frame", frame};
 TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
-[stateMachine handleEvent:eventA data:payload];
+[stateMachine scheduleEvent:eventA data:payload];
 ```
 
-### Sub-State Machines
+The state machine will queue all events it receives until processing of the current state has finished.
+
+### Nested State Machines
 
 TBStateMachine instances can also be nested as sub-state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
 
@@ -104,23 +120,23 @@ stateMachine.states = @[stateA, stateB, subStateMachine];
 
 You do not need to call `- (void)setup` and `- (void)tearDown` on the sub-state machine since these methods will be called by the super-state machine.
 
-### Parallel States and State Machines
+### Parallel State Machines
 
-To run multiple states and sub-state machines in parallel you will use the `TBStateMachineParallelWrapper`:
+To run multiple state machines in parallel you will use the `TBStateMachineParallelWrapper`:
 
 ```objective-c
 TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
-parallelWrapper.states = @[subStateMachineA, subStateMachineB, stateZ];
+parallelWrapper.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
     
 stateMachine.states = @[stateA, stateB, parallelWrapper];
 ```
 
 ### Concurrency
 
-Event handlers, enter and exit handlers will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
+Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
 
 ```objective-c
-stateZ.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
     
     // evaluate payload data
     NSString *text = data[@"text"];
@@ -133,10 +149,9 @@ stateZ.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
         label.text = text;
     
     });
-       
+    
 };
 ```
-
 
 ## Author
 
@@ -145,4 +160,3 @@ Julian Krumow, julian.krumow@tarbrain.com
 ## License
 
 TBStateMachine is available under the MIT license. See the LICENSE file for more info.
-
