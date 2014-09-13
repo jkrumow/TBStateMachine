@@ -18,7 +18,7 @@
  *  @param state Either the previous state (when entering) or the next state (when exiting)
  *  @param data The payload data.
  */
-typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> state, NSDictionary *data);
+typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);
 
 /**
  *  This class represents a state in a state machine.

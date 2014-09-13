@@ -84,14 +84,14 @@
 - (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     if (_enterBlock) {
-        _enterBlock(sourceState, data);
+        _enterBlock(sourceState, destinationState, data);
     }
 }
 
 - (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     if (_exitBlock) {
-        _exitBlock(destinationState, data);
+        _exitBlock(destinationState, destinationState, data);
     }
 }
 
