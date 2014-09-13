@@ -19,7 +19,7 @@
 
 - events processing follows RTC-model. The state machine will queue all events it receives until processing of the current state has finished.
 
-- transitions from substate to substate of different submachine are possible now ()using LCA-algorithm).
+- transitions from substate to substate of different submachine are possible now (using LCA-algorithm).
 
 ## 1.0.0
 

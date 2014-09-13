@@ -40,13 +40,13 @@ Create state objects, set enter and exit blocks and register event handlers:
 
 ```objective-c
 TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
-stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
         
     // ...
        
 };
     
-stateA.exitBlock = ^(TBStateMachineState *nextState, NSDictionary *data) {
+stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
         
     // ...
        
@@ -80,16 +80,16 @@ Register an event handler from a given event and target state:
 Register an event handler from a given event, target state, action and guard block:
 
 ```objective-c
-[stateA registerEvent:eventA
+[stateA registerEvent:eventA 
                target:stateB
-               action:^(id<TBStateMachineNode> nextState, NSDictionary *data) {
+               action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                    
                    // ...
                    
                }
-                guard:^BOOL(id<TBStateMachineNode> nextState, NSDictionary *data) {
+                guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                    
-                   return // YES or NO
+                   return // YES or NO;
                }];
 ```
 
@@ -136,7 +136,7 @@ stateMachine.states = @[stateA, stateB, parallelWrapper];
 Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
 
 ```objective-c
-stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
+stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
     
     // evaluate payload data
     NSString *text = data[@"text"];
@@ -149,7 +149,7 @@ stateA.enterBlock = ^(TBStateMachineState *previousState, NSDictionary *data) {
         label.text = text;
     
     });
-       
+    
 };
 ```
 
