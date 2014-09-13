@@ -225,39 +225,6 @@ describe(@"TBStateMachineParallelWrapper", ^{
         expect(exitedStateA).to.equal(YES);
         expect(exitedStateB).to.equal(YES);
     });
-
-    
-    it(@"handles events on all registered states until the first valid follow-up state is returned.", ^{
-        
-        [stateA registerEvent:eventA target:stateC];
-        [stateB registerEvent:eventA target:stateD];
-        
-        subStateMachineA.states = @[stateA];
-        subStateMachineA.initialState = stateA;
-        
-        subStateMachineB.states = @[stateB];
-        subStateMachineB.initialState = stateB;
-        
-        NSArray *states = @[subStateMachineA, subStateMachineB];
-        parallelStates.states = states;
-        
-        [parallelStates enter:nil destinationState:nil data:nil];
-        TBStateMachineTransition *result = [parallelStates handleEvent:eventA];
-        
-        expect(result).toNot.beNil;
-        
-        NSArray *validSourceStates = @[stateA, stateB];
-        expect(validSourceStates).contain(result.sourceState);
-        NSArray *validDestinationStates = @[stateC, stateD];
-        expect(validDestinationStates).contain(result.destinationState);
-        
-        if (result.sourceState == stateA) {
-            expect(result.destinationState).to.equal(stateC);
-        } else if (result.sourceState == stateB) {
-            expect(result.destinationState).to.equal(stateD);
-        }
-        
-    });
     
 });
 
@@ -680,21 +647,7 @@ describe(@"TBStateMachine", ^{
             expect(previousStateBData[EVENT_DATA_KEY]).toNot.beNil;
             expect(previousStateBData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
         });
-        
-        it(@"returns an unprocessed transition when the result of a given event can not be handled.", ^{
-            
-            NSArray *states = @[stateA, stateB];
-            
-            [stateA registerEvent:eventA target:stateC];
-            
-            stateMachine.states = states;
-            stateMachine.initialState = stateA;
-            [stateMachine setUp];
-            
-            TBStateMachineTransition *transition = [stateMachine handleEvent:eventA];
-            expect(transition.destinationState).to.equal(stateC);
-        });
-        
+
         it(@"can re-enter a state.", ^{
             
             NSArray *states = @[stateA];
