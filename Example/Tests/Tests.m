@@ -378,7 +378,6 @@ describe(@"TBStateMachine", ^{
             __block TBStateMachineState *sourceStateA;
             __block TBStateMachineState *destinationStateA;
             __block NSDictionary *dataEnterA;
-            __block NSDictionary *dataExitA;
             __block BOOL wasEnterExecuted = NO;
             __block BOOL wasExitExecuted = NO;
             
