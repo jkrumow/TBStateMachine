@@ -2,13 +2,13 @@
 //  TBStateMachineTests.m
 //  TBStateMachineTests
 //
-//  Created by Julian Krumow on 08/01/2014.
+//  Created by Julian Krumow on 09/14/2014.
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
 #import <TBStateMachine/TBStateMachine.h>
 
-SpecBegin(StateMachine)
+SpecBegin(TBStateMachine)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";
@@ -33,248 +33,6 @@ __block TBStateMachineParallelWrapper *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
-describe(@"TBStateMachineState", ^{
-    
-    beforeEach(^{
-        stateA = [TBStateMachineState stateWithName:@"a"];
-        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBStateMachineEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBStateMachineEvent eventWithName:EVENT_NAME_B];
-        
-        stateMachine = [TBStateMachine stateMachineWithName:@"stateMachine"];
-        subStateMachineA = [TBStateMachine stateMachineWithName:@"stateMachineA"];
-        subStateMachineB = [TBStateMachine stateMachineWithName:@"stateMachineB"];
-        parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@"parallelStates"];
-    });
-    
-    afterEach(^{
-        stateA = nil;
-        eventDataA = nil;
-        eventDataB = nil;
-        eventA = nil;
-        eventB = nil;
-        
-        stateMachine = nil;
-        subStateMachineA = nil;
-        subStateMachineB = nil;
-        parallelStates = nil;
-    });
-    
-    describe(@"Exception handling on setup.", ^{
-        
-        it (@"throws a TBStateMachineException when name is nil.", ^{
-            
-            expect(^{
-                stateA = [TBStateMachineState stateWithName:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
-            
-            expect(^{
-                stateA = [TBStateMachineState stateWithName:@""];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-    });
-    
-    it(@"registers TBStateMachineEventBlock instances by the name of a provided TBStateMachineEvent instance.", ^{
-        
-        [stateA registerEvent:eventA target:nil];
-        
-        NSDictionary *registeredEvents = stateA.eventHandlers;
-        expect(registeredEvents.allKeys).to.haveCountOf(1);
-        expect(registeredEvents).to.contain(eventA.name);
-    });
-    
-    it(@"handles events by returning nil or a TBStateMachineTransition containing source and destination state.", ^{
-        
-        [stateA registerEvent:eventA target:nil];
-        [stateA registerEvent:eventB target:stateB];
-        
-        TBStateMachineTransition *resultA = [stateA handleEvent:eventA];
-        expect(resultA).to.beNil;
-        
-        TBStateMachineTransition *resultB = [stateA handleEvent:eventB];
-        expect(resultB.sourceState).to.equal(stateA);
-        expect(resultB.destinationState).to.equal(stateB);
-    });
-    
-    it(@"returns its path inside the state machine hierarchy", ^{
-        
-        subStateMachineB.states = @[stateA];
-        subStateMachineA.states = @[subStateMachineB];
-        parallelStates.states = @[subStateMachineA];
-        stateMachine.states = @[parallelStates];
-        stateMachine.initialState = parallelStates;
-        
-        NSArray *path = [stateA getPath];
-        
-        expect(path.count).to.equal(3);
-        expect(path[0]).to.equal(stateMachine);
-        expect(path[1]).to.equal(subStateMachineA);
-        expect(path[2]).to.equal(subStateMachineB);
-    });
-    
-});
-
-describe(@"TBStateMachineParallelWrapper", ^{
-    
-    beforeEach(^{
-        parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
-        stateA = [TBStateMachineState stateWithName:@"a"];
-        stateB = [TBStateMachineState stateWithName:@"b"];
-        stateC = [TBStateMachineState stateWithName:@"c"];
-        stateD = [TBStateMachineState stateWithName:@"d"];
-        stateE = [TBStateMachineState stateWithName:@"e"];
-        stateF = [TBStateMachineState stateWithName:@"f"];
-        
-        subStateMachineA = [TBStateMachine stateMachineWithName:@"SubA"];
-        subStateMachineB = [TBStateMachine stateMachineWithName:@"SubB"];
-        
-        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBStateMachineEvent eventWithName:EVENT_NAME_A];
-    });
-    
-    afterEach(^{
-        parallelStates = nil;
-        stateA = nil;
-        stateB = nil;
-        stateC = nil;
-        stateD = nil;
-        stateE = nil;
-        stateF = nil;
-        
-        subStateMachineA = nil;
-        subStateMachineB = nil;
-        
-        eventDataA = nil;
-        eventA = nil;
-    });
-    
-    describe(@"Exception handling on setup.", ^{
-        
-        it (@"throws a TBStateMachineException when name is nil.", ^{
-            
-            expect(^{
-                parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
-            
-            expect(^{
-                parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@""];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it(@"throws TBStateMachineException when state object is not of type TBStateMachine.", ^{
-            
-            id object = [[NSObject alloc] init];
-            NSArray *states = @[subStateMachineA, subStateMachineB, object];
-            expect(^{
-                parallelStates.states = states;
-            }).to.raise(TBStateMachineException);
-        });
-        
-    });
-    
-    it(@"switches states on all registered states", ^{
-        
-        __block BOOL enteredStateA = NO;
-        stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-            enteredStateA = YES;
-        };
-        
-        __block BOOL exitedStateA = NO;
-        stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-            exitedStateA = YES;
-        };
-        
-        __block BOOL enteredStateB = NO;
-        stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-            enteredStateB = YES;
-        };
-        
-        __block BOOL exitedStateB = NO;
-        stateB.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-            exitedStateB = YES;
-        };
-        
-        subStateMachineA.states = @[stateA];
-        subStateMachineA.initialState = stateA;
-        
-        subStateMachineB.states = @[stateB];
-        subStateMachineB.initialState = stateB;
-        
-        NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
-        parallelStates.states = parallelSubStateMachines;
-        
-        [parallelStates enter:nil destinationState:nil data:nil];
-        
-        expect(enteredStateA).to.equal(YES);
-        expect(enteredStateB).to.equal(YES);
-        
-        [parallelStates exit:nil destinationState:nil data:nil];
-        
-        expect(exitedStateA).to.equal(YES);
-        expect(exitedStateB).to.equal(YES);
-    });
-    
-});
-
-describe(@"TBStateMachineEvent", ^{
-    
-    describe(@"Exception handling on setup.", ^{
-        
-        it (@"throws a TBStateMachineException when name is nil.", ^{
-            
-            expect(^{
-                [TBStateMachineEvent eventWithName:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
-            
-            expect(^{
-                [TBStateMachineEvent eventWithName:@""];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-    });
-    
-});
-
-describe(@"TBStateMachineEventHandler", ^{
-    
-    describe(@"Exception handling on setup.", ^{
-        
-        it (@"throws a TBStateMachineException when name is nil.", ^{
-            
-            expect(^{
-                [TBStateMachineEventHandler eventHandlerWithName:nil target:nil action:nil guard:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
-            
-            expect(^{
-                [TBStateMachineEventHandler eventHandlerWithName:@"" target:nil action:nil guard:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-    });
-    
-});
 
 describe(@"TBStateMachine", ^{
     
@@ -899,7 +657,7 @@ describe(@"TBStateMachine", ^{
             
             expect(destinationStateA).to.equal(stateB);
             expect(sourceStateB).to.equal(stateA);
-
+            
         });
         
         it(@"can switch into and out of parallel state machines.", ^{
