@@ -1,10 +1,17 @@
 # TBStateMachine CHANGELOG
 
+## 2.0.1
+
+### fixes
+
+- LCA handling was broken and resulted in a wrong execution sequence of exit - action - enter.
+- corrected typos in CHANGELOG.md (this document)
+
 ## 2.0.0
 
-### enhanced event switching:
+### enhanced state switching:
 
-- state machine can now switch from a substate of a sub state machine deep into another submachine. Implementation uses LCA (Lowest Common Ancestor) - algorithm.
+- state machine can now switch from a substate of a sub state machine deep into another submachine. Implementation uses LCA (Lowest Common Ancestor) - algorithm
 
 ### re-worked event handling:
 
@@ -17,9 +24,7 @@
                 guard:(TBStateMachineGuardBlock)guard;
 ```
 
-- events processing follows RTC-model. The state machine will queue all events it receives until processing of the current state has finished.
-
-- transitions from substate to substate of different submachine are possible now (using LCA-algorithm).
+- event processing follows RTC-model. The state machine will queue all events it receives until processing of the current event has finished
 
 ## 1.0.0
 
@@ -29,4 +34,4 @@
 
 ## 0.9.0
 
-Initial release.
+- initial release

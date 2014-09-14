@@ -22,6 +22,7 @@
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
+- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state;
 - (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
@@ -71,7 +72,7 @@
 - (void)tearDown
 {
     if (_currentState) {
-        [self switchState:nil destinationState:nil data:nil action:nil];
+        [self switchState:_currentState destinationState:nil data:nil action:nil];
     }
     _currentState = nil;
     [_priv_states removeAllObjects];
@@ -149,14 +150,34 @@
         action(sourceState, destinationState, data);
     }
     
-    id<TBStateMachineNode> oldState = _currentState;
-    _currentState = destinationState;
+    _currentState = [self _findNextNodeForState:destinationState];
     if (_currentState) {
-        [_currentState enter:oldState destinationState:_currentState data:data];
+        [_currentState enter:sourceState destinationState:destinationState data:data];
     }
 }
 
 #pragma mark - private methods
+
+- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state
+{
+    if (state == nil) {
+        return nil;
+    }
+    
+    // return destination state right away
+    NSArray *path = [state getPath];
+    if (self == [path lastObject]) {
+        return state;
+    }
+    
+    if (![path containsObject:self]) {
+        return nil;
+    }
+    
+    // return next node in path
+    NSUInteger index = [path indexOfObject:self];
+    return path[index + 1];
+}
 
 - (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState
 {

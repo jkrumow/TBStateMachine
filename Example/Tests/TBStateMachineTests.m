@@ -2,13 +2,13 @@
 //  TBStateMachineTests.m
 //  TBStateMachineTests
 //
-//  Created by Julian Krumow on 08/01/2014.
+//  Created by Julian Krumow on 09/14/2014.
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
 #import <TBStateMachine/TBStateMachine.h>
 
-SpecBegin(StateMachine)
+SpecBegin(TBStateMachine)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";
@@ -33,248 +33,6 @@ __block TBStateMachineParallelWrapper *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
-describe(@"TBStateMachineState", ^{
-    
-    beforeEach(^{
-        stateA = [TBStateMachineState stateWithName:@"a"];
-        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBStateMachineEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBStateMachineEvent eventWithName:EVENT_NAME_B];
-        
-        stateMachine = [TBStateMachine stateMachineWithName:@"stateMachine"];
-        subStateMachineA = [TBStateMachine stateMachineWithName:@"stateMachineA"];
-        subStateMachineB = [TBStateMachine stateMachineWithName:@"stateMachineB"];
-        parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@"parallelStates"];
-    });
-    
-    afterEach(^{
-        stateA = nil;
-        eventDataA = nil;
-        eventDataB = nil;
-        eventA = nil;
-        eventB = nil;
-        
-        stateMachine = nil;
-        subStateMachineA = nil;
-        subStateMachineB = nil;
-        parallelStates = nil;
-    });
-    
-    describe(@"Exception handling on setup.", ^{
-        
-        it (@"throws a TBStateMachineException when name is nil.", ^{
-            
-            expect(^{
-                stateA = [TBStateMachineState stateWithName:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
-            
-            expect(^{
-                stateA = [TBStateMachineState stateWithName:@""];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-    });
-    
-    it(@"registers TBStateMachineEventBlock instances by the name of a provided TBStateMachineEvent instance.", ^{
-        
-        [stateA registerEvent:eventA target:nil];
-        
-        NSDictionary *registeredEvents = stateA.eventHandlers;
-        expect(registeredEvents.allKeys).to.haveCountOf(1);
-        expect(registeredEvents).to.contain(eventA.name);
-    });
-    
-    it(@"handles events by returning nil or a TBStateMachineTransition containing source and destination state.", ^{
-        
-        [stateA registerEvent:eventA target:nil];
-        [stateA registerEvent:eventB target:stateB];
-        
-        TBStateMachineTransition *resultA = [stateA handleEvent:eventA];
-        expect(resultA).to.beNil;
-        
-        TBStateMachineTransition *resultB = [stateA handleEvent:eventB];
-        expect(resultB.sourceState).to.equal(stateA);
-        expect(resultB.destinationState).to.equal(stateB);
-    });
-    
-    it(@"returns its path inside the state machine hierarchy", ^{
-    
-        subStateMachineB.states = @[stateA];
-        subStateMachineA.states = @[subStateMachineB];
-        parallelStates.states = @[subStateMachineA];
-        stateMachine.states = @[parallelStates];
-        stateMachine.initialState = parallelStates;
-    
-        NSArray *path = [stateA getPath];
-        
-        expect(path.count).to.equal(3);
-        expect(path[0]).to.equal(stateMachine);
-        expect(path[1]).to.equal(subStateMachineA);
-        expect(path[2]).to.equal(subStateMachineB);
-    });
-    
-});
-
-describe(@"TBStateMachineParallelWrapper", ^{
-    
-    beforeEach(^{
-        parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
-        stateA = [TBStateMachineState stateWithName:@"a"];
-        stateB = [TBStateMachineState stateWithName:@"b"];
-        stateC = [TBStateMachineState stateWithName:@"c"];
-        stateD = [TBStateMachineState stateWithName:@"d"];
-        stateE = [TBStateMachineState stateWithName:@"e"];
-        stateF = [TBStateMachineState stateWithName:@"f"];
-        
-        subStateMachineA = [TBStateMachine stateMachineWithName:@"SubA"];
-        subStateMachineB = [TBStateMachine stateMachineWithName:@"SubB"];
-        
-        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBStateMachineEvent eventWithName:EVENT_NAME_A];
-    });
-    
-    afterEach(^{
-        parallelStates = nil;
-        stateA = nil;
-        stateB = nil;
-        stateC = nil;
-        stateD = nil;
-        stateE = nil;
-        stateF = nil;
-        
-        subStateMachineA = nil;
-        subStateMachineB = nil;
-        
-        eventDataA = nil;
-        eventA = nil;
-    });
-    
-    describe(@"Exception handling on setup.", ^{
-        
-        it (@"throws a TBStateMachineException when name is nil.", ^{
-            
-            expect(^{
-                parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
-            
-            expect(^{
-                parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@""];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it(@"throws TBStateMachineException when state object is not of type TBStateMachine.", ^{
-            
-            id object = [[NSObject alloc] init];
-            NSArray *states = @[subStateMachineA, subStateMachineB, object];
-            expect(^{
-                parallelStates.states = states;
-            }).to.raise(TBStateMachineException);
-        });
-        
-    });
-     
-    it(@"switches states on all registered states", ^{
-        
-        __block BOOL enteredStateA = NO;
-        stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-            enteredStateA = YES;
-        };
-        
-        __block BOOL exitedStateA = NO;
-        stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-            exitedStateA = YES;
-        };
-        
-        __block BOOL enteredStateB = NO;
-        stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-            enteredStateB = YES;
-        };
-        
-        __block BOOL exitedStateB = NO;
-        stateB.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-            exitedStateB = YES;
-        };
-        
-        subStateMachineA.states = @[stateA];
-        subStateMachineA.initialState = stateA;
-        
-        subStateMachineB.states = @[stateB];
-        subStateMachineB.initialState = stateB;
-        
-        NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
-        parallelStates.states = parallelSubStateMachines;
-        
-        [parallelStates enter:nil destinationState:nil data:nil];
-        
-        expect(enteredStateA).to.equal(YES);
-        expect(enteredStateB).to.equal(YES);
-        
-        [parallelStates exit:nil destinationState:nil data:nil];
-        
-        expect(exitedStateA).to.equal(YES);
-        expect(exitedStateB).to.equal(YES);
-    });
-    
-});
-
-describe(@"TBStateMachineEvent", ^{
-    
-    describe(@"Exception handling on setup.", ^{
-        
-        it (@"throws a TBStateMachineException when name is nil.", ^{
-            
-            expect(^{
-                [TBStateMachineEvent eventWithName:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
-            
-            expect(^{
-                [TBStateMachineEvent eventWithName:@""];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-    });
-    
-});
-
-describe(@"TBStateMachineEventHandler", ^{
-    
-    describe(@"Exception handling on setup.", ^{
-        
-        it (@"throws a TBStateMachineException when name is nil.", ^{
-            
-            expect(^{
-                [TBStateMachineEventHandler eventHandlerWithName:nil target:nil action:nil guard:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
-            
-            expect(^{
-                [TBStateMachineEventHandler eventHandlerWithName:@"" target:nil action:nil guard:nil];
-            }).to.raise(TBStateMachineException);
-            
-        });
-        
-    });
-    
-});
 
 describe(@"TBStateMachine", ^{
     
@@ -375,14 +133,16 @@ describe(@"TBStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            __block TBStateMachineState *previousStateA;
+            __block TBStateMachineState *sourceStateA;
+            __block TBStateMachineState *destinationStateA;
             __block NSDictionary *dataEnterA;
             __block BOOL wasEnterExecuted = NO;
             __block BOOL wasExitExecuted = NO;
             
             stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 wasEnterExecuted = YES;
-                previousStateA = sourceState;
+                sourceStateA = sourceState;
+                destinationStateA = destinationState;
                 dataEnterA = data;
             };
             
@@ -397,7 +157,7 @@ describe(@"TBStateMachine", ^{
             expect(stateMachine.currentState).to.equal(stateA);
             
             expect(wasEnterExecuted).to.equal(YES);
-            expect(previousStateA).to.beNil;
+            expect(sourceStateA).to.beNil;
             expect(dataEnterA).to.beNil;
             expect(wasExitExecuted).to.equal(NO);
         });
@@ -411,12 +171,14 @@ describe(@"TBStateMachine", ^{
                 wasEnterExecuted = YES;
             };
             
-            __block TBStateMachineState *nextStateA;
+            __block TBStateMachineState *sourceStateA;
+            __block TBStateMachineState *destinationStateA;
             __block NSDictionary *dataExitA;
             __block BOOL wasExitExecuted = NO;
             stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
                 wasExitExecuted = YES;
-                nextStateA = destinationState;
+                sourceStateA = sourceState;
+                destinationStateA = destinationState;
                 dataExitA = data;
             };
             
@@ -435,7 +197,8 @@ describe(@"TBStateMachine", ^{
             
             expect(stateMachine.currentState).to.beNil;
             
-            expect(nextStateA).to.beNil;
+            expect(sourceStateA).to.equal(stateA);
+            expect(destinationStateA).to.beNil;
             expect(dataExitA).to.beNil;
             expect(wasEnterExecuted).to.equal(NO);
             expect(wasExitExecuted).to.equal(YES);
@@ -445,19 +208,19 @@ describe(@"TBStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            __block TBStateMachineState *previousStateA;
+            __block TBStateMachineState *sourceStateA;
             stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateA = sourceState;
+                sourceStateA = sourceState;
             };
             
-            __block TBStateMachineState *nextStateA;
+            __block TBStateMachineState *destinationStateA;
             stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateA = destinationState;
+                destinationStateA = destinationState;
             };
             
-            __block TBStateMachineState *previousStateB;
+            __block TBStateMachineState *sourceStateB;
             stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateB = sourceState;
+                sourceStateB = sourceState;
             };
             
             [stateA registerEvent:eventA target:stateB];
@@ -473,9 +236,9 @@ describe(@"TBStateMachine", ^{
             
             expect(stateMachine.currentState).to.equal(stateB);
             
-            expect(previousStateA).to.beNil;
-            expect(nextStateA).to.equal(stateB);
-            expect(previousStateB).to.equal(stateA);
+            expect(sourceStateA).to.beNil;
+            expect(destinationStateA).to.equal(stateB);
+            expect(sourceStateB).to.equal(stateA);
         });
         
         it(@"evaluates a guard function, exits the current state, executes transition action and enters the next state.", ^{
@@ -484,20 +247,20 @@ describe(@"TBStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            __block TBStateMachineState *previousStateA;
+            __block TBStateMachineState *sourceStateA;
             stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateA = sourceState;
+                sourceStateA = sourceState;
             };
             
-            __block TBStateMachineState *nextStateA;
+            __block TBStateMachineState *destinationStateA;
             stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateA = destinationState;
+                destinationStateA = destinationState;
                 [executionOrder appendString:@"-exit"];
             };
             
-            __block TBStateMachineState *previousStateB;
+            __block TBStateMachineState *sourceStateB;
             stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateB = sourceState;
+                sourceStateB = sourceState;
                 [executionOrder appendString:@"-enter"];
             };
             
@@ -521,9 +284,9 @@ describe(@"TBStateMachine", ^{
             [stateMachine scheduleEvent:eventA];
             
             expect(didExecuteAction).to.equal(YES);
-            expect(previousStateA).to.beNil;
-            expect(nextStateA).to.equal(stateB);
-            expect(previousStateB).to.equal(stateA);
+            expect(sourceStateA).to.beNil;
+            expect(destinationStateA).to.equal(stateB);
+            expect(sourceStateB).to.equal(stateA);
             expect(executionOrder).to.equal(@"guard-exit-action-enter");
         });
         
@@ -574,18 +337,18 @@ describe(@"TBStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            __block id<TBStateMachineNode> nextStateAction;
+            __block id<TBStateMachineNode> destinationStateAction;
             __block NSDictionary *receivedDataAction;
-            __block id<TBStateMachineNode> nextStateGuard;
+            __block id<TBStateMachineNode> destinationStateGuard;
             __block NSDictionary *receivedDataGuard;
             [stateA registerEvent:eventA
                            target:stateB
                            action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                               nextStateAction = destinationState;
+                               destinationStateAction = destinationState;
                                receivedDataAction = data;
                            }
                             guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                                nextStateGuard = destinationState;
+                                destinationStateGuard = destinationState;
                                 receivedDataGuard = data;
                                 return YES;
                             }];
@@ -597,35 +360,43 @@ describe(@"TBStateMachine", ^{
             // will enter state B
             [stateMachine scheduleEvent:eventA data:eventDataA];
             
-            expect(nextStateAction).to.equal(stateB);
+            expect(destinationStateAction).to.equal(stateB);
             expect(receivedDataAction).to.equal(eventDataA);
             expect(receivedDataAction[EVENT_DATA_KEY]).toNot.beNil;
             expect(receivedDataAction[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
             
-            expect(nextStateGuard).to.equal(stateB);
+            expect(destinationStateGuard).to.equal(stateB);
             expect(receivedDataGuard).to.equal(eventDataA);
             expect(receivedDataGuard[EVENT_DATA_KEY]).toNot.beNil;
             expect(receivedDataGuard[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
         });
         
-        it(@"passes next state and event data into the enter and exit blocks of the involved states.", ^{
+        it(@"passes next state and event data into the enter, exit, action and guard blocks of the involved states.", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            __block id<TBStateMachineNode> nextStateA;
-            __block NSDictionary *nextStateAData;
+            __block id<TBStateMachineNode> destinationStateA;
+            __block NSDictionary *destinationStateAData;
             stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateA = destinationState;
-                nextStateAData = data;
+                destinationStateA = destinationState;
+                destinationStateAData = data;
             };
             
-            [stateA registerEvent:eventA target:stateB];
+            __block NSDictionary *actionData;
+            __block NSDictionary *guardData;
+            [stateA registerEvent:eventA target:stateB action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+                actionData = data;
+            }
+                            guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+                                guardData = data;
+                                return YES;
+                            }];
             
-            __block TBStateMachineState *previousStateB;
-            __block NSDictionary *previousStateBData;
+            __block TBStateMachineState *sourceStateB;
+            __block NSDictionary *sourceStateBData;
             stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateB = sourceState;
-                previousStateBData = data;
+                sourceStateB = sourceState;
+                sourceStateBData = data;
             };
             
             stateMachine.states = states;
@@ -635,31 +406,42 @@ describe(@"TBStateMachine", ^{
             // enters state B
             [stateMachine scheduleEvent:eventA data:eventDataA];
             
-            expect(nextStateA).to.equal(stateB);
-            expect(nextStateAData).to.equal(eventDataA);
-            expect(nextStateAData.allKeys).haveCountOf(1);
-            expect(nextStateAData[EVENT_DATA_KEY]).toNot.beNil;
-            expect(nextStateAData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
+            expect(destinationStateA).to.equal(stateB);
+            expect(destinationStateAData).to.equal(eventDataA);
+            expect(destinationStateAData.allKeys).haveCountOf(1);
+            expect(destinationStateAData[EVENT_DATA_KEY]).toNot.beNil;
+            expect(destinationStateAData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
             
-            expect(previousStateB).to.equal(stateA);
-            expect(previousStateBData).to.equal(eventDataA);
-            expect(previousStateBData.allKeys).haveCountOf(1);
-            expect(previousStateBData[EVENT_DATA_KEY]).toNot.beNil;
-            expect(previousStateBData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
+            expect(actionData).to.equal(eventDataA);
+            expect(actionData.allKeys).haveCountOf(1);
+            expect(actionData[EVENT_DATA_KEY]).toNot.beNil;
+            expect(actionData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
+            
+            expect(guardData).to.equal(eventDataA);
+            expect(guardData.allKeys).haveCountOf(1);
+            expect(guardData[EVENT_DATA_KEY]).toNot.beNil;
+            expect(guardData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
+            
+            
+            expect(sourceStateB).to.equal(stateA);
+            expect(sourceStateBData).to.equal(eventDataA);
+            expect(sourceStateBData.allKeys).haveCountOf(1);
+            expect(sourceStateBData[EVENT_DATA_KEY]).toNot.beNil;
+            expect(sourceStateBData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
         });
-
+        
         it(@"can re-enter a state.", ^{
             
             NSArray *states = @[stateA];
             
-            __block TBStateMachineState *previousStateA;
+            __block TBStateMachineState *sourceStateA;
             stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateA = sourceState;
+                sourceStateA = sourceState;
             };
             
-            __block TBStateMachineState *nextStateA;
+            __block TBStateMachineState *destinationStateA;
             stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateA = destinationState;
+                destinationStateA = destinationState;
             };
             
             [stateA registerEvent:eventA target:stateA];
@@ -671,32 +453,32 @@ describe(@"TBStateMachine", ^{
             
             [stateMachine scheduleEvent:eventA];
             
-            expect(previousStateA).to.equal(stateA);
-            expect(nextStateA).to.equal(stateA);
+            expect(sourceStateA).to.equal(stateA);
+            expect(destinationStateA).to.equal(stateA);
         });
         
         it(@"can switch into and out of sub-state machines.", ^{
             
             // setup sub-state machine A
-            __block TBStateMachineState *previousStateC;
+            __block TBStateMachineState *sourceStateC;
             stateC.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateC = sourceState;
+                sourceStateC = sourceState;
             };
             
-            __block id<TBStateMachineNode> nextStateC;
+            __block id<TBStateMachineNode> destinationStateC;
             stateC.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateC = destinationState;
+                destinationStateC = destinationState;
             };
             
-            __block TBStateMachineState *previousStateD;
+            __block TBStateMachineState *sourceStateD;
             stateD.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateD = sourceState;
+                sourceStateD = sourceState;
             };
             
-            __block id<TBStateMachineNode> nextStateD;
+            __block id<TBStateMachineNode> destinationStateD;
             __block NSDictionary *dataExitD;
             stateD.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateD = destinationState;
+                destinationStateD = destinationState;
                 dataExitD = data;
             };
             
@@ -708,26 +490,26 @@ describe(@"TBStateMachine", ^{
             subStateMachineA.initialState = stateC;
             
             // setup main state machine
-            __block id<TBStateMachineNode> previousStateA;
+            __block id<TBStateMachineNode> sourceStateA;
             __block NSDictionary *dataEnterA;
             stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateA = sourceState;
+                sourceStateA = sourceState;
                 dataEnterA = data;
             };
             
-            __block TBStateMachineState *nextStateA;
+            __block TBStateMachineState *destinationStateA;
             stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateA = destinationState;
+                destinationStateA = destinationState;
             };
             
-            __block TBStateMachineState *previousStateB;
+            __block TBStateMachineState *sourceStateB;
             stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateB = sourceState;
+                sourceStateB = sourceState;
             };
             
-            __block id<TBStateMachineNode> nextStateB;
+            __block id<TBStateMachineNode> destinationStateB;
             stateB.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateB = destinationState;
+                destinationStateB = destinationState;
             };
             
             [stateA registerEvent:eventA target:stateB];
@@ -738,25 +520,25 @@ describe(@"TBStateMachine", ^{
             stateMachine.initialState = stateA;
             [stateMachine setUp];
             
-            expect(previousStateA).to.beNil;
+            expect(sourceStateA).to.beNil;
             
             // moves to state B
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateA).to.equal(stateB);
-            expect(previousStateB).to.equal(stateA);
+            expect(destinationStateA).to.equal(stateB);
+            expect(sourceStateB).to.equal(stateA);
             
             // moves to sub machine A which enters C
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateB).to.equal(subStateMachineA);
-            expect(previousStateC).to.beNil;
+            expect(destinationStateB).to.equal(subStateMachineA);
+            expect(sourceStateC).to.beNil;
             
             // moves to state D
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateC).to.equal(stateD);
-            expect(previousStateD).to.equal(stateC);
+            expect(destinationStateC).to.equal(stateD);
+            expect(sourceStateD).to.equal(stateC);
             
             dataEnterA = nil;
             
@@ -765,40 +547,40 @@ describe(@"TBStateMachine", ^{
             
             expect(dataExitD[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
             
-            expect(previousStateA).to.equal(subStateMachineA);
-            expect(nextStateD).to.beNil;
+            expect(sourceStateA).to.equal(stateD);
+            expect(destinationStateD).to.beNil;
             
             expect(dataEnterA[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
             
             // handled by state A
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateA).to.equal(stateB);
-            expect(previousStateB).to.equal(stateA);
+            expect(destinationStateA).to.equal(stateB);
+            expect(sourceStateB).to.equal(stateA);
         });
-
+        
         it(@"can deeply switch into and out of sub-state machines using lowest common ancestor algorithm.", ^{
             
             // setup sub-state machine A
-            __block TBStateMachineState *previousStateA;
+            __block TBStateMachineState *sourceStateA;
             stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateA = sourceState;
+                sourceStateA = sourceState;
             };
             
-            __block id<TBStateMachineNode> nextStateA;
+            __block id<TBStateMachineNode> destinationStateA;
             stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateA = destinationState;
+                destinationStateA = destinationState;
             };
             
-            __block TBStateMachineState *previousStateB;
+            __block TBStateMachineState *sourceStateB;
             stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateB = sourceState;
+                sourceStateB = sourceState;
             };
             
-            __block id<TBStateMachineNode> nextStateB;
+            __block id<TBStateMachineNode> destinationStateB;
             __block NSDictionary *dataExitB;
             stateB.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateB = destinationState;
+                destinationStateB = destinationState;
                 dataExitB = data;
             };
             
@@ -810,30 +592,30 @@ describe(@"TBStateMachine", ^{
             subStateMachineA.initialState = stateA;
             
             // setup sub-state machine B
-            __block TBStateMachineState *previousStateC;
+            __block TBStateMachineState *sourceStateC;
             stateC.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateC = sourceState;
+                sourceStateC = sourceState;
             };
             
-            __block id<TBStateMachineNode> nextStateC;
+            __block id<TBStateMachineNode> destinationStateC;
             stateC.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateC = destinationState;
+                destinationStateC = destinationState;
             };
             
-            __block TBStateMachineState *previousStateD;
+            __block TBStateMachineState *sourceStateD;
             stateD.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateD = sourceState;
+                sourceStateD = sourceState;
             };
             
-            __block id<TBStateMachineNode> nextStateD;
+            __block id<TBStateMachineNode> destinationStateD;
             __block NSDictionary *dataExitD;
             stateD.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateD = destinationState;
+                destinationStateD = destinationState;
                 dataExitD = data;
             };
             
             [stateC registerEvent:eventA target:stateD];
-            [stateD registerEvent:eventA target:nil];
+            [stateD registerEvent:eventA target:stateA];
             
             NSArray *subStatesB = @[stateC, stateD];
             subStateMachineB.states = subStatesB;
@@ -848,42 +630,57 @@ describe(@"TBStateMachine", ^{
             stateMachine.initialState = subStateMachineA;
             [stateMachine setUp];
             
-            expect(previousStateA).to.beNil;
+            expect(sourceStateA).to.beNil;
             
             // moves to state B
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateA).to.equal(stateB);
-            expect(previousStateB).to.equal(stateA);
+            expect(destinationStateA).to.equal(stateB);
+            expect(sourceStateB).to.equal(stateA);
             
             // moves to state D
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateB).to.beNil;
-            expect(previousStateD).to.beNil;
+            expect(destinationStateB).to.beNil;
+            expect(sourceStateD).to.beNil;
+            
+            sourceStateA = nil;
+            
+            // will go back to start
+            [stateMachine scheduleEvent:eventA data:eventDataA];
+            
+            expect(sourceStateA).to.equal(stateD);
+            expect(destinationStateD).to.beNil;
+            
+            // handled by state A
+            [stateMachine scheduleEvent:eventA];
+            
+            expect(destinationStateA).to.equal(stateB);
+            expect(sourceStateB).to.equal(stateA);
+            
         });
-
+        
         it(@"can switch into and out of parallel state machines.", ^{
             
             // setup sub-machine A
-            __block TBStateMachineState *previousStateC;
+            __block TBStateMachineState *sourceStateC;
             stateC.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateC = sourceState;
+                sourceStateC = sourceState;
             };
             
-            __block TBStateMachineState *nextStateC;
+            __block TBStateMachineState *destinationStateC;
             stateC.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateC = destinationState;
+                destinationStateC = destinationState;
             };
             
-            __block TBStateMachineState *previousStateD;
+            __block TBStateMachineState *sourceStateD;
             stateD.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateD = sourceState;
+                sourceStateD = sourceState;
             };
             
-            __block TBStateMachineState *nextStateD;
+            __block TBStateMachineState *destinationStateD;
             stateD.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateD = destinationState;
+                destinationStateD = destinationState;
             };
             
             NSArray *subStatesA = @[stateC, stateD];
@@ -891,24 +688,24 @@ describe(@"TBStateMachine", ^{
             subStateMachineA.initialState = stateC;
             
             // setup sub-machine B
-            __block TBStateMachineState *previousStateE;
+            __block TBStateMachineState *sourceStateE;
             stateE.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateE = sourceState;
+                sourceStateE = sourceState;
             };
             
-            __block TBStateMachineState *nextStateE;
+            __block TBStateMachineState *destinationStateE;
             stateE.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateE = destinationState;
+                destinationStateE = destinationState;
             };
             
-            __block TBStateMachineState *previousStateF;
+            __block TBStateMachineState *sourceStateF;
             stateF.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateF = sourceState;
+                sourceStateF = sourceState;
             };
             
-            __block TBStateMachineState *nextStateF;
+            __block TBStateMachineState *destinationStateF;
             stateF.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateF = destinationState;
+                destinationStateF = destinationState;
             };
             
             NSArray *subStatesB = @[stateE, stateF];
@@ -920,26 +717,26 @@ describe(@"TBStateMachine", ^{
             parallelStates.states = parallelSubStateMachines;
             
             // setup main state machine
-            __block id<TBStateMachineNode> previousStateA;
-            __block NSDictionary *previousStateDataA;
+            __block id<TBStateMachineNode> sourceStateA;
+            __block NSDictionary *sourceStateDataA;
             stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateA = sourceState;
-                previousStateDataA = data;
+                sourceStateA = sourceState;
+                sourceStateDataA = data;
             };
             
-            __block TBStateMachineState *nextStateA;
+            __block TBStateMachineState *destinationStateA;
             stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateA = destinationState;
+                destinationStateA = destinationState;
             };
             
-            __block TBStateMachineState *previousStateB;
+            __block TBStateMachineState *sourceStateB;
             stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                previousStateB = sourceState;
+                sourceStateB = sourceState;
             };
             
-            __block id<TBStateMachineNode> nextStateB;
+            __block id<TBStateMachineNode> destinationStateB;
             stateB.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                nextStateB = destinationState;
+                destinationStateB = destinationState;
             };
             
             [stateA registerEvent:eventA target:stateB];
@@ -954,44 +751,44 @@ describe(@"TBStateMachine", ^{
             stateMachine.initialState = stateA;
             [stateMachine setUp];
             
-            expect(previousStateA).to.beNil;
+            expect(sourceStateA).to.beNil;
             
             // moves to state B
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateA).to.equal(stateB);
-            expect(previousStateB).to.equal(stateA);
+            expect(destinationStateA).to.equal(stateB);
+            expect(sourceStateB).to.equal(stateA);
             
             // moves to parallel state wrapper
             // enters state C in subStateMachine A
             // enters state E in subStateMachine B
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateB).to.equal(parallelStates);
-            expect(previousStateC).to.beNil;
-            expect(previousStateE).to.beNil;
+            expect(destinationStateB).to.equal(parallelStates);
+            expect(sourceStateC).to.beNil;
+            expect(sourceStateE).to.beNil;
             
             // moves subStateMachine A from C to state D
             // moves subStateMachine B from E to state F
             [stateMachine scheduleEvent:eventA];
             
-            expect(nextStateC).to.equal(stateD);
-            expect(previousStateD).to.equal(stateC);
+            expect(destinationStateC).to.equal(stateD);
+            expect(sourceStateD).to.equal(stateC);
             
-            expect(nextStateE).to.equal(stateF);
-            expect(previousStateF).to.equal(stateE);
+            expect(destinationStateE).to.equal(stateF);
+            expect(sourceStateF).to.equal(stateE);
             
             [stateMachine scheduleEvent:eventA data:eventDataA];
             
             // moves back to state A
-            expect(nextStateD).to.beNil;
-            expect(nextStateF).to.beNil;
-            expect(previousStateA).to.beNil;
-            expect(previousStateDataA[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
+            expect(destinationStateD).to.beNil;
+            expect(destinationStateF).to.beNil;
+            expect(sourceStateA).to.beNil;
+            expect(sourceStateDataA[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
         });
-
+        
     });
-
+    
     describe(@"Concurrency", ^{
         
         it(@"queues up events if an event is currently handled", ^{
@@ -1172,7 +969,7 @@ describe(@"TBStateMachine", ^{
             expect(executionSequence).to.equal(expectedExecutionSequence);
             
         });
-         
+        
     });
 });
 
