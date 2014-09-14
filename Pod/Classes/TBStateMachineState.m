@@ -91,7 +91,7 @@
 - (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
     if (_exitBlock) {
-        _exitBlock(destinationState, destinationState, data);
+        _exitBlock(sourceState, destinationState, data);
     }
 }
 
