@@ -22,6 +22,7 @@
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
+- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state;
 - (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
@@ -149,7 +150,7 @@
         action(sourceState, destinationState, data);
     }
     
-    _currentState = [self _findNextAncestorForState:destinationState];
+    _currentState = [self _findNextNodeForState:destinationState];
     if (_currentState) {
         [_currentState enter:sourceState destinationState:destinationState data:data];
     }
@@ -157,7 +158,7 @@
 
 #pragma mark - private methods
 
-- (TBStateMachine *)_findNextAncestorForState:(id<TBStateMachineNode>)state
+- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state
 {
     if (state == nil) {
         return nil;
@@ -173,7 +174,7 @@
         return nil;
     }
     
-    // return next submachine in path
+    // return next node in path
     NSUInteger index = [path indexOfObject:self];
     return path[index + 1];
 }
