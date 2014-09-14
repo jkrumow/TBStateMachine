@@ -11,7 +11,7 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 ## Features
 
 * block based API
-* nested state machines (sub state machines)
+* nested state (sub state machines)
 * wrapper for parallel state machines (orthogonal regions)
 * guards and transitions and actions
 * thread safe event handling and switching
