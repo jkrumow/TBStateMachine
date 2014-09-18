@@ -42,6 +42,11 @@
  */
 - (TBStateMachine *)parentState;
 
+/**
+ *  Sets the parent state machine.
+ *
+ *  @param parentStateMachine The parent state machine.
+ */
 - (void)setParentState:(TBStateMachine *)parentStateMachine;
 
 /**
