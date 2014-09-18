@@ -2,7 +2,7 @@
 //  TBStateMachineParallelWrapperTests.m
 //  TBStateMachineTests
 //
-//  Created by Julian Krumow on 08/01/2014.
+//  Created by Julian Krumow on 01.08.2014.
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 

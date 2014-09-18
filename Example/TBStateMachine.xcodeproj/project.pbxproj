@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		0A6C67E1EE074EF7B9F3DB6B /* libPods-TBStateMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92468FFB7995400DA10E71AF /* libPods-TBStateMachine.a */; };
-		155BB54A19C610D200EB1C74 /* TBStateMachineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBStateMachineTests.m */; };
+		155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */; };
 		155BB54C19C6122B00EB1C74 /* TBStateMachineStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */; };
 		155BB54E19C612A400EB1C74 /* TBStateMachineEventTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */; };
+		15A2F99C19CB4CD600614B4E /* TBStateMachineNestedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */; };
+		15A2F99E19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */; };
 		15B1453819BCFDA700924D92 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 15B1453719BCFDA700924D92 /* CHANGELOG.md */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -41,9 +43,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		155BB54919C610D200EB1C74 /* TBStateMachineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineTests.m; sourceTree = "<group>"; };
+		155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineSimpleTests.m; sourceTree = "<group>"; };
 		155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineStateTests.m; sourceTree = "<group>"; };
 		155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineEventTests.m; sourceTree = "<group>"; };
+		15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineNestedTests.m; sourceTree = "<group>"; };
+		15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineConcurrencyTests.m; sourceTree = "<group>"; };
 		15B1453719BCFDA700924D92 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* TBStateMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBStateMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -165,7 +169,9 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				155BB54919C610D200EB1C74 /* TBStateMachineTests.m */,
+				155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */,
+				15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */,
+				15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */,
 				155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */,
 				6003F5BB195388D20070C39A /* TBStateMachineParallelWrapperTests.m */,
 				155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */,
@@ -372,9 +378,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15A2F99E19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m in Sources */,
 				6003F5BC195388D20070C39A /* TBStateMachineParallelWrapperTests.m in Sources */,
-				155BB54A19C610D200EB1C74 /* TBStateMachineTests.m in Sources */,
+				155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */,
 				155BB54E19C612A400EB1C74 /* TBStateMachineEventTests.m in Sources */,
+				15A2F99C19CB4CD600614B4E /* TBStateMachineNestedTests.m in Sources */,
 				155BB54C19C6122B00EB1C74 /* TBStateMachineStateTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
