@@ -13,6 +13,7 @@
 #import "TBStateMachineEvent.h"
 #import "TBStateMachineEventHandler.h"
 #import "TBStateMachineParallelWrapper.h"
+#import "TBStateMachineSubWrapper.h"
 #import "NSException+TBStateMachine.h"
 
 /**
