@@ -94,21 +94,22 @@ describe(@"TBStateMachineParallelWrapper", ^{
     it(@"switches states on all registered states", ^{
         
         __block BOOL enteredStateA = NO;
+        __block BOOL exitedStateA = NO;
+        __block BOOL enteredStateB = NO;
+        __block BOOL exitedStateB = NO;
+        
         stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
             enteredStateA = YES;
         };
         
-        __block BOOL exitedStateA = NO;
         stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
             exitedStateA = YES;
         };
         
-        __block BOOL enteredStateB = NO;
         stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
             enteredStateB = YES;
         };
         
-        __block BOOL exitedStateB = NO;
         stateB.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
             exitedStateB = YES;
         };
