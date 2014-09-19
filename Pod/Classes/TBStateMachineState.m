@@ -14,7 +14,6 @@
 @interface TBStateMachineState ()
 
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, weak) TBStateMachine *parentState;
 
 - (BOOL)_canHandleEvent:(TBStateMachineEvent *)event;
 

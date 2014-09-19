@@ -26,6 +26,8 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> sourceState, id<
  */
 @interface TBStateMachineState : NSObject<TBStateMachineNode>
 
+@property (nonatomic, weak) TBStateMachine *parentState;
+
 /**
  *  Block that is executed when the state is entered.
  */

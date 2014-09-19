@@ -12,8 +12,6 @@
 
 @interface TBStateMachineParallelState ()
 
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, weak) TBStateMachine *parentState;
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
 
 #if OS_OBJECT_USE_OBJC
@@ -26,6 +24,8 @@
 
 @implementation TBStateMachineParallelState
 
+@synthesize parentState = _parentState;
+
 + (TBStateMachineParallelState *)parallelStateWithName:(NSString *)name
 {
     return [[TBStateMachineParallelState alloc] initWithName:name];
@@ -33,12 +33,8 @@
 
 - (instancetype)initWithName:(NSString *)name
 {
-    if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForNodeException];
-    }
-    self = [super init];
+    self = [super initWithName:name];
     if (self) {
-        _name = name.copy;
         _priv_parallelStates = [NSMutableArray new];
         _parallelQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.ParallelStateQueue", DISPATCH_QUEUE_CONCURRENT);
     }
@@ -73,17 +69,6 @@
 
 #pragma mark - TBStateMachineNode
 
-- (NSArray *)getPath
-{
-    NSMutableArray *path = [NSMutableArray new];
-    TBStateMachine *node = self.parentState;
-    while (node) {
-        [path insertObject:node atIndex:0];
-        node = node.parentState;
-    }
-    return path;
-}
-
 - (void)setParentState:(TBStateMachine *)parentState
 {
     _parentState = parentState;
@@ -94,6 +79,8 @@
 
 - (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
 {
+    [super enter:sourceState destinationState:destinationState data:data];
+    
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
         TBStateMachine *stateMachine = _priv_parallelStates[idx];
@@ -116,11 +103,8 @@
             [stateMachine exit:sourceState destinationState:destinationState data:data];
         }
     });
-}
-
-- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
-{
-    return [self handleEvent:event data:nil];
+    
+    [super exit:sourceState destinationState:destinationState data:data];
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
@@ -135,8 +119,12 @@
         }
     });
     
-    // return follow-up state.
-    return nextTransition;
+    if (nextTransition) {
+        // return follow-up state.
+        return nextTransition;
+    } else {
+        return [super handleEvent:event data:data];
+    }
 }
 
 @end

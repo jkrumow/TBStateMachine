@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "TBStateMachineNode.h"
+#import "TBStateMachineState.h"
 
 /**
  *  This class wraps multiple `TBStateMachineNode` instances and processes them in parallel.
@@ -20,7 +21,7 @@
  *  Event handlers, enter and exit handlers will be executed on a background queue.
  *  Make sure the code in these blocks is dispatched back onto the right queue.
  */
-@interface TBStateMachineParallelState : NSObject <TBStateMachineNode>
+@interface TBStateMachineParallelState : TBStateMachineState
 
 /**
  *  Creates a `TBStateMachineParallelState` instance from a given name.
