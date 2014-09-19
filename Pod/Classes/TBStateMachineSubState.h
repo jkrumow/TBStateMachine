@@ -1,5 +1,5 @@
 //
-//  TBStateMachineSubWrapper.h
+//  TBStateMachineSubState.h
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 19.09.14.
@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "TBStateMachineState.h"
 
-@interface TBStateMachineSubWrapper : TBStateMachineState
+@interface TBStateMachineSubState : TBStateMachineState
 
 @end

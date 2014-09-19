@@ -12,19 +12,19 @@
 #import "TBStateMachineTransition.h"
 #import "TBStateMachineEvent.h"
 #import "TBStateMachineEventHandler.h"
-#import "TBStateMachineParallelWrapper.h"
-#import "TBStateMachineSubWrapper.h"
+#import "TBStateMachineParallelState.h"
+#import "TBStateMachineSubState.h"
 #import "NSException+TBStateMachine.h"
 
 /**
- *  This class represents a hierarchical finite state machine.
+ *  This class represents a hierarchical state machine.
  *
  *  The state machine is able to switch between nodes.
  *  A node can be:
  *
  *  - a simple state - represented by `TBStateMachineState`
  *  - a sub-state machine - represented by `TBStateMachine`
- *  - a wrapper for multiple parallel nodes - represented by `TBStateMachineParallelWrapper`
+ *  - a wrapper for multiple parallel nodes - represented by `TBStateMachineParallelState`
  *
  *  All classes mentioned above implement the `TBStateMachineNode` protocol.
  *

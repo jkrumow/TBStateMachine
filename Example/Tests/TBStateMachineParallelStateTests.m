@@ -1,5 +1,5 @@
 //
-//  TBStateMachineParallelWrapperTests.m
+//  TBStateMachineParallelStateTests.m
 //  TBStateMachineTests
 //
 //  Created by Julian Krumow on 01.08.2014.
@@ -8,7 +8,7 @@
 
 #import <TBStateMachine/TBStateMachine.h>
 
-SpecBegin(TBStateMachineParallelWrapper)
+SpecBegin(TBStateMachineParallelState)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
@@ -24,14 +24,14 @@ __block TBStateMachineState *stateF;
 __block TBStateMachineEvent *eventA;
 __block TBStateMachine *subStateMachineA;
 __block TBStateMachine *subStateMachineB;
-__block TBStateMachineParallelWrapper *parallelStates;
+__block TBStateMachineParallelState *parallelStates;
 __block NSDictionary *eventDataA;
 
 
-describe(@"TBStateMachineParallelWrapper", ^{
+describe(@"TBStateMachineParallelState", ^{
     
     beforeEach(^{
-        parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
+        parallelStates = [TBStateMachineParallelState parallelStateWithName:@"ParallelWrapper"];
         stateA = [TBStateMachineState stateWithName:@"a"];
         stateB = [TBStateMachineState stateWithName:@"b"];
         stateC = [TBStateMachineState stateWithName:@"c"];
@@ -67,7 +67,7 @@ describe(@"TBStateMachineParallelWrapper", ^{
         it (@"throws a TBStateMachineException when name is nil.", ^{
             
             expect(^{
-                parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:nil];
+                parallelStates = [TBStateMachineParallelState parallelStateWithName:nil];
             }).to.raise(TBStateMachineException);
             
         });
@@ -75,7 +75,7 @@ describe(@"TBStateMachineParallelWrapper", ^{
         it (@"throws a TBStateMachineException when name is an empty string.", ^{
             
             expect(^{
-                parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@""];
+                parallelStates = [TBStateMachineParallelState parallelStateWithName:@""];
             }).to.raise(TBStateMachineException);
             
         });

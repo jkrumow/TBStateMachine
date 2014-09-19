@@ -28,7 +28,7 @@ __block TBStateMachineEvent *eventB;
 __block TBStateMachineEvent *eventC;
 __block TBStateMachine *subStateMachineA;
 __block TBStateMachine *subStateMachineB;
-__block TBStateMachineParallelWrapper *parallelStates;
+__block TBStateMachineParallelState *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
@@ -51,7 +51,7 @@ describe(@"TBStateMachine", ^{
         
         subStateMachineA = [TBStateMachine stateMachineWithName:@"SubA"];
         subStateMachineB = [TBStateMachine stateMachineWithName:@"SubB"];
-        parallelStates = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
+        parallelStates = [TBStateMachineParallelState parallelStateWithName:@"ParallelWrapper"];
     });
     
     afterEach(^{

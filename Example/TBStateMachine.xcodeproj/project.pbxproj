@@ -28,7 +28,7 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* TBStateMachineParallelWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* TBStateMachineParallelWrapperTests.m */; };
+		6003F5BC195388D20070C39A /* TBStateMachineParallelStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */; };
 		E39D0008817A43C28A3CFFBB /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D52824CE23284B9F8AF945DA /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
 
@@ -68,7 +68,7 @@
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* TBStateMachineParallelWrapperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineParallelWrapperTests.m; sourceTree = "<group>"; };
+		6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineParallelStateTests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		92468FFB7995400DA10E71AF /* libPods-TBStateMachine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TBStateMachine.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DC2BD94630C4C24B2A9E9DE /* TBStateMachine.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TBStateMachine.podspec; path = ../TBStateMachine.podspec; sourceTree = "<group>"; };
@@ -173,7 +173,7 @@
 				15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */,
 				15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */,
 				155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */,
-				6003F5BB195388D20070C39A /* TBStateMachineParallelWrapperTests.m */,
+				6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */,
 				155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
@@ -379,7 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				15A2F99E19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m in Sources */,
-				6003F5BC195388D20070C39A /* TBStateMachineParallelWrapperTests.m in Sources */,
+				6003F5BC195388D20070C39A /* TBStateMachineParallelStateTests.m in Sources */,
 				155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */,
 				155BB54E19C612A400EB1C74 /* TBStateMachineEventTests.m in Sources */,
 				15A2F99C19CB4CD600614B4E /* TBStateMachineNestedTests.m in Sources */,

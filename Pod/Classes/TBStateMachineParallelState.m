@@ -1,16 +1,16 @@
 //
-//  TBStateMachineParallelWrapper.m
+//  TBStateMachineParallelState.m
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
-#import "TBStateMachineParallelWrapper.h"
+#import "TBStateMachineParallelState.h"
 #import "TBStateMachine.h"
 #import "NSException+TBStateMachine.h"
 
-@interface TBStateMachineParallelWrapper ()
+@interface TBStateMachineParallelState ()
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, weak) TBStateMachine *parentState;
@@ -24,11 +24,11 @@
 
 @end
 
-@implementation TBStateMachineParallelWrapper
+@implementation TBStateMachineParallelState
 
-+ (TBStateMachineParallelWrapper *)parallelWrapperWithName:(NSString *)name;
++ (TBStateMachineParallelState *)parallelStateWithName:(NSString *)name
 {
-    return [[TBStateMachineParallelWrapper alloc] initWithName:name];
+    return [[TBStateMachineParallelState alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name
@@ -40,7 +40,7 @@
     if (self) {
         _name = name.copy;
         _priv_parallelStates = [NSMutableArray new];
-        _parallelQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.ParallelWrapperQueue", DISPATCH_QUEUE_CONCURRENT);
+        _parallelQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.ParallelStateQueue", DISPATCH_QUEUE_CONCURRENT);
     }
     return self;
 }
