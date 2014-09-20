@@ -265,4 +265,5 @@ describe(@"TBStateMachine", ^{
     });
     
 });
+
 SpecEnd

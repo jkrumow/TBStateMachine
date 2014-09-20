@@ -113,6 +113,7 @@ describe(@"TBStateMachine", ^{
         NSArray *subStates = @[stateC, stateD];
         subStateMachineA.states = subStates;
         subStateMachineA.initialState = stateC;
+        TBStateMachineSubState *subStateA = [TBStateMachineSubState subStateWithName:@"subStateA" stateMachine:subStateMachineA];
         
         // setup main state machine
         __block id<TBStateMachineNode> sourceStateA;
@@ -139,9 +140,10 @@ describe(@"TBStateMachine", ^{
         };
         
         [stateA registerEvent:eventA target:stateB];
-        [stateB registerEvent:eventA target:subStateMachineA];
+        [stateB registerEvent:eventA target:subStateA];
         
-        NSArray *states = @[stateA, stateB, subStateMachineA];
+        
+        NSArray *states = @[stateA, stateB, subStateA];
         stateMachine.states = states;
         stateMachine.initialState = stateA;
         [stateMachine setUp];
@@ -157,7 +159,7 @@ describe(@"TBStateMachine", ^{
         // moves to sub machine A which enters C
         [stateMachine scheduleEvent:eventA];
         
-        expect(destinationStateB).to.equal(subStateMachineA);
+        expect(destinationStateB).to.equal(subStateA);
         expect(sourceStateC).to.beNil;
         
         // moves to state D
@@ -184,7 +186,7 @@ describe(@"TBStateMachine", ^{
         expect(destinationStateA).to.equal(stateB);
         expect(sourceStateB).to.equal(stateA);
     });
-    
+
     it(@"can deeply switch into and out of sub-state machines using lowest common ancestor algorithm.", ^{
         
         // setup sub-state machine A
@@ -252,10 +254,13 @@ describe(@"TBStateMachine", ^{
         // setup parallel wrapper
         parallelStates.states = @[subStateMachineB];
         
+        // setup sub state machine wrapper
+        TBStateMachineSubState *subStateA = [TBStateMachineSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        
         // setup main state machine
-        NSArray *states = @[subStateMachineA, parallelStates];
+        NSArray *states = @[subStateA, parallelStates];
         stateMachine.states = states;
-        stateMachine.initialState = subStateMachineA;
+        stateMachine.initialState = subStateA;
         [stateMachine setUp];
         
         expect(sourceStateA).to.beNil;
@@ -285,9 +290,8 @@ describe(@"TBStateMachine", ^{
         
         expect(destinationStateA).to.equal(stateB);
         expect(sourceStateB).to.equal(stateA);
-        
     });
-    
+
     it(@"can switch into and out of parallel state machines.", ^{
         
         // setup sub-machine A
@@ -419,4 +423,5 @@ describe(@"TBStateMachine", ^{
     });
 
 });
+
 SpecEnd

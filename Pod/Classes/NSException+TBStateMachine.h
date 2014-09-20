@@ -16,7 +16,7 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
 @interface NSException (TBStateMachine)
 
 /**
- *  Thrown when an object does not conform to the `TBStateMachineNode` protocol.
+ *  Thrown when an object is not of type `TBStateMachineState`.
  *
  *  The `reason:` string will contain a description of the object.
  *
@@ -24,14 +24,14 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
  *
  *  @return The NSException instance.
  */
-+ (NSException *)tb_doesNotConformToNodeProtocolException:(id)object;
++ (NSException *)tb_notOfTypeTBStateMachineStateException:(id)object;
 
 /**
- *  Thrown when a specified `TBStateMachineNode` instance does not exist in the state machine.
+ *  Thrown when a specified `TBStateMachineState` instance does not exist in the state machine.
  *
  *  The `reason:` string will contain the name of the state.
  *
- *  @param stateName The name of the specified `TBStateMachineNode`.
+ *  @param stateName The name of the specified `TBStateMachineState`.
  *
  *  @return The NSException instance.
  */
@@ -49,11 +49,11 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
 + (NSException *)tb_noInitialStateException:(NSString *)stateName;
 
 /**
- *  Thrown when no name was given to a `TBStateMachineNode` instance.
+ *  Thrown when no name was given to a `TBStateMachineState` instance.
  *
  *  @return The NSException instance.
  */
-+ (NSException *)tb_noNameForNodeException;
++ (NSException *)tb_noNameForStateException;
 
 /**
  *  Thrown when no name was given to a `TBStateMachineEvent` instance.

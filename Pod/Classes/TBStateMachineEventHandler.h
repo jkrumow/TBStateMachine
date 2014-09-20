@@ -10,6 +10,8 @@
 
 #import "TBStateMachineTransition.h"
 
+@class TBStateMachineState;
+
 /**
  *  This class represents an event handler object. It stores information associated with a given event registered on a `TBStateMachineState` instance.
  */
@@ -23,7 +25,7 @@
 /**
  *  The destination state of the transition triggered by the event.
  */
-@property (nonatomic, strong, readonly) id<TBStateMachineNode> target;
+@property (nonatomic, strong, readonly) TBStateMachineState *target;
 
 /**
  *  The action of the transition triggered by the event.
@@ -45,7 +47,7 @@
  *
  *  @return The event instance.
  */
-+ (instancetype)eventHandlerWithName:(NSString *)name target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
++ (instancetype)eventHandlerWithName:(NSString *)name target:(TBStateMachineState *)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
 
 /**
  *  Initializes a `TBStateMachineEventHandler` from a given event name, target, action and guard.
@@ -59,6 +61,6 @@
  *
  *  @return An initialized `TBStateMachineEventHandler` instance.
  */
-- (instancetype)initWithName:(NSString *)name target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
+- (instancetype)initWithName:(NSString *)name target:(TBStateMachineState *)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
 
 @end

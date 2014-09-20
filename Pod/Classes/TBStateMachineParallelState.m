@@ -69,11 +69,11 @@
 
 #pragma mark - TBStateMachineNode
 
-- (void)setParentState:(TBStateMachineState *)parentState
+- (void)setParentState:(id<TBStateMachineNode>)parentState
 {
     _parentState = parentState;
-    for (TBStateMachineSubState *subMachine in _priv_parallelStates) {
-        subMachine.parentState = _parentState;
+    for (TBStateMachine *subMachine in _priv_parallelStates) {
+        subMachine.parentState = self;
     }
 }
 
@@ -83,11 +83,11 @@
     
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        TBStateMachineSubState *stateMachine = _priv_parallelStates[idx];
-        if (destinationState == nil || self) {
-            [stateMachine enter:sourceState destinationState:destinationState data:data];
+        TBStateMachine *stateMachine = _priv_parallelStates[idx];
+        if (destinationState == nil || destinationState == self) {
+            [stateMachine setUp];
         } else {
-            [stateMachine exit:sourceState destinationState:destinationState data:data];
+            [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
         }
     });
 }
@@ -96,11 +96,11 @@
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        TBStateMachineSubState *stateMachine = _priv_parallelStates[idx];
+        TBStateMachine *stateMachine = _priv_parallelStates[idx];
         if (destinationState == nil) {
-            [stateMachine exit:sourceState destinationState:nil data:data];
+            [stateMachine tearDown];
         } else {
-            [stateMachine exit:sourceState destinationState:destinationState data:data];
+            [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
         }
     });
     
@@ -112,7 +112,7 @@
     __block TBStateMachineTransition *nextTransition = nil;
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        TBStateMachineSubState *stateMachine = _priv_parallelStates[idx];
+        TBStateMachine *stateMachine = _priv_parallelStates[idx];
         TBStateMachineTransition *transition = [stateMachine handleEvent:event data:data];
         if (transition.destinationState && nextTransition == nil) {
             nextTransition = transition;

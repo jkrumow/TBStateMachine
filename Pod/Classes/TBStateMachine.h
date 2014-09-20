@@ -23,8 +23,8 @@
  *  A node can be:
  *
  *  - a simple state - represented by `TBStateMachineState`
- *  - a sub-state machine - represented by `TBStateMachine`
- *  - a wrapper for multiple parallel nodes - represented by `TBStateMachineParallelState`
+ *  - a sub-state machine - represented by `TBStateMachineSubState`
+ *  - a wrapper for multiple parallel state machines - represented by `TBStateMachineParallelState`
  *
  *  All classes mentioned above implement the `TBStateMachineNode` protocol.
  *
@@ -36,17 +36,17 @@
  *  - call -tearDown to deactivate the state machine
  *
  */
-@interface TBStateMachine : NSObject
+@interface TBStateMachine : NSObject <TBStateMachineNode>
 
 /**
  *  The initial state of the state machine. Must be set before calling -setUp.
  */
-@property (nonatomic, strong, readonly) id<TBStateMachineNode> initialState;
+@property (nonatomic, strong, readonly) TBStateMachineState *initialState;
 
 /**
  *  The current state the state machine resides in. Set to be nil before -setUp and after -tearDown being called.
  */
-@property (nonatomic, strong, readonly) id<TBStateMachineNode> currentState;
+@property (nonatomic, strong, readonly) TBStateMachineState *currentState;
 
 /**
  *  Creates a `TBStateMachine` instance from a given name.
@@ -85,14 +85,14 @@
 /**
  *  Returns the states the state machine manages.
  *
- *  @return An NSArray containing all `TBStateMachineNode` instances.
+ *  @return An NSArray containing all `TBStateMachineState` instances.
  */
 - (NSArray *)states;
 
 /**
  *  Sets all states the state machine will manage.
  *
- *  Throws `TBStateMachineException` if states do not conform to the `TBStateMachineNode` protocol.
+ *  Throws `TBStateMachineException` if states do not conform to the `TBStateMachineState` protocol.
  *
  *  @param states An `NSArray` containing all state objects.
  */
@@ -105,7 +105,7 @@
  *
  *  @param initialState A given state object.
  */
-- (void)setInitialState:(id<TBStateMachineNode>)initialState;
+- (void)setInitialState:(TBStateMachineState *)initialState;
 
 /**
  *  Schedules an event.
@@ -132,6 +132,6 @@
  *  @param data             The payload data.
  *  @param action           The transition action.
  */
-- (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
+- (void)switchState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
 
 @end

@@ -9,16 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "TBStateMachineTransition.h"
 
-@protocol TBStateMachineNode;
+@class TBStateMachineState;
 
 /**
  *  This type represents an action of a given `TBStateMachineTransition`.
  *
- *  @param sourceState      The source `TBStateMachineNode`.
- *  @param destinationState The destination `TBStateMachineNode`.
+ *  @param sourceState      The source `TBStateMachineState`.
+ *  @param destinationState The destination `TBStateMachineState`.
  *  @param data             The payload data.
  */
-typedef void(^TBStateMachineActionBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);
+typedef void(^TBStateMachineActionBlock)(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data);
 
 /**
  *  This type represents a guard function of a given `TBStateMachineTransition`.
@@ -27,7 +27,7 @@ typedef void(^TBStateMachineActionBlock)(id<TBStateMachineNode> sourceState, id<
  *  @param destinationState The destination `TBStateMachineNode`.
  *  @param data      The payload data.
  */
-typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);
+typedef BOOL(^TBStateMachineGuardBlock)(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data);
 
 
 /**
@@ -38,12 +38,12 @@ typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> sourceState, id<T
 /**
  *  The source state.
  */
-@property (nonatomic, weak, readonly) id<TBStateMachineNode> sourceState;
+@property (nonatomic, weak, readonly) TBStateMachineState *sourceState;
 
 /**
  *  The destination state.
  */
-@property (nonatomic, weak, readonly) id<TBStateMachineNode> destinationState;
+@property (nonatomic, weak, readonly) TBStateMachineState *destinationState;
 
 /**
  *  The action associated with the transition.
@@ -57,6 +57,18 @@ typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> sourceState, id<T
 
 /**
  *  Creates a `TBStateMachineTransition` instance from a given source and destination state, action and guard.
+ * 
+ *  @param sourceState      The specified source state.
+ *  @param destinationState The specified destination state.
+ *  @param action           The action associated with this transition.
+ *  @param guard            The guard function associated with the transition.
+ *
+ *  @return The transition object.
+ */
++ (TBStateMachineTransition *)transitionWithSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
+
+/**
+ *  Initializes a `TBStateMachineTransition` instance from a given source and destination state, action and guard.
  *
  *  @param sourceState      The specified source state.
  *  @param destinationState The specified destination state.
@@ -65,7 +77,7 @@ typedef BOOL(^TBStateMachineGuardBlock)(id<TBStateMachineNode> sourceState, id<T
  *
  *  @return The transition object.
  */
-+ (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
+- (instancetype)initWithSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
 
 /**
  *  The transition's name.

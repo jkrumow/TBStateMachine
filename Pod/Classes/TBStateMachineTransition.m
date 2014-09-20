@@ -7,16 +7,16 @@
 //
 
 #import "TBStateMachineTransition.h"
-#import "TBStateMachineNode.h"
+#import "TBStateMachineState.h"
 
 @implementation TBStateMachineTransition
 
-+ (TBStateMachineTransition *)transitionWithSourceState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
++ (TBStateMachineTransition *)transitionWithSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
 {
     return [[TBStateMachineTransition alloc] initWithSourceState:sourceState destinationState:destinationState action:action guard:guard];
 }
 
-- (instancetype)initWithSourceState:()sourceState destinationState:()destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
+- (instancetype)initWithSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
 {
     self = [super init];
     if (self) {

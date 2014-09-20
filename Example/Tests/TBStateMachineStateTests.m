@@ -27,6 +27,7 @@ __block TBStateMachineParallelState *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
+
 describe(@"TBStateMachineState", ^{
     
     beforeEach(^{
@@ -100,17 +101,21 @@ describe(@"TBStateMachineState", ^{
     it(@"returns its path inside the state machine hierarchy", ^{
         
         subStateMachineB.states = @[stateA];
-        subStateMachineA.states = @[subStateMachineB];
+        TBStateMachineSubState *subStateB = [TBStateMachineSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
+        subStateMachineA.states = @[subStateB];
+        
         parallelStates.states = @[subStateMachineA];
         stateMachine.states = @[parallelStates];
         stateMachine.initialState = parallelStates;
         
         NSArray *path = [stateA getPath];
         
-        expect(path.count).to.equal(3);
+        expect(path.count).to.equal(5);
         expect(path[0]).to.equal(stateMachine);
-        expect(path[1]).to.equal(subStateMachineA);
-        expect(path[2]).to.equal(subStateMachineB);
+        expect(path[1]).to.equal(parallelStates);
+        expect(path[2]).to.equal(subStateMachineA);
+        expect(path[3]).to.equal(subStateB);
+        expect(path[4]).to.equal(subStateMachineB);
     });
     
 });

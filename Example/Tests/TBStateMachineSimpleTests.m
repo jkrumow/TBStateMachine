@@ -96,7 +96,7 @@ describe(@"TBStateMachine", ^{
             
         });
         
-        it(@"throws TBStateMachineException when state object does not implement the TBStateMachineNode protocol.", ^{
+        it(@"throws TBStateMachineException when state object is not of type TBStateMachineState.", ^{
             id object = [[NSObject alloc] init];
             NSArray *states = @[stateA, stateB, object];
             expect(^{
@@ -459,8 +459,9 @@ describe(@"TBStateMachine", ^{
             expect(sourceStateA).to.equal(stateA);
             expect(destinationStateA).to.equal(stateA);
         });
-        
+
     });
     
 });
+
 SpecEnd

@@ -10,7 +10,6 @@
 
 
 @class TBStateMachineEvent;
-@protocol TBStateMachineNode;
 
 
 /**

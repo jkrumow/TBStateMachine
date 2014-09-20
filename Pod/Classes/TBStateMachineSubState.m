@@ -12,8 +12,6 @@
 
 @interface TBStateMachineSubState ()
 
-@property (nonatomic, strong) TBStateMachine *stateMachine;
-
 @end
 
 @implementation TBStateMachineSubState
@@ -34,6 +32,17 @@
 }
 
 #pragma mark - TBStateMachineNode
+
+- (void)setStateMachine:(TBStateMachine *)stateMachine
+{
+    [_stateMachine setParentState:self.parentState];
+}
+
+- (void)setParentState:(id<TBStateMachineNode>)parentState
+{
+    [super setParentState:parentState];
+    [_stateMachine setParentState:self];
+}
 
 - (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
 {
@@ -60,7 +69,7 @@
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
-    return nil; // [_stateMachine _handleEvent:event data:data];
+    return [_stateMachine handleEvent:event data:data];
 }
 
 

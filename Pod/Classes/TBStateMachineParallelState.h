@@ -8,13 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TBStateMachineNode.h"
 #import "TBStateMachineState.h"
 
 /**
- *  This class wraps multiple `TBStateMachineNode` instances and processes them in parallel.
+ *  This class wraps multiple `TBStateMachine` instances and processes them in parallel.
  *
- *  **Notice:** When sending events into the TBStateMachineParallelState instance each node will handle the event, but only the follow-up node
+ *  **Notice:** When sending events into the TBStateMachineParallelState instance each sub machine will handle the event, but only the follow-up state
  *  which was returned first to the wrapper will switch out of the parallel state.
  *
  *  **Concurrency:**

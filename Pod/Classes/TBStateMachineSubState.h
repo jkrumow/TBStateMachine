@@ -12,6 +12,8 @@
 @class TBStateMachine;
 @interface TBStateMachineSubState : TBStateMachineState
 
+@property (nonatomic, strong, readonly) TBStateMachine *stateMachine;
+
 /**
  *  Creates a `TBStateMachineSubState` instance from a given name.
  *

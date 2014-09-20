@@ -40,32 +40,14 @@
  *
  *  @return THe parent TBStateMachine instance.
  */
-- (TBStateMachineState *)parentState;
+- (id<TBStateMachineNode>)parentState;
 
 /**
  *  Sets the parent state machine.
  *
  *  @param parentStateMachine The parent state machine.
  */
-- (void)setParentState:(TBStateMachineState *)parentState;
-
-/**
- *  Executes the enter block of the state.
- *
- *  @param sourceState      The source state.
- *  @param destinationState The destination state.
- *  @param data             The payload data.
- */
-- (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data;
-
-/**
- *  Executes the exit block of the state.
- *
- *  @param sourceState      The source state.
- *  @param destinationState The destination state.
- *  @param data             The payload data.
- */
-- (void)exit:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data;
+- (void)setParentState:(id<TBStateMachineNode>)parentState;
 
 /**
  *  Receives a specified `TBStateMachineEvent` instance.
