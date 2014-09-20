@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TBStateMachineState.h"
 
+@class TBStateMachine;
 @interface TBStateMachineSubState : TBStateMachineState
 
 /**

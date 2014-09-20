@@ -7,6 +7,7 @@
 //
 
 #import "TBStateMachineSubState.h"
+#import "TBSTateMachine.h"
 #import "NSException+TBStateMachine.h"
 
 @interface TBStateMachineSubState ()
@@ -31,5 +32,37 @@
     }
     return self;
 }
+
+#pragma mark - TBStateMachineNode
+
+- (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
+{
+    if (destinationState == self) {
+        [_stateMachine setUp];
+    } else {
+        [_stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
+    }
+}
+
+- (void)exit:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
+{
+    if (destinationState == nil) {
+        [_stateMachine tearDown];
+    } else {
+        [_stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
+    }
+}
+
+- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
+{
+    return [self handleEvent:event data:nil];
+}
+
+- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+{
+    return nil; // [_stateMachine _handleEvent:event data:data];
+}
+
+
 
 @end

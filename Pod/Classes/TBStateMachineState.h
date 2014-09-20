@@ -19,14 +19,14 @@
  *  @param destinationState The destination state.
  *  @param data The payload data.
  */
-typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data);
+typedef void (^TBStateMachineStateBlock)(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data);
 
 /**
  *  This class represents a state in a state machine.
  */
 @interface TBStateMachineState : NSObject<TBStateMachineNode>
 
-@property (nonatomic, weak) TBStateMachine *parentState;
+@property (nonatomic, weak) TBStateMachineState *parentState;
 
 /**
  *  Block that is executed when the state is entered.
@@ -69,28 +69,28 @@ typedef void (^TBStateMachineStateBlock)(id<TBStateMachineNode> sourceState, id<
  *  Registers a `TBStateMachineEvent` object.
  *
  *  @param event  The given TBStateMachineEvent object.
- *  @param target The follow-up `TBStateMachineNode`.
+ *  @param target The follow-up `TBStateMachineState`.
  */
-- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target;
+- (void)registerEvent:(TBStateMachineEvent *)event target:(TBStateMachineState *)target;
 
 /**
  *  Registers a `TBStateMachineEvent` object.
  *
  *  @param event  The given TBStateMachineEvent object.
- *  @param target The follow-up `TBStateMachineNode`.
+ *  @param target The follow-up `TBStateMachineState`.
  *  @param action The action associated with this event.
  */
-- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action;
+- (void)registerEvent:(TBStateMachineEvent *)event target:(TBStateMachineState *)target action:(TBStateMachineActionBlock)action;
 
 /**
  *  Registers a `TBStateMachineEvent` object.
  *
  *  @param event  The given TBStateMachineEvent object.
- *  @param target The follow-up `TBStateMachineNode`.
+ *  @param target The follow-up `TBStateMachineState`.
  *  @param action The action associated with this event.
  *  @param guard  The guard function associated with this event.
  */
-- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
+- (void)registerEvent:(TBStateMachineEvent *)event target:(TBStateMachineState *)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard;
 
 /**
  *  Unregisteres a `TBStateMachineEvent` object.

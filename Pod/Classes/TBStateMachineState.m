@@ -39,17 +39,17 @@
     return self;
 }
 
-- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target
+- (void)registerEvent:(TBStateMachineEvent *)event target:(TBStateMachineState *)target
 {
     [self registerEvent:event target:target action:nil guard:nil];
 }
 
-- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action
+- (void)registerEvent:(TBStateMachineEvent *)event target:(TBStateMachineState *)target action:(TBStateMachineActionBlock)action
 {
     [self registerEvent:event target:target action:action guard:nil];
 }
 
-- (void)registerEvent:(TBStateMachineEvent *)event target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
+- (void)registerEvent:(TBStateMachineEvent *)event target:(TBStateMachineState *)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
 {
     TBStateMachineEventHandler *eventHandler = [TBStateMachineEventHandler eventHandlerWithName:event.name target:target action:action guard:guard];
     [_eventHandlers setObject:eventHandler forKey:event.name];
@@ -72,7 +72,7 @@
 - (NSArray *)getPath
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBStateMachine *node = self.parentState;
+    TBStateMachineState *node = self.parentState;
     while (node) {
         [path insertObject:node atIndex:0];
         node = node.parentState;
@@ -80,14 +80,14 @@
     return path;
 }
 
-- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
+- (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
 {
     if (_enterBlock) {
         _enterBlock(sourceState, destinationState, data);
     }
 }
 
-- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
+- (void)exit:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
 {
     if (_exitBlock) {
         _exitBlock(sourceState, destinationState, data);

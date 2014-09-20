@@ -36,7 +36,7 @@
  *  - call -tearDown to deactivate the state machine
  *
  */
-@interface TBStateMachine : NSObject <TBStateMachineNode>
+@interface TBStateMachine : NSObject
 
 /**
  *  The initial state of the state machine. Must be set before calling -setUp.

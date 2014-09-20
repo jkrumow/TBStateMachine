@@ -17,13 +17,13 @@
 #endif
 
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, weak) TBStateMachine *parentState;
+@property (nonatomic, weak) TBStateMachineState *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
-- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state;
-- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
+- (TBStateMachineSubState *)_findNextNodeForState:(id<TBStateMachineNode>)state;
+- (TBStateMachineSubState *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
@@ -89,8 +89,8 @@
     
     for (id object in states) {
         if ([object conformsToProtocol:@protocol(TBStateMachineNode)])  {
-            id<TBStateMachineNode> state = object;
-            [state setParentState:self];
+            TBStateMachineState *state = object;
+            [state setParentState:self.parentState];
             [_priv_states setObject:state forKey:state.name];
         } else {
             @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
@@ -179,17 +179,17 @@
     return path[index + 1];
 }
 
-- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState
+- (TBStateMachineState *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState
 {
     NSArray *sourcePath = [sourceState getPath];
     NSArray *destinationPath = [destinationState getPath];
     
     for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
-        id<TBStateMachineNode> node = sourcePath[i];
-        if (![node isKindOfClass:[TBStateMachine class]]) {
+        TBStateMachineState *node = sourcePath[i];
+        if (![node isKindOfClass:[TBStateMachineSubState class]]) {
             continue;
         }
-        TBStateMachine *stateMachine = node;
+        TBStateMachineSubState *stateMachine = (TBStateMachineSubState *)node;
         if ([destinationPath containsObject:stateMachine]) {
             return stateMachine;
         }
@@ -208,7 +208,7 @@
         TBStateMachineActionBlock action = transition.action;
         TBStateMachineGuardBlock guard = transition.guard;
         if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
-            TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+            TBStateMachineSubState *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
             if (lowestCommonAncestor) {
                 [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
             }
@@ -233,7 +233,7 @@
 - (NSArray *)getPath
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBStateMachine *node = self.parentState;
+    TBStateMachineState *node = self.parentState;
     while (node) {
         [path insertObject:node atIndex:0];
         node = node.parentState;
