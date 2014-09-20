@@ -26,7 +26,7 @@ typedef void (^TBStateMachineStateBlock)(TBStateMachineState *sourceState, TBSta
  */
 @interface TBStateMachineState : NSObject<TBStateMachineNode>
 
-@property (nonatomic, weak) TBStateMachineState *parentState;
+@property (nonatomic, weak) id<TBStateMachineNode> parentState;
 
 /**
  *  Block that is executed when the state is entered.
@@ -98,5 +98,23 @@ typedef void (^TBStateMachineStateBlock)(TBStateMachineState *sourceState, TBSta
  *  @param event   The given TBStateMachineEvent object.
  */
 - (void)unregisterEvent:(TBStateMachineEvent *)event;
+
+/**
+ *  Executes the enter block of the state.
+ *
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
+ *  @param data             The payload data.
+ */
+- (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data;
+
+/**
+ *  Executes the exit block of the state.
+ *
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
+ *  @param data             The payload data.
+ */
+- (void)exit:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data;
 
 @end

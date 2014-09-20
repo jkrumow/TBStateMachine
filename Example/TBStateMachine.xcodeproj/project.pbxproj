@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A6C67E1EE074EF7B9F3DB6B /* libPods-TBStateMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92468FFB7995400DA10E71AF /* libPods-TBStateMachine.a */; };
+		151C5C0C19CDF6A4003D21AE /* TBStateMachineSubStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */; };
 		155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */; };
 		155BB54C19C6122B00EB1C74 /* TBStateMachineStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */; };
 		155BB54E19C612A400EB1C74 /* TBStateMachineEventTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineSubStateTests.m; sourceTree = "<group>"; };
 		155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineSimpleTests.m; sourceTree = "<group>"; };
 		155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineStateTests.m; sourceTree = "<group>"; };
 		155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineEventTests.m; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */,
 				15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */,
 				155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */,
+				151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */,
 				6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */,
 				155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
@@ -380,6 +383,7 @@
 			files = (
 				15A2F99E19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m in Sources */,
 				6003F5BC195388D20070C39A /* TBStateMachineParallelStateTests.m in Sources */,
+				151C5C0C19CDF6A4003D21AE /* TBStateMachineSubStateTests.m in Sources */,
 				155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */,
 				155BB54E19C612A400EB1C74 /* TBStateMachineEventTests.m in Sources */,
 				15A2F99C19CB4CD600614B4E /* TBStateMachineNestedTests.m in Sources */,

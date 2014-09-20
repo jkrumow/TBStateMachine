@@ -1,20 +1,21 @@
 //
-//  TBStateMachineStateTests.m
-//  TBStateMachineTests
+//  TBStateMachineSubStateTests.m
+//  TBStateMachine
 //
-//  Created by Julian Krumow on 14.09.14.
+//  Created by Julian Krumow on 20.09.14.
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
 #import <TBStateMachine/TBStateMachine.h>
 
-SpecBegin(StateMachineState)
+SpecBegin(StateMachineSubState)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
+__block TBStateMachineSubState *subState;
 __block TBStateMachine *stateMachine;
 __block TBStateMachineState *stateA;
 __block TBStateMachineState *stateB;
@@ -28,7 +29,7 @@ __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
 
-describe(@"TBStateMachineState", ^{
+describe(@"TBStateMachineSubState", ^{
     
     beforeEach(^{
         stateA = [TBStateMachineState stateWithName:@"a"];
@@ -41,9 +42,12 @@ describe(@"TBStateMachineState", ^{
         subStateMachineA = [TBStateMachine stateMachineWithName:@"stateMachineA"];
         subStateMachineB = [TBStateMachine stateMachineWithName:@"stateMachineB"];
         parallelStates = [TBStateMachineParallelState parallelStateWithName:@"parallelStates"];
+        
+        subState = [TBStateMachineSubState subStateWithName:@"subState" stateMachine:subStateMachineA];
     });
     
     afterEach(^{
+        subState = nil;
         stateA = nil;
         eventDataA = nil;
         eventDataB = nil;
@@ -61,7 +65,7 @@ describe(@"TBStateMachineState", ^{
         it (@"throws a TBStateMachineException when name is nil.", ^{
             
             expect(^{
-                stateA = [TBStateMachineState stateWithName:nil];
+                subState = [TBStateMachineSubState subStateWithName:nil stateMachine:subStateMachineA];
             }).to.raise(TBStateMachineException);
             
         });
@@ -69,7 +73,15 @@ describe(@"TBStateMachineState", ^{
         it (@"throws a TBStateMachineException when name is an empty string.", ^{
             
             expect(^{
-                stateA = [TBStateMachineState stateWithName:@""];
+                subState = [TBStateMachineSubState subStateWithName:@"" stateMachine:subStateMachineA];
+            }).to.raise(TBStateMachineException);
+            
+        });
+        
+        it (@"throws a TBStateMachineException when stateMachine is nil.", ^{
+            
+            expect(^{
+                subState = [TBStateMachineSubState subStateWithName:@"subState" stateMachine:nil];
             }).to.raise(TBStateMachineException);
             
         });
@@ -78,22 +90,22 @@ describe(@"TBStateMachineState", ^{
     
     it(@"registers TBStateMachineEventBlock instances by the name of a provided TBStateMachineEvent instance.", ^{
         
-        [stateA registerEvent:eventA target:nil];
+        [subState registerEvent:eventA target:nil];
         
-        NSDictionary *registeredEvents = stateA.eventHandlers;
+        NSDictionary *registeredEvents = subState.eventHandlers;
         expect(registeredEvents.allKeys).to.haveCountOf(1);
         expect(registeredEvents).to.contain(eventA.name);
     });
     
     it(@"handles events by returning nil or a TBStateMachineTransition containing source and destination state.", ^{
         
-        [stateA registerEvent:eventA target:nil];
-        [stateA registerEvent:eventB target:stateB];
+        [subState registerEvent:eventA target:nil];
+        [subState registerEvent:eventB target:stateB];
         
-        TBStateMachineTransition *resultA = [stateA handleEvent:eventA];
+        TBStateMachineTransition *resultA = [subState handleEvent:eventA];
         expect(resultA).to.beNil;
         
-        TBStateMachineTransition *resultB = [stateA handleEvent:eventB];
+        TBStateMachineTransition *resultB = [subState handleEvent:eventB];
         expect(resultB.sourceState).to.equal(stateA);
         expect(resultB.destinationState).to.equal(stateB);
     });
@@ -108,14 +120,12 @@ describe(@"TBStateMachineState", ^{
         stateMachine.states = @[parallelStates];
         stateMachine.initialState = parallelStates;
         
-        NSArray *path = [stateA getPath];
+        NSArray *path = [subStateB getPath];
         
-        expect(path.count).to.equal(5);
+        expect(path.count).to.equal(3);
         expect(path[0]).to.equal(stateMachine);
         expect(path[1]).to.equal(parallelStates);
         expect(path[2]).to.equal(subStateMachineA);
-        expect(path[3]).to.equal(subStateB);
-        expect(path[4]).to.equal(subStateMachineB);
     });
     
 });

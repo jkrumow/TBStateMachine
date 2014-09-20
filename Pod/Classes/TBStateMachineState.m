@@ -29,7 +29,7 @@
 - (instancetype)initWithName:(NSString *)name
 {
     if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForNodeException];
+        @throw [NSException tb_noNameForStateException];
     }
     self = [super init];
     if (self) {
@@ -72,10 +72,10 @@
 - (NSArray *)getPath
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBStateMachineState *node = self.parentState;
-    while (node) {
-        [path insertObject:node atIndex:0];
-        node = node.parentState;
+    TBStateMachineState *state = self.parentState;
+    while (state) {
+        [path insertObject:state atIndex:0];
+        state = state.parentState;
     }
     return path;
 }

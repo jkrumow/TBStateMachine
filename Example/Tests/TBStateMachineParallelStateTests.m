@@ -123,7 +123,7 @@ describe(@"TBStateMachineParallelState", ^{
         NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
         parallelStates.states = parallelSubStateMachines;
         
-        [parallelStates enter:nil destinationState:nil data:nil];
+        [parallelStates enter:nil destinationState:parallelStates data:nil];
         
         expect(enteredStateA).to.equal(YES);
         expect(enteredStateB).to.equal(YES);

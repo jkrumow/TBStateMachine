@@ -12,8 +12,6 @@
 
 @interface TBStateMachineSubState ()
 
-@property (nonatomic, strong) TBStateMachine *stateMachine;
-
 @end
 
 @implementation TBStateMachineSubState
@@ -26,6 +24,9 @@
 
 - (instancetype)initWithName:(NSString *)name stateMachine:(TBStateMachine *)stateMachine
 {
+    if (stateMachine == nil) {
+        @throw [NSException tb_missingStateMachineException:name];
+    }
     self = [super initWithName:name];
     if (self) {
         _stateMachine = stateMachine;
@@ -34,6 +35,17 @@
 }
 
 #pragma mark - TBStateMachineNode
+
+- (void)setStateMachine:(TBStateMachine *)stateMachine
+{
+    [_stateMachine setParentState:self.parentState];
+}
+
+- (void)setParentState:(id<TBStateMachineNode>)parentState
+{
+    [super setParentState:parentState];
+    [_stateMachine setParentState:self];
+}
 
 - (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
 {
@@ -60,7 +72,8 @@
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
-    return nil; // [_stateMachine _handleEvent:event data:data];
+    // TODO: check what needs to happen: who handles to event first: the statemachine or self.
+    return [_stateMachine handleEvent:event data:data];
 }
 
 
