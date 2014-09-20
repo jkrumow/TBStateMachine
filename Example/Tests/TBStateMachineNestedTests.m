@@ -115,6 +115,9 @@ describe(@"TBStateMachine", ^{
         subStateMachineA.initialState = stateC;
         TBStateMachineSubState *subStateA = [TBStateMachineSubState subStateWithName:@"subStateA" stateMachine:subStateMachineA];
         
+        // TODO: add eventhandlers and enter + exit blocks to subStateA.
+        
+        
         // setup main state machine
         __block id<TBStateMachineNode> sourceStateA;
         __block NSDictionary *dataEnterA;
@@ -256,6 +259,8 @@ describe(@"TBStateMachine", ^{
         
         // setup sub state machine wrapper
         TBStateMachineSubState *subStateA = [TBStateMachineSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        // TODO: add eventhandlers and enter + exit blocks to subStateA.
+        
         
         // setup main state machine
         NSArray *states = @[subStateA, parallelStates];

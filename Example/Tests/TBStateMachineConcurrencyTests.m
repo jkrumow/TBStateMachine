@@ -83,6 +83,8 @@ describe(@"TBStateMachine", ^{
     
     describe(@"Concurrency", ^{
         
+        // TODO: add eventhandlers and enter + exit blocks to subState.
+        
         it(@"queues up events if an event is currently handled", ^{
             
             NSArray *expectedExecutionSequence = @[@"stateA_enter",
@@ -172,6 +174,8 @@ describe(@"TBStateMachine", ^{
             NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
             expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
         });
+        
+        // TODO: add eventhandlers and enter + exit blocks to subStateA.
         
         it(@"handles events sent concurrently from multiple threads", ^AsyncBlock {
             
