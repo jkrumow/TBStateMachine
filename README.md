@@ -118,6 +118,8 @@ TBStateMachineSubState *subState = [TBStateMachineSubState subStateWithName:@"Su
 stateMachine.states = @[stateA, stateB, subState];
 ```
 
+You can also register events, add enter and exit blocks on `TBStateMachineSubState`, since it is a subtype of `TBStateMachineState`.
+
 You do not need to call `- (void)setup` and `- (void)tearDown` on the sub-state machine since these methods will be called by the super-state machine.
 
 ### Parallel State Machines
