@@ -102,30 +102,30 @@ describe(@"TBStateMachine", ^{
             
             __block NSUInteger enteredCount = 0;
             __block NSUInteger guardExecutedCount = 0;
-            stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_enter"];
                 enteredCount++;
                 [stateMachine scheduleEvent:eventA];
             };
             
-            stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_exit"];
             };
             
-            stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateB.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_enter"];
                 [stateMachine scheduleEvent:eventC];
             };
             
-            stateB.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateB.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_exit"];
             };
             
-            stateC.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateC.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateC_enter"];
             };
             
-            stateC.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateC.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateC_exit"];
             };
             
@@ -197,7 +197,7 @@ describe(@"TBStateMachine", ^{
             NSMutableArray *executionSequence = [NSMutableArray new];
             
             __block NSUInteger enteredCount = 0;
-            stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_enter"];
                 enteredCount++;
                 
@@ -207,31 +207,31 @@ describe(@"TBStateMachine", ^{
                 }
             };
             
-            stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_exit"];
             };
             
-            stateB.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateB.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_enter"];
             };
             
-            stateB.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateB.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_exit"];
             };
             
-            stateC.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateC.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateC_enter"];
             };
             
-            stateC.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateC.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateC_exit"];
             };
             
-            stateD.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateD.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateD_enter"];
             };
             
-            stateD.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+            stateD.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateD_exit"];
             };
             

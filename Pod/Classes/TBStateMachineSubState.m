@@ -49,6 +49,8 @@
 
 - (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
 {
+    [super enter:sourceState destinationState:destinationState data:data];
+    
     if (destinationState == self) {
         [_stateMachine setUp];
     } else {
@@ -63,6 +65,8 @@
     } else {
         [_stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
     }
+    
+    [super exit:sourceState destinationState:destinationState data:data];
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
@@ -72,8 +76,9 @@
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
 {
+    [_stateMachine handleEvent:event data:data];
+    return [super handleEvent:event data:data];
     // TODO: check what needs to happen: who handles to event first: the statemachine or self.
-    return [_stateMachine handleEvent:event data:data];
 }
 
 
