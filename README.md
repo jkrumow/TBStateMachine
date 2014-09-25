@@ -38,7 +38,7 @@ it, simply add the following line to your Podfile:
 
 ### Configuration
 
-Create state objects, set enter and exit blocks:
+Create a state, set enter and exit blocks:
 
 ```objective-c
 TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
@@ -55,23 +55,23 @@ stateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *dest
 };
 ```
 
-Create a state machine instance:
+Create a state machine:
 
 ```objective-c
 TBStateMachine *stateMachine = [TBStateMachine stateMachineWithName:@"StateMachine"];
 ```
 
-Add states and set state machine up:
+Add states and set state machine up. The state machine will always set the first state in the given array as the initial state unless you define the initial state explicitly:
 
 ```objective-c
 stateMachine.states = @[stateA, stateB, ...];
-stateMachine.initialState = stateA;
+stateMachine.initialState = stateB;
 [stateMachine setup];
 ```
 
 The state machine will immediately enter the initial state.
 
-### Switching States
+### Event Handlers
 
 You can register an event handler from a given event and target state:
 
@@ -103,11 +103,11 @@ TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
 [stateMachine scheduleEvent:eventA data:payload];
 ```
 
-The state machine will queue all events it receives until processing of the current state has finished.
+The state machine will queue all events it receives until processing of the current event has finished.
 
 ### Nested State Machines
 
-TBStateMachine instances can also be nested as sub-state machines. To acomplish this you will use the `TBStateMachineSubState` wrapper class:
+TBStateMachine instances can also be nested as sub-state machines. To achieve this you will use the `TBStateMachineSubState` wrapper class:
 
 ```objective-c
 TBStateMachine *subStateMachine = [TBStateMachine stateMachineWithName:@"SubStateMachine"];
@@ -120,7 +120,7 @@ stateMachine.states = @[stateA, stateB, subState];
 
 You can also register events, add enter and exit blocks on `TBStateMachineSubState`, since it is a subtype of `TBStateMachineState`.
 
-You do not need to call `- (void)setup` and `- (void)tearDown` on the sub-state machine since these methods will be called by the super-state machine.
+You do not need to call `- (void)setup` and `- (void)tearDown` on the sub-state machine since these methods will be called by the super state machine.
 
 ### Parallel State Machines
 
@@ -135,7 +135,7 @@ stateMachine.states = @[stateA, stateB, parallelState];
 
 ### Concurrency
 
-Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
+Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the expected queue:
 
 ```objective-c
 stateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {

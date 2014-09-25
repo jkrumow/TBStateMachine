@@ -109,7 +109,7 @@
 
 /**
  *  Schedules an event.
- *  The state machine will queue all events it receives until processing of the current state has finished.
+ *  The state machine will queue all events it receives until processing of the current event has finished.
  *
  *  @param event The given `TBStateMachineEvent` instance.
  */
@@ -117,7 +117,7 @@
 
 /**
  *  Schedules an event with a given payload.
- *  The state machine will queue all events it receives until processing of the current state has finished.
+ *  The state machine will queue all events it receives until processing of the current event has finished.
  *
  *  @param event The given `TBStateMachineEvent` instance.
  *  @param data  The payload data.
