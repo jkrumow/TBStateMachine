@@ -107,7 +107,7 @@ The state machine will queue all events it receives until processing of the curr
 
 ### Nested State Machines
 
-TBStateMachine instances can also be nested as sub-state machines. To achieve this you will use the `TBStateMachineSubState` wrapper class:
+`TBStateMachine` instances can also be nested as sub-state machines. To achieve this you will use the `TBStateMachineSubState` wrapper class:
 
 ```objective-c
 TBStateMachine *subStateMachine = [TBStateMachine stateMachineWithName:@"SubStateMachine"];
