@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class TBStateMachine;
+@class TBStateMachineState;
 @class TBStateMachineEvent;
 @class TBStateMachineTransition;
 
@@ -40,32 +40,14 @@
  *
  *  @return THe parent TBStateMachine instance.
  */
-- (TBStateMachine *)parentState;
+- (id<TBStateMachineNode>)parentState;
 
 /**
  *  Sets the parent state machine.
  *
  *  @param parentStateMachine The parent state machine.
  */
-- (void)setParentState:(TBStateMachine *)parentStateMachine;
-
-/**
- *  Executes the enter block of the state.
- *
- *  @param sourceState      The source state.
- *  @param destinationState The destination state.
- *  @param data             The payload data.
- */
-- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data;
-
-/**
- *  Executes the exit block of the state.
- *
- *  @param sourceState      The source state.
- *  @param destinationState The destination state.
- *  @param data             The payload data.
- */
-- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data;
+- (void)setParentState:(id<TBStateMachineNode>)parentState;
 
 /**
  *  Receives a specified `TBStateMachineEvent` instance.
@@ -87,7 +69,7 @@
  *  @param event The given `TBStateMachineEvent` instance.
  *  @param data  The payload data.
  *
- *  @return The next state or `nil`.
+ *  @return A `TBStateMachineTransition` to the next state or `nil`.
  */
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 

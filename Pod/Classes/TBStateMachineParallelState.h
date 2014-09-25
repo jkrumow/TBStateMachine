@@ -1,5 +1,5 @@
 //
-//  TBStateMachineParallelWrapper.h
+//  TBStateMachineParallelState.h
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
@@ -8,22 +8,22 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TBStateMachineNode.h"
+#import "TBStateMachineState.h"
 
 /**
- *  This class wraps multiple `TBStateMachineNode` instances and processes them in parallel.
+ *  This class wraps multiple `TBStateMachine` instances and processes them in parallel.
  *
- *  **Notice:** When sending events into the TBStateMachineParallelWrapper instance each node will handle the event, but only the follow-up node
+ *  **Notice:** When sending events into the TBStateMachineParallelState instance each sub machine will handle the event, but only the follow-up state
  *  which was returned first to the wrapper will switch out of the parallel state.
  *
  *  **Concurrency:**
  *  Event handlers, enter and exit handlers will be executed on a background queue.
  *  Make sure the code in these blocks is dispatched back onto the right queue.
  */
-@interface TBStateMachineParallelWrapper : NSObject <TBStateMachineNode>
+@interface TBStateMachineParallelState : TBStateMachineState
 
 /**
- *  Creates a `TBStateMachineParallelWrapper` instance from a given name.
+ *  Creates a `TBStateMachineParallelState` instance from a given name.
  *
  *  Throws a `TBStateMachineException` when name is nil or an empty string.
  *
@@ -31,16 +31,16 @@
  *
  *  @return The parallel wrapper instance.
  */
-+ (TBStateMachineParallelWrapper *)parallelWrapperWithName:(NSString *)name;
++ (TBStateMachineParallelState *)parallelStateWithName:(NSString *)name;
 
 /**
- *  Initializes a `TBStateMachineParallelWrapper` with a specified name.
+ *  Initializes a `TBStateMachineParallelState` with a specified name.
  *
  *  Throws a `TBStateMachineException` when name is nil or an empty string.
  *
  *  @param name The name of this wrapper. Must be unique.
  *
- *  @return An initialized `TBStateMachineParallelWrapper` instance.
+ *  @return An initialized `TBStateMachineParallelState` instance.
  */
 - (instancetype)initWithName:(NSString *)name;
 

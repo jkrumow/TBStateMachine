@@ -1,5 +1,10 @@
 # TBStateMachine CHANGELOG
 
+## 3.0.0
+
+- added TBStateMachineSubState
+- added event handler and enter / exit blocks to sub substates
+
 ## 2.0.1
 
 ### fixes

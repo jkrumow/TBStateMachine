@@ -12,12 +12,12 @@
 
 @implementation TBStateMachineEventHandler
 
-+ (instancetype)eventHandlerWithName:(NSString *)name target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
++ (instancetype)eventHandlerWithName:(NSString *)name target:(TBStateMachineState *)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
 {
     return [[TBStateMachineEventHandler alloc] initWithName:name target:target action:action guard:guard];
 }
 
-- (instancetype)initWithName:(NSString *)name target:(id<TBStateMachineNode>)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
+- (instancetype)initWithName:(NSString *)name target:(TBStateMachineState *)target action:(TBStateMachineActionBlock)action guard:(TBStateMachineGuardBlock)guard
 {
     if (name == nil || [name isEqualToString:@""]) {
         @throw [NSException tb_noNameForEventException];

@@ -12,18 +12,19 @@
 #import "TBStateMachineTransition.h"
 #import "TBStateMachineEvent.h"
 #import "TBStateMachineEventHandler.h"
-#import "TBStateMachineParallelWrapper.h"
+#import "TBStateMachineParallelState.h"
+#import "TBStateMachineSubState.h"
 #import "NSException+TBStateMachine.h"
 
 /**
- *  This class represents a hierarchical finite state machine.
+ *  This class represents a hierarchical state machine.
  *
  *  The state machine is able to switch between nodes.
  *  A node can be:
  *
  *  - a simple state - represented by `TBStateMachineState`
- *  - a sub-state machine - represented by `TBStateMachine`
- *  - a wrapper for multiple parallel nodes - represented by `TBStateMachineParallelWrapper`
+ *  - a sub-state machine - represented by `TBStateMachineSubState`
+ *  - a wrapper for multiple parallel state machines - represented by `TBStateMachineParallelState`
  *
  *  All classes mentioned above implement the `TBStateMachineNode` protocol.
  *
@@ -40,12 +41,12 @@
 /**
  *  The initial state of the state machine. Must be set before calling -setUp.
  */
-@property (nonatomic, strong, readonly) id<TBStateMachineNode> initialState;
+@property (nonatomic, strong, readonly) TBStateMachineState *initialState;
 
 /**
  *  The current state the state machine resides in. Set to be nil before -setUp and after -tearDown being called.
  */
-@property (nonatomic, strong, readonly) id<TBStateMachineNode> currentState;
+@property (nonatomic, strong, readonly) TBStateMachineState *currentState;
 
 /**
  *  Creates a `TBStateMachine` instance from a given name.
@@ -84,14 +85,14 @@
 /**
  *  Returns the states the state machine manages.
  *
- *  @return An NSArray containing all `TBStateMachineNode` instances.
+ *  @return An NSArray containing all `TBStateMachineState` instances.
  */
 - (NSArray *)states;
 
 /**
- *  Sets all states the state machine will manage.
+ *  Sets all states the state machine will manage. First state in array wil be set as initialState.
  *
- *  Throws `TBStateMachineException` if states do not conform to the `TBStateMachineNode` protocol.
+ *  Throws `TBStateMachineException` if states do not conform to the `TBStateMachineState` protocol.
  *
  *  @param states An `NSArray` containing all state objects.
  */
@@ -104,11 +105,11 @@
  *
  *  @param initialState A given state object.
  */
-- (void)setInitialState:(id<TBStateMachineNode>)initialState;
+- (void)setInitialState:(TBStateMachineState *)initialState;
 
 /**
  *  Schedules an event.
- *  The state machine will queue all events it receives until processing of the current state has finished.
+ *  The state machine will queue all events it receives until processing of the current event has finished.
  *
  *  @param event The given `TBStateMachineEvent` instance.
  */
@@ -116,7 +117,7 @@
 
 /**
  *  Schedules an event with a given payload.
- *  The state machine will queue all events it receives until processing of the current state has finished.
+ *  The state machine will queue all events it receives until processing of the current event has finished.
  *
  *  @param event The given `TBStateMachineEvent` instance.
  *  @param data  The payload data.
@@ -131,6 +132,6 @@
  *  @param data             The payload data.
  *  @param action           The transition action.
  */
-- (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
+- (void)switchState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action;
 
 @end

@@ -17,12 +17,12 @@
 #endif
 
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, weak) TBStateMachine *parentState;
+@property (nonatomic, weak) TBStateMachineState *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
-- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state;
+- (TBStateMachineSubState *)_findNextNodeForState:(TBStateMachineState *)state;
 - (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
 - (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
@@ -39,7 +39,7 @@
 - (instancetype)initWithName:(NSString *)name
 {
     if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForNodeException];
+        @throw [NSException tb_noNameForStateException];
     }
     self = [super init];
     if (self) {
@@ -65,7 +65,7 @@
     if (_initialState) {
         [self switchState:nil destinationState:_initialState data:nil action:nil];
     } else {
-        @throw [NSException tb_nonExistingStateException:@"nil"];
+        @throw [NSException tb_nonExistingStateException:@"initialState"];
     }
 }
 
@@ -88,17 +88,22 @@
     [_priv_states removeAllObjects];
     
     for (id object in states) {
-        if ([object conformsToProtocol:@protocol(TBStateMachineNode)])  {
-            id<TBStateMachineNode> state = object;
-            [state setParentState:self];
+        if ([object isKindOfClass:[TBStateMachineState class]])  {
+            TBStateMachineState *state = object;
+            if (self.parentState) {
+                [state setParentState:self.parentState];
+            } else {
+                [state setParentState:self];
+            }
             [_priv_states setObject:state forKey:state.name];
         } else {
-            @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
+            @throw ([NSException tb_notOfTypeTBStateMachineStateException:object]);
         }
     }
+    _initialState = states[0];
 }
 
-- (void)setInitialState:(id<TBStateMachineNode>)initialState
+- (void)setInitialState:(TBStateMachineState *)initialState
 {
     if ([_priv_states objectForKey:initialState.name]) {
         _initialState = initialState;
@@ -139,7 +144,7 @@
     }
 }
 
-- (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
+- (void)switchState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
 {
     // exit current state
     if (_currentState) {
@@ -158,7 +163,7 @@
 
 #pragma mark - private methods
 
-- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state
+- (TBStateMachineState *)_findNextNodeForState:(TBStateMachineState *)state
 {
     if (state == nil) {
         return nil;
@@ -174,7 +179,7 @@
         return nil;
     }
     
-    // return next node in path
+    // return next state in path
     NSUInteger index = [path indexOfObject:self];
     return path[index + 1];
 }
@@ -185,11 +190,11 @@
     NSArray *destinationPath = [destinationState getPath];
     
     for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
-        id<TBStateMachineNode> node = sourcePath[i];
-        if (![node isKindOfClass:[TBStateMachine class]]) {
+        TBStateMachineState *state = sourcePath[i];
+        if (![state isKindOfClass:[TBStateMachine class]]) {
             continue;
         }
-        TBStateMachine *stateMachine = node;
+        TBStateMachine *stateMachine = (TBStateMachine *)state;
         if ([destinationPath containsObject:stateMachine]) {
             return stateMachine;
         }
@@ -233,30 +238,12 @@
 - (NSArray *)getPath
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBStateMachine *node = self.parentState;
-    while (node) {
-        [path insertObject:node atIndex:0];
-        node = node.parentState;
+    TBStateMachineState *state = self.parentState;
+    while (state) {
+        [path insertObject:state atIndex:0];
+        state = state.parentState;
     }
     return path;
-}
-
-- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
-{
-    if (destinationState == self) {
-        [self setUp];
-    } else {
-        [self switchState:sourceState destinationState:destinationState data:data action:nil];
-    }
-}
-
-- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
-{
-    if (destinationState == nil) {
-        [self tearDown];
-    } else {
-        [self switchState:sourceState destinationState:destinationState data:data action:nil];
-    }
 }
 
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
