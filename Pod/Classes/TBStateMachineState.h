@@ -26,6 +26,9 @@ typedef void (^TBStateMachineStateBlock)(TBStateMachineState *sourceState, TBSta
  */
 @interface TBStateMachineState : NSObject<TBStateMachineNode>
 
+/**
+ *  The state's parent state inside the state machine hierarchy.
+ */
 @property (nonatomic, weak) id<TBStateMachineNode> parentState;
 
 /**

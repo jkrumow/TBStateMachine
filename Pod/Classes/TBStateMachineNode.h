@@ -69,7 +69,7 @@
  *  @param event The given `TBStateMachineEvent` instance.
  *  @param data  The payload data.
  *
- *  @return The next state or `nil`.
+ *  @return A `TBStateMachineTransition` to the next state or `nil`.
  */
 - (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
 

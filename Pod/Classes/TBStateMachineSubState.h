@@ -12,6 +12,9 @@
 @class TBStateMachine;
 @interface TBStateMachineSubState : TBStateMachineState
 
+/**
+ *  The `TBStateMachine` instance wrapped by this sub state.
+ */
 @property (nonatomic, strong, readonly) TBStateMachine *stateMachine;
 
 /**

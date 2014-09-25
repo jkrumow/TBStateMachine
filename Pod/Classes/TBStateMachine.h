@@ -90,7 +90,7 @@
 - (NSArray *)states;
 
 /**
- *  Sets all states the state machine will manage.
+ *  Sets all states the state machine will manage. First state in array wil be set as initialState.
  *
  *  Throws `TBStateMachineException` if states do not conform to the `TBStateMachineState` protocol.
  *
