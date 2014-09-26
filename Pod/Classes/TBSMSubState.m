@@ -1,28 +1,28 @@
 //
-//  TBStateMachineSubState.m
+//  TBSMSubState.m
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 19.09.14.
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
-#import "TBStateMachineSubState.h"
-#import "TBSTateMachine.h"
+#import "TBSMSubState.h"
+#import "TBSMStateMachine.h"
 #import "NSException+TBStateMachine.h"
 
-@interface TBStateMachineSubState ()
+@interface TBSMSubState ()
 
 @end
 
-@implementation TBStateMachineSubState
+@implementation TBSMSubState
 
 
-+ (TBStateMachineSubState *)subStateWithName:(NSString *)name stateMachine:(TBStateMachine *)stateMachine
++ (TBSMSubState *)subStateWithName:(NSString *)name stateMachine:(TBSMStateMachine *)stateMachine
 {
-    return [[TBStateMachineSubState alloc] initWithName:name stateMachine:stateMachine];
+    return [[TBSMSubState alloc] initWithName:name stateMachine:stateMachine];
 }
 
-- (instancetype)initWithName:(NSString *)name stateMachine:(TBStateMachine *)stateMachine
+- (instancetype)initWithName:(NSString *)name stateMachine:(TBSMStateMachine *)stateMachine
 {
     if (stateMachine == nil) {
         @throw [NSException tb_missingStateMachineException:name];
@@ -34,20 +34,20 @@
     return self;
 }
 
-#pragma mark - TBStateMachineNode
+#pragma mark - TBSMNode
 
-- (void)setStateMachine:(TBStateMachine *)stateMachine
+- (void)setStateMachine:(TBSMStateMachine *)stateMachine
 {
     [_stateMachine setParentState:self.parentState];
 }
 
-- (void)setParentState:(id<TBStateMachineNode>)parentState
+- (void)setParentState:(id<TBSMNode>)parentState
 {
     [super setParentState:parentState];
     [_stateMachine setParentState:self];
 }
 
-- (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
     [super enter:sourceState destinationState:destinationState data:data];
     
@@ -58,7 +58,7 @@
     }
 }
 
-- (void)exit:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
     if (destinationState == nil) {
         [_stateMachine tearDown];
@@ -69,12 +69,12 @@
     [super exit:sourceState destinationState:destinationState data:data];
 }
 
-- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event
 {
     return [self handleEvent:event data:nil];
 }
 
-- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
     [_stateMachine handleEvent:event data:data];
     return [super handleEvent:event data:data];

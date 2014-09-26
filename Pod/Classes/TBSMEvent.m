@@ -1,19 +1,19 @@
 //
-//  TBStateMachineEvent.m
+//  TBSMEvent.m
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
-#import "TBStateMachineEvent.h"
+#import "TBSMEvent.h"
 #import "NSException+TBStateMachine.h"
 
-@implementation TBStateMachineEvent
+@implementation TBSMEvent
 
-+ (TBStateMachineEvent *)eventWithName:(NSString *)name
++ (TBSMEvent *)eventWithName:(NSString *)name
 {
-    return [[TBStateMachineEvent alloc] initWithName:name];
+    return [[TBSMEvent alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name

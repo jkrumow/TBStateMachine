@@ -1,16 +1,16 @@
 //
-//  TBStateMachineParallelState.m
+//  TBSMParallelState.m
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
-#import "TBStateMachineParallelState.h"
-#import "TBStateMachine.h"
+#import "TBSMParallelState.h"
+#import "TBSMStateMachine.h"
 #import "NSException+TBStateMachine.h"
 
-@interface TBStateMachineParallelState ()
+@interface TBSMParallelState ()
 
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
 
@@ -22,13 +22,13 @@
 
 @end
 
-@implementation TBStateMachineParallelState
+@implementation TBSMParallelState
 
 @synthesize parentState = _parentState;
 
-+ (TBStateMachineParallelState *)parallelStateWithName:(NSString *)name
++ (TBSMParallelState *)parallelStateWithName:(NSString *)name
 {
-    return [[TBStateMachineParallelState alloc] initWithName:name];
+    return [[TBSMParallelState alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name
@@ -59,7 +59,7 @@
     [_priv_parallelStates removeAllObjects];
     
     for (id object in states) {
-        if ([object isKindOfClass:[TBStateMachine class]]) {
+        if ([object isKindOfClass:[TBSMStateMachine class]]) {
             [_priv_parallelStates addObject:object];
         } else {
             @throw ([NSException tb_notAStateMachineException:object]);
@@ -67,23 +67,23 @@
     }
 }
 
-#pragma mark - TBStateMachineNode
+#pragma mark - TBSMNode
 
-- (void)setParentState:(id<TBStateMachineNode>)parentState
+- (void)setParentState:(id<TBSMNode>)parentState
 {
     _parentState = parentState;
-    for (TBStateMachine *subMachine in _priv_parallelStates) {
+    for (TBSMStateMachine *subMachine in _priv_parallelStates) {
         subMachine.parentState = self;
     }
 }
 
-- (void)enter:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
     [super enter:sourceState destinationState:destinationState data:data];
     
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        TBStateMachine *stateMachine = _priv_parallelStates[idx];
+        TBSMStateMachine *stateMachine = _priv_parallelStates[idx];
         if (destinationState == nil || destinationState == self) {
             [stateMachine setUp];
         } else {
@@ -92,11 +92,11 @@
     });
 }
 
-- (void)exit:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        TBStateMachine *stateMachine = _priv_parallelStates[idx];
+        TBSMStateMachine *stateMachine = _priv_parallelStates[idx];
         if (destinationState == nil) {
             [stateMachine tearDown];
         } else {
@@ -107,13 +107,13 @@
     [super exit:sourceState destinationState:destinationState data:data];
 }
 
-- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
-    __block TBStateMachineTransition *nextTransition = nil;
+    __block TBSMTransition *nextTransition = nil;
     dispatch_apply(_priv_parallelStates.count, _parallelQueue, ^(size_t idx) {
         
-        TBStateMachine *stateMachine = _priv_parallelStates[idx];
-        TBStateMachineTransition *transition = [stateMachine handleEvent:event data:data];
+        TBSMStateMachine *stateMachine = _priv_parallelStates[idx];
+        TBSMTransition *transition = [stateMachine handleEvent:event data:data];
         if (transition.destinationState && nextTransition == nil) {
             nextTransition = transition;
         }

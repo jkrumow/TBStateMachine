@@ -51,6 +51,7 @@
 		15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineNestedTests.m; sourceTree = "<group>"; };
 		15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineConcurrencyTests.m; sourceTree = "<group>"; };
 		15B1453719BCFDA700924D92 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		45DE11B7756962DA59F9E54D /* Pods-TBStateMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBStateMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-TBStateMachine/Pods-TBStateMachine.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* TBStateMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBStateMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -73,9 +74,10 @@
 		6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineParallelStateTests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		92468FFB7995400DA10E71AF /* libPods-TBStateMachine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TBStateMachine.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		98191D3EC64DE11776F81351 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		9DC2BD94630C4C24B2A9E9DE /* TBStateMachine.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TBStateMachine.podspec; path = ../TBStateMachine.podspec; sourceTree = "<group>"; };
-		9E48BE82173E43C9A862B298 /* Pods-Tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.xcconfig"; path = "Pods/Pods-Tests.xcconfig"; sourceTree = "<group>"; };
-		ADD66DA978ED4EBA9BCA6F5A /* Pods-TBStateMachine.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBStateMachine.xcconfig"; path = "Pods/Pods-TBStateMachine.xcconfig"; sourceTree = "<group>"; };
+		CE165D77A8D50DEAE01F05A5 /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		D4C924ED34B3A3E76054C84B /* Pods-TBStateMachine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBStateMachine.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TBStateMachine/Pods-TBStateMachine.debug.xcconfig"; sourceTree = "<group>"; };
 		D52824CE23284B9F8AF945DA /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3051BECA66A486CA6E2E47E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		EE25D86ED8294FBD9000D76C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -115,8 +117,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				ADD66DA978ED4EBA9BCA6F5A /* Pods-TBStateMachine.xcconfig */,
-				9E48BE82173E43C9A862B298 /* Pods-Tests.xcconfig */,
+				6E2DF1A3E7D2FF8713B10A5F /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -202,6 +203,17 @@
 				E3051BECA66A486CA6E2E47E /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		6E2DF1A3E7D2FF8713B10A5F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D4C924ED34B3A3E76054C84B /* Pods-TBStateMachine.debug.xcconfig */,
+				45DE11B7756962DA59F9E54D /* Pods-TBStateMachine.release.xcconfig */,
+				CE165D77A8D50DEAE01F05A5 /* Pods-Tests.debug.xcconfig */,
+				98191D3EC64DE11776F81351 /* Pods-Tests.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,7 +343,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-TBStateMachine-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TBStateMachine/Pods-TBStateMachine-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A6683A09743E4905AE4DF6A3 /* Copy Pods Resources */ = {
@@ -346,7 +358,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-Tests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C17794C21BD24D9398C22A97 /* Check Pods Manifest.lock */ = {
@@ -511,7 +523,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ADD66DA978ED4EBA9BCA6F5A /* Pods-TBStateMachine.xcconfig */;
+			baseConfigurationReference = D4C924ED34B3A3E76054C84B /* Pods-TBStateMachine.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -550,7 +562,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ADD66DA978ED4EBA9BCA6F5A /* Pods-TBStateMachine.xcconfig */;
+			baseConfigurationReference = 45DE11B7756962DA59F9E54D /* Pods-TBStateMachine.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -589,7 +601,7 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E48BE82173E43C9A862B298 /* Pods-Tests.xcconfig */;
+			baseConfigurationReference = CE165D77A8D50DEAE01F05A5 /* Pods-Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TBStateMachine.app/TBStateMachine";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -612,7 +624,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E48BE82173E43C9A862B298 /* Pods-Tests.xcconfig */;
+			baseConfigurationReference = 98191D3EC64DE11776F81351 /* Pods-Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TBStateMachine.app/TBStateMachine";
 				FRAMEWORK_SEARCH_PATHS = (

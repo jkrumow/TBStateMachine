@@ -9,52 +9,52 @@
 #import "NSException+TBStateMachine.h"
 
 
-NSString * const TBStateMachineException = @"TBStateMachineException";
+NSString * const TBSMException = @"TBSMException";
 
-static NSString * const TBNotOfTypeTBStateMachineStateExceptionReason = @"The specified object '%@' must be of type TBStateMachineState.";
-static NSString * const TBNonExistingStateExceptionReason = @"The specified state '%@' does not exist.";
-static NSString * const TBNoInitialStateExceptionReason = @"Initial state needs to be set on %@.";
-static NSString * const TBNoNameForStateExceptionReason = @"State needs to have a valid name.";
-static NSString * const TBNoNameForEventExceptionReason = @"Event needs to have a valid name.";
-static NSString * const TBNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBStateMachine.";
-static NSString * const TBMissingStateMachineExceptionReason = @"Sub state '%@' needs to be initialized with a valid TBStateMachine instance.";
+static NSString * const TBSMNotOfTypeStateExceptionReason = @"The specified object '%@' must be of type TBSMState.";
+static NSString * const TBSMNonExistingStateExceptionReason = @"The specified state '%@' does not exist.";
+static NSString * const TBSMNoInitialStateExceptionReason = @"Initial state needs to be set on %@.";
+static NSString * const TBSMNoNameForStateExceptionReason = @"State needs to have a valid name.";
+static NSString * const TBSMNoNameForEventExceptionReason = @"Event needs to have a valid name.";
+static NSString * const TBSMNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBSMStateMachine.";
+static NSString * const TBSMMissingStateMachineExceptionReason = @"Sub state '%@' needs to be initialized with a valid TBSMStateMachine instance.";
 
 
 @implementation NSException (TBStateMachine)
 
-+ (NSException *)tb_notOfTypeTBStateMachineStateException:(id)object
++ (NSException *)tb_notOfTypeStateMachineStateException:(id)object
 {
-    return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNotOfTypeTBStateMachineStateExceptionReason, object] userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNotAStateMachineExceptionReason, object] userInfo:nil];
 }
 
 + (NSException *)tb_nonExistingStateException:(NSString *)stateName
 {
-    return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateName] userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNonExistingStateExceptionReason, stateName] userInfo:nil];
 }
 
 + (NSException *)tb_noInitialStateException:(NSString *)stateMachineName
 {
-    return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNonExistingStateExceptionReason, stateMachineName] userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNonExistingStateExceptionReason, stateMachineName] userInfo:nil];
 }
 
 + (NSException *)tb_noNameForStateException
 {
-    return [NSException exceptionWithName:TBStateMachineException reason:TBNoNameForStateExceptionReason userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForStateExceptionReason userInfo:nil];
 }
 
 + (NSException *)tb_noNameForEventException
 {
-    return [NSException exceptionWithName:TBStateMachineException reason:TBNoNameForEventExceptionReason userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForEventExceptionReason userInfo:nil];
 }
 
 + (NSException *)tb_notAStateMachineException:(id)object
 {
-    return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBNotAStateMachineExceptionReason, object] userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNotAStateMachineExceptionReason, object] userInfo:nil];
 }
 
 + (NSException *)tb_missingStateMachineException:(NSString *)stateName
 {
-    return [NSException exceptionWithName:TBStateMachineException reason:[NSString stringWithFormat:TBMissingStateMachineExceptionReason, stateName] userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMMissingStateMachineExceptionReason, stateName] userInfo:nil];
 }
 
 @end

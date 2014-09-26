@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
-#import <TBStateMachine/TBStateMachine.h>
+#import <TBStateMachine/TBSMStateMachine.h>
 
 SpecBegin(StateMachineState)
 
@@ -15,32 +15,32 @@ NSString * const EVENT_NAME_B = @"DummyEventB";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
-__block TBStateMachine *stateMachine;
-__block TBStateMachineState *stateA;
-__block TBStateMachineState *stateB;
+__block TBSMStateMachine *stateMachine;
+__block TBSMState *stateA;
+__block TBSMState *stateB;
 
-__block TBStateMachineEvent *eventA;
-__block TBStateMachineEvent *eventB;
-__block TBStateMachine *subStateMachineA;
-__block TBStateMachine *subStateMachineB;
-__block TBStateMachineParallelState *parallelStates;
+__block TBSMEvent *eventA;
+__block TBSMEvent *eventB;
+__block TBSMStateMachine *subStateMachineA;
+__block TBSMStateMachine *subStateMachineB;
+__block TBSMParallelState *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
 
-describe(@"TBStateMachineState", ^{
+describe(@"TBSMState", ^{
     
     beforeEach(^{
-        stateA = [TBStateMachineState stateWithName:@"a"];
+        stateA = [TBSMState stateWithName:@"a"];
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBStateMachineEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBStateMachineEvent eventWithName:EVENT_NAME_B];
+        eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
+        eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
         
-        stateMachine = [TBStateMachine stateMachineWithName:@"stateMachine"];
-        subStateMachineA = [TBStateMachine stateMachineWithName:@"stateMachineA"];
-        subStateMachineB = [TBStateMachine stateMachineWithName:@"stateMachineB"];
-        parallelStates = [TBStateMachineParallelState parallelStateWithName:@"parallelStates"];
+        stateMachine = [TBSMStateMachine stateMachineWithName:@"stateMachine"];
+        subStateMachineA = [TBSMStateMachine stateMachineWithName:@"stateMachineA"];
+        subStateMachineB = [TBSMStateMachine stateMachineWithName:@"stateMachineB"];
+        parallelStates = [TBSMParallelState parallelStateWithName:@"parallelStates"];
     });
     
     afterEach(^{
@@ -58,25 +58,25 @@ describe(@"TBStateMachineState", ^{
     
     describe(@"Exception handling on setup.", ^{
         
-        it (@"throws a TBStateMachineException when name is nil.", ^{
+        it (@"throws a TBSMException when name is nil.", ^{
             
             expect(^{
-                stateA = [TBStateMachineState stateWithName:nil];
-            }).to.raise(TBStateMachineException);
+                stateA = [TBSMState stateWithName:nil];
+            }).to.raise(TBSMException);
             
         });
         
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
+        it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
-                stateA = [TBStateMachineState stateWithName:@""];
-            }).to.raise(TBStateMachineException);
+                stateA = [TBSMState stateWithName:@""];
+            }).to.raise(TBSMException);
             
         });
         
     });
     
-    it(@"registers TBStateMachineEventBlock instances by the name of a provided TBStateMachineEvent instance.", ^{
+    it(@"registers TBSMEventBlock instances by the name of a provided TBSMEvent instance.", ^{
         
         [stateA registerEvent:eventA target:nil];
         
@@ -85,15 +85,15 @@ describe(@"TBStateMachineState", ^{
         expect(registeredEvents).to.contain(eventA.name);
     });
     
-    it(@"handles events by returning nil or a TBStateMachineTransition containing source and destination state.", ^{
+    it(@"handles events by returning nil or a TBSMTransition containing source and destination state.", ^{
         
         [stateA registerEvent:eventA target:nil];
         [stateA registerEvent:eventB target:stateB];
         
-        TBStateMachineTransition *resultA = [stateA handleEvent:eventA];
+        TBSMTransition *resultA = [stateA handleEvent:eventA];
         expect(resultA).to.beNil;
         
-        TBStateMachineTransition *resultB = [stateA handleEvent:eventB];
+        TBSMTransition *resultB = [stateA handleEvent:eventB];
         expect(resultB.sourceState).to.equal(stateA);
         expect(resultB.destinationState).to.equal(stateB);
     });
@@ -101,7 +101,7 @@ describe(@"TBStateMachineState", ^{
     it(@"returns its path inside the state machine hierarchy", ^{
         
         subStateMachineB.states = @[stateA];
-        TBStateMachineSubState *subStateB = [TBStateMachineSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
+        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
         subStateMachineA.states = @[subStateB];
         
         parallelStates.states = @[subStateMachineA];

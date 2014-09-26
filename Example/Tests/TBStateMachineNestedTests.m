@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
-#import <TBStateMachine/TBStateMachine.h>
+#import <TBStateMachine/TBSMStateMachine.h>
 
 SpecBegin(TBStateMachineNested)
 
@@ -16,45 +16,44 @@ NSString * const EVENT_NAME_C = @"DummyEventC";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
-__block TBStateMachine *stateMachine;
-__block TBStateMachineState *stateA;
-__block TBStateMachineState *stateB;
-__block TBStateMachineState *stateC;
-__block TBStateMachineState *stateD;
-__block TBStateMachineState *stateE;
-__block TBStateMachineState *stateF;
+__block TBSMStateMachine *stateMachine;
+__block TBSMState *stateA;
+__block TBSMState *stateB;
+__block TBSMState *stateC;
+__block TBSMState *stateD;
+__block TBSMState *stateE;
+__block TBSMState *stateF;
 
-__block TBStateMachineEvent *eventA;
-__block TBStateMachineEvent *eventB;
-__block TBStateMachineEvent *eventC;
-__block TBStateMachine *subStateMachineA;
-__block TBStateMachine *subStateMachineB;
-__block TBStateMachineParallelState *parallelStates;
-__block TBStateMachineSubState *subState;
+__block TBSMEvent *eventA;
+__block TBSMEvent *eventB;
+__block TBSMEvent *eventC;
+__block TBSMStateMachine *subStateMachineA;
+__block TBSMStateMachine *subStateMachineB;
+__block TBSMParallelState *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
 
-describe(@"TBStateMachine", ^{
+describe(@"TBSM", ^{
     
     beforeEach(^{
-        stateMachine = [TBStateMachine stateMachineWithName:@"StateMachine"];
-        stateA = [TBStateMachineState stateWithName:@"a"];
-        stateB = [TBStateMachineState stateWithName:@"b"];
-        stateC = [TBStateMachineState stateWithName:@"c"];
-        stateD = [TBStateMachineState stateWithName:@"d"];
-        stateE = [TBStateMachineState stateWithName:@"e"];
-        stateF = [TBStateMachineState stateWithName:@"f"];
+        stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
+        stateA = [TBSMState stateWithName:@"a"];
+        stateB = [TBSMState stateWithName:@"b"];
+        stateC = [TBSMState stateWithName:@"c"];
+        stateD = [TBSMState stateWithName:@"d"];
+        stateE = [TBSMState stateWithName:@"e"];
+        stateF = [TBSMState stateWithName:@"f"];
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBStateMachineEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBStateMachineEvent eventWithName:EVENT_NAME_B];
-        eventC = [TBStateMachineEvent eventWithName:EVENT_NAME_C];
+        eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
+        eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
+        eventC = [TBSMEvent eventWithName:EVENT_NAME_C];
         
-        subStateMachineA = [TBStateMachine stateMachineWithName:@"SubA"];
-        subStateMachineB = [TBStateMachine stateMachineWithName:@"SubB"];
-        parallelStates = [TBStateMachineParallelState parallelStateWithName:@"ParallelWrapper"];
+        subStateMachineA = [TBSMStateMachine stateMachineWithName:@"SubA"];
+        subStateMachineB = [TBSMStateMachine stateMachineWithName:@"SubB"];
+        parallelStates = [TBSMParallelState parallelStateWithName:@"ParallelWrapper"];
     });
     
     afterEach(^{
@@ -101,28 +100,28 @@ describe(@"TBStateMachine", ^{
         NSMutableArray *executionSequence = [NSMutableArray new];
         
         // setup sub-state machine A
-        __block TBStateMachineState *sourceStateC;
-        __block id<TBStateMachineNode> destinationStateC;
-        __block TBStateMachineState *sourceStateD;
-        __block id<TBStateMachineNode> destinationStateD;
+        __block TBSMState *sourceStateC;
+        __block id<TBSMNode> destinationStateC;
+        __block TBSMState *sourceStateD;
+        __block id<TBSMNode> destinationStateD;
         __block NSDictionary *dataExitD;
         
-        stateC.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateC_enter"];
             sourceStateC = sourceState;
         };
         
-        stateC.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateC.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateC_exit"];
             destinationStateC = destinationState;
         };
         
-        stateD.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateD.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateD_enter"];
             sourceStateD = sourceState;
         };
         
-        stateD.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateD.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateD_exit"];
             destinationStateD = destinationState;
             dataExitD = data;
@@ -135,48 +134,48 @@ describe(@"TBStateMachine", ^{
         subStateMachineA.states = subStates;
         subStateMachineA.initialState = stateC;
         
-        __block TBStateMachineState *sourceStateEnterSubA;
-        __block TBStateMachineState *destinationStateEnterSubA;
-        __block TBStateMachineState *sourceStateExitSubA;
-        __block TBStateMachineState *destinationStateExitSubA;
-        TBStateMachineSubState *subStateA = [TBStateMachineSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        __block TBSMState *sourceStateEnterSubA;
+        __block TBSMState *destinationStateEnterSubA;
+        __block TBSMState *sourceStateExitSubA;
+        __block TBSMState *destinationStateExitSubA;
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
         
-        subStateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_enter"];
             sourceStateEnterSubA = sourceState;
             destinationStateEnterSubA = destinationState;
         };
         
-        subStateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        subStateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_exit"];
             sourceStateExitSubA = sourceState;
             destinationStateExitSubA = destinationState;
         };
         
         // setup main state machine
-        __block id<TBStateMachineNode> sourceStateA;
+        __block id<TBSMNode> sourceStateA;
         __block NSDictionary *dataEnterA;
-        __block TBStateMachineState *destinationStateA;
-        __block TBStateMachineState *sourceStateB;
-        __block id<TBStateMachineNode> destinationStateB;
+        __block TBSMState *destinationStateA;
+        __block TBSMState *sourceStateB;
+        __block id<TBSMNode> destinationStateB;
         
-        stateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateA_enter"];
             sourceStateA = sourceState;
             dataEnterA = data;
         };
         
-        stateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateA_exit"];
             destinationStateA = destinationState;
         };
         
-        stateB.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateB_enter"];
             sourceStateB = sourceState;
         };
         
-        stateB.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateB_exit"];
             destinationStateB = destinationState;
         };
@@ -256,28 +255,28 @@ describe(@"TBStateMachine", ^{
         NSMutableArray *executionSequence = [NSMutableArray new];
         
         // setup sub-state machine A
-        __block TBStateMachineState *sourceStateA;
-        __block id<TBStateMachineNode> destinationStateA;
-        __block TBStateMachineState *sourceStateB;
-        __block id<TBStateMachineNode> destinationStateB;
+        __block TBSMState *sourceStateA;
+        __block id<TBSMNode> destinationStateA;
+        __block TBSMState *sourceStateB;
+        __block id<TBSMNode> destinationStateB;
         __block NSDictionary *dataExitB;
         
-        stateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateA_enter"];
             sourceStateA = sourceState;
         };
         
-        stateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateA_exit"];
             destinationStateA = destinationState;
         };
         
-        stateB.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateB_enter"];
             sourceStateB = sourceState;
         };
         
-        stateB.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateB_exit"];
             destinationStateB = destinationState;
             dataExitB = data;
@@ -291,32 +290,32 @@ describe(@"TBStateMachine", ^{
         subStateMachineA.initialState = stateA;
         
         // setup sub-state machine B
-        __block TBStateMachineState *sourceStateC;
-        __block TBStateMachineState *destinationStateC;
-        __block TBStateMachineState *sourceStateD;
-        __block TBStateMachineState *destinationStateD;
-        __block TBStateMachineState *sourceStateEnterSubA;
-        __block TBStateMachineState *destinationStateEnterSubA;
-        __block TBStateMachineState *sourceStateExitSubA;
-        __block TBStateMachineState *destinationStateExitSubA;
+        __block TBSMState *sourceStateC;
+        __block TBSMState *destinationStateC;
+        __block TBSMState *sourceStateD;
+        __block TBSMState *destinationStateD;
+        __block TBSMState *sourceStateEnterSubA;
+        __block TBSMState *destinationStateEnterSubA;
+        __block TBSMState *sourceStateExitSubA;
+        __block TBSMState *destinationStateExitSubA;
         __block NSDictionary *dataExitD;
         
-        stateC.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateC_enter"];
             sourceStateC = sourceState;
         };
         
-        stateC.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateC.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateC_exit"];
             destinationStateC = destinationState;
         };
         
-        stateD.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateD.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateD_enter"];
             sourceStateD = sourceState;
         };
         
-        stateD.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateD.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateD_exit"];
             destinationStateD = destinationState;
             dataExitD = data;
@@ -333,15 +332,15 @@ describe(@"TBStateMachine", ^{
         parallelStates.states = @[subStateMachineB];
         
         // setup sub state machine wrapper
-        TBStateMachineSubState *subStateA = [TBStateMachineSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
         
-        subStateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_enter"];
             sourceStateEnterSubA = sourceState;
             destinationStateEnterSubA = destinationState;
         };
         
-        subStateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        subStateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_exit"];
             sourceStateExitSubA = sourceState;
             destinationStateExitSubA = destinationState;
@@ -394,24 +393,24 @@ describe(@"TBStateMachine", ^{
     it(@"can switch into and out of parallel state machines.", ^{
         
         // setup sub-machine A
-        __block TBStateMachineState *sourceStateC;
-        __block TBStateMachineState *destinationStateC;
-        __block TBStateMachineState *sourceStateD;
-        __block TBStateMachineState *destinationStateD;
+        __block TBSMState *sourceStateC;
+        __block TBSMState *destinationStateC;
+        __block TBSMState *sourceStateD;
+        __block TBSMState *destinationStateD;
         
-        stateC.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             sourceStateC = sourceState;
         };
         
-        stateC.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateC.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             destinationStateC = destinationState;
         };
         
-        stateD.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateD.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             sourceStateD = sourceState;
         };
         
-        stateD.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateD.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             destinationStateD = destinationState;
         };
         
@@ -420,24 +419,24 @@ describe(@"TBStateMachine", ^{
         subStateMachineA.initialState = stateC;
         
         // setup sub-machine B
-        __block TBStateMachineState *sourceStateE;
-        __block TBStateMachineState *destinationStateE;
-        __block TBStateMachineState *sourceStateF;
-        __block TBStateMachineState *destinationStateF;
+        __block TBSMState *sourceStateE;
+        __block TBSMState *destinationStateE;
+        __block TBSMState *sourceStateF;
+        __block TBSMState *destinationStateF;
         
-        stateE.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateE.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             sourceStateE = sourceState;
         };
         
-        stateE.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateE.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             destinationStateE = destinationState;
         };
         
-        stateF.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateF.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             sourceStateF = sourceState;
         };
         
-        stateF.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateF.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             destinationStateF = destinationState;
         };
         
@@ -450,26 +449,26 @@ describe(@"TBStateMachine", ^{
         parallelStates.states = parallelSubStateMachines;
         
         // setup main state machine
-        __block id<TBStateMachineNode> sourceStateA;
+        __block id<TBSMNode> sourceStateA;
         __block NSDictionary *sourceStateDataA;
-        __block TBStateMachineState *destinationStateA;
-        __block TBStateMachineState *sourceStateB;
-        __block id<TBStateMachineNode> destinationStateB;
+        __block TBSMState *destinationStateA;
+        __block TBSMState *sourceStateB;
+        __block id<TBSMNode> destinationStateB;
         
-        stateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             sourceStateA = sourceState;
             sourceStateDataA = data;
         };
         
-        stateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             destinationStateA = destinationState;
         };
         
-        stateB.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             sourceStateB = sourceState;
         };
         
-        stateB.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+        stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             destinationStateB = destinationState;
         };
         
