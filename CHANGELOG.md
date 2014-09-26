@@ -2,8 +2,8 @@
 
 ## 3.0.0
 
-- added TBStateMachineSubState
-- added event handler and enter / exit blocks to sub substates
+- changed class name to use prefix `TBSM` instead of `TBStateMachine`
+- added TBSMSubState which derives from `TBSMState` (formerly known as `TBStateMachineState`)
 
 ## 2.0.1
 

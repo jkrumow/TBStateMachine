@@ -41,14 +41,14 @@ it, simply add the following line to your Podfile:
 Create a state, set enter and exit blocks:
 
 ```objective-c
-TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
-stateA.enterBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
+stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
         
     // ...
        
 };
     
-stateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *destinationState, NSDictionary *data) {
+stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
         
     // ...
        
@@ -58,7 +58,7 @@ stateA.exitBlock = ^(TBStateMachineState *sourceState, TBStateMachineState *dest
 Create a state machine:
 
 ```objective-c
-TBStateMachine *stateMachine = [TBStateMachine stateMachineWithName:@"Main"];
+TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
 ```
 
 Add states and set state machine up. The state machine will always set the first state in the given array as the initial state unless you define the initial state explicitly:
@@ -83,12 +83,12 @@ You can also register an event handler with additional action and guard blocks:
 
 ```objective-c
 
-TBStateMachineActionBlock action = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+TBSMActionBlock action = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 
     // ...
 };
 
-TBStateMachineGuardBlock guard = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+TBSMGuardBlock guard = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 
     // ...
 };
@@ -96,10 +96,10 @@ TBStateMachineGuardBlock guard = ^(id<TBStateMachineNode> sourceState, id<TBStat
 [stateA registerEvent:eventA target:stateB action:action guard:guard];
 ```
 
-To schedule the event call `scheduleEvent:` and pass the specified `TBStateMachineEvent` instance and (optionally) an `NSDictionary` with payload:
+To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
 ```objective-c
-TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
+TBSMEvent *eventA = [TBSMEvent eventWithName:@"EventA"];
 [stateMachine scheduleEvent:eventA];
 ```
 
@@ -107,26 +107,25 @@ The state machine will queue all events it receives until processing of the curr
 
 ### Nested State Machines
 
-`TBStateMachine` instances can also be nested as sub-state machines. To achieve this you will use the `TBStateMachineSubState` wrapper class:
+`TBSMStateMachine` instances can also be nested as sub-state machines. To achieve this you will use the `TBSMSubState` wrapper class:
 
 ```objective-c
-TBStateMachine *subStateMachine = [TBStateMachine stateMachineWithName:@"SubMachine"];
+TBSMStateMachine *subStateMachine = [TBSMStateMachine stateMachineWithName:@"SubMachine"];
 subStateMachine.states = @[stateC, stateD];
 
-TBStateMachineSubState *subState = [TBStateMachineSubState subStateWithName:@"SubCD" 
-                                                               stateMachine:subStateMachine];
+TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState" stateMachine:subStateMachine];
 
 stateMachine.states = @[stateA, stateB, subState];
 ```
 
-You can also register events, add enter and exit blocks on `TBStateMachineSubState`, since it is a subtype of `TBStateMachineState`.
+You can also register events, add enter and exit blocks on `TBSMSubState`, since it is a subtype of `TBSMState`.
 
 ### Parallel State Machines
 
-To run multiple state machines in parallel you will use the `TBStateMachineParallelState`:
+To run multiple state machines in parallel you will use the `TBSMParallelState`:
 
 ```objective-c
-TBStateMachineParallelState *parallelState = [TBStateMachineParallelState parallelStateWithName:@"ParallelState"];
+TBSMParallelState *parallelState = [TBSMParallelState parallelStateWithName:@"ParallelState"];
 parallelState.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
     
 stateMachine.states = @[stateA, stateB, parallelState];
