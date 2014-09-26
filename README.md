@@ -58,7 +58,7 @@ stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDict
 Create a state machine:
 
 ```objective-c
-TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
+TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"Main"];
 ```
 
 Add states and set state machine up. The state machine will always set the first state in the given array as the initial state unless you define the initial state explicitly:
@@ -110,10 +110,11 @@ The state machine will queue all events it receives until processing of the curr
 `TBSMStateMachine` instances can also be nested as sub-state machines. To achieve this you will use the `TBSMSubState` wrapper class:
 
 ```objective-c
-TBSMStateMachine *subStateMachine = [TBSMStateMachine stateMachineWithName:@"SubMachine"];
+TBSMStateMachine *subStateMachine = [TBSMStateMachine stateMachineWithName:@"SubA"];
 subStateMachine.states = @[stateC, stateD];
 
-TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState" stateMachine:subStateMachine];
+TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState" 
+                                           stateMachine:subStateMachine];
 
 stateMachine.states = @[stateA, stateB, subState];
 ```
