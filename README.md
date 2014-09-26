@@ -61,7 +61,7 @@ Create a state machine:
 TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"Main"];
 ```
 
-Add states and set state machine up. The state machine will always set the first state in the given array as the initial state unless you define the initial state explicitly:
+Add states and set state machine up. The state machine will always set the first state in the given array as the initial state unless you set the initial state explicitly:
 
 ```objective-c
 stateMachine.states = @[stateA, stateB, ...];
