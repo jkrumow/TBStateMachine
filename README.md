@@ -126,7 +126,7 @@ You can also register events, add enter and exit blocks on `TBSMSubState`, since
 To run multiple state machines in parallel you will use the `TBSMParallelState`:
 
 ```objective-c
-TBSMParallelState *parallelState = [TBSMParallelState parallelStateWithName:@"ParallelState"];
+TBSMParallelState *parallelState = [TBSMParallelState parallelStateWithName:@"PS"];
 parallelState.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
     
 stateMachine.states = @[stateA, stateB, parallelState];
