@@ -76,7 +76,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 /**
  *  Thrown when a TBSMSubState was instanciated without a `TBSMStateMachine` instance.
  *
- *  @param stateName The name of the specified `TBSMStateMachine` instance.
+ *  @param stateMachineName The name of the specified `TBSMStateMachine` instance.
  *
  *  @return The NSException instance.
  */

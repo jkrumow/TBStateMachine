@@ -31,21 +31,21 @@
 /**
  *  Returns the path of the node inside the state machine hierarchy.
  *
- *  @return An array containing all parent TBSMStateMachine instances - top state machine at index 0.
+ *  @return An array containing all parent nodes.
  */
 - (NSMutableArray *)getPath;
 
 /**
  *  Returns the parent state machine.
  *
- *  @return THe parent TBSMStateMachine instance.
+ *  @return The parent `TBSMNode`.
  */
 - (id<TBSMNode>)parentState;
 
 /**
  *  Sets the parent state machine.
  *
- *  @param parentStateMachine The parent state machine.
+ *  @param parentState The parent state.
  */
 - (void)setParentState:(id<TBSMNode>)parentState;
 

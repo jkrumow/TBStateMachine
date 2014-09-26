@@ -10,6 +10,10 @@
 #import "TBSMState.h"
 
 @class TBSMStateMachine;
+
+/**
+ *  This class wraps a given `TBSMStateMachine` instance in a state.
+ */
 @interface TBSMSubState : TBSMState
 
 /**
@@ -18,24 +22,26 @@
 @property (nonatomic, strong, readonly) TBSMStateMachine *stateMachine;
 
 /**
- *  Creates a `TBSMSubState` instance from a given name.
+ *  Creates a `TBSMSUBState` with a specified name and a `TBSMStateMachine` instance.
  *
  *  Throws a `TBSMException` when name is nil or an empty string.
  *
- *  @param name The specified sub state name.
+ *  @param name         The name of this wrapper. Must be unique.
+ *  @param stateMachine The sub state machine to wrap.
  *
- *  @return The sub state instance.
+ *  @return A new `TBSMSubState` instance.
  */
 + (TBSMSubState *)subStateWithName:(NSString *)name stateMachine:(TBSMStateMachine *)stateMachine;
 
 /**
- *  Initializes a `TBSMParallelState` with a specified name.
+ *  Initializes a `TBSMSUBState` with a specified name and a `TBSMStateMachine` instance.
  *
  *  Throws a `TBSMException` when name is nil or an empty string.
  *
- *  @param name The name of this wrapper. Must be unique.
+ *  @param name         The name of this wrapper. Must be unique.
+ *  @param stateMachine The sub state machine to wrap.
  *
- *  @return An initialized `TBSMParallelState` instance.
+ *  @return An initialized `TBSMSubState` instance.
  */
 - (instancetype)initWithName:(NSString *)name stateMachine:(TBSMStateMachine *)stateMachine;
 
