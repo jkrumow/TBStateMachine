@@ -1,5 +1,5 @@
 //
-//  NSException+TBStateMachine.h
+//  NSException+TBSM.h
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-FOUNDATION_EXPORT NSString * const TBStateMachineException;
+FOUNDATION_EXPORT NSString * const TBSMException;
 
 /**
  *  This category adds class methods to create NSException instances thrown by the TBStateMachine library.
@@ -16,7 +16,7 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
 @interface NSException (TBStateMachine)
 
 /**
- *  Thrown when an object does not conform to the `TBStateMachineNode` protocol.
+ *  Thrown when an object is not of type `TBSMState`.
  *
  *  The `reason:` string will contain a description of the object.
  *
@@ -24,14 +24,14 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
  *
  *  @return The NSException instance.
  */
-+ (NSException *)tb_doesNotConformToNodeProtocolException:(id)object;
++ (NSException *)tb_notOfTypeStateException:(id)object;
 
 /**
- *  Thrown when a specified `TBStateMachineNode` instance does not exist in the state machine.
+ *  Thrown when a specified `TBSMState` instance does not exist in the state machine.
  *
  *  The `reason:` string will contain the name of the state.
  *
- *  @param stateName The name of the specified `TBStateMachineNode`.
+ *  @param stateName The name of the specified `TBSMState`.
  *
  *  @return The NSException instance.
  */
@@ -42,28 +42,28 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
  *
  *  The `reason:` string will contain the name of the state machine.
  *
- *  @param stateName The name of the specified `TBStateMachine` instance.
+ *  @param stateName The name of the specified `TBSMStateMachine` instance.
  *
  *  @return The NSException instance.
  */
 + (NSException *)tb_noInitialStateException:(NSString *)stateName;
 
 /**
- *  Thrown when no name was given to a `TBStateMachineNode` instance.
+ *  Thrown when no name was given to a `TBSMState` instance.
  *
  *  @return The NSException instance.
  */
-+ (NSException *)tb_noNameForNodeException;
++ (NSException *)tb_noNameForStateException;
 
 /**
- *  Thrown when no name was given to a `TBStateMachineEvent` instance.
+ *  Thrown when no name was given to a `TBSMEvent` instance.
  *
  *  @return The NSException instance.
  */
 + (NSException *)tb_noNameForEventException;
 
 /**
- *  Thrown when a given object is not of type `TBStateMachine`.
+ *  Thrown when a given object is not of type `TBSMStateMachine`.
  *
  *  The `reason:` string will contain a description of the object.
  *
@@ -72,5 +72,14 @@ FOUNDATION_EXPORT NSString * const TBStateMachineException;
  *  @return The NSException instance.
  */
 + (NSException *)tb_notAStateMachineException:(id)object;
+
+/**
+ *  Thrown when a TBSMSubState was instanciated without a `TBSMStateMachine` instance.
+ *
+ *  @param stateMachineName The name of the specified `TBSMStateMachine` instance.
+ *
+ *  @return The NSException instance.
+ */
++ (NSException *)tb_missingStateMachineException:(NSString *)stateMachineName;
 
 @end

@@ -11,9 +11,9 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 ## Features
 
 * block based API
-* nested state (sub state machines)
-* wrapper for parallel state machines (orthogonal regions)
-* guards and transitions and actions
+* wrapper class for nested state machines (sub state machines)
+* wrapper class for parallel state machines (orthogonal regions)
+* transitions with guards and actions
 * thread safe event handling and switching
 * state switching using lowest common ancestor algorithm (LCA)
 
@@ -38,40 +38,40 @@ it, simply add the following line to your Podfile:
 
 ### Configuration
 
-Create state objects, set enter and exit blocks:
+Create a state, set enter and exit blocks:
 
 ```objective-c
-TBStateMachineState *stateA = [TBStateMachineState stateWithName:@"StateA"];
-stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
+stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
         
     // ...
        
 };
     
-stateA.exitBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
+stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
         
     // ...
        
 };
 ```
 
-Create a state machine instance:
+Create a state machine:
 
 ```objective-c
-TBStateMachine *stateMachine = [TBStateMachine stateMachineWithName:@"StateMachine"];
+TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"Main"];
 ```
 
-Add states and set state machine up:
+Add states and set state machine up. The state machine will always set the first state in the given array as the initial state unless you set the initial state explicitly:
 
 ```objective-c
 stateMachine.states = @[stateA, stateB, ...];
-stateMachine.initialState = stateA;
+stateMachine.initialState = stateB;
 [stateMachine setup];
 ```
 
 The state machine will immediately enter the initial state.
 
-### Switching States
+### Event Handlers
 
 You can register an event handler from a given event and target state:
 
@@ -82,72 +82,60 @@ You can register an event handler from a given event and target state:
 You can also register an event handler with additional action and guard blocks:
 
 ```objective-c
-[stateA registerEvent:eventA 
-               target:stateB
-               action:^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                   
-                   // ...
-                   
-               }
-                guard:^BOOL(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-                   
-                   return // YES or NO;
-               }];
+
+TBSMActionBlock action = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                
+    // ...
+};
+
+TBSMGuardBlock guard = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                
+    // ...
+};
+
+[stateA registerEvent:eventA target:stateB action:action guard:guard];
 ```
 
-Send the event:
+To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
 ```objective-c
-NSDictionary *payload = // ...
-TBStateMachineEvent *eventA = [TBStateMachineEvent eventWithName:@"EventA"];
-[stateMachine scheduleEvent:eventA data:payload];
+TBSMEvent *eventA = [TBSMEvent eventWithName:@"EventA"];
+[stateMachine scheduleEvent:eventA];
 ```
 
-The state machine will queue all events it receives until processing of the current state has finished.
+The state machine will queue all events it receives until processing of the current event has finished.
 
 ### Nested State Machines
 
-TBStateMachine instances can also be nested as sub-state machines. Instead of a `TBMachineStateState` instance you can set a `TBStateMachine` instance:
+`TBSMStateMachine` instances can also be nested as sub-state machines. To achieve this you will use the `TBSMSubState` wrapper class:
 
 ```objective-c
-TBStateMachine *subStateMachine = [TBStateMachine stateMachineWithName:@"SubStateMachine"];
+TBSMStateMachine *subStateMachine = [TBSMStateMachine stateMachineWithName:@"SubA"];
 subStateMachine.states = @[stateC, stateD];
-subStateMachine.initialState = stateC;
 
-stateMachine.states = @[stateA, stateB, subStateMachine];
+TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState" 
+                                           stateMachine:subStateMachine];
+
+stateMachine.states = @[stateA, stateB, subState];
 ```
 
-You do not need to call `- (void)setup` and `- (void)tearDown` on the sub-state machine since these methods will be called by the super-state machine.
+You can also register events, add enter and exit blocks on `TBSMSubState`, since it is a subtype of `TBSMState`.
 
 ### Parallel State Machines
 
-To run multiple state machines in parallel you will use the `TBStateMachineParallelWrapper`:
+To run multiple state machines in parallel you will use the `TBSMParallelState`:
 
 ```objective-c
-TBStateMachineParallelWrapper *parallelWrapper = [TBStateMachineParallelWrapper parallelWrapperWithName:@"ParallelWrapper"];
-parallelWrapper.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
+TBSMParallelState *parallelState = [TBSMParallelState parallelStateWithName:@"PS"];
+parallelState.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
     
-stateMachine.states = @[stateA, stateB, parallelWrapper];
+stateMachine.states = @[stateA, stateB, parallelState];
 ```
 
 ### Concurrency
 
-Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the right queue:
+Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the expected queue.
 
-```objective-c
-stateA.enterBlock = ^(id<TBStateMachineNode> sourceState, id<TBStateMachineNode> destinationState, NSDictionary *data) {
-    
-    // evaluate payload data
-    NSString *text = data[@"text"];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-    
-        label.text = text;
-    
-    });
-    
-};
-```
 
 ## Author
 

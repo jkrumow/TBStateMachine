@@ -6,28 +6,28 @@
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
-#import <TBStateMachine/TBStateMachine.h>
+#import <TBStateMachine/TBSMStateMachine.h>
 
 SpecBegin(StateMachineEvent)
 
 
-describe(@"TBStateMachineEvent", ^{
+describe(@"TBSMEvent", ^{
     
     describe(@"Exception handling on setup.", ^{
         
-        it (@"throws a TBStateMachineException when name is nil.", ^{
+        it (@"throws a TBSMException when name is nil.", ^{
             
             expect(^{
-                [TBStateMachineEvent eventWithName:nil];
-            }).to.raise(TBStateMachineException);
+                [TBSMEvent eventWithName:nil];
+            }).to.raise(TBSMException);
             
         });
         
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
+        it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
-                [TBStateMachineEvent eventWithName:@""];
-            }).to.raise(TBStateMachineException);
+                [TBSMEvent eventWithName:@""];
+            }).to.raise(TBSMException);
             
         });
         
@@ -35,23 +35,23 @@ describe(@"TBStateMachineEvent", ^{
     
 });
 
-describe(@"TBStateMachineEventHandler", ^{
+describe(@"TBSMEventHandler", ^{
     
     describe(@"Exception handling on setup.", ^{
         
-        it (@"throws a TBStateMachineException when name is nil.", ^{
+        it (@"throws a TBSMException when name is nil.", ^{
             
             expect(^{
-                [TBStateMachineEventHandler eventHandlerWithName:nil target:nil action:nil guard:nil];
-            }).to.raise(TBStateMachineException);
+                [TBSMEventHandler eventHandlerWithName:nil target:nil action:nil guard:nil];
+            }).to.raise(TBSMException);
             
         });
         
-        it (@"throws a TBStateMachineException when name is an empty string.", ^{
+        it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
-                [TBStateMachineEventHandler eventHandlerWithName:@"" target:nil action:nil guard:nil];
-            }).to.raise(TBStateMachineException);
+                [TBSMEventHandler eventHandlerWithName:@"" target:nil action:nil guard:nil];
+            }).to.raise(TBSMException);
             
         });
         

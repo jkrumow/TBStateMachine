@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
-#import "TBStateMachine.h"
+#import "TBSMStateMachine.h"
 
-@interface TBStateMachine ()
+@interface TBSMStateMachine ()
 
 #if OS_OBJECT_USE_OBJC
 @property (nonatomic, strong) dispatch_queue_t eventDispatchQueue;
@@ -17,29 +17,29 @@
 #endif
 
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, weak) TBStateMachine *parentState;
+@property (nonatomic, weak) TBSMState *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *eventQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
-- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state;
-- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState;
-- (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data;
+- (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
+- (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
+- (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
 @end
 
-@implementation TBStateMachine
+@implementation TBSMStateMachine
 
-+ (TBStateMachine *)stateMachineWithName:(NSString *)name;
++ (TBSMStateMachine *)stateMachineWithName:(NSString *)name;
 {
-    return [[TBStateMachine alloc] initWithName:name];
+    return [[TBSMStateMachine alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name
 {
     if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForNodeException];
+        @throw [NSException tb_noNameForStateException];
     }
     self = [super init];
     if (self) {
@@ -65,7 +65,7 @@
     if (_initialState) {
         [self switchState:nil destinationState:_initialState data:nil action:nil];
     } else {
-        @throw [NSException tb_nonExistingStateException:@"nil"];
+        @throw [NSException tb_nonExistingStateException:@"initialState"];
     }
 }
 
@@ -88,17 +88,22 @@
     [_priv_states removeAllObjects];
     
     for (id object in states) {
-        if ([object conformsToProtocol:@protocol(TBStateMachineNode)])  {
-            id<TBStateMachineNode> state = object;
-            [state setParentState:self];
+        if ([object isKindOfClass:[TBSMState class]])  {
+            TBSMState *state = object;
+            if (self.parentState) {
+                [state setParentState:self.parentState];
+            } else {
+                [state setParentState:self];
+            }
             [_priv_states setObject:state forKey:state.name];
         } else {
-            @throw ([NSException tb_doesNotConformToNodeProtocolException:object]);
+            @throw ([NSException tb_notOfTypeStateException:object]);
         }
     }
+    _initialState = states[0];
 }
 
-- (void)setInitialState:(id<TBStateMachineNode>)initialState
+- (void)setInitialState:(TBSMState *)initialState
 {
     if ([_priv_states objectForKey:initialState.name]) {
         _initialState = initialState;
@@ -107,12 +112,12 @@
     }
 }
 
-- (void)scheduleEvent:(TBStateMachineEvent *)event
+- (void)scheduleEvent:(TBSMEvent *)event
 {
     [self scheduleEvent:event data:nil];
 }
 
-- (void)scheduleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+- (void)scheduleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
     @synchronized(_eventQueue) {
         
@@ -139,7 +144,7 @@
     }
 }
 
-- (void)switchState:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data action:(TBStateMachineActionBlock)action
+- (void)switchState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data action:(TBSMActionBlock)action
 {
     // exit current state
     if (_currentState) {
@@ -158,7 +163,7 @@
 
 #pragma mark - private methods
 
-- (TBStateMachine *)_findNextNodeForState:(id<TBStateMachineNode>)state
+- (TBSMState *)_findNextNodeForState:(TBSMState *)state
 {
     if (state == nil) {
         return nil;
@@ -174,22 +179,22 @@
         return nil;
     }
     
-    // return next node in path
+    // return next state in path
     NSUInteger index = [path indexOfObject:self];
     return path[index + 1];
 }
 
-- (TBStateMachine *)_findLowestCommonAncestorForSourceState:(TBStateMachineState *)sourceState destinationState:(TBStateMachineState *)destinationState
+- (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState
 {
     NSArray *sourcePath = [sourceState getPath];
     NSArray *destinationPath = [destinationState getPath];
     
     for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
-        id<TBStateMachineNode> node = sourcePath[i];
-        if (![node isKindOfClass:[TBStateMachine class]]) {
+        TBSMState *state = sourcePath[i];
+        if (![state isKindOfClass:[TBSMStateMachine class]]) {
             continue;
         }
-        TBStateMachine *stateMachine = node;
+        TBSMStateMachine *stateMachine = (TBSMStateMachine *)state;
         if ([destinationPath containsObject:stateMachine]) {
             return stateMachine;
         }
@@ -197,18 +202,18 @@
     return nil;
 }
 
-- (TBStateMachineTransition *)_handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
-    TBStateMachineTransition *transition;
+    TBSMTransition *transition;
     if (_currentState) {
         transition = [_currentState handleEvent:event data:data];
     }
     if (transition && transition.destinationState) {
         
-        TBStateMachineActionBlock action = transition.action;
-        TBStateMachineGuardBlock guard = transition.guard;
+        TBSMActionBlock action = transition.action;
+        TBSMGuardBlock guard = transition.guard;
         if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
-            TBStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+            TBSMStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
             if (lowestCommonAncestor) {
                 [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
             }
@@ -228,43 +233,25 @@
     }
 }
 
-#pragma mark - TBStateMachineNode
+#pragma mark - TBSMNode
 
 - (NSArray *)getPath
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBStateMachine *node = self.parentState;
-    while (node) {
-        [path insertObject:node atIndex:0];
-        node = node.parentState;
+    TBSMState *state = self.parentState;
+    while (state) {
+        [path insertObject:state atIndex:0];
+        state = state.parentState;
     }
     return path;
 }
 
-- (void)enter:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
-{
-    if (destinationState == self) {
-        [self setUp];
-    } else {
-        [self switchState:sourceState destinationState:destinationState data:data action:nil];
-    }
-}
-
-- (void)exit:(id<TBStateMachineNode>)sourceState destinationState:(id<TBStateMachineNode>)destinationState data:(NSDictionary *)data
-{
-    if (destinationState == nil) {
-        [self tearDown];
-    } else {
-        [self switchState:sourceState destinationState:destinationState data:data action:nil];
-    }
-}
-
-- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event
 {
     return [self handleEvent:event data:nil];
 }
 
-- (TBStateMachineTransition *)handleEvent:(TBStateMachineEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
     return [self _handleEvent:event data:data];
 }

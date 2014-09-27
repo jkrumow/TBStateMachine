@@ -1,5 +1,10 @@
 # TBStateMachine CHANGELOG
 
+## 3.0.0
+
+- changed class name to use prefix `TBSM` instead of `TBStateMachine`
+- added TBSMSubState which derives from `TBSMState` (formerly known as `TBStateMachineState`)
+
 ## 2.0.1
 
 ### fixes

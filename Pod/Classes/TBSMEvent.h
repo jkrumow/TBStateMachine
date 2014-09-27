@@ -1,5 +1,5 @@
 //
-//  TBStateMachineEvent.h
+//  TBSMEvent.h
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
@@ -9,14 +9,13 @@
 #import <Foundation/Foundation.h>
 
 
-@class TBStateMachineEvent;
-@protocol TBStateMachineNode;
+@class TBSMEvent;
 
 
 /**
  *  This class represents an event in a state machine.
  */
-@interface TBStateMachineEvent : NSObject
+@interface TBSMEvent : NSObject
 
 /**
  *  The event's name.
@@ -24,24 +23,24 @@
 @property (nonatomic, copy, readonly) NSString *name;
 
 /**
- *  Creates a `TBStateMachineEvent` instance from a given name.
+ *  Creates a `TBSMEvent` instance from a given name.
  *
- *  Throws a `TBStateMachineException` when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The specified event name.
  *
  *  @return The event instance.
  */
-+ (TBStateMachineEvent *)eventWithName:(NSString *)name;
++ (TBSMEvent *)eventWithName:(NSString *)name;
 
 /**
- *  Initializes a `TBStateMachineEvent` with a specified name.
+ *  Initializes a `TBSMEvent` with a specified name.
  *
- *  Throws a `TBStateMachineException` when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The name of this event. Must be unique.
  *
- *  @return An initialized `TBStateMachineEvent` instance.
+ *  @return An initialized `TBSMEvent` instance.
  */
 - (instancetype)initWithName:(NSString *)name;
 
