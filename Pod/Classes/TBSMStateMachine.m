@@ -97,7 +97,7 @@
             }
             [_priv_states setObject:state forKey:state.name];
         } else {
-            @throw ([NSException tb_notOfTypeStateMachineStateException:object]);
+            @throw ([NSException tb_notOfTypeStateException:object]);
         }
     }
     _initialState = states[0];

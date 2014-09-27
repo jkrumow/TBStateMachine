@@ -82,7 +82,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *destinationStat
 /**
  *  The transition's name.
  *
- *  @return the name.
+ *  @return The name.
  */
 - (NSString *)name;
 

@@ -22,9 +22,9 @@ static NSString * const TBSMMissingStateMachineExceptionReason = @"Sub state '%@
 
 @implementation NSException (TBStateMachine)
 
-+ (NSException *)tb_notOfTypeStateMachineStateException:(id)object
++ (NSException *)tb_notOfTypeStateException:(id)object
 {
-    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNotAStateMachineExceptionReason, object] userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNotOfTypeStateExceptionReason, object] userInfo:nil];
 }
 
 + (NSException *)tb_nonExistingStateException:(NSString *)stateName

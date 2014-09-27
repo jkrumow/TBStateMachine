@@ -23,15 +23,15 @@
  *  A node can be:
  *
  *  - a simple state - represented by `TBSMState`
- *  - a sub-state machine - represented by `TBSMSubState`
- *  - a wrapper for multiple parallel state machines - represented by `TBSMParallelState`
+ *  - a wrapper for a sub state machine - represented by `TBSMSubState`
+ *  - a wrapper for parallel state machines - represented by `TBSMParallelState`
  *
  *  All classes mentioned above implement the `TBSMNode` protocol.
  *
  *  To set the state machine up properly:
  *
  *  - set at least one state via -setStates:
- *  - set an initial state (which has already been added to the state machine) via -setInitialState:
+ *  - set an initial state (optional. The first state in the provided array is always set as the initial state)
  *  - call -setUp to activate the state machine
  *  - call -tearDown to deactivate the state machine
  *

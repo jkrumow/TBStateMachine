@@ -24,7 +24,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The NSException instance.
  */
-+ (NSException *)tb_notOfTypeStateMachineStateException:(id)object;
++ (NSException *)tb_notOfTypeStateException:(id)object;
 
 /**
  *  Thrown when a specified `TBSMState` instance does not exist in the state machine.
