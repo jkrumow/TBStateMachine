@@ -1,5 +1,5 @@
 //
-//  TBSM.h
+//  TBSMStateMachine.h
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
