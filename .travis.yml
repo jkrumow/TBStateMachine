@@ -3,7 +3,7 @@
 language: objective-c
 # before_install: cd Example && pod install && cd -
 
-before-script:
+before_install:
   - sudo easy_install cpp-coveralls
 
 script:
