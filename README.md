@@ -88,9 +88,9 @@ TBSMActionBlock action = ^(TBSMState *sourceState, TBSMState *destinationState, 
     // ...
 };
 
-TBSMGuardBlock guard = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                
-    // ...
+TBSMGuardBlock guard = ^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+
+    return YES;
 };
 
 [stateA registerEvent:eventA target:stateB action:action guard:guard];

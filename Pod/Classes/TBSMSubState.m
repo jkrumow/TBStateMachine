@@ -29,7 +29,7 @@
     }
     self = [super initWithName:name];
     if (self) {
-        _stateMachine = stateMachine;
+        self.stateMachine = stateMachine;
     }
     return self;
 }
@@ -38,6 +38,7 @@
 
 - (void)setStateMachine:(TBSMStateMachine *)stateMachine
 {
+    _stateMachine = stateMachine;
     [_stateMachine setParentState:self.parentState];
 }
 

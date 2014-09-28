@@ -104,13 +104,47 @@ describe(@"TBSM", ^{
             }).to.raise(TBSMException);
         });
         
-        it(@"throws TBSMException initial state does not exist in set of defined states.", ^{
+        it(@"throws TBSMException when initial state does not exist in set of defined states.", ^{
             NSArray *states = @[stateA, stateB];
             stateMachine.states = states;
             expect(^{
                 stateMachine.initialState = stateC;
             }).to.raise(TBSMException);
             
+        });
+        
+        it(@"throws an TBSMException when initial state has not been set on setup.", ^{
+            expect(^{
+                [stateMachine setUp];
+            }).to.raise(TBSMException);
+        });
+        
+    });
+    
+    describe(@"Location inside hierarchy.", ^{
+    
+        it(@"returns its path inside the state machine hierarchy.", ^{
+            
+            subStateMachineB.states = @[stateA];
+            TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
+            subStateMachineA.states = @[subStateB];
+            
+            parallelStates.states = @[subStateMachineA];
+            stateMachine.states = @[parallelStates];
+            stateMachine.initialState = parallelStates;
+            
+            NSArray *path = [subStateMachineB getPath];
+            
+            expect(path.count).to.equal(4);
+            expect(path[0]).to.equal(stateMachine);
+            expect(path[1]).to.equal(parallelStates);
+            expect(path[2]).to.equal(subStateMachineA);
+            expect(path[3]).to.equal(subStateB);
+        });
+        
+        it(@"returns its name.", ^{
+            TBSMStateMachine *stateMachineXYZ = [TBSMStateMachine stateMachineWithName:@"StateMachineXYZ"];
+            expect(stateMachineXYZ.name).to.equal(@"StateMachineXYZ");
         });
         
     });
@@ -138,6 +172,9 @@ describe(@"TBSM", ^{
             
             stateMachine.states = states;
             stateMachine.initialState = stateA;
+            
+            expect(stateMachine.initialState).to.equal(stateA);
+            
             [stateMachine setUp];
             
             expect(stateMachine.currentState).to.equal(stateA);
