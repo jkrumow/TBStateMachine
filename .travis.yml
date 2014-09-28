@@ -2,5 +2,12 @@
 
 language: objective-c
 # before_install: cd Example && pod install && cd -
+
+before-script:
+  - sudo easy_install cpp-coveralls
+
 script:
-- xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+  - xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+
+after_success:
+  - ./coveralls.rb --extension m --exclude-folder Example
