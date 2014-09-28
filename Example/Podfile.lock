@@ -1,0 +1,20 @@
+PODS:
+  - Expecta (0.3.1)
+  - Specta (0.2.1)
+  - TBStateMachine (3.0.0)
+
+DEPENDENCIES:
+  - Expecta
+  - Specta (~> 0.2.1)
+  - TBStateMachine (from `../`)
+
+EXTERNAL SOURCES:
+  TBStateMachine:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Expecta: 03aabd0a89d8dea843baecb19a7fd7466a69a31d
+  Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
+  TBStateMachine: a4910613929d8b1934cbde4d491ec4b30b5648c9
+
+COCOAPODS: 0.34.1

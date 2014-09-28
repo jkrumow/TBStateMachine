@@ -21,7 +21,3 @@ DerivedData
 
 # Bundler
 .bundle
-
-# Cocoapods
-Pods
-Podfile.lock
