@@ -76,13 +76,31 @@ describe(@"TBSMState", ^{
         
     });
     
-    it(@"registers TBSMEventBlock instances by the name of a provided TBSMEvent instance.", ^{
+    it(@"returns its name.", ^{
+        TBSMState *stateXYZ = [TBSMState stateWithName:@"StateXYZ"];
+        expect(stateXYZ.name).to.equal(@"StateXYZ");
+    });
+    
+    it(@"registers TBSMEvent instances with a given target TBSMState.", ^{
         
-        [stateA registerEvent:eventA target:nil];
+        [stateA registerEvent:eventA target:stateA];
         
         NSDictionary *registeredEvents = stateA.eventHandlers;
         expect(registeredEvents.allKeys).to.haveCountOf(1);
         expect(registeredEvents).to.contain(eventA.name);
+        
+        TBSMEventHandler *eventHandler = registeredEvents[eventA.name];
+        expect(eventHandler.target).to.equal(stateA);
+    });
+    
+    it(@"unregisters TBSMEvent instances.", ^{
+        
+        [stateA registerEvent:eventA target:stateA];
+        [stateA unregisterEvent:eventA];
+        
+        NSDictionary *registeredEvents = stateA.eventHandlers;
+        expect(registeredEvents.allKeys).to.haveCountOf(0);
+        expect(registeredEvents).notTo.contain(eventA.name);
     });
     
     it(@"handles events by returning nil or a TBSMTransition containing source and destination state.", ^{
@@ -98,7 +116,7 @@ describe(@"TBSMState", ^{
         expect(resultB.destinationState).to.equal(stateB);
     });
     
-    it(@"returns its path inside the state machine hierarchy", ^{
+    it(@"returns its path inside the state machine hierarchy.", ^{
         
         subStateMachineB.states = @[stateA];
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A6C67E1EE074EF7B9F3DB6B /* libPods-TBStateMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92468FFB7995400DA10E71AF /* libPods-TBStateMachine.a */; };
+		150FD64019D8543E00D9D1BA /* TBStateMachineTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 150FD63F19D8543E00D9D1BA /* TBStateMachineTransitionTests.m */; };
 		151C5C0C19CDF6A4003D21AE /* TBStateMachineSubStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */; };
 		155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */; };
 		155BB54C19C6122B00EB1C74 /* TBStateMachineStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		150FD63F19D8543E00D9D1BA /* TBStateMachineTransitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineTransitionTests.m; sourceTree = "<group>"; };
 		151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineSubStateTests.m; sourceTree = "<group>"; };
 		155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineSimpleTests.m; sourceTree = "<group>"; };
 		155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineStateTests.m; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */,
 				6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */,
 				155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */,
+				150FD63F19D8543E00D9D1BA /* TBStateMachineTransitionTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -395,6 +398,7 @@
 			files = (
 				15A2F99E19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m in Sources */,
 				6003F5BC195388D20070C39A /* TBStateMachineParallelStateTests.m in Sources */,
+				150FD64019D8543E00D9D1BA /* TBStateMachineTransitionTests.m in Sources */,
 				151C5C0C19CDF6A4003D21AE /* TBStateMachineSubStateTests.m in Sources */,
 				155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */,
 				155BB54E19C612A400EB1C74 /* TBStateMachineEventTests.m in Sources */,
@@ -537,6 +541,8 @@
 				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TBStateMachine/TBStateMachine-Prefix.pch";
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -576,6 +582,7 @@
 				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TBStateMachine/TBStateMachine-Prefix.pch";
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -609,6 +616,8 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (

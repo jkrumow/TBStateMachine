@@ -65,7 +65,7 @@
     if (_initialState) {
         [self switchState:nil destinationState:_initialState data:nil action:nil];
     } else {
-        @throw [NSException tb_nonExistingStateException:@"initialState"];
+        @throw [NSException tb_noInitialStateException:@"initialState"];
     }
 }
 

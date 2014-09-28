@@ -91,6 +91,17 @@ describe(@"TBSMParallelState", ^{
         
     });
     
+    it(@"returns its states.", ^{
+        subStateMachineA.states = @[stateA];
+        subStateMachineB.states = @[stateB];
+        parallelStates.states = @[subStateMachineA, subStateMachineB];
+        
+        expect(parallelStates.states).notTo.beNil;
+        expect(parallelStates.states.count).to.equal(2);
+        expect(parallelStates.states[0]).to.equal(subStateMachineA);
+        expect(parallelStates.states[1]).to.equal(subStateMachineB);
+    });
+    
     it(@"switches states on all registered states", ^{
         
         __block BOOL enteredStateA = NO;

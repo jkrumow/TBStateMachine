@@ -3,7 +3,8 @@
 [![Version](https://img.shields.io/cocoapods/v/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![License](https://img.shields.io/cocoapods/l/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![Platform](https://img.shields.io/cocoapods/p/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
-[![Build Status](https://img.shields.io/travis/tarbrain/TBStateMachine/master.svg?style=flat)](https://travis-ci.org/tarbrain/TBStateMachine)
+[![Build Status](https://img.shields.io/travis/tarbrain/TBStateMachine/master.svg?style=flat)](https://travis-ci.org/tarbrain/TBStateMachine?branch=master)
+[![Coverage Status](https://img.shields.io/coveralls/tarbrain/TBStateMachine.svg?style=flat)](https://coveralls.io/r/tarbrain/TBStateMachine?branch=master)
 
 
 A lightweight event-driven hierarchical state machine implementation in Objective-C.
@@ -88,9 +89,9 @@ TBSMActionBlock action = ^(TBSMState *sourceState, TBSMState *destinationState, 
     // ...
 };
 
-TBSMGuardBlock guard = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                
-    // ...
+TBSMGuardBlock guard = ^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+
+    return YES;
 };
 
 [stateA registerEvent:eventA target:stateB action:action guard:guard];

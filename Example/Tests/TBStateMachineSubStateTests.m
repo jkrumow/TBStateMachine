@@ -90,8 +90,14 @@ describe(@"TBSMSubState", ^{
         
     });
     
+    it(@"returns the hosted state machine.", ^{
+        subStateMachineB.states = @[stateA];
+        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
+        expect(subStateB.stateMachine).to.equal(subStateMachineB);
+    
+    });
+    
     it(@"registers TBSMEventBlock instances by the name of a provided TBSMEvent instance.", ^{
-        
         [subState registerEvent:eventA target:nil];
         
         NSDictionary *registeredEvents = subState.eventHandlers;

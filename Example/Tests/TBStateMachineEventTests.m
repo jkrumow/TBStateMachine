@@ -31,6 +31,11 @@ describe(@"TBSMEvent", ^{
             
         });
         
+        it (@"returns its name.", ^{
+            TBSMEvent *event = [TBSMEvent eventWithName:@"a"];
+            expect(event.name).to.equal(@"a");
+        });
+        
     });
     
 });
@@ -53,6 +58,11 @@ describe(@"TBSMEventHandler", ^{
                 [TBSMEventHandler eventHandlerWithName:@"" target:nil action:nil guard:nil];
             }).to.raise(TBSMException);
             
+        });
+        
+        it (@"returns its name.", ^{
+            TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:@"a" target:nil action:nil guard:nil];
+            expect(eventHandler.name).to.equal(@"a");
         });
         
     });
