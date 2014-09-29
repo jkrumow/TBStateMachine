@@ -1,13 +1,14 @@
 # reference: http://www.objc.io/issue-6/travis-ci.html
 
 language: objective-c
-# before_install: cd Example && pod install && cd -
 
 before_install:
-  - sudo easy_install cpp-coveralls
+  - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
+  - gem install slather --no-rdoc --no-ri --no-document --quiet
+  - cd Example && pod install && cd $TRAVIS_BUILD_DIR
 
 script:
   - xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 
 after_success:
-  - ./coveralls.rb --extension m --exclude-folder Example
+  - slather
