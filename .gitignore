@@ -18,6 +18,11 @@ profile
 DerivedData
 *.hmap
 *.ipa
+*.xcworkspace
+
 
 # Bundler
 .bundle
+
+# Cocoapods
+Pods
