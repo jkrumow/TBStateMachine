@@ -70,11 +70,6 @@
     [super exit:sourceState destinationState:destinationState data:data];
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
-{
-    return [self handleEvent:event data:nil];
-}
-
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
     [_stateMachine handleEvent:event data:data];

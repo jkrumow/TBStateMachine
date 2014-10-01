@@ -246,11 +246,6 @@
     return path;
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
-{
-    return [self handleEvent:event data:nil];
-}
-
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
     return [self _handleEvent:event data:data];

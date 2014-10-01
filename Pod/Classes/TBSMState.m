@@ -94,11 +94,6 @@
     }
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
-{
-    return [self handleEvent:event data:nil];
-}
-
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
     if ([self _canHandleEvent:event]) {
