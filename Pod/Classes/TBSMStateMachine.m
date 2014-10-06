@@ -31,7 +31,7 @@
 
 @implementation TBSMStateMachine
 
-+ (TBSMStateMachine *)stateMachineWithName:(NSString *)name;
++ (TBSMStateMachine *)stateMachineWithName:(NSString *)name
 {
     return [[TBSMStateMachine alloc] initWithName:name];
 }
