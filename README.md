@@ -43,13 +43,13 @@ Create a state, set enter and exit blocks:
 
 ```objective-c
 TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
-stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+stateA.enterBlock = ^(TBSMState *source, TBSMState *destination, NSDictionary *data) {
         
     // ...
        
 };
     
-stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+stateA.exitBlock = ^(TBSMState *source, TBSMState *destination, NSDictionary *data) {
         
     // ...
        
@@ -77,31 +77,31 @@ The state machine will immediately enter the initial state.
 You can register an event handler from a given event and target state:
 
 ```objective-c
-[stateA registerEvent:eventA target:stateB];
+[stateA registerEvent:event target:stateB];
 ```
 
 You can also register an event handler with additional action and guard blocks:
 
 ```objective-c
 
-TBSMActionBlock action = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+TBSMActionBlock action = ^(TBSMState *source, TBSMState *destination, NSDictionary *data) {
                 
     // ...
 };
 
-TBSMGuardBlock guard = ^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictionary *data) {
 
     return YES;
 };
 
-[stateA registerEvent:eventA target:stateB action:action guard:guard];
+[stateA registerEvent:event target:stateB action:action guard:guard];
 ```
 
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
 ```objective-c
-TBSMEvent *eventA = [TBSMEvent eventWithName:@"EventA"];
-[stateMachine scheduleEvent:eventA];
+TBSMEvent *event = [TBSMEvent eventWithName:@"EventA"];
+[stateMachine scheduleEvent:event];
 ```
 
 The state machine will queue all events it receives until processing of the current event has finished.
@@ -111,11 +111,11 @@ The state machine will queue all events it receives until processing of the curr
 `TBSMStateMachine` instances can also be nested as sub-state machines. To achieve this you will use the `TBSMSubState` wrapper class:
 
 ```objective-c
-TBSMStateMachine *subStateMachine = [TBSMStateMachine stateMachineWithName:@"SubA"];
-subStateMachine.states = @[stateC, stateD];
+TBSMStateMachine *subMachine = [TBSMStateMachine stateMachineWithName:@"Sub"];
+subMachine.states = @[stateC, stateD];
 
 TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState" 
-                                           stateMachine:subStateMachine];
+                                           stateMachine:subMachine];
 
 stateMachine.states = @[stateA, stateB, subState];
 ```
@@ -127,10 +127,10 @@ You can also register events, add enter and exit blocks on `TBSMSubState`, since
 To run multiple state machines in parallel you will use the `TBSMParallelState`:
 
 ```objective-c
-TBSMParallelState *parallelState = [TBSMParallelState parallelStateWithName:@"PS"];
-parallelState.states = @[subStateMachineA, subStateMachineB, subStateMachineC];
+TBSMParallelState *parallel = [TBSMParallelState parallelStateWithName:@"P"];
+parallel.states = @[subMachineA, subMachineB, subMachineC];
     
-stateMachine.states = @[stateA, stateB, parallelState];
+stateMachine.states = @[stateA, stateB, parallel];
 ```
 
 ### Concurrency
