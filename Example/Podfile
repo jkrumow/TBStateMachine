@@ -1,4 +1,4 @@
-# source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
 
 target 'TBStateMachine', :exclusive => true do
   pod "TBStateMachine", :path => "../"
@@ -9,11 +9,4 @@ target 'Tests', :exclusive => true do
 
   pod 'Specta', '~> 0.2.1'
   pod 'Expecta'
-end
-
-begin
-    require 'slather'
-    Slather.prepare_pods(self)
-    rescue LoadError
-    puts 'Slather has been disabled (not installed).'
 end

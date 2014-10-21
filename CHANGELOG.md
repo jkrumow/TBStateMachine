@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 3.0.1
+
+- removed method `- (TBSMTransition *)handleEvent:(TBSMEvent *)event` from `TBSMNode` protocol
+
 ## 3.0.0
 
 - changed class name to use prefix `TBSM` instead of `TBStateMachine`
@@ -35,7 +39,6 @@
 
 - updated documentation
 - updated API
-
 
 ## 0.9.0
 

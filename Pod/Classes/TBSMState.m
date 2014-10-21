@@ -21,7 +21,7 @@
 
 @implementation TBSMState
 
-+ (TBSMState *)stateWithName:(NSString *)name;
++ (TBSMState *)stateWithName:(NSString *)name
 {
     return [[TBSMState alloc] initWithName:name];
 }
@@ -55,7 +55,7 @@
     [_eventHandlers setObject:eventHandler forKey:event.name];
 }
 
-- (void)unregisterEvent:(TBSMEvent *)event;
+- (void)unregisterEvent:(TBSMEvent *)event
 {
     [_eventHandlers removeObjectForKey:event.name];
 }
@@ -92,11 +92,6 @@
     if (_exitBlock) {
         _exitBlock(sourceState, destinationState, data);
     }
-}
-
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
-{
-    return [self handleEvent:event data:nil];
 }
 
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data

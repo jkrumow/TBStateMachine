@@ -31,7 +31,7 @@
 
 @implementation TBSMStateMachine
 
-+ (TBSMStateMachine *)stateMachineWithName:(NSString *)name;
++ (TBSMStateMachine *)stateMachineWithName:(NSString *)name
 {
     return [[TBSMStateMachine alloc] initWithName:name];
 }
@@ -244,11 +244,6 @@
         state = state.parentState;
     }
     return path;
-}
-
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
-{
-    return [self handleEvent:event data:nil];
 }
 
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data

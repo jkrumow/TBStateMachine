@@ -108,10 +108,10 @@ describe(@"TBSMState", ^{
         [stateA registerEvent:eventA target:nil];
         [stateA registerEvent:eventB target:stateB];
         
-        TBSMTransition *resultA = [stateA handleEvent:eventA];
+        TBSMTransition *resultA = [stateA handleEvent:eventA data:nil];
         expect(resultA).to.beNil;
         
-        TBSMTransition *resultB = [stateA handleEvent:eventB];
+        TBSMTransition *resultB = [stateA handleEvent:eventB data:nil];
         expect(resultB.sourceState).to.equal(stateA);
         expect(resultB.destinationState).to.equal(stateB);
     });

@@ -50,17 +50,6 @@
 - (void)setParentState:(id<TBSMNode>)parentState;
 
 /**
- *  Receives a specified `TBSMEvent` instance.
- *
- *  If the node recognizes the given `TBSMEvent` the corresponding `TBSMEventBlock` is executed.
- *
- *  @param event The given `TBSMEvent` instance.
- *
- *  @return The next state or `nil`.
- */
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event;
-
-/**
  *  Receives a specified `TBSMEvent` instance and payload dictionary.
  *
  *  If the node recognizes the given `TBSMEvent` the corresponding `TBSMEventBlock` is executed
