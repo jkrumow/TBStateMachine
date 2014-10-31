@@ -34,7 +34,7 @@ __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
 
-describe(@"TBSM", ^{
+describe(@"TBSMStateMachine", ^{
     
     beforeEach(^{
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
@@ -384,6 +384,67 @@ describe(@"TBSM", ^{
         
         expect(destinationStateA).to.equal(stateB);
         expect(sourceStateB).to.equal(stateA);
+        
+        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
+        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
+        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+    });
+    
+    it(@"switches nowhere if the destination state was not found using lowest common ancestor algorithm.", ^{
+        
+        NSArray *expectedExecutionSequence = @[@"subStateA_enter",
+                                               @"stateA_enter"];
+        
+        NSMutableArray *executionSequence = [NSMutableArray new];
+        
+        // setup sub-state machine A
+        stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateA_enter"];
+        };
+        
+        stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateA_exit"];
+        };
+        
+        [stateA registerEvent:eventA target:stateF];
+        
+        NSArray *subStatesA = @[stateA];
+        subStateMachineA.states = subStatesA;
+        subStateMachineA.initialState = stateA;
+        
+        // setup sub-state machine B
+        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateB_enter"];
+        };
+        
+        NSArray *subStatesB = @[stateB];
+        subStateMachineB.states = subStatesB;
+        subStateMachineB.initialState = stateB;
+        
+        // setup sub state machine wrapper
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"SubStateB" stateMachine:subStateMachineB];
+        
+        subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"subStateA_enter"];
+        };
+        
+        subStateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"subStateA_exit"];
+        };
+        
+        subStateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"subStateB_enter"];
+        };
+        
+        // setup main state machine
+        NSArray *states = @[subStateA, subStateB];
+        stateMachine.states = states;
+        stateMachine.initialState = subStateA;
+        [stateMachine setUp];
+        
+        // moves to state F
+        [stateMachine scheduleEvent:eventA];
         
         NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
         NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];

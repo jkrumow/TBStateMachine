@@ -75,17 +75,17 @@
         [self switchState:_currentState destinationState:nil data:nil action:nil];
     }
     _currentState = nil;
-    [_priv_states removeAllObjects];
+    [self.priv_states removeAllObjects];
 }
 
 - (NSArray *)states
 {
-    return [NSArray arrayWithArray:_priv_states.allValues];
+    return [NSArray arrayWithArray:self.priv_states.allValues];
 }
 
 - (void)setStates:(NSArray *)states
 {
-    [_priv_states removeAllObjects];
+    [self.priv_states removeAllObjects];
     
     for (id object in states) {
         if ([object isKindOfClass:[TBSMState class]])  {
@@ -95,7 +95,7 @@
             } else {
                 [state setParentState:self];
             }
-            [_priv_states setObject:state forKey:state.name];
+            [self.priv_states setObject:state forKey:state.name];
         } else {
             @throw ([NSException tb_notOfTypeStateException:object]);
         }
@@ -105,7 +105,7 @@
 
 - (void)setInitialState:(TBSMState *)initialState
 {
-    if ([_priv_states objectForKey:initialState.name]) {
+    if ([self.priv_states objectForKey:initialState.name]) {
         _initialState = initialState;
     } else {
         @throw [NSException tb_nonExistingStateException:initialState.name];
@@ -119,7 +119,7 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
-    @synchronized(_eventQueue) {
+    @synchronized(self.eventQueue) {
         
         NSDictionary *queuedEvent = nil;
         if (data) {
@@ -128,13 +128,13 @@
             queuedEvent = @{@"event" : event};
         }
         
-        [_eventQueue addObject:queuedEvent];
+        [self.eventQueue addObject:queuedEvent];
         
         if (self.isProcessingEvent) {
             NSLog(@"Queuing event %@", event.name);
         } else {
-            while (_eventQueue.count > 0) {
-                NSLog(@"%lu more scheduled events to handle.", (unsigned long)_eventQueue.count);
+            while (self.eventQueue.count > 0) {
+                NSLog(@"%lu more scheduled events to handle.", (unsigned long)self.eventQueue.count);
                 
                 dispatch_sync(_eventDispatchQueue, ^{
                     [self _handleNextEvent];
@@ -224,10 +224,10 @@
 
 - (void)_handleNextEvent
 {
-    if (_eventQueue.count > 0) {
+    if (self.eventQueue.count > 0) {
         self.processesEvent = YES;
-        NSDictionary *queuedEvent = _eventQueue[0];
-        [_eventQueue removeObject:queuedEvent];
+        NSDictionary *queuedEvent = self.eventQueue[0];
+        [self.eventQueue removeObject:queuedEvent];
         [self handleEvent:queuedEvent[@"event"] data:queuedEvent[@"data"]];
         self.processesEvent = NO;
     }
