@@ -1,5 +1,5 @@
 //
-//  TBStateMachineNestedTests.m
+//  TBSMStateMachineNestedTests.m
 //  TBStateMachineTests
 //
 //  Created by Julian Krumow on 18.09.14.
@@ -8,7 +8,7 @@
 
 #import <TBStateMachine/TBSMStateMachine.h>
 
-SpecBegin(TBStateMachineNested)
+SpecBegin(TBSMStateMachineNested)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";

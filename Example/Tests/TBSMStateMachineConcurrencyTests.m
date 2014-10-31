@@ -1,5 +1,5 @@
 //
-//  TBStateMachineConcurrencyTests.m
+//  TBSMStateMachineConcurrencyTests.m
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 18.09.14.
@@ -8,7 +8,7 @@
 
 #import <TBStateMachine/TBSMStateMachine.h>
 
-SpecBegin(TBStateMachineConcurrency)
+SpecBegin(TBSMStateMachineConcurrency)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";
@@ -34,7 +34,7 @@ __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
 
-describe(@"TBSM", ^{
+describe(@"TBSMStateMachine", ^{
     
     beforeEach(^{
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];

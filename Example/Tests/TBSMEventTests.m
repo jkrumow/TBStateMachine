@@ -1,5 +1,5 @@
 //
-//  TBStateMachineEventTests.m
+//  TBSMEventTests.m
 //  TBStateMachineTests
 //
 //  Created by Julian Krumow on 14.09.14.
@@ -8,7 +8,7 @@
 
 #import <TBStateMachine/TBSMStateMachine.h>
 
-SpecBegin(StateMachineEvent)
+SpecBegin(TBSMEvent)
 
 
 describe(@"TBSMEvent", ^{

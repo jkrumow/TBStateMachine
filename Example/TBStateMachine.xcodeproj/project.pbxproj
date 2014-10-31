@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		0A6C67E1EE074EF7B9F3DB6B /* libPods-TBStateMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92468FFB7995400DA10E71AF /* libPods-TBStateMachine.a */; };
-		150FD64019D8543E00D9D1BA /* TBStateMachineTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 150FD63F19D8543E00D9D1BA /* TBStateMachineTransitionTests.m */; };
-		151C5C0C19CDF6A4003D21AE /* TBStateMachineSubStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */; };
-		155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */; };
-		155BB54C19C6122B00EB1C74 /* TBStateMachineStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */; };
-		155BB54E19C612A400EB1C74 /* TBStateMachineEventTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */; };
-		15A2F99C19CB4CD600614B4E /* TBStateMachineNestedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */; };
-		15A2F99E19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */; };
+		150FD64019D8543E00D9D1BA /* TBSMTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */; };
+		151C5C0C19CDF6A4003D21AE /* TBSMSubStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */; };
+		155BB54A19C610D200EB1C74 /* TBSMStateMachineSimpleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */; };
+		155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */; };
+		155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54D19C612A400EB1C74 /* TBSMEventTests.m */; };
+		15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */; };
+		15A2F99E19CB4DB800614B4E /* TBSMStateMachineConcurrencyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99D19CB4DB800614B4E /* TBSMStateMachineConcurrencyTests.m */; };
 		15B1453819BCFDA700924D92 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 15B1453719BCFDA700924D92 /* CHANGELOG.md */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -30,7 +30,7 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* TBStateMachineParallelStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */; };
+		6003F5BC195388D20070C39A /* TBSMParallelStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */; };
 		E39D0008817A43C28A3CFFBB /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D52824CE23284B9F8AF945DA /* libPods-Tests.a */; };
 /* End PBXBuildFile section */
 
@@ -45,13 +45,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		150FD63F19D8543E00D9D1BA /* TBStateMachineTransitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineTransitionTests.m; sourceTree = "<group>"; };
-		151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineSubStateTests.m; sourceTree = "<group>"; };
-		155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineSimpleTests.m; sourceTree = "<group>"; };
-		155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineStateTests.m; sourceTree = "<group>"; };
-		155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineEventTests.m; sourceTree = "<group>"; };
-		15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineNestedTests.m; sourceTree = "<group>"; };
-		15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineConcurrencyTests.m; sourceTree = "<group>"; };
+		150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMTransitionTests.m; sourceTree = "<group>"; };
+		151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMSubStateTests.m; sourceTree = "<group>"; };
+		155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineSimpleTests.m; sourceTree = "<group>"; };
+		155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateTests.m; sourceTree = "<group>"; };
+		155BB54D19C612A400EB1C74 /* TBSMEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMEventTests.m; sourceTree = "<group>"; };
+		15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineNestedTests.m; sourceTree = "<group>"; };
+		15A2F99D19CB4DB800614B4E /* TBSMStateMachineConcurrencyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineConcurrencyTests.m; sourceTree = "<group>"; };
 		15B1453719BCFDA700924D92 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		45DE11B7756962DA59F9E54D /* Pods-TBStateMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBStateMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-TBStateMachine/Pods-TBStateMachine.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* TBStateMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TBStateMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,7 +73,7 @@
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineParallelStateTests.m; sourceTree = "<group>"; };
+		6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TBSMParallelStateTests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		92468FFB7995400DA10E71AF /* libPods-TBStateMachine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TBStateMachine.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98191D3EC64DE11776F81351 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -174,14 +174,14 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				155BB54919C610D200EB1C74 /* TBStateMachineSimpleTests.m */,
-				15A2F99B19CB4CD600614B4E /* TBStateMachineNestedTests.m */,
-				15A2F99D19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m */,
-				155BB54B19C6122B00EB1C74 /* TBStateMachineStateTests.m */,
-				151C5C0B19CDF6A3003D21AE /* TBStateMachineSubStateTests.m */,
-				6003F5BB195388D20070C39A /* TBStateMachineParallelStateTests.m */,
-				155BB54D19C612A400EB1C74 /* TBStateMachineEventTests.m */,
-				150FD63F19D8543E00D9D1BA /* TBStateMachineTransitionTests.m */,
+				155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */,
+				15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */,
+				15A2F99D19CB4DB800614B4E /* TBSMStateMachineConcurrencyTests.m */,
+				155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */,
+				151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */,
+				6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */,
+				155BB54D19C612A400EB1C74 /* TBSMEventTests.m */,
+				150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -396,14 +396,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15A2F99E19CB4DB800614B4E /* TBStateMachineConcurrencyTests.m in Sources */,
-				6003F5BC195388D20070C39A /* TBStateMachineParallelStateTests.m in Sources */,
-				150FD64019D8543E00D9D1BA /* TBStateMachineTransitionTests.m in Sources */,
-				151C5C0C19CDF6A4003D21AE /* TBStateMachineSubStateTests.m in Sources */,
-				155BB54A19C610D200EB1C74 /* TBStateMachineSimpleTests.m in Sources */,
-				155BB54E19C612A400EB1C74 /* TBStateMachineEventTests.m in Sources */,
-				15A2F99C19CB4CD600614B4E /* TBStateMachineNestedTests.m in Sources */,
-				155BB54C19C6122B00EB1C74 /* TBStateMachineStateTests.m in Sources */,
+				15A2F99E19CB4DB800614B4E /* TBSMStateMachineConcurrencyTests.m in Sources */,
+				6003F5BC195388D20070C39A /* TBSMParallelStateTests.m in Sources */,
+				150FD64019D8543E00D9D1BA /* TBSMTransitionTests.m in Sources */,
+				151C5C0C19CDF6A4003D21AE /* TBSMSubStateTests.m in Sources */,
+				155BB54A19C610D200EB1C74 /* TBSMStateMachineSimpleTests.m in Sources */,
+				155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */,
+				15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */,
+				155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

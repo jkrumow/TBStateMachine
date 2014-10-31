@@ -1,5 +1,5 @@
 //
-//  TBStateMachineParallelStateTests.m
+//  TBSMParallelStateTests.m
 //  TBStateMachineTests
 //
 //  Created by Julian Krumow on 01.08.2014.
@@ -8,7 +8,7 @@
 
 #import <TBStateMachine/TBSMStateMachine.h>
 
-SpecBegin(TBStateMachineParallelState)
+SpecBegin(TBSMParallelState)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";

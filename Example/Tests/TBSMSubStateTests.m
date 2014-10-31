@@ -1,5 +1,5 @@
 //
-//  TBStateMachineSubStateTests.m
+//  TBSMSubStateTests.m
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 20.09.14.
@@ -8,7 +8,7 @@
 
 #import <TBStateMachine/TBSMStateMachine.h>
 
-SpecBegin(StateMachineSubState)
+SpecBegin(TBSMSubState)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";

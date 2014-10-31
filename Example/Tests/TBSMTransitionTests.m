@@ -1,5 +1,5 @@
 //
-//  TBStateMachineTransitionTests.m
+//  TBSMTransitionTests.m
 //  TBStateMachineTests
 //
 //  Created by Julian Krumow on 28.09.14.
@@ -8,11 +8,10 @@
 
 #import <TBStateMachine/TBSMStateMachine.h>
 
-SpecBegin(StateMachineTransition)
+SpecBegin(TBSMTransition)
 
 __block TBSMState *stateA;
 __block TBSMState *stateB;
-
 
 
 describe(@"TBSMTransition", ^{

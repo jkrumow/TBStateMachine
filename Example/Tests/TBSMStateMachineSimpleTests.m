@@ -1,5 +1,5 @@
 //
-//  TBStateMachineSimpleTests.m
+//  TBSMStateMachineSimpleTests.m
 //  TBStateMachineTests
 //
 //  Created by Julian Krumow on 14.09.2014.
@@ -8,7 +8,7 @@
 
 #import <TBStateMachine/TBSMStateMachine.h>
 
-SpecBegin(TBStateMachineSimple)
+SpecBegin(TBSMStateMachineSimple)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";
@@ -33,7 +33,7 @@ __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
 
-describe(@"TBSM", ^{
+describe(@"TBSMStateMachine", ^{
     
     beforeEach(^{
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
