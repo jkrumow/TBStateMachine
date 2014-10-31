@@ -90,11 +90,7 @@
     for (id object in states) {
         if ([object isKindOfClass:[TBSMState class]])  {
             TBSMState *state = object;
-            if (self.parentState) {
-                [state setParentState:self.parentState];
-            } else {
-                [state setParentState:self];
-            }
+            [state setParentState:self];
             [self.priv_states setObject:state forKey:state.name];
         } else {
             @throw ([NSException tb_notOfTypeStateException:object]);
