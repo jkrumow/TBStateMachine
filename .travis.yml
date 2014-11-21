@@ -1,7 +1,5 @@
 # reference: http://www.objc.io/issue-6/travis-ci.html
 
-osx_image: xcode61
-
 language: objective-c
 
 before_install:
