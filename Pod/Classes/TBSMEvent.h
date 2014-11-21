@@ -9,9 +9,6 @@
 #import <Foundation/Foundation.h>
 
 
-@class TBSMEvent;
-
-
 /**
  *  This class represents an event in a state machine.
  */

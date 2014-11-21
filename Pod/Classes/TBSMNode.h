@@ -8,9 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@class TBSMState;
-@class TBSMEvent;
-@class TBSMTransition;
+#import "TBSMTransition.h"
+#import "TBSMEvent.h"
 
 /**
  *  This protocol defines a node in a state machine.

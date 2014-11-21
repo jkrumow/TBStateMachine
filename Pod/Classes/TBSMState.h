@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TBSMTransition.h"
-#import "TBSMEvent.h"
 #import "TBSMNode.h"
 
 /**

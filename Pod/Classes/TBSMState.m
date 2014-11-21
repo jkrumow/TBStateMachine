@@ -9,7 +9,6 @@
 #import "TBSMState.h"
 #import "NSException+TBStateMachine.h"
 #import "TBSMEventHandler.h"
-#import "TBSMStateMachine.h"
 
 @interface TBSMState ()
 

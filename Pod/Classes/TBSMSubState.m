@@ -10,12 +10,8 @@
 #import "TBSMStateMachine.h"
 #import "NSException+TBStateMachine.h"
 
-@interface TBSMSubState ()
-
-@end
 
 @implementation TBSMSubState
-
 
 + (TBSMSubState *)subStateWithName:(NSString *)name stateMachine:(TBSMStateMachine *)stateMachine
 {
