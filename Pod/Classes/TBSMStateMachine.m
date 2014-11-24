@@ -212,6 +212,8 @@
             TBSMStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
             if (lowestCommonAncestor) {
                 [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
+            } else {
+                NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
             }
         }
     }
