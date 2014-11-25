@@ -213,7 +213,7 @@
             if (lowestCommonAncestor) {
                 [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
             } else {
-                NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
+                NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
             }
         }
     }
