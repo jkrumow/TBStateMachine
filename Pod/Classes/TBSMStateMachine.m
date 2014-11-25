@@ -96,7 +96,9 @@
             @throw ([NSException tb_notOfTypeStateException:object]);
         }
     }
-    _initialState = states[0];
+    if (states.count > 0) {
+        _initialState = states[0];
+    }
 }
 
 - (void)setInitialState:(TBSMState *)initialState
