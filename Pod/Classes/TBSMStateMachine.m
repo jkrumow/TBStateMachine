@@ -128,12 +128,8 @@
         
         [self.eventQueue addObject:queuedEvent];
         
-        if (self.isProcessingEvent) {
-            NSLog(@"Queuing event %@", event.name);
-        } else {
+        if (!self.isProcessingEvent) {
             while (self.eventQueue.count > 0) {
-                NSLog(@"%lu more scheduled events to handle.", (unsigned long)self.eventQueue.count);
-                
                 dispatch_sync(_eventDispatchQueue, ^{
                     [self _handleNextEvent];
                 });
