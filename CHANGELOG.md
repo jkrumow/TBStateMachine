@@ -1,5 +1,10 @@
 # TBStateMachine CHANGELOG
 
+## 3.0.2
+
+- removed log messages
+- code cleanup
+
 ## 3.0.1
 
 - removed method `- (TBSMTransition *)handleEvent:(TBSMEvent *)event` from `TBSMNode` protocol
