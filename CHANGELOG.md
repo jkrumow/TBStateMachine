@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 3.0.3
+
+- removed internal dispatch queues
+
 ## 3.0.2
 
 - removed log messages
