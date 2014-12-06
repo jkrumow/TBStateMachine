@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 3.0.4
+
+- re-added internal dispatch queue for TBSMParallelState
+
 ## 3.0.3
 
 - removed internal dispatch queues
