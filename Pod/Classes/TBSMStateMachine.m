@@ -10,12 +10,6 @@
 
 @interface TBSMStateMachine ()
 
-#if OS_OBJECT_USE_OBJC
-@property (nonatomic, strong) dispatch_queue_t eventDispatchQueue;
-#else
-@property (nonatomic, assign) dispatch_queue_t eventDispatchQueue;
-#endif
-
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, weak) TBSMState *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
@@ -47,17 +41,8 @@
         _priv_states = [NSMutableDictionary new];
         _eventQueue = [NSMutableArray new];
         _processesEvent = NO;
-        _eventDispatchQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.eventDispatchQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
-}
-
-- (void)dealloc
-{
-#if !OS_OBJECT_USE_OBJC
-    dispatch_release(_eventDispatchQueue);
-    _eventDispatchQueue = nil;
-#endif
 }
 
 - (void)setUp
@@ -130,9 +115,7 @@
         
         if (!self.isProcessingEvent) {
             while (self.eventQueue.count > 0) {
-                dispatch_sync(_eventDispatchQueue, ^{
-                    [self _handleNextEvent];
-                });
+                [self _handleNextEvent];
             }
         }
     }

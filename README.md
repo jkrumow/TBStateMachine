@@ -133,10 +133,6 @@ parallel.states = @[subMachineA, subMachineB, subMachineC];
 stateMachine.states = @[stateA, stateB, parallel];
 ```
 
-### Concurrency
-
-Actions, guards, enter and exit blocks will be executed on a background queue. Make sure the code in these blocks is dispatched back onto the expected queue.
-
 
 ## Author
 

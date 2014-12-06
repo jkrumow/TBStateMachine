@@ -13,13 +13,6 @@
 @interface TBSMParallelState ()
 
 @property (nonatomic, strong) NSMutableArray *priv_parallelStates;
-
-#if OS_OBJECT_USE_OBJC
-@property (nonatomic, strong) dispatch_queue_t parallelQueue;
-#else
-@property (nonatomic, assign) dispatch_queue_t parallelQueue;
-#endif
-
 @end
 
 @implementation TBSMParallelState
@@ -36,17 +29,8 @@
     self = [super initWithName:name];
     if (self) {
         _priv_parallelStates = [NSMutableArray new];
-        _parallelQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.ParallelStateQueue", DISPATCH_QUEUE_CONCURRENT);
     }
     return self;
-}
-
-- (void)dealloc
-{
-#if !OS_OBJECT_USE_OBJC
-    dispatch_release(self.parallelQueue);
-    self.parallelQueue = nil;
-#endif
 }
 
 - (NSArray *)states
@@ -81,39 +65,38 @@
 {
     [super enter:sourceState destinationState:destinationState data:data];
     
-    dispatch_apply(self.priv_parallelStates.count, self.parallelQueue, ^(size_t idx) {
-        
-        TBSMStateMachine *stateMachine = self.priv_parallelStates[idx];
+    for (NSUInteger i = 0; i < self.priv_parallelStates.count; i++) {
+        TBSMStateMachine *stateMachine = self.priv_parallelStates[i];
         if (destinationState == nil || destinationState == self) {
             [stateMachine setUp];
         } else {
             [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
         }
-    });
+    }
 }
 
 - (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
-    dispatch_apply(self.priv_parallelStates.count, self.parallelQueue, ^(size_t idx) {
+    for (NSUInteger i = 0; i < self.priv_parallelStates.count; i++) {
         
-        TBSMStateMachine *stateMachine = self.priv_parallelStates[idx];
+        TBSMStateMachine *stateMachine = self.priv_parallelStates[i];
         if (destinationState == nil) {
             [stateMachine tearDown];
         } else {
             [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
         }
-    });
+    }
     
     [super exit:sourceState destinationState:destinationState data:data];
 }
 
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
-    dispatch_apply(self.priv_parallelStates.count, self.parallelQueue, ^(size_t idx) {
+    for (NSUInteger i = 0; i < self.priv_parallelStates.count; i++) {
         
-        TBSMStateMachine *stateMachine = self.priv_parallelStates[idx];
+        TBSMStateMachine *stateMachine = self.priv_parallelStates[i];
         [stateMachine handleEvent:event data:data];
-    });
+    }
     return [super handleEvent:event data:data];
 }
 
