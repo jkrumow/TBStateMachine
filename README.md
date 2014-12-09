@@ -101,10 +101,12 @@ To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` i
 
 ```objective-c
 TBSMEvent *event = [TBSMEvent eventWithName:@"EventA"];
-[stateMachine scheduleEvent:event];
+[stateMachine scheduleEvent:event data:@{@"myPayload":aPayloadObject}];
 ```
 
 The state machine will queue all events it receives until processing of the current event has finished.
+
+The payload will be available in all action, guard enter and exit handlers which are passed until the event is successfully handled.
 
 ### Nested State Machines
 
