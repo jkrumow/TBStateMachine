@@ -186,7 +186,6 @@
         transition = [_currentState handleEvent:event data:data];
     }
     if (transition) {
-        
         TBSMActionBlock action = transition.action;
         TBSMGuardBlock guard = transition.guard;
         if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
