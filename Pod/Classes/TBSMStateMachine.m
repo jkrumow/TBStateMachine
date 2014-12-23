@@ -185,16 +185,23 @@
     if (_currentState) {
         transition = [_currentState handleEvent:event data:data];
     }
-    if (transition && transition.destinationState) {
+    if (transition) {
         
         TBSMActionBlock action = transition.action;
         TBSMGuardBlock guard = transition.guard;
         if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
-            TBSMStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
-            if (lowestCommonAncestor) {
-                [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
+            if (transition.destinationState) {
+                TBSMStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+                if (lowestCommonAncestor) {
+                    [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
+                } else {
+                    NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
+                }
             } else {
-                NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
+                // Perform internal transition
+                if (action) {
+                    action(transition.sourceState, transition.destinationState, data);
+                }
             }
         }
     }

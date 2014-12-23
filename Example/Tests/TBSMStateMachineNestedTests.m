@@ -27,6 +27,7 @@ __block TBSMState *stateF;
 __block TBSMEvent *eventA;
 __block TBSMEvent *eventB;
 __block TBSMEvent *eventC;
+__block TBSMEvent *eventInternal;
 __block TBSMStateMachine *subStateMachineA;
 __block TBSMStateMachine *subStateMachineB;
 __block TBSMParallelState *parallelStates;
@@ -50,6 +51,7 @@ describe(@"TBSMStateMachine", ^{
         eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
         eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
         eventC = [TBSMEvent eventWithName:EVENT_NAME_C];
+        eventInternal = [TBSMEvent eventWithName:@"eventInternal"];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"SubA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"SubB"];
@@ -73,6 +75,7 @@ describe(@"TBSMStateMachine", ^{
         eventA = nil;
         eventB = nil;
         eventC = nil;
+        eventInternal = nil;
         
         [subStateMachineA tearDown];
         [subStateMachineB tearDown];
@@ -581,6 +584,176 @@ describe(@"TBSMStateMachine", ^{
         expect(sourceStateDataA[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
     });
     
+    it(@"can deeply switch into and out of sub-state and parallel machines using lowest common ancestor algorithm while performing internal transitions.", ^{
+        
+        NSArray *expectedExecutionSequence = @[@"subStateA_enter",
+                                               @"stateA_enter",
+                                               @"stateA_exit",
+                                               @"stateB_enter",
+                                               @"stateB_exit",
+                                               @"subStateA_exit",
+                                               @"stateD_enter",
+                                               @"stateD_guard_internal",
+                                               @"stateD_action_internal",
+                                               @"stateD_guard_internal",
+                                               @"stateD_exit",
+                                               @"subStateA_enter",
+                                               @"stateA_enter",
+                                               @"stateA_exit",
+                                               @"stateB_enter"];
+        
+        NSMutableArray *executionSequence = [NSMutableArray new];
+        
+        // setup sub-state machine A
+        __block TBSMState *sourceStateA;
+        __block id<TBSMNode> destinationStateA;
+        __block TBSMState *sourceStateB;
+        __block id<TBSMNode> destinationStateB;
+        __block NSDictionary *dataExitB;
+        
+        stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateA_enter"];
+            sourceStateA = sourceState;
+        };
+        
+        stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateA_exit"];
+            destinationStateA = destinationState;
+        };
+        
+        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateB_enter"];
+            sourceStateB = sourceState;
+        };
+        
+        stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateB_exit"];
+            destinationStateB = destinationState;
+            dataExitB = data;
+        };
+        
+        [stateA registerEvent:eventA target:stateB];
+        [stateB registerEvent:eventA target:stateD];
+        
+        NSArray *subStatesA = @[stateA, stateB];
+        subStateMachineA.states = subStatesA;
+        subStateMachineA.initialState = stateA;
+        
+        // setup sub-state machine B
+        __block TBSMState *sourceStateC;
+        __block TBSMState *destinationStateC;
+        __block TBSMState *sourceStateD;
+        __block TBSMState *destinationStateD;
+        __block TBSMState *sourceStateEnterSubA;
+        __block TBSMState *destinationStateEnterSubA;
+        __block TBSMState *sourceStateExitSubA;
+        __block TBSMState *destinationStateExitSubA;
+        __block NSDictionary *dataExitD;
+        __block NSUInteger guardCount = 0;
+        
+        stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateC_enter"];
+            sourceStateC = sourceState;
+        };
+        
+        stateC.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateC_exit"];
+            destinationStateC = destinationState;
+        };
+        
+        stateD.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateD_enter"];
+            sourceStateD = sourceState;
+        };
+        
+        stateD.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateD_exit"];
+            destinationStateD = destinationState;
+            dataExitD = data;
+        };
+        
+        [stateC registerEvent:eventA target:stateD];
+        [stateD registerEvent:eventA target:stateA];
+        
+        [stateD registerEvent:eventInternal target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateD_action_internal"];
+        } guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"stateD_guard_internal"];
+            guardCount++;
+            return (guardCount == 1);
+        }];
+        
+        NSArray *subStatesB = @[stateC, stateD];
+        subStateMachineB.states = subStatesB;
+        subStateMachineB.initialState = stateC;
+        
+        // setup parallel wrapper
+        parallelStates.states = @[subStateMachineB];
+        
+        // setup sub state machine wrapper
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        
+        subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"subStateA_enter"];
+            sourceStateEnterSubA = sourceState;
+            destinationStateEnterSubA = destinationState;
+        };
+        
+        subStateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [executionSequence addObject:@"subStateA_exit"];
+            sourceStateExitSubA = sourceState;
+            destinationStateExitSubA = destinationState;
+        };
+        
+        // setup main state machine
+        NSArray *states = @[subStateA, parallelStates];
+        stateMachine.states = states;
+        stateMachine.initialState = subStateA;
+        [stateMachine setUp];
+        
+        expect(sourceStateEnterSubA).to.beNil;
+        expect(destinationStateEnterSubA).to.beNil;
+        expect(sourceStateA).to.beNil;
+        
+        // moves to state B
+        [stateMachine scheduleEvent:eventA];
+        
+        expect(destinationStateA).to.equal(stateB);
+        expect(sourceStateB).to.equal(stateA);
+        
+        // moves to state D
+        [stateMachine scheduleEvent:eventA];
+        
+        // perform internal transition on state D
+        [stateMachine scheduleEvent:eventInternal];
+        
+        // attempt to perform internal transition on state D blocked by guard
+        [stateMachine scheduleEvent:eventInternal];
+        
+        expect(destinationStateB).to.equal(stateD);
+        expect(destinationStateExitSubA).to.equal(stateD);
+        expect(sourceStateD).to.equal(stateB);
+        
+        sourceStateA = nil;
+        
+        // will go back to start
+        [stateMachine scheduleEvent:eventA data:eventDataA];
+        
+        expect(destinationStateD).to.equal(stateA);
+        expect(sourceStateEnterSubA).to.equal(stateD);
+        expect(destinationStateEnterSubA).to.equal(stateA);
+        expect(sourceStateA).to.equal(stateD);
+        
+        // handled by state A
+        [stateMachine scheduleEvent:eventA];
+        
+        expect(destinationStateA).to.equal(stateB);
+        expect(sourceStateB).to.equal(stateA);
+        
+        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
+        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
+        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+    });
 });
 
 SpecEnd

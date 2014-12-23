@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 3.1.0
+
+- added internal transitions
+
 ## 3.0.4
 
 - re-added internal dispatch queue for TBSMParallelState

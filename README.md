@@ -97,6 +97,8 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictio
 [stateA registerEvent:event target:stateB action:action guard:guard];
 ```
 
+If you set the target state to `nil` the resulting transition will be an internal transition. In this case only guard and action blocks will be executed.
+
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
 ```objective-c
