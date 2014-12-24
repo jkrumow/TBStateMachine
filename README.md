@@ -112,7 +112,7 @@ Under certain conditions you may want to handle an event later in an other state
 ```
 Now the event will be queued until another state has been entered which can consume - but not necessarily handle - the event.
 
-### Scheduling events
+#### Scheduling events
 
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
