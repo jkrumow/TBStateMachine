@@ -22,7 +22,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @param object The object in question.
  *
- *  @return The NSException instance.
+ *  @return The `NSException` instance.
  */
 + (NSException *)tb_notOfTypeStateException:(id)object;
 
@@ -33,7 +33,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @param stateName The name of the specified `TBSMState`.
  *
- *  @return The NSException instance.
+ *  @return The `NSException` instance.
  */
 + (NSException *)tb_nonExistingStateException:(NSString *)stateName;
 
@@ -42,25 +42,43 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  The `reason:` string will contain the name of the state machine.
  *
- *  @param stateName The name of the specified `TBSMStateMachine` instance.
+ *  @param stateName The name of the specified `TBSMState`.
  *
- *  @return The NSException instance.
+ *  @return The `NSException` instance.
  */
 + (NSException *)tb_noInitialStateException:(NSString *)stateName;
 
 /**
  *  Thrown when no name was given to a `TBSMState` instance.
  *
- *  @return The NSException instance.
+ *  @return The `NSException` instance.
  */
 + (NSException *)tb_noNameForStateException;
 
 /**
  *  Thrown when no name was given to a `TBSMEvent` instance.
  *
- *  @return The NSException instance.
+ *  @return The `NSException` instance.
  */
 + (NSException *)tb_noNameForEventException;
+
+/**
+ *  Thrown when attempting to register a `TBSMEvent` instance which was already defined as deferred.
+ *
+ *  @param eventName The name of the specified event.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_cannotDeferRegisteredEvent:(NSString *)eventName;
+
+/**
+ *  Thrown when attempting to define a `TBSMEvent` as deferred instance which was already registered.
+ *
+ *  @param eventName The name of the specified event.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_cannotRegisterDeferredEvent:(NSString *)eventName;
 
 /**
  *  Thrown when a given object is not of type `TBSMStateMachine`.
@@ -69,7 +87,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @param object The object in question.
  *
- *  @return The NSException instance.
+ *  @return The `NSException` instance.
  */
 + (NSException *)tb_notAStateMachineException:(id)object;
 
@@ -78,7 +96,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @param stateMachineName The name of the specified `TBSMStateMachine` instance.
  *
- *  @return The NSException instance.
+ *  @return The `NSException` instance.
  */
 + (NSException *)tb_missingStateMachineException:(NSString *)stateMachineName;
 
