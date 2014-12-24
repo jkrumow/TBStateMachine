@@ -629,6 +629,55 @@ describe(@"TBSMStateMachine", ^{
             expect(sourceStateAction).to.beNil;
             expect(destinationStateAction).to.beNil;
         });
+        
+        it(@"defers events until a state has been reached which can consume the event.", ^{
+            
+            NSMutableString *executionOrder = [NSMutableString stringWithString:@""];
+            
+            NSArray *states = @[stateA, stateB, stateC];
+            
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionOrder appendString:@"-enterA"];
+            };
+            
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionOrder appendString:@"-exitA"];
+            };
+            
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionOrder appendString:@"-enterB"];
+            };
+            
+            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionOrder appendString:@"-exitB"];
+            };
+            
+            stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionOrder appendString:@"-enterC"];
+            };
+            
+            stateC.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionOrder appendString:@"-exitC"];
+            };
+            
+            [stateA registerEvent:eventA target:stateB];
+            [stateA deferEvent:eventB];
+            [stateB registerEvent:eventB target:stateC];
+            
+            stateMachine.states = states;
+            stateMachine.initialState = stateA;
+            [stateMachine setUp];
+            
+            // event should be deferred
+            [stateMachine scheduleEvent:eventB];
+            [stateMachine scheduleEvent:eventB];
+            [stateMachine scheduleEvent:eventB];
+            
+            // should switch to state B --> handle eventB --> switch to stateC
+            [stateMachine scheduleEvent:eventA];
+            
+            expect(stateMachine.currentState).to.equal(stateC);
+        });
     });
 });
 

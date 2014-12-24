@@ -73,15 +73,15 @@ stateMachine.initialState = stateB;
 
 The state machine will immediately enter the initial state.
 
-### Event Handlers
+### Event Handling
 
-You can register an event handler from a given event and target state:
+You can register an event which triggers the transition to a specified target state:
 
 ```objective-c
 [stateA registerEvent:event target:stateB];
 ```
 
-You can also register an event handler with additional action and guard blocks:
+You can also register an event with additional action and guard blocks:
 
 ```objective-c
 
@@ -99,6 +99,13 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictio
 ```
 
 If you set the target state to `nil` the resulting transition will be an internal transition. In this case only guard and action blocks will be executed.
+
+Under certain conditions you may want to handle an event later in an other state:
+
+```objective-c
+[stateA deferEvent:event];
+```
+Now the event will be queued until another state has been entered which can consume - but not necessarily handle - the event.
 
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 

@@ -3,6 +3,7 @@
 ## 3.1.0
 
 - added internal transitions
+- added event deferral
 - removed method -unregisterEvent: from class `TBSMState`
 - renamed property states to stateMachines on class `TBSMParallelState`
 

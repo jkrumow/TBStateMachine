@@ -42,7 +42,9 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 /**
  *  All `TBSMEvent` instances added to this state instance.
  */
-@property (nonatomic, strong, readonly) NSMutableDictionary *eventHandlers;
+@property (nonatomic, strong, readonly) NSDictionary *eventHandlers;
+
+@property (nonatomic, strong, readonly) NSDictionary *deferredEvents;
 
 /**
  *  Creates a `TBSMState` instance from a given name.
@@ -94,11 +96,29 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 - (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
- *  Unregisteres a `TBSMEvent` object.
+ *  Registers a `TBSMEvent` object which should be deferred when received by this state instance.
  *
- *  @param event   The given TBSMEvent object.
+ *  @param event The given TBSMEvent object.
  */
-- (void)unregisterEvent:(TBSMEvent *)event;
+- (void)deferEvent:(TBSMEvent *)event;
+
+/**
+ *  Returns `YES` if a given event can be handled by the state.
+ *
+ *  @param event The event to check.
+ *
+ *  @return `YES` if the event can be handled.
+ */
+- (BOOL)canHandleEvent:(TBSMEvent *)event;
+
+/**
+ *  Returns `YES` if a given event can be defered by the state.
+ *
+ *  @param event The event to check.
+ *
+ *  @return `YES` if the event can be defered.
+ */
+- (BOOL)canDeferEvent:(TBSMEvent *)event;
 
 /**
  *  Executes the enter block of the state.

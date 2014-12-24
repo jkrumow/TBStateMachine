@@ -13,11 +13,13 @@
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, weak) TBSMState *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
-@property (nonatomic, strong) NSMutableArray *eventQueue;
+@property (nonatomic, strong) NSMutableArray *scheduledEventsQueue;
+@property (nonatomic, strong) NSMutableArray *deferredEventsQueue;
 @property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
 
 - (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
 - (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
+- (NSArray *)_findLeafStatesInStateMachine:(TBSMStateMachine *)stateMachine;
 - (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
@@ -39,7 +41,8 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _eventQueue = [NSMutableArray new];
+        _scheduledEventsQueue = [NSMutableArray new];
+        _deferredEventsQueue = [NSMutableArray new];
         _processesEvent = NO;
     }
     return self;
@@ -102,7 +105,7 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
-    @synchronized(self.eventQueue) {
+    @synchronized(self.scheduledEventsQueue) {
         
         NSDictionary *queuedEvent = nil;
         if (data) {
@@ -111,10 +114,10 @@
             queuedEvent = @{@"event" : event};
         }
         
-        [self.eventQueue addObject:queuedEvent];
+        [self.scheduledEventsQueue addObject:queuedEvent];
         
         if (!self.isProcessingEvent) {
-            while (self.eventQueue.count > 0) {
+            while (self.scheduledEventsQueue.count > 0) {
                 [self _handleNextEvent];
             }
         }
@@ -123,7 +126,6 @@
 
 - (void)switchState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data action:(TBSMActionBlock)action
 {
-    // exit current state
     if (_currentState) {
         [_currentState exit:sourceState destinationState:destinationState data:data];
     }
@@ -179,6 +181,33 @@
     return nil;
 }
 
+- (NSArray *)_findLeafStatesInStateMachine:(TBSMStateMachine *)stateMachine
+{
+    NSMutableArray *leafStates = [NSMutableArray new];
+    
+    TBSMState *currentState = stateMachine.currentState;
+    if ([currentState isMemberOfClass:[TBSMState class]]) {
+        
+        [leafStates addObject:currentState];
+        
+    } else if ([currentState isMemberOfClass:[TBSMSubState class]]) {
+        
+        TBSMSubState *subState = (TBSMSubState *)currentState;
+        NSArray *subLeafs = [self _findLeafStatesInStateMachine:subState.stateMachine];
+        [leafStates addObjectsFromArray:subLeafs];
+        
+    } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
+        
+        TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
+        for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
+            NSArray *parallelLeafs = [self _findLeafStatesInStateMachine:stateMachine];
+            [leafStates addObjectsFromArray:parallelLeafs];
+        }
+    }
+    
+    return leafStates;
+}
+
 - (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
     TBSMTransition *transition;
@@ -209,13 +238,39 @@
 
 - (void)_handleNextEvent
 {
-    if (self.eventQueue.count > 0) {
-        self.processesEvent = YES;
-        NSDictionary *queuedEvent = self.eventQueue[0];
-        [self.eventQueue removeObject:queuedEvent];
-        [self handleEvent:queuedEvent[@"event"] data:queuedEvent[@"data"]];
-        self.processesEvent = NO;
+    self.processesEvent = YES;
+    
+    if (self.scheduledEventsQueue.count > 0) {
+        
+        NSDictionary *queuedEventInfo = self.scheduledEventsQueue[0];
+        [self.scheduledEventsQueue removeObject:queuedEventInfo];
+        
+        TBSMEvent *queuedEvent = queuedEventInfo[@"event"];
+        NSDictionary *queuedEventData = queuedEventInfo[@"data"];
+        
+        NSArray *leafStates = [self _findLeafStatesInStateMachine:self];
+        BOOL isDeferred = YES;
+        
+        for (TBSMState *leafState in leafStates) {
+            
+            // First state which can consume the queued event wins.
+            if (![leafState canDeferEvent:queuedEvent]) {
+                isDeferred = NO;
+                break;
+            }
+        }
+        
+        if (isDeferred) {
+            [self.deferredEventsQueue addObject:queuedEventInfo];
+        } else {
+            [self handleEvent:queuedEvent data:queuedEventData];
+            
+            // Now that we have entered another state we will reschedule the deferred events at the beginning of the event queue.
+            [self.scheduledEventsQueue insertObjects:self.deferredEventsQueue atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.deferredEventsQueue.count)]];
+            [self.deferredEventsQueue removeAllObjects];
+        }
     }
+    self.processesEvent = NO;
 }
 
 #pragma mark - TBSMNode
