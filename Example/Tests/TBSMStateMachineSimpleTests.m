@@ -129,7 +129,7 @@ describe(@"TBSMStateMachine", ^{
             TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
             subStateMachineA.states = @[subStateB];
             
-            parallelStates.states = @[subStateMachineA];
+            parallelStates.stateMachines = @[subStateMachineA];
             stateMachine.states = @[parallelStates];
             stateMachine.initialState = parallelStates;
             
@@ -257,7 +257,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"evaluates a guard function, exits the current state, executes transition action and enters the next state.", ^{
             
-            NSMutableString *executionOrder = [NSMutableString stringWithString:@""];
+            NSMutableString *executionSequence = [NSMutableString stringWithString:@""];
             
             NSArray *states = @[stateA, stateB];
             
@@ -271,21 +271,21 @@ describe(@"TBSMStateMachine", ^{
             
             stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 destinationStateA = destinationState;
-                [executionOrder appendString:@"-exit"];
+                [executionSequence appendString:@"-exit"];
             };
             
             stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 sourceStateB = sourceState;
-                [executionOrder appendString:@"-enter"];
+                [executionSequence appendString:@"-enter"];
             };
             
             [stateA registerEvent:eventA
                            target:stateB
                            action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
-                               [executionOrder appendString:@"-action"];
+                               [executionSequence appendString:@"-action"];
                            }
                             guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
-                                [executionOrder appendString:@"guard"];
+                                [executionSequence appendString:@"guard"];
                                 return YES;
                             }];
             
@@ -299,7 +299,7 @@ describe(@"TBSMStateMachine", ^{
             expect(sourceStateA).to.beNil;
             expect(destinationStateA).to.equal(stateB);
             expect(sourceStateB).to.equal(stateA);
-            expect(executionOrder).to.equal(@"guard-exit-action-enter");
+            expect(executionSequence).to.equal(@"guard-exit-action-enter");
         });
         
         it(@"evaluates a guard function, and skips switching to the next state.", ^{
@@ -478,24 +478,24 @@ describe(@"TBSMStateMachine", ^{
             __block TBSMState *sourceStateAction = nil;
             __block TBSMState *destinationStateAction = nil;
             
-            NSMutableString *executionOrder = [NSMutableString stringWithString:@""];
+            NSMutableString *executionSequence = [NSMutableString stringWithString:@""];
             
             NSArray *states = @[stateA, stateB];
             
             stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-enterA"];
+                [executionSequence appendString:@"-enterA"];
             };
             
             stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-exitA"];
+                [executionSequence appendString:@"-exitA"];
             };
             
             stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-enterB"];
+                [executionSequence appendString:@"-enterB"];
             };
             
             stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-exitB"];
+                [executionSequence appendString:@"-exitB"];
             };
             
             [stateA registerEvent:eventA
@@ -503,12 +503,12 @@ describe(@"TBSMStateMachine", ^{
                            action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
                                destinationStateAction = destinationState;
-                               [executionOrder appendString:@"-action"];
+                               [executionSequence appendString:@"-action"];
                            }
                             guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
                                 sourceStateGuard = sourceState;
                                 destinationStateGuard = destinationState;
-                                [executionOrder appendString:@"-guard"];
+                                [executionSequence appendString:@"-guard"];
                                 return YES;
                             }];
             
@@ -520,7 +520,7 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine scheduleEvent:eventA];
             [stateMachine scheduleEvent:eventA];
             
-            expect(executionOrder).to.equal(@"-enterA-guard-action-guard-action");
+            expect(executionSequence).to.equal(@"-enterA-guard-action-guard-action");
             expect(sourceStateGuard).to.equal(stateA);
             expect(destinationStateGuard).to.beNil;
             expect(sourceStateAction).to.equal(stateA);
@@ -532,24 +532,24 @@ describe(@"TBSMStateMachine", ^{
             __block TBSMState *sourceStateAction = nil;
             __block TBSMState *destinationStateAction = nil;
             
-            NSMutableString *executionOrder = [NSMutableString stringWithString:@""];
+            NSMutableString *executionSequence = [NSMutableString stringWithString:@""];
             
             NSArray *states = @[stateA, stateB];
             
             stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-enterA"];
+                [executionSequence appendString:@"-enterA"];
             };
             
             stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-exitA"];
+                [executionSequence appendString:@"-exitA"];
             };
             
             stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-enterB"];
+                [executionSequence appendString:@"-enterB"];
             };
             
             stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-exitB"];
+                [executionSequence appendString:@"-exitB"];
             };
             
             [stateA registerEvent:eventA
@@ -557,7 +557,7 @@ describe(@"TBSMStateMachine", ^{
                            action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
                                destinationStateAction = destinationState;
-                               [executionOrder appendString:@"-action"];
+                               [executionSequence appendString:@"-action"];
                            }
                             guard:nil];
             
@@ -569,7 +569,7 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine scheduleEvent:eventA];
             [stateMachine scheduleEvent:eventA];
             
-            expect(executionOrder).to.equal(@"-enterA-action-action");
+            expect(executionSequence).to.equal(@"-enterA-action-action");
             expect(sourceStateAction).to.equal(stateA);
             expect(destinationStateAction).to.beNil;
         });
@@ -581,24 +581,24 @@ describe(@"TBSMStateMachine", ^{
             __block TBSMState *sourceStateAction = nil;
             __block TBSMState *destinationStateAction = nil;
         
-            NSMutableString *executionOrder = [NSMutableString stringWithString:@""];
+            NSMutableString *executionSequence = [NSMutableString stringWithString:@""];
             
             NSArray *states = @[stateA, stateB];
             
             stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-enterA"];
+                [executionSequence appendString:@"-enterA"];
             };
             
             stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-exitA"];
+                [executionSequence appendString:@"-exitA"];
             };
             
             stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-enterB"];
+                [executionSequence appendString:@"-enterB"];
             };
             
             stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-                [executionOrder appendString:@"-exitB"];
+                [executionSequence appendString:@"-exitB"];
             };
             
             [stateA registerEvent:eventA
@@ -606,12 +606,12 @@ describe(@"TBSMStateMachine", ^{
                            action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
                                destinationStateAction = destinationState;
-                               [executionOrder appendString:@"-action"];
+                               [executionSequence appendString:@"-action"];
                            }
                             guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
                                 sourceStateGuard = sourceState;
                                 destinationStateGuard = destinationState;
-                                [executionOrder appendString:@"-guard"];
+                                [executionSequence appendString:@"-guard"];
                                 return NO;
                             }];
             
@@ -623,11 +623,58 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine scheduleEvent:eventA];
             [stateMachine scheduleEvent:eventA];
             
-            expect(executionOrder).to.equal(@"-enterA-guard-guard");
+            expect(executionSequence).to.equal(@"-enterA-guard-guard");
             expect(sourceStateGuard).to.equal(stateA);
             expect(destinationStateGuard).to.beNil;
             expect(sourceStateAction).to.beNil;
             expect(destinationStateAction).to.beNil;
+        });
+        
+        it(@"defers events until a state has been reached which can consume the event.", ^{
+            
+            NSMutableString *executionSequence = [NSMutableString stringWithString:@""];
+            
+            NSArray *states = @[stateA, stateB, stateC];
+            
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionSequence appendString:@"-enterA"];
+            };
+            
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionSequence appendString:@"-exitA"];
+            };
+            
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionSequence appendString:@"-enterB"];
+            };
+            
+            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionSequence appendString:@"-exitB"];
+            };
+            
+            stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionSequence appendString:@"-enterC"];
+            };
+            
+            stateC.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                [executionSequence appendString:@"-exitC"];
+            };
+            
+            [stateA registerEvent:eventA target:stateB];
+            [stateA deferEvent:eventB];
+            [stateB registerEvent:eventB target:stateC];
+            
+            stateMachine.states = states;
+            stateMachine.initialState = stateA;
+            [stateMachine setUp];
+            
+            // event should be deferred
+            [stateMachine scheduleEvent:eventB];
+            
+            // should switch to state B --> handle eventB --> switch to stateC
+            [stateMachine scheduleEvent:eventA];
+            
+            expect(stateMachine.currentState).to.equal(stateC);
         });
     });
 });

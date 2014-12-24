@@ -16,6 +16,8 @@ static NSString * const TBSMNonExistingStateExceptionReason = @"The specified st
 static NSString * const TBSMNoInitialStateExceptionReason = @"Initial state needs to be set on %@.";
 static NSString * const TBSMNoNameForStateExceptionReason = @"State needs to have a valid name.";
 static NSString * const TBSMNoNameForEventExceptionReason = @"Event needs to have a valid name.";
+static NSString * const TBSMCannotDeferRegisteredEventExceptionReason = @"Can not defer event %@ which is already registered.";
+static NSString * const TBSMCannotRegisterDeferredEventExceptionReason = @"Can not register event %@ which is already defered.";
 static NSString * const TBSMNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBSMStateMachine.";
 static NSString * const TBSMMissingStateMachineExceptionReason = @"Sub state '%@' needs to be initialized with a valid TBSMStateMachine instance.";
 
@@ -45,6 +47,16 @@ static NSString * const TBSMMissingStateMachineExceptionReason = @"Sub state '%@
 + (NSException *)tb_noNameForEventException
 {
     return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForEventExceptionReason userInfo:nil];
+}
+
++ (NSException *)tb_cannotDeferRegisteredEvent:(NSString *)eventName
+{
+	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMCannotDeferRegisteredEventExceptionReason, eventName] userInfo:nil];
+}
+
++ (NSException *)tb_cannotRegisterDeferredEvent:(NSString *)eventName
+{
+	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMCannotRegisterDeferredEventExceptionReason, eventName] userInfo:nil];
 }
 
 + (NSException *)tb_notAStateMachineException:(id)object

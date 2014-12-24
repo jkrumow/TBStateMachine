@@ -111,7 +111,7 @@ describe(@"TBSMSubState", ^{
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
         subStateMachineA.states = @[subStateB];
         
-        parallelStates.states = @[subStateMachineA];
+        parallelStates.stateMachines = @[subStateMachineA];
         stateMachine.states = @[parallelStates];
         stateMachine.initialState = parallelStates;
         

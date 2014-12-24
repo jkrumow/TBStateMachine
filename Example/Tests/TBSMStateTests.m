@@ -93,14 +93,29 @@ describe(@"TBSMState", ^{
         expect(eventHandler.target).to.equal(stateA);
     });
     
-    it(@"unregisters TBSMEvent instances.", ^{
+    describe(@"Exception handling when registering and deferring events.", ^{
+    
+        it(@"throws an exception when attempting to register an event which was already marked as deferred.", ^{
         
-        [stateA registerEvent:eventA target:stateA];
-        [stateA unregisterEvent:eventA];
+            [stateA deferEvent:eventA];
+            
+            expect(^{
+                [stateA registerEvent:eventA target:stateB];
+            }).to.raise(TBSMException);
         
-        NSDictionary *registeredEvents = stateA.eventHandlers;
-        expect(registeredEvents.allKeys).to.haveCountOf(0);
-        expect(registeredEvents).notTo.contain(eventA.name);
+        });
+        
+        it(@"throws an exception when attempting to efer an event which was already registered.", ^{
+            
+            [stateA registerEvent:eventA target:stateB];
+            
+            expect(^{
+                [stateA deferEvent:eventA];
+            }).to.raise(TBSMException);
+            
+        });
+    
+    
     });
     
     it(@"handles events by returning nil or a TBSMTransition containing source and destination state.", ^{
@@ -122,7 +137,7 @@ describe(@"TBSMState", ^{
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
         subStateMachineA.states = @[subStateB];
         
-        parallelStates.states = @[subStateMachineA];
+        parallelStates.stateMachines = @[subStateMachineA];
         stateMachine.states = @[parallelStates];
         stateMachine.initialState = parallelStates;
         

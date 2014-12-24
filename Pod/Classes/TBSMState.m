@@ -13,9 +13,8 @@
 @interface TBSMState ()
 
 @property (nonatomic, copy) NSString *name;
-
-- (BOOL)_canHandleEvent:(TBSMEvent *)event;
-
+@property (nonatomic, strong) NSMutableDictionary *priv_eventHandlers;
+@property (nonatomic, strong) NSMutableDictionary *priv_deferredEvents;
 @end
 
 @implementation TBSMState
@@ -33,9 +32,20 @@
     self = [super init];
     if (self) {
         _name = name.copy;
-        _eventHandlers = [NSMutableDictionary new];
+        _priv_eventHandlers = [NSMutableDictionary new];
+        _priv_deferredEvents = [NSMutableDictionary new];
     }
     return self;
+}
+
+- (NSDictionary *)eventHandlers
+{
+    return _priv_eventHandlers.copy;
+}
+
+- (NSDictionary *)deferredEvents
+{
+    return _priv_deferredEvents.copy;
 }
 
 - (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target
@@ -50,20 +60,29 @@
 
 - (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
+    if ([self canDeferEvent:event])  {
+        @throw [NSException tb_cannotRegisterDeferredEvent:event.name];
+    }
     TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event.name target:target action:action guard:guard];
-    [_eventHandlers setObject:eventHandler forKey:event.name];
+    [_priv_eventHandlers setObject:eventHandler forKey:event.name];
 }
 
-- (void)unregisterEvent:(TBSMEvent *)event
+- (void)deferEvent:(TBSMEvent *)event
 {
-    [_eventHandlers removeObjectForKey:event.name];
+    if ([self canHandleEvent:event])  {
+        @throw [NSException tb_cannotDeferRegisteredEvent:event.name];
+    }
+    [_priv_deferredEvents setObject:event forKey:event.name];
 }
 
-#pragma mark - private methods
-
-- (BOOL)_canHandleEvent:(TBSMEvent *)event
+- (BOOL)canHandleEvent:(TBSMEvent *)event
 {
-    return ([_eventHandlers objectForKey:event.name] != nil);
+    return ([_priv_eventHandlers objectForKey:event.name] != nil);
+}
+
+- (BOOL)canDeferEvent:(TBSMEvent *)event
+{
+    return ([_priv_deferredEvents objectForKey:event.name] != nil);
 }
 
 #pragma mark - TBSMNode
@@ -95,8 +114,8 @@
 
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
-    if ([self _canHandleEvent:event]) {
-        TBSMEventHandler *eventHandler = [_eventHandlers objectForKey:event.name];
+    if ([self canHandleEvent:event]) {
+        TBSMEventHandler *eventHandler = [_priv_eventHandlers objectForKey:event.name];
         return [TBSMTransition transitionWithSourceState:self destinationState:eventHandler.target action:eventHandler.action guard:eventHandler.guard];
     }
     return nil;
