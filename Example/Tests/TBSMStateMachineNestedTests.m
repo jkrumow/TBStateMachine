@@ -13,6 +13,9 @@ SpecBegin(TBSMStateMachineNested)
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";
 NSString * const EVENT_NAME_C = @"DummyEventC";
+NSString * const EVENT_NAME_D = @"DummyEventD";
+NSString * const EVENT_NAME_E = @"DummyEventE";
+NSString * const EVENT_NAME_F = @"DummyEventF";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
@@ -27,6 +30,9 @@ __block TBSMState *stateF;
 __block TBSMEvent *eventA;
 __block TBSMEvent *eventB;
 __block TBSMEvent *eventC;
+__block TBSMEvent *eventD;
+__block TBSMEvent *eventE;
+__block TBSMEvent *eventF;
 __block TBSMEvent *eventInternal;
 __block TBSMStateMachine *subStateMachineA;
 __block TBSMStateMachine *subStateMachineB;
@@ -53,6 +59,9 @@ describe(@"TBSMStateMachine", ^{
         eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
         eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
         eventC = [TBSMEvent eventWithName:EVENT_NAME_C];
+        eventD = [TBSMEvent eventWithName:EVENT_NAME_D];
+        eventE = [TBSMEvent eventWithName:EVENT_NAME_E];
+        eventF = [TBSMEvent eventWithName:EVENT_NAME_F];
         eventInternal = [TBSMEvent eventWithName:@"eventInternal"];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"SubA"];
@@ -79,6 +88,9 @@ describe(@"TBSMStateMachine", ^{
         eventA = nil;
         eventB = nil;
         eventC = nil;
+        eventD = nil;
+        eventE = nil;
+        eventF = nil;
         eventInternal = nil;
         
         [subStateMachineA tearDown];
@@ -761,7 +773,7 @@ describe(@"TBSMStateMachine", ^{
         expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
     });
     
-    it(@"performs internal transitions all registered states", ^{
+    it(@"performs internal transitions on all registered states", ^{
         
         __block BOOL actionStateA = NO;
         __block BOOL actionStateB = NO;
@@ -809,6 +821,143 @@ describe(@"TBSMStateMachine", ^{
         expect(actionStateB).to.equal(YES);
         expect(actionStateC).to.equal(YES);
         expect(actionStateD).to.equal(YES);
+    });
+    
+    it(@"defers events until a sub state has been reached which can consume the event.", ^{
+        
+        // setup sub state machine wrapper A
+        NSArray *subStatesA = @[stateA, stateB, stateC];
+        subStateMachineA.states = subStatesA;
+        subStateMachineA.initialState = stateA;
+        
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        
+        [subStateA deferEvent:eventB];
+        [stateA registerEvent:eventA target:stateB];
+        [stateA deferEvent:eventB];
+        [stateB registerEvent:eventB target:stateC];
+        [stateC deferEvent:eventC];
+        [stateC registerEvent:eventD target:stateD];
+        
+        // setup sub state machine wrapper B
+        NSArray *subStatesB = @[stateD, stateE, stateF];
+        subStateMachineB.states = subStatesB;
+        subStateMachineB.initialState = stateD;
+        
+        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"SubStateB" stateMachine:subStateMachineB];
+        
+        [subStateB deferEvent:eventC];
+        [subStateB deferEvent:eventE];
+        [stateD registerEvent:eventC target:stateE];
+        [stateE deferEvent:eventE];
+        
+        // setup main state machine
+        stateMachine.states = @[subStateA, subStateB];
+        stateMachine.initialState = subStateA;
+        [stateMachine setUp];
+        
+        // event should be deferred by stateA
+        [stateMachine scheduleEvent:eventB];
+        
+        expect(stateMachine.currentState).to.equal(subStateA);
+        expect(subStateA.stateMachine.currentState).to.equal(stateA);
+        
+        // should switch from stateA to stateB --> handle eventB --> switch to stateC
+        [stateMachine scheduleEvent:eventA];
+        
+        expect(stateMachine.currentState).to.equal(subStateA);
+        expect(subStateA.stateMachine.currentState).to.equal(stateC);
+        
+        // should be deferred by stateC
+        [stateMachine scheduleEvent:eventC];
+        
+        expect(stateMachine.currentState).to.equal(subStateA);
+        expect(subStateA.stateMachine.currentState).to.equal(stateC);
+        
+        // should switch from stateC to stateD --> handle eventC --> switch to stateE
+        [stateMachine scheduleEvent:eventD];
+        
+        expect(stateMachine.currentState).to.equal(subStateB);
+        expect(subStateB.stateMachine.currentState).to.equal(stateE);
+        
+        // should be deferred by eventE
+        [stateMachine scheduleEvent:eventE];
+        
+        expect(stateMachine.currentState).to.equal(subStateB);
+        expect(subStateB.stateMachine.currentState).to.equal(stateE);
+    });
+    
+    it(@"defers events until a parallel state has been reached which can consume the event.", ^{
+        
+        // setup sub state machine wrapper A
+        NSArray *subStatesA = @[stateA, stateB];
+        subStateMachineA.states = subStatesA;
+        subStateMachineA.initialState = stateA;
+        
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        
+        [subStateA deferEvent:eventB];
+        [stateA registerEvent:eventA target:stateB];
+        [stateA deferEvent:eventB];
+        [stateB registerEvent:eventB target:parallelStates];
+        
+        // setup sub state machine wrapper B
+        NSArray *subStatesB = @[stateC, stateD];
+        subStateMachineB.states = subStatesB;
+        subStateMachineB.initialState = stateC;
+        
+        // setup sub state machine wrapper C
+        NSArray *subStatesC = @[stateE, stateF];
+        subStateMachineC.states = subStatesC;
+        subStateMachineC.initialState = stateE;
+        
+        parallelStates.stateMachines = @[subStateMachineB, subStateMachineC];
+        [parallelStates deferEvent:eventC];
+        [stateC deferEvent:eventC];
+        [stateC registerEvent:eventD target:stateD];
+        [stateD registerEvent:eventC target:stateC];
+        [stateE deferEvent:eventC];
+        [stateE deferEvent:eventD];
+        [stateE registerEvent:eventE target:stateA];
+        [stateF registerEvent:eventC target:stateE];
+        
+        // setup main state machine
+        stateMachine.states = @[subStateA, parallelStates];
+        stateMachine.initialState = subStateA;
+        [stateMachine setUp];
+        
+        // event should be deferred by stateA
+        [stateMachine scheduleEvent:eventB];
+        
+        expect(stateMachine.currentState).to.equal(subStateA);
+        expect(subStateA.stateMachine.currentState).to.equal(stateA);
+        
+        // should switch from stateA to stateB --> handle eventB --> switch to parallel wrapper
+        [stateMachine scheduleEvent:eventA];
+        
+        expect(stateMachine.currentState).to.equal(parallelStates);
+        expect([parallelStates.stateMachines[0] currentState]).to.equal(stateC);
+        expect([parallelStates.stateMachines[1] currentState]).to.equal(stateE);
+        
+        // should be deferred by parallelStates, stateC and stateE
+        [stateMachine scheduleEvent:eventC];
+        
+        expect(stateMachine.currentState).to.equal(parallelStates);
+        expect([parallelStates.stateMachines[0] currentState]).to.equal(stateC);
+        expect([parallelStates.stateMachines[1] currentState]).to.equal(stateE);
+        
+        // should switch from stateC to stateD --> handle eventC --> switch from stateD to stateC
+        [stateMachine scheduleEvent:eventD];
+        
+        expect(stateMachine.currentState).to.equal(parallelStates);
+        expect([parallelStates.stateMachines[0] currentState]).to.equal(stateC);
+        expect([parallelStates.stateMachines[1] currentState]).to.equal(stateE);
+        
+        // should switch to subStateA - stateA
+        [stateMachine scheduleEvent:eventE];
+        
+        expect(stateMachine.currentState).to.equal(subStateA);
+        expect(subStateA.stateMachine.currentState).to.equal(stateA);
     });
 });
 
