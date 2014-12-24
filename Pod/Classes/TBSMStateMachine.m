@@ -19,7 +19,7 @@
 
 - (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
 - (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
-- (NSArray *)_findLeafStatesInStateMachine:(TBSMStateMachine *)stateMachine;
+- (NSArray *)_findActiveLeafStatesInStateMachine:(TBSMStateMachine *)stateMachine;
 - (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
@@ -181,31 +181,31 @@
     return nil;
 }
 
-- (NSArray *)_findLeafStatesInStateMachine:(TBSMStateMachine *)stateMachine
+- (NSArray *)_findActiveLeafStatesInStateMachine:(TBSMStateMachine *)stateMachine
 {
-    NSMutableArray *leafStates = [NSMutableArray new];
+    NSMutableArray *activeLeafStates = [NSMutableArray new];
     
     TBSMState *currentState = stateMachine.currentState;
     if ([currentState isMemberOfClass:[TBSMState class]]) {
         
-        [leafStates addObject:currentState];
+        [activeLeafStates addObject:currentState];
         
     } else if ([currentState isMemberOfClass:[TBSMSubState class]]) {
         
         TBSMSubState *subState = (TBSMSubState *)currentState;
-        NSArray *subLeafs = [self _findLeafStatesInStateMachine:subState.stateMachine];
-        [leafStates addObjectsFromArray:subLeafs];
+        NSArray *subLeafs = [self _findActiveLeafStatesInStateMachine:subState.stateMachine];
+        [activeLeafStates addObjectsFromArray:subLeafs];
         
     } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
         
         TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
         for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
-            NSArray *parallelLeafs = [self _findLeafStatesInStateMachine:stateMachine];
-            [leafStates addObjectsFromArray:parallelLeafs];
+            NSArray *parallelLeafs = [self _findActiveLeafStatesInStateMachine:stateMachine];
+            [activeLeafStates addObjectsFromArray:parallelLeafs];
         }
     }
     
-    return leafStates;
+    return activeLeafStates;
 }
 
 - (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
@@ -248,13 +248,13 @@
         TBSMEvent *queuedEvent = queuedEventInfo[@"event"];
         NSDictionary *queuedEventData = queuedEventInfo[@"data"];
         
-        NSArray *leafStates = [self _findLeafStatesInStateMachine:self];
+        NSArray *activeLeafStates = [self _findActiveLeafStatesInStateMachine:self];
         BOOL isDeferred = YES;
         
-        for (TBSMState *leafState in leafStates) {
+        for (TBSMState *activeLeafState in activeLeafStates) {
             
             // First state which can consume the queued event wins.
-            if (![leafState canDeferEvent:queuedEvent]) {
+            if (![activeLeafState canDeferEvent:queuedEvent]) {
                 isDeferred = NO;
                 break;
             }
