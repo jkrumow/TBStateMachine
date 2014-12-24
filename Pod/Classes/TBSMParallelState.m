@@ -12,7 +12,7 @@
 
 @interface TBSMParallelState ()
 
-@property (nonatomic, strong) NSMutableArray *priv_parallelStates;
+@property (nonatomic, strong) NSMutableArray *priv_parallelStateMachines;
 
 #if OS_OBJECT_USE_OBJC
 @property (nonatomic, strong) dispatch_queue_t parallelQueue;
@@ -35,7 +35,7 @@
 {
     self = [super initWithName:name];
     if (self) {
-        _priv_parallelStates = [NSMutableArray new];
+        _priv_parallelStateMachines = [NSMutableArray new];
         _parallelQueue = dispatch_queue_create("com.tarbrain.TBStateMachine.ParallelStateQueue", DISPATCH_QUEUE_CONCURRENT);
     }
     return self;
@@ -49,18 +49,18 @@
 #endif
 }
 
-- (NSArray *)states
+- (NSArray *)stateMachines
 {
-    return [NSArray arrayWithArray:self.priv_parallelStates];
+    return [NSArray arrayWithArray:self.priv_parallelStateMachines];
 }
 
-- (void)setStates:(NSArray *)states
+- (void)setStateMachines:(NSArray *)stateMachines
 {
-    [self.priv_parallelStates removeAllObjects];
+    [self.priv_parallelStateMachines removeAllObjects];
     
-    for (id object in states) {
+    for (id object in stateMachines) {
         if ([object isKindOfClass:[TBSMStateMachine class]]) {
-            [self.priv_parallelStates addObject:object];
+            [self.priv_parallelStateMachines addObject:object];
         } else {
             @throw ([NSException tb_notAStateMachineException:object]);
         }
@@ -72,7 +72,7 @@
 - (void)setParentState:(id<TBSMNode>)parentState
 {
     _parentState = parentState;
-    for (TBSMStateMachine *subMachine in self.priv_parallelStates) {
+    for (TBSMStateMachine *subMachine in self.priv_parallelStateMachines) {
         subMachine.parentState = self;
     }
 }
@@ -81,9 +81,9 @@
 {
     [super enter:sourceState destinationState:destinationState data:data];
     
-    dispatch_apply(self.priv_parallelStates.count, self.parallelQueue, ^(size_t idx) {
+    dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
-        TBSMStateMachine *stateMachine = self.priv_parallelStates[idx];
+        TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
         if (destinationState == nil || destinationState == self) {
             [stateMachine setUp];
         } else {
@@ -94,9 +94,9 @@
 
 - (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
-    dispatch_apply(self.priv_parallelStates.count, self.parallelQueue, ^(size_t idx) {
+    dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
-        TBSMStateMachine *stateMachine = self.priv_parallelStates[idx];
+        TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
         if (destinationState == nil) {
             [stateMachine tearDown];
         } else {
@@ -109,9 +109,9 @@
 
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
 {
-    dispatch_apply(self.priv_parallelStates.count, self.parallelQueue, ^(size_t idx) {
+    dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
-        TBSMStateMachine *stateMachine = self.priv_parallelStates[idx];
+        TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
         [stateMachine handleEvent:event data:data];
     });
     return [super handleEvent:event data:data];

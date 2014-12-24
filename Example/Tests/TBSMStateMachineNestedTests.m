@@ -332,7 +332,7 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineB.initialState = stateC;
         
         // setup parallel wrapper
-        parallelStates.states = @[subStateMachineB];
+        parallelStates.stateMachines = @[subStateMachineB];
         
         // setup sub state machine wrapper
         TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
@@ -510,7 +510,7 @@ describe(@"TBSMStateMachine", ^{
         
         // setup parallel wrapper
         NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
-        parallelStates.states = parallelSubStateMachines;
+        parallelStates.stateMachines = parallelSubStateMachines;
         
         // setup main state machine
         __block id<TBSMNode> sourceStateA;
@@ -688,7 +688,7 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineB.initialState = stateC;
         
         // setup parallel wrapper
-        parallelStates.states = @[subStateMachineB];
+        parallelStates.stateMachines = @[subStateMachineB];
         
         // setup sub state machine wrapper
         TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];

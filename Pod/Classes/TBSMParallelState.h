@@ -49,7 +49,7 @@
  *
  *  @return An NSArray containing all `TBSMStateMachine` instances.
  */
-- (NSArray *)states;
+- (NSArray *)stateMachines;
 
 /**
  *  Sets the `TBSMStateMachine` instances to wrap.
@@ -58,6 +58,6 @@
  *
  *  @param states An array of `TBSMStateMachine` instances.
  */
-- (void)setStates:(NSArray *)states;
+- (void)setStateMachines:(NSArray *)states;
 
 @end

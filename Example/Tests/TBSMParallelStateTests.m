@@ -85,7 +85,7 @@ describe(@"TBSMParallelState", ^{
             id object = [[NSObject alloc] init];
             NSArray *states = @[subStateMachineA, subStateMachineB, object];
             expect(^{
-                parallelStates.states = states;
+                parallelStates.stateMachines = states;
             }).to.raise(TBSMException);
         });
         
@@ -94,12 +94,12 @@ describe(@"TBSMParallelState", ^{
     it(@"returns its states.", ^{
         subStateMachineA.states = @[stateA];
         subStateMachineB.states = @[stateB];
-        parallelStates.states = @[subStateMachineA, subStateMachineB];
+        parallelStates.stateMachines = @[subStateMachineA, subStateMachineB];
         
-        expect(parallelStates.states).notTo.beNil;
-        expect(parallelStates.states.count).to.equal(2);
-        expect(parallelStates.states[0]).to.equal(subStateMachineA);
-        expect(parallelStates.states[1]).to.equal(subStateMachineB);
+        expect(parallelStates.stateMachines).notTo.beNil;
+        expect(parallelStates.stateMachines.count).to.equal(2);
+        expect(parallelStates.stateMachines[0]).to.equal(subStateMachineA);
+        expect(parallelStates.stateMachines[1]).to.equal(subStateMachineB);
     });
     
     it(@"switches states on all registered states", ^{
@@ -132,7 +132,7 @@ describe(@"TBSMParallelState", ^{
         subStateMachineB.initialState = stateB;
         
         NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
-        parallelStates.states = parallelSubStateMachines;
+        parallelStates.stateMachines = parallelSubStateMachines;
         
         [parallelStates enter:nil destinationState:parallelStates data:nil];
         
