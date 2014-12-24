@@ -40,10 +40,13 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 @property (nonatomic, strong) TBSMStateBlock exitBlock;
 
 /**
- *  All `TBSMEvent` instances added to this state instance.
+ *  All `TBSMEvent` instances registered to this state instance.
  */
 @property (nonatomic, strong, readonly) NSDictionary *eventHandlers;
 
+/**
+ *  All `TBSMEvent` instances deferred by this state instance.
+ */
 @property (nonatomic, strong, readonly) NSDictionary *deferredEvents;
 
 /**
@@ -53,7 +56,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
  *
  *  @param name The specified state name.
  *
- *  @return The state object.
+ *  @return The state instance.
  */
 + (TBSMState *)stateWithName:(NSString *)name;
 
@@ -69,36 +72,38 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 - (instancetype)initWithName:(NSString *)name;
 
 /**
- *  Registers a `TBSMEvent` object.
+ *  Registers a `TBSMEvent` instance for transition to a specified target state.
  *
- *  @param event  The given TBSMEvent object.
- *  @param target The follow-up `TBSMState`.
+ *  @param event  The given TBSMEvent instance.
+ *  @param target The destination `TBSMState` instance.
  */
 - (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target;
 
 /**
- *  Registers a `TBSMEvent` object.
+ *  Registers a `TBSMEvent` instance for transition to a specified target state.
+ *  If target parameter is `nil` an internal transition will be performed using the action block.
  *
- *  @param event  The given TBSMEvent object.
- *  @param target The follow-up `TBSMState`.
- *  @param action The action associated with this event.
+ *  @param event  The given `TBSMEvent` instance.
+ *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param action The action block associated with this event.
  */
 - (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target action:(TBSMActionBlock)action;
 
 /**
- *  Registers a `TBSMEvent` object.
+ *  Registers a `TBSMEvent` instance for transition to a specified target state.
+ *  If target parameter is `nil` an internal transition will be performed using guard and action block.
  *
- *  @param event  The given TBSMEvent object.
- *  @param target The follow-up `TBSMState`.
- *  @param action The action associated with this event.
- *  @param guard  The guard function associated with this event.
+ *  @param event  The given `TBSMEvent` instance.
+ *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param action The action block associated with this event.
+ *  @param guard  The guard block associated with this event.
  */
 - (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
- *  Registers a `TBSMEvent` object which should be deferred when received by this state instance.
+ *  Registers a `TBSMEvent` instance which should be deferred when received by this state instance.
  *
- *  @param event The given TBSMEvent object.
+ *  @param event The given `TBSMEvent` instance.
  */
 - (void)deferEvent:(TBSMEvent *)event;
 

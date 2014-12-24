@@ -63,7 +63,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_noNameForEventException;
 
 /**
- *  Thrown when attempting to register a `TBSMEvent` instance which was already defined as deferred.
+ *  Thrown when attempting to register a `TBSMEvent` instance which has already been defined as deferred.
  *
  *  @param eventName The name of the specified event.
  *
@@ -72,7 +72,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_cannotDeferRegisteredEvent:(NSString *)eventName;
 
 /**
- *  Thrown when attempting to define a `TBSMEvent` as deferred instance which was already registered.
+ *  Thrown when attempting to define a `TBSMEvent` as deferred instance which has already been registered.
  *
  *  @param eventName The name of the specified event.
  *

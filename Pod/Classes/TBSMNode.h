@@ -12,9 +12,9 @@
 #import "TBSMEvent.h"
 
 /**
- *  This protocol defines a node in a state machine.
+ *  This protocol defines a node in a state machine hierarchy.
  *
- *  Classes which implement this protocol can be managed by state machine.
+ *  Classes which implement this protocol can be managed inside a state machine heriarchy.
  */
 @protocol TBSMNode <NSObject>
 
@@ -51,8 +51,7 @@
 /**
  *  Receives a specified `TBSMEvent` instance and payload dictionary.
  *
- *  If the node recognizes the given `TBSMEvent` the corresponding `TBSMEventBlock` is executed
- *  and the paylod data is passed into the block.
+ *  If the node recognizes the given `TBSMEvent` it will return the corresponding `TBSMTransition` instance.
  *
  *  @param event The given `TBSMEvent` instance.
  *  @param data  The payload data.
