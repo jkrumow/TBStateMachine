@@ -111,7 +111,7 @@ If you set the target state to `nil` the resulting transition will be an interna
 
 #### Event deferral
 
-Under certain conditions you may want to handle an event later in an other state:
+Under certain conditions you may want to handle an event later in another state:
 
 ```objective-c
 [stateA deferEvent:event];
