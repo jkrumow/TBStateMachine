@@ -158,7 +158,7 @@ stateMachine.states = @[stateA, stateB, parallel];
 ```
 ### Concurrency
 
-Actions, guards, enter and exit blocks of states within a TBSMParallelState will be executed on a concurrent background queue. Make sure the code in these blocks is dispatched back onto the expected queue.
+Actions, guards, enter and exit blocks of states within a `TBSMParallelState` will be executed on a concurrent background queue. Make sure the code in these blocks is dispatched back onto the expected queue.
 
 ## Author
 
