@@ -80,6 +80,7 @@ The state machine will immediately enter the initial state.
 You can register an event which triggers the transition to a specified target state:
 
 ```objective-c
+TBSMEvent *event = [TBSMEvent eventWithName:@"Event"];
 [stateA registerEvent:event target:stateB];
 ```
 
@@ -101,7 +102,20 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictio
 ```
 #### Internal transitions
 
-If you set the target state to `nil` the resulting transition will be an internal transition. In this case only guard and action blocks will be executed.
+If you set the target state to `nil` the resulting transition will be an internal transition. In this case only guard and action blocks will be executed:
+
+```objective-c
+[stateA registerEvent:event
+               target:nil
+               action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+
+                   // ...
+               }
+                guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                           
+                    return YES;
+                }];
+```
 
 #### Event deferral
 
@@ -117,7 +131,6 @@ Now the event will be queued until another state has been entered which can cons
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
 ```objective-c
-TBSMEvent *event = [TBSMEvent eventWithName:@"EventA"];
 [stateMachine scheduleEvent:event data:@{@"myPayload":aPayloadObject}];
 ```
 
