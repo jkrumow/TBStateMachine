@@ -4,12 +4,12 @@
 
 - added internal transitions
 - added event deferral
-- removed method -unregisterEvent: from class `TBSMState`
-- renamed property states to stateMachines on class `TBSMParallelState`
+- removed method `-unregisterEvent:` from class `TBSMState`
+- renamed property `states` to `stateMachines` in class `TBSMParallelState`
 
 ## 3.0.4
 
-- re-added internal dispatch queue for TBSMParallelState
+- re-added internal dispatch queue for `TBSMParallelState`
 
 ## 3.0.3
 
@@ -33,7 +33,7 @@
 
 ### fixes
 
-- LCA handling was broken and resulted in a wrong execution sequence of exit - action - enter.
+- LCA handling was broken and resulted in a wrong execution sequence of exit - action - enter
 - corrected typos in CHANGELOG.md (this document)
 
 ## 2.0.0
