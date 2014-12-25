@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *scheduledEventsQueue;
 @property (nonatomic, strong) NSMutableArray *deferredEventsQueue;
-@property (nonatomic, assign, getter = isProcessingEvent) BOOL processesEvent;
+@property (nonatomic, assign, getter = isHandlingEvent) BOOL handlesEvent;
 
 - (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
 - (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
@@ -43,7 +43,7 @@
         _priv_states = [NSMutableDictionary new];
         _scheduledEventsQueue = [NSMutableArray new];
         _deferredEventsQueue = [NSMutableArray new];
-        _processesEvent = NO;
+        _handlesEvent = NO;
     }
     return self;
 }
@@ -116,7 +116,7 @@
         
         [self.scheduledEventsQueue addObject:queuedEvent];
         
-        if (!self.isProcessingEvent) {
+        if (!self.isHandlingEvent) {
             while (self.scheduledEventsQueue.count > 0) {
                 [self _handleNextEvent];
             }
@@ -238,7 +238,7 @@
 
 - (void)_handleNextEvent
 {
-    self.processesEvent = YES;
+    self.handlesEvent = YES;
     
     if (self.scheduledEventsQueue.count > 0) {
         
@@ -270,7 +270,7 @@
             [self.deferredEventsQueue removeAllObjects];
         }
     }
-    self.processesEvent = NO;
+    self.handlesEvent = NO;
 }
 
 #pragma mark - TBSMNode
