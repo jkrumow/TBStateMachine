@@ -94,15 +94,15 @@ describe(@"TBSMState", ^{
     });
     
     describe(@"Exception handling when registering and deferring events.", ^{
-    
-        it(@"throws an exception when attempting to register an event which was already marked as deferred.", ^{
         
+        it(@"throws an exception when attempting to register an event which was already marked as deferred.", ^{
+            
             [stateA deferEvent:eventA];
             
             expect(^{
                 [stateA registerEvent:eventA target:stateB];
             }).to.raise(TBSMException);
-        
+            
         });
         
         it(@"throws an exception when attempting to efer an event which was already registered.", ^{
@@ -114,8 +114,8 @@ describe(@"TBSMState", ^{
             }).to.raise(TBSMException);
             
         });
-    
-    
+        
+        
     });
     
     it(@"handles events by returning nil or a TBSMTransition containing source and destination state.", ^{

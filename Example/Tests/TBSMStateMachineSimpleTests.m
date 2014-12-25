@@ -122,7 +122,7 @@ describe(@"TBSMStateMachine", ^{
     });
     
     describe(@"Location inside hierarchy.", ^{
-    
+        
         it(@"returns its path inside the state machine hierarchy.", ^{
             
             subStateMachineB.states = @[stateA];
@@ -580,7 +580,7 @@ describe(@"TBSMStateMachine", ^{
             __block TBSMState *destinationStateGuard = nil;
             __block TBSMState *sourceStateAction = nil;
             __block TBSMState *destinationStateAction = nil;
-        
+            
             NSMutableString *executionSequence = [NSMutableString stringWithString:@""];
             
             NSArray *states = @[stateA, stateB];
