@@ -281,10 +281,10 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA
                            target:stateB
-                           action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                [executionSequence appendString:@"-action"];
                            }
-                            guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                 [executionSequence appendString:@"guard"];
                                 return YES;
                             }];
@@ -325,10 +325,10 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA
                            target:stateB
-                           action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                didExecuteAction = YES;
                            }
-                            guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                 return NO;
                             }];
             
@@ -350,17 +350,17 @@ describe(@"TBSMStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            __block id<TBSMNode> destinationStateAction;
+            __block TBSMState *destinationStateAction;
             __block NSDictionary *receivedDataAction;
-            __block id<TBSMNode> destinationStateGuard;
+            __block TBSMState *destinationStateGuard;
             __block NSDictionary *receivedDataGuard;
             [stateA registerEvent:eventA
                            target:stateB
-                           action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                destinationStateAction = destinationState;
                                receivedDataAction = data;
                            }
-                            guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                 destinationStateGuard = destinationState;
                                 receivedDataGuard = data;
                                 return YES;
@@ -388,7 +388,7 @@ describe(@"TBSMStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            __block id<TBSMNode> destinationStateA;
+            __block TBSMState *destinationStateA;
             __block NSDictionary *destinationStateAData;
             __block NSDictionary *actionData;
             __block NSDictionary *guardData;
@@ -400,10 +400,10 @@ describe(@"TBSMStateMachine", ^{
                 destinationStateAData = data;
             };
             
-            [stateA registerEvent:eventA target:stateB action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            [stateA registerEvent:eventA target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 actionData = data;
             }
-                            guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                 guardData = data;
                                 return YES;
                             }];
@@ -500,12 +500,12 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA
                            target:nil
-                           action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
                                destinationStateAction = destinationState;
                                [executionSequence appendString:@"-action"];
                            }
-                            guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                 sourceStateGuard = sourceState;
                                 destinationStateGuard = destinationState;
                                 [executionSequence appendString:@"-guard"];
@@ -554,7 +554,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA
                            target:nil
-                           action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
                                destinationStateAction = destinationState;
                                [executionSequence appendString:@"-action"];
@@ -603,12 +603,12 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA
                            target:nil
-                           action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
                                destinationStateAction = destinationState;
                                [executionSequence appendString:@"-action"];
                            }
-                            guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                 sourceStateGuard = sourceState;
                                 destinationStateGuard = destinationState;
                                 [executionSequence appendString:@"-guard"];

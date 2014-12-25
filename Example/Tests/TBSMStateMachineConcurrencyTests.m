@@ -141,19 +141,19 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence addObject:@"subStateC_exit"];
             };
             
-            [stateA registerEvent:eventA target:stateB action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            [stateA registerEvent:eventA target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_action"];
                 [stateMachine scheduleEvent:eventB];
-            } guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            } guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 guardExecutedCount++;
                 return (enteredCount == 1);
             }];
             
-            [stateB registerEvent:eventB target:subStateC action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            [stateB registerEvent:eventB target:subStateC action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_action"];
             }];
             
-            [subStateC registerEvent:eventC target:stateA action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            [subStateC registerEvent:eventC target:stateA action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"subStateC_action"];
             }];
             
@@ -258,19 +258,19 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence addObject:@"subStateC_exit"];
             };
             
-            [stateA registerEvent:eventA target:stateB action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            [stateA registerEvent:eventA target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_action"];
             }];
             
-            [stateB registerEvent:eventA target:stateC action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            [stateB registerEvent:eventA target:stateC action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_action"];
             }];
             
-            [subStateC registerEvent:eventA target:stateD action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            [subStateC registerEvent:eventA target:stateD action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"subStateC_action"];
             }];
             
-            [stateD registerEvent:eventA target:stateA action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
+            [stateD registerEvent:eventA target:stateA action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateD_action"];
             }];
             

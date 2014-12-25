@@ -122,9 +122,9 @@ describe(@"TBSMStateMachine", ^{
         
         // setup sub-state machine A
         __block TBSMState *sourceStateC;
-        __block id<TBSMNode> destinationStateC;
+        __block TBSMState *destinationStateC;
         __block TBSMState *sourceStateD;
-        __block id<TBSMNode> destinationStateD;
+        __block TBSMState *destinationStateD;
         __block NSDictionary *dataExitD;
         
         stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
@@ -174,11 +174,11 @@ describe(@"TBSMStateMachine", ^{
         };
         
         // setup main state machine
-        __block id<TBSMNode> sourceStateA;
+        __block TBSMState *sourceStateA;
         __block NSDictionary *dataEnterA;
         __block TBSMState *destinationStateA;
         __block TBSMState *sourceStateB;
-        __block id<TBSMNode> destinationStateB;
+        __block TBSMState *destinationStateB;
         
         stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateA_enter"];
@@ -277,9 +277,9 @@ describe(@"TBSMStateMachine", ^{
         
         // setup sub-state machine A
         __block TBSMState *sourceStateA;
-        __block id<TBSMNode> destinationStateA;
+        __block TBSMState *destinationStateA;
         __block TBSMState *sourceStateB;
-        __block id<TBSMNode> destinationStateB;
+        __block TBSMState *destinationStateB;
         __block NSDictionary *dataExitB;
         
         stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
@@ -531,11 +531,11 @@ describe(@"TBSMStateMachine", ^{
         parallelStates.stateMachines = parallelSubStateMachines;
         
         // setup main state machine
-        __block id<TBSMNode> sourceStateA;
+        __block TBSMState *sourceStateA;
         __block NSDictionary *sourceStateDataA;
         __block TBSMState *destinationStateA;
         __block TBSMState *sourceStateB;
-        __block id<TBSMNode> destinationStateB;
+        __block TBSMState *destinationStateB;
         
         stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             sourceStateA = sourceState;
@@ -624,9 +624,9 @@ describe(@"TBSMStateMachine", ^{
         
         // setup sub-state machine A
         __block TBSMState *sourceStateA;
-        __block id<TBSMNode> destinationStateA;
+        __block TBSMState *destinationStateA;
         __block TBSMState *sourceStateB;
-        __block id<TBSMNode> destinationStateB;
+        __block TBSMState *destinationStateB;
         __block NSDictionary *dataExitB;
         
         stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {

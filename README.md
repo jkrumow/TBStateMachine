@@ -105,16 +105,7 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictio
 If you set the target state to `nil` the resulting transition will be an internal transition. In this case only guard and action blocks will be executed:
 
 ```objective-c
-[stateA registerEvent:event
-               target:nil
-               action:^(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
-
-                   // ...
-               }
-                guard:^BOOL(id<TBSMNode> sourceState, id<TBSMNode> destinationState, NSDictionary *data) {
-                           
-                    return YES;
-                }];
+[stateA registerEvent:event target:nil action:action guard:guard];
 ```
 
 #### Event deferral
