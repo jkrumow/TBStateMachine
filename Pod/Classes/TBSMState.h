@@ -74,6 +74,9 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 /**
  *  Registers a `TBSMEvent` instance for transition to a specified target state.
  *
+ *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
+ *  See deferevent:
+ *
  *  @param event  The given TBSMEvent instance.
  *  @param target The destination `TBSMState` instance.
  */
@@ -82,6 +85,9 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 /**
  *  Registers a `TBSMEvent` instance for transition to a specified target state.
  *  If target parameter is `nil` an internal transition will be performed using the action block.
+ *
+ *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
+ *  See deferevent:
  *
  *  @param event  The given `TBSMEvent` instance.
  *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
@@ -93,6 +99,9 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
  *  Registers a `TBSMEvent` instance for transition to a specified target state.
  *  If target parameter is `nil` an internal transition will be performed using guard and action block.
  *
+ *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
+ *  See deferevent:
+ *
  *  @param event  The given `TBSMEvent` instance.
  *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
  *  @param action The action block associated with this event.
@@ -102,6 +111,9 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 
 /**
  *  Registers a `TBSMEvent` instance which should be deferred when received by this state instance.
+ *
+ *  Throws a `TBSMException` if the specified event is already registered on this state.
+ *  See registerEvent:target:action:guard:
  *
  *  @param event The given `TBSMEvent` instance.
  */
