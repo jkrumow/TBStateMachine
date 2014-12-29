@@ -18,7 +18,7 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 * internal transitions with guards and actions
 * thread safe event handling and switching
 * state switching using lowest common ancestor algorithm (LCA)
-* deferrable events
+* event deferral
 
 ## Example Project
 
