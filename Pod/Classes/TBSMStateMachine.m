@@ -19,7 +19,7 @@
 
 - (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
 - (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
-- (NSArray *)_findActiveLeafStatesInStateMachine:(TBSMStateMachine *)stateMachine;
+- (NSSet *)_valuesFromCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine block:(NSSet * (^)(TBSMState *currentState))block;
 - (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data;
 - (void)_handleNextEvent;
 
@@ -181,31 +181,28 @@
     return nil;
 }
 
-- (NSArray *)_findActiveLeafStatesInStateMachine:(TBSMStateMachine *)stateMachine
+- (NSSet *)_valuesFromCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine block:(NSSet *(^)(TBSMState *currentState))block
 {
-    NSMutableArray *activeLeafStates = [NSMutableArray new];
-    
+    if (!block) {
+        return nil;
+    }
+    NSMutableSet *deferredEvents = [NSMutableSet new];
     TBSMState *currentState = stateMachine.currentState;
     if ([currentState isMemberOfClass:[TBSMState class]]) {
-        
-        [activeLeafStates addObject:currentState];
-        
+        NSSet *values = block(currentState);
+        [deferredEvents unionSet:values];
     } else if ([currentState isMemberOfClass:[TBSMSubState class]]) {
-        
         TBSMSubState *subState = (TBSMSubState *)currentState;
-        NSArray *subLeafs = [self _findActiveLeafStatesInStateMachine:subState.stateMachine];
-        [activeLeafStates addObjectsFromArray:subLeafs];
-        
+        NSSet *events = [self _valuesFromCurrentStatemachineConfiguration:subState.stateMachine block:block];
+        [deferredEvents unionSet:events];
     } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
-        
         TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
         for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
-            NSArray *parallelLeafs = [self _findActiveLeafStatesInStateMachine:stateMachine];
-            [activeLeafStates addObjectsFromArray:parallelLeafs];
+            NSSet *events = [self _valuesFromCurrentStatemachineConfiguration:stateMachine block:block];
+            [deferredEvents unionSet:events];
         }
     }
-    
-    return activeLeafStates;
+    return deferredEvents;
 }
 
 - (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
@@ -248,15 +245,27 @@
         TBSMEvent *queuedEvent = queuedEventInfo[@"event"];
         NSDictionary *queuedEventData = queuedEventInfo[@"data"];
         
-        NSArray *activeLeafStates = [self _findActiveLeafStatesInStateMachine:self];
-        BOOL isDeferred = YES;
+        // Check wether the event is deferred by any state of the active state configuration.
+        NSSet *compositeDeferralList = [self _valuesFromCurrentStatemachineConfiguration:self block:^NSSet *(TBSMState *currentState) {
+            return [NSSet setWithArray:currentState.deferredEvents.allKeys];
+        }];
         
-        for (TBSMState *activeLeafState in activeLeafStates) {
+        BOOL isDeferred = NO;
+        if ([compositeDeferralList containsObject:queuedEvent.name]) {
+            isDeferred = YES;
             
-            // First state which can consume the queued event wins.
-            if (![activeLeafState canDeferEvent:queuedEvent]) {
-                isDeferred = NO;
-                break;
+            // If the event is deferred check wether higher prioritized states can consume the event.
+            NSSet *activeLeafStates = [self _valuesFromCurrentStatemachineConfiguration:self block:^NSSet *(TBSMState *currentState) {
+                return [NSSet setWithObject:currentState];
+            }];
+            
+            for (TBSMState *activeLeafState in activeLeafStates) {
+                
+                // First state which can consume the deferred event wins.
+                if ([activeLeafState canHandleEvent:queuedEvent.name]) {
+                    isDeferred = NO;
+                    break;
+                }
             }
         }
         
@@ -265,7 +274,7 @@
         } else {
             [self handleEvent:queuedEvent data:queuedEventData];
             
-            // Now that we have entered another state we will reschedule the deferred events at the beginning of the event queue.
+            // Since another state has been entered move all deferred events to the beginning of the event queue.
             [self.scheduledEventsQueue insertObjects:self.deferredEventsQueue atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.deferredEventsQueue.count)]];
             [self.deferredEventsQueue removeAllObjects];
         }
