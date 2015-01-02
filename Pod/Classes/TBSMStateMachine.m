@@ -20,7 +20,7 @@
 - (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
 - (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
 - (NSSet *)_valuesFromCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine block:(NSSet * (^)(TBSMState *currentState))block;
-- (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data;
+- (TBSMTransition *)_handleEvent:(TBSMEvent *)event;
 - (void)_handleNextEvent;
 
 @end
@@ -100,21 +100,9 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event
 {
-    [self scheduleEvent:event data:nil];
-}
-
-- (void)scheduleEvent:(TBSMEvent *)event data:(NSDictionary *)data
-{
     @synchronized(self.scheduledEventsQueue) {
         
-        NSDictionary *queuedEvent = nil;
-        if (data) {
-            queuedEvent = @{@"event" : event, @"data" : data};
-        } else {
-            queuedEvent = @{@"event" : event};
-        }
-        
-        [self.scheduledEventsQueue addObject:queuedEvent];
+        [self.scheduledEventsQueue addObject:event];
         
         if (!self.isHandlingEvent) {
             while (self.scheduledEventsQueue.count > 0) {
@@ -205,27 +193,27 @@
     return deferredEvents;
 }
 
-- (TBSMTransition *)_handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)_handleEvent:(TBSMEvent *)event
 {
     TBSMTransition *transition;
     if (_currentState) {
-        transition = [_currentState handleEvent:event data:data];
+        transition = [_currentState handleEvent:event];
     }
     if (transition) {
         TBSMActionBlock action = transition.action;
         TBSMGuardBlock guard = transition.guard;
-        if (guard == nil || guard(transition.sourceState, transition.destinationState, data)) {
+        if (guard == nil || guard(transition.sourceState, transition.destinationState, event.data)) {
             if (transition.destinationState) {
                 TBSMStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
                 if (lowestCommonAncestor) {
-                    [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:action];
+                    [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:event.data action:action];
                 } else {
                     NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
                 }
             } else {
                 // Perform internal transition
                 if (action) {
-                    action(transition.sourceState, transition.destinationState, data);
+                    action(transition.sourceState, transition.destinationState, event.data);
                 }
             }
         }
@@ -239,11 +227,8 @@
     
     if (self.scheduledEventsQueue.count > 0) {
         
-        NSDictionary *queuedEventInfo = self.scheduledEventsQueue[0];
-        [self.scheduledEventsQueue removeObject:queuedEventInfo];
-        
-        TBSMEvent *queuedEvent = queuedEventInfo[@"event"];
-        NSDictionary *queuedEventData = queuedEventInfo[@"data"];
+        TBSMEvent *queuedEvent = self.scheduledEventsQueue[0];
+        [self.scheduledEventsQueue removeObject:queuedEvent];
         
         // Check wether the event is deferred by any state of the active state configuration.
         NSSet *compositeDeferralList = [self _valuesFromCurrentStatemachineConfiguration:self block:^NSSet *(TBSMState *currentState) {
@@ -260,9 +245,7 @@
             }];
             
             for (TBSMState *activeLeafState in activeLeafStates) {
-                
-                // First state which can consume the deferred event wins.
-                if ([activeLeafState canHandleEvent:queuedEvent.name]) {
+                if ([activeLeafState canHandleEvent:queuedEvent]) {
                     isDeferred = NO;
                     break;
                 }
@@ -270,9 +253,9 @@
         }
         
         if (isDeferred) {
-            [self.deferredEventsQueue addObject:queuedEventInfo];
+            [self.deferredEventsQueue addObject:queuedEvent];
         } else {
-            [self handleEvent:queuedEvent data:queuedEventData];
+            [self handleEvent:queuedEvent];
             
             // Since another state has been entered move all deferred events to the beginning of the event queue.
             [self.scheduledEventsQueue insertObjects:self.deferredEventsQueue atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.deferredEventsQueue.count)]];
@@ -295,9 +278,9 @@
     return path;
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event
 {
-    return [self _handleEvent:event data:data];
+    return [self _handleEvent:event];
 }
 
 @end

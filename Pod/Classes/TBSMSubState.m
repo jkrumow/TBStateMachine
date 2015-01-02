@@ -66,10 +66,10 @@
     [super exit:sourceState destinationState:destinationState data:data];
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event
 {
-    [_stateMachine handleEvent:event data:data];
-    return [super handleEvent:event data:data];
+    [_stateMachine handleEvent:event];
+    return [super handleEvent:event];
     // TODO: check what needs to happen: who handles to event first: the statemachine or self.
 }
 

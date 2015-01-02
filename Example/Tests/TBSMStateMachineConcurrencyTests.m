@@ -47,9 +47,9 @@ describe(@"TBSMStateMachine", ^{
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
-        eventC = [TBSMEvent eventWithName:EVENT_NAME_C];
+        eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
+        eventB = [TBSMEvent eventWithName:EVENT_NAME_B data:nil];
+        eventC = [TBSMEvent eventWithName:EVENT_NAME_C data:nil];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"SubA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"SubB"];
@@ -141,7 +141,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence addObject:@"subStateC_exit"];
             };
             
-            [stateA registerEvent:eventA target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [stateA registerEvent:eventA.name target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_action"];
                 [stateMachine scheduleEvent:eventB];
             } guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
@@ -149,11 +149,11 @@ describe(@"TBSMStateMachine", ^{
                 return (enteredCount == 1);
             }];
             
-            [stateB registerEvent:eventB target:subStateC action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [stateB registerEvent:eventB.name target:subStateC action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_action"];
             }];
             
-            [subStateC registerEvent:eventC target:stateA action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [subStateC registerEvent:eventC.name target:stateA action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"subStateC_action"];
             }];
             
@@ -258,19 +258,19 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence addObject:@"subStateC_exit"];
             };
             
-            [stateA registerEvent:eventA target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [stateA registerEvent:eventA.name target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_action"];
             }];
             
-            [stateB registerEvent:eventA target:stateC action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [stateB registerEvent:eventA.name target:stateC action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_action"];
             }];
             
-            [subStateC registerEvent:eventA target:stateD action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [subStateC registerEvent:eventA.name target:stateD action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"subStateC_action"];
             }];
             
-            [stateD registerEvent:eventA target:stateA action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [stateD registerEvent:eventA.name target:stateA action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 [executionSequence addObject:@"stateD_action"];
             }];
             

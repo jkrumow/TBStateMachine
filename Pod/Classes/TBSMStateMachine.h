@@ -116,15 +116,6 @@
 - (void)scheduleEvent:(TBSMEvent *)event;
 
 /**
- *  Schedules an event with a given payload.
- *  The state machine will queue all events it receives until processing of the current event has finished.
- *
- *  @param event The given `TBSMEvent` instance.
- *  @param data  The payload data.
- */
-- (void)scheduleEvent:(TBSMEvent *)event data:(NSDictionary *)data;
-
-/**
  *  Switches from a given source state into a specified destination state.
  *
  *  @param sourceState      The source state.

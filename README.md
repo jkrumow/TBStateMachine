@@ -16,7 +16,6 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 * wrapper class for parallel state machines (orthogonal regions)
 * local transitions with guards and actions, enter and exit blocks
 * internal transitions with guards and actions
-* thread safe event handling and switching
 * state switching using lowest common ancestor algorithm (LCA)
 * event deferral
 
@@ -81,8 +80,7 @@ The state machine will immediately enter the initial state.
 You can register an event which triggers the transition to a specified target state:
 
 ```objective-c
-TBSMEvent *event = [TBSMEvent eventWithName:@"Event"];
-[stateA registerEvent:event target:stateB];
+[stateA registerEvent:@"EventA" target:stateB];
 ```
 
 You can also register an event with additional action and guard blocks:
@@ -99,14 +97,14 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictio
     return YES;
 };
 
-[stateA registerEvent:event target:stateB action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateB action:action guard:guard];
 ```
 #### Internal transitions
 
 If you set the target state to `nil` the resulting transition will be an internal transition. In this case only guard and action blocks will be executed:
 
 ```objective-c
-[stateA registerEvent:event target:nil action:action guard:guard];
+[stateA registerEvent:@"EventA" target:nil action:action guard:guard];
 ```
 
 #### Event deferral
@@ -114,16 +112,17 @@ If you set the target state to `nil` the resulting transition will be an interna
 Under certain conditions you may want to handle an event later in another state:
 
 ```objective-c
-[stateA deferEvent:event];
+[stateA deferEvent:@"EventB"];
 ```
-Now the event will be queued until another state has been entered which can consume - but not necessarily handle - the event.
+Now the event will be queued until another state has been entered which can process the event.
 
 #### Scheduling events
 
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
 ```objective-c
-[stateMachine scheduleEvent:event data:@{@"myPayload":aPayloadObject}];
+TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:@{@"myPayload":aPayloadObject}];
+[stateMachine scheduleEvent:event];
 ```
 
 The state machine will queue all events it receives until processing of the current event has finished.

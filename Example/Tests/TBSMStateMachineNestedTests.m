@@ -56,13 +56,13 @@ describe(@"TBSMStateMachine", ^{
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
-        eventC = [TBSMEvent eventWithName:EVENT_NAME_C];
-        eventD = [TBSMEvent eventWithName:EVENT_NAME_D];
-        eventE = [TBSMEvent eventWithName:EVENT_NAME_E];
-        eventF = [TBSMEvent eventWithName:EVENT_NAME_F];
-        eventInternal = [TBSMEvent eventWithName:@"eventInternal"];
+        eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
+        eventB = [TBSMEvent eventWithName:EVENT_NAME_B data:nil];
+        eventC = [TBSMEvent eventWithName:EVENT_NAME_C data:nil];
+        eventD = [TBSMEvent eventWithName:EVENT_NAME_D data:nil];
+        eventE = [TBSMEvent eventWithName:EVENT_NAME_E data:nil];
+        eventF = [TBSMEvent eventWithName:EVENT_NAME_F data:nil];
+        eventInternal = [TBSMEvent eventWithName:@"eventInternal" data:nil];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"SubA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"SubB"];
@@ -148,8 +148,8 @@ describe(@"TBSMStateMachine", ^{
             dataExitD = data;
         };
         
-        [stateC registerEvent:eventA target:stateD];
-        [stateD registerEvent:eventA target:stateA];
+        [stateC registerEvent:eventA.name target:stateD];
+        [stateD registerEvent:eventA.name target:stateA];
         
         NSArray *subStates = @[stateC, stateD];
         subStateMachineA.states = subStates;
@@ -201,8 +201,8 @@ describe(@"TBSMStateMachine", ^{
             destinationStateB = destinationState;
         };
         
-        [stateA registerEvent:eventA target:stateB];
-        [stateB registerEvent:eventA target:subStateA];
+        [stateA registerEvent:eventA.name target:stateB];
+        [stateB registerEvent:eventA.name target:subStateA];
         
         
         NSArray *states = @[stateA, stateB, subStateA];
@@ -235,7 +235,8 @@ describe(@"TBSMStateMachine", ^{
         dataEnterA = nil;
         
         // will go back to start
-        [stateMachine scheduleEvent:eventA data:eventDataA];
+        eventA.data = eventDataA;
+        [stateMachine scheduleEvent:eventA];
         
         expect(dataExitD[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
         
@@ -303,8 +304,8 @@ describe(@"TBSMStateMachine", ^{
             dataExitB = data;
         };
         
-        [stateA registerEvent:eventA target:stateB];
-        [stateB registerEvent:eventA target:stateD];
+        [stateA registerEvent:eventA.name target:stateB];
+        [stateB registerEvent:eventA.name target:stateD];
         
         NSArray *subStatesA = @[stateA, stateB];
         subStateMachineA.states = subStatesA;
@@ -342,8 +343,8 @@ describe(@"TBSMStateMachine", ^{
             dataExitD = data;
         };
         
-        [stateC registerEvent:eventA target:stateD];
-        [stateD registerEvent:eventA target:stateA];
+        [stateC registerEvent:eventA.name target:stateD];
+        [stateD registerEvent:eventA.name target:stateA];
         
         NSArray *subStatesB = @[stateC, stateD];
         subStateMachineB.states = subStatesB;
@@ -393,7 +394,8 @@ describe(@"TBSMStateMachine", ^{
         sourceStateA = nil;
         
         // will go back to start
-        [stateMachine scheduleEvent:eventA data:eventDataA];
+        eventA.data = eventDataA;
+        [stateMachine scheduleEvent:eventA];
         
         expect(destinationStateD).to.equal(stateA);
         expect(sourceStateEnterSubA).to.equal(stateD);
@@ -427,7 +429,7 @@ describe(@"TBSMStateMachine", ^{
             [executionSequence addObject:@"stateA_exit"];
         };
         
-        [stateA registerEvent:eventA target:stateF];
+        [stateA registerEvent:eventA.name target:stateF];
         
         NSArray *subStatesA = @[stateA];
         subStateMachineA.states = subStatesA;
@@ -554,12 +556,12 @@ describe(@"TBSMStateMachine", ^{
             destinationStateB = destinationState;
         };
         
-        [stateA registerEvent:eventA target:stateB];
-        [stateB registerEvent:eventA target:parallelStates];
-        [stateC registerEvent:eventA target:stateD];
-        [stateD registerEvent:eventA target:nil];
-        [stateE registerEvent:eventA target:stateF];
-        [stateF registerEvent:eventA target:stateA];
+        [stateA registerEvent:eventA.name target:stateB];
+        [stateB registerEvent:eventA.name target:parallelStates];
+        [stateC registerEvent:eventA.name target:stateD];
+        [stateD registerEvent:eventA.name target:nil];
+        [stateE registerEvent:eventA.name target:stateF];
+        [stateF registerEvent:eventA.name target:stateA];
         
         NSArray *states = @[stateA, stateB, parallelStates];
         stateMachine.states = states;
@@ -593,7 +595,8 @@ describe(@"TBSMStateMachine", ^{
         expect(destinationStateE).to.equal(stateF);
         expect(sourceStateF).to.equal(stateE);
         
-        [stateMachine scheduleEvent:eventA data:eventDataA];
+        eventA.data = eventDataA;
+        [stateMachine scheduleEvent:eventA];
         
         // moves back to state A
         expect(destinationStateD).to.equal(stateA);
@@ -650,8 +653,8 @@ describe(@"TBSMStateMachine", ^{
             dataExitB = data;
         };
         
-        [stateA registerEvent:eventA target:stateB];
-        [stateB registerEvent:eventA target:stateD];
+        [stateA registerEvent:eventA.name target:stateB];
+        [stateB registerEvent:eventA.name target:stateD];
         
         NSArray *subStatesA = @[stateA, stateB];
         subStateMachineA.states = subStatesA;
@@ -690,10 +693,10 @@ describe(@"TBSMStateMachine", ^{
             dataExitD = data;
         };
         
-        [stateC registerEvent:eventA target:stateD];
-        [stateD registerEvent:eventA target:stateA];
+        [stateC registerEvent:eventA.name target:stateD];
+        [stateD registerEvent:eventA.name target:stateA];
         
-        [stateD registerEvent:eventInternal target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        [stateD registerEvent:eventInternal.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateD_action_internal"];
         } guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             [executionSequence addObject:@"stateD_guard_internal"];
@@ -755,7 +758,8 @@ describe(@"TBSMStateMachine", ^{
         sourceStateA = nil;
         
         // will go back to start
-        [stateMachine scheduleEvent:eventA data:eventDataA];
+        eventA.data = eventDataA;
+        [stateMachine scheduleEvent:eventA];
         
         expect(destinationStateD).to.equal(stateA);
         expect(sourceStateEnterSubA).to.equal(stateD);
@@ -792,19 +796,19 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineD.states = @[stateD];
         subStateMachineD.initialState = stateD;
         
-        [stateA registerEvent:eventInternal target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        [stateA registerEvent:eventInternal.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             actionStateA = YES;
         }];
         
-        [stateB registerEvent:eventInternal target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        [stateB registerEvent:eventInternal.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             actionStateB = YES;
         }];
         
-        [stateC registerEvent:eventInternal target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        [stateC registerEvent:eventInternal.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             actionStateC = YES;
         }];
         
-        [stateD registerEvent:eventInternal target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        [stateD registerEvent:eventInternal.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             actionStateD = YES;
         }];
         
@@ -832,12 +836,12 @@ describe(@"TBSMStateMachine", ^{
         
         TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
         
-        [subStateA deferEvent:eventB];
-        [stateA registerEvent:eventA target:stateB];
-        [stateA deferEvent:eventB];
-        [stateB registerEvent:eventB target:stateC];
-        [stateC deferEvent:eventC];
-        [stateC registerEvent:eventD target:stateD];
+        [subStateA deferEvent:eventB.name];
+        [stateA registerEvent:eventA.name target:stateB];
+        [stateA deferEvent:eventB.name];
+        [stateB registerEvent:eventB.name target:stateC];
+        [stateC deferEvent:eventC.name];
+        [stateC registerEvent:eventD.name target:stateD];
         
         // setup sub state machine wrapper B
         NSArray *subStatesB = @[stateD, stateE, stateF];
@@ -846,10 +850,10 @@ describe(@"TBSMStateMachine", ^{
         
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"SubStateB" stateMachine:subStateMachineB];
         
-        [subStateB deferEvent:eventC];
-        [subStateB deferEvent:eventE];
-        [stateD registerEvent:eventC target:stateE];
-        [stateE deferEvent:eventE];
+        [subStateB deferEvent:eventC.name];
+        [subStateB deferEvent:eventE.name];
+        [stateD registerEvent:eventC.name target:stateE];
+        [stateE deferEvent:eventE.name];
         
         // setup main state machine
         stateMachine.states = @[subStateA, subStateB];
@@ -880,8 +884,14 @@ describe(@"TBSMStateMachine", ^{
         expect(stateMachine.currentState).to.equal(subStateB);
         expect(subStateB.stateMachine.currentState).to.equal(stateE);
         
-        // should be deferred by eventE
+        // should be deferred by stateE
         [stateMachine scheduleEvent:eventE];
+        
+        expect(stateMachine.currentState).to.equal(subStateB);
+        expect(subStateB.stateMachine.currentState).to.equal(stateE);
+        
+        // should be deferred by subStateB
+        [stateMachine scheduleEvent:eventC];
         
         expect(stateMachine.currentState).to.equal(subStateB);
         expect(subStateB.stateMachine.currentState).to.equal(stateE);
@@ -896,10 +906,10 @@ describe(@"TBSMStateMachine", ^{
         
         TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
         
-        [subStateA deferEvent:eventB];
-        [stateA registerEvent:eventA target:stateB];
-        [stateA deferEvent:eventB];
-        [stateB registerEvent:eventB target:parallelStates];
+        [subStateA deferEvent:eventB.name];
+        [stateA registerEvent:eventA.name target:stateB];
+        [stateA deferEvent:eventB.name];
+        [stateB registerEvent:eventB.name target:parallelStates];
         
         // setup sub state machine wrapper B
         NSArray *subStatesB = @[stateC, stateD];
@@ -912,14 +922,15 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineC.initialState = stateE;
         
         parallelStates.stateMachines = @[subStateMachineB, subStateMachineC];
-        [parallelStates deferEvent:eventC];
-        [stateC deferEvent:eventC];
-        [stateC registerEvent:eventD target:stateD];
-        [stateD registerEvent:eventC target:stateC];
-        [stateE deferEvent:eventC];
-        [stateE deferEvent:eventD];
-        [stateE registerEvent:eventE target:stateA];
-        [stateF registerEvent:eventC target:stateE];
+        [parallelStates deferEvent:eventC.name];
+        [parallelStates deferEvent:eventF.name];
+        [stateC deferEvent:eventC.name];
+        [stateC registerEvent:eventD.name target:stateD];
+        [stateD registerEvent:eventC.name target:stateC];
+        [stateE deferEvent:eventC.name];
+        [stateE deferEvent:eventD.name];
+        [stateE registerEvent:eventE.name target:stateA];
+        [stateF registerEvent:eventC.name target:stateE];
         
         // setup main state machine
         stateMachine.states = @[subStateA, parallelStates];
@@ -952,7 +963,14 @@ describe(@"TBSMStateMachine", ^{
         expect(stateMachine.currentState).to.equal(parallelStates);
         expect([parallelStates.stateMachines[0] currentState]).to.equal(stateC);
         expect([parallelStates.stateMachines[1] currentState]).to.equal(stateE);
+
+        // should be deferred by parallelStates
+        [stateMachine scheduleEvent:eventF];
         
+        expect(stateMachine.currentState).to.equal(parallelStates);
+        expect([parallelStates.stateMachines[0] currentState]).to.equal(stateC);
+        expect([parallelStates.stateMachines[1] currentState]).to.equal(stateE);
+
         // should switch to subStateA - stateA
         [stateMachine scheduleEvent:eventE];
         

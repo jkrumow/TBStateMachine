@@ -36,8 +36,8 @@ describe(@"TBSMSubState", ^{
         stateB = [TBSMState stateWithName:@"B"];
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
+        eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
+        eventB = [TBSMEvent eventWithName:EVENT_NAME_B data:nil];
         
         stateMachine = [TBSMStateMachine stateMachineWithName:@"stateMachine"];
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"stateMachineA"];
@@ -98,7 +98,7 @@ describe(@"TBSMSubState", ^{
     });
     
     it(@"registers TBSMEventBlock instances by the name of a provided TBSMEvent instance.", ^{
-        [subState registerEvent:eventA target:nil];
+        [subState registerEvent:eventA.name target:nil];
         
         NSDictionary *registeredEvents = subState.eventHandlers;
         expect(registeredEvents.allKeys).to.haveCountOf(1);
@@ -232,7 +232,7 @@ describe(@"TBSMSubState", ^{
             expect(destinationState).to.equal(stateB);
         };
         
-        [subStateA registerEvent:eventA target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        [subStateA registerEvent:eventA.name target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             actionExecuted = YES;
         } guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
             return YES;

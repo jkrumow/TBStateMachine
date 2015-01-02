@@ -45,9 +45,9 @@ describe(@"TBSMStateMachine", ^{
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
-        eventC = [TBSMEvent eventWithName:EVENT_NAME_C];
+        eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
+        eventB = [TBSMEvent eventWithName:EVENT_NAME_B data:nil];
+        eventC = [TBSMEvent eventWithName:EVENT_NAME_C data:nil];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"SubA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"SubB"];
@@ -237,7 +237,7 @@ describe(@"TBSMStateMachine", ^{
                 sourceStateB = sourceState;
             };
             
-            [stateA registerEvent:eventA target:stateB];
+            [stateA registerEvent:eventA.name target:stateB];
             
             stateMachine.states = states;
             stateMachine.initialState = stateA;
@@ -279,7 +279,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-enter"];
             };
             
-            [stateA registerEvent:eventA
+            [stateA registerEvent:eventA.name
                            target:stateB
                            action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                [executionSequence appendString:@"-action"];
@@ -323,7 +323,7 @@ describe(@"TBSMStateMachine", ^{
                 didExecuteEnterB = YES;
             };
             
-            [stateA registerEvent:eventA
+            [stateA registerEvent:eventA.name
                            target:stateB
                            action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                didExecuteAction = YES;
@@ -354,7 +354,7 @@ describe(@"TBSMStateMachine", ^{
             __block NSDictionary *receivedDataAction;
             __block TBSMState *destinationStateGuard;
             __block NSDictionary *receivedDataGuard;
-            [stateA registerEvent:eventA
+            [stateA registerEvent:eventA.name
                            target:stateB
                            action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                destinationStateAction = destinationState;
@@ -371,7 +371,8 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp];
             
             // will enter state B
-            [stateMachine scheduleEvent:eventA data:eventDataA];
+            eventA.data = eventDataA;
+            [stateMachine scheduleEvent:eventA];
             
             expect(destinationStateAction).to.equal(stateB);
             expect(receivedDataAction).to.equal(eventDataA);
@@ -400,7 +401,7 @@ describe(@"TBSMStateMachine", ^{
                 destinationStateAData = data;
             };
             
-            [stateA registerEvent:eventA target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            [stateA registerEvent:eventA.name target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                 actionData = data;
             }
                             guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
@@ -418,7 +419,8 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp];
             
             // enters state B
-            [stateMachine scheduleEvent:eventA data:eventDataA];
+            eventA.data = eventDataA;
+            [stateMachine scheduleEvent:eventA];
             
             expect(destinationStateA).to.equal(stateB);
             expect(destinationStateAData).to.equal(eventDataA);
@@ -459,7 +461,7 @@ describe(@"TBSMStateMachine", ^{
                 destinationStateA = destinationState;
             };
             
-            [stateA registerEvent:eventA target:stateA];
+            [stateA registerEvent:eventA.name target:stateA];
             
             stateMachine.states = states;
             stateMachine.initialState = stateA;
@@ -498,7 +500,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitB"];
             };
             
-            [stateA registerEvent:eventA
+            [stateA registerEvent:eventA.name
                            target:nil
                            action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
@@ -552,7 +554,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitB"];
             };
             
-            [stateA registerEvent:eventA
+            [stateA registerEvent:eventA.name
                            target:nil
                            action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
@@ -601,7 +603,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitB"];
             };
             
-            [stateA registerEvent:eventA
+            [stateA registerEvent:eventA.name
                            target:nil
                            action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
                                sourceStateAction = sourceState;
@@ -660,9 +662,9 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitC"];
             };
             
-            [stateA registerEvent:eventA target:stateB];
-            [stateA deferEvent:eventB];
-            [stateB registerEvent:eventB target:stateC];
+            [stateA registerEvent:eventA.name target:stateB];
+            [stateA deferEvent:eventB.name];
+            [stateB registerEvent:eventB.name target:stateC];
             
             stateMachine.states = states;
             stateMachine.initialState = stateA;

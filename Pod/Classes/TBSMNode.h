@@ -49,15 +49,14 @@
 - (void)setParentState:(id<TBSMNode>)parentState;
 
 /**
- *  Receives a specified `TBSMEvent` instance and payload dictionary.
+ *  Receives a specified `TBSMEvent` instance.
  *
  *  If the node recognizes the given `TBSMEvent` it will return the corresponding `TBSMTransition` instance.
  *
  *  @param event The given `TBSMEvent` instance.
- *  @param data  The payload data.
  *
  *  @return A `TBSMTransition` to the next state or `nil`.
  */
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data;
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event;
 
 @end

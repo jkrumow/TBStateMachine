@@ -1,5 +1,10 @@
 # TBStateMachine CHANGELOG
 
+## 4.0.0
+
+- corrected event deferral algorithm
+- changed event registration / deferral API
+
 ## 3.1.0
 
 - added internal transitions

@@ -48,31 +48,31 @@
     return _priv_deferredEvents.copy;
 }
 
-- (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target
 {
     [self registerEvent:event target:target action:nil guard:nil];
 }
 
-- (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target action:(TBSMActionBlock)action
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target action:(TBSMActionBlock)action
 {
     [self registerEvent:event target:target action:action guard:nil];
 }
 
-- (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
-    if ([self canDeferEvent:event])  {
-        @throw [NSException tb_cannotRegisterDeferredEvent:event.name];
+    if ([_priv_deferredEvents objectForKey:event])  {
+        @throw [NSException tb_cannotRegisterDeferredEvent:event];
     }
-    TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event.name target:target action:action guard:guard];
-    [_priv_eventHandlers setObject:eventHandler forKey:event.name];
+    TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target action:action guard:guard];
+    [_priv_eventHandlers setObject:eventHandler forKey:event];
 }
 
-- (void)deferEvent:(TBSMEvent *)event
+- (void)deferEvent:(NSString *)event
 {
-    if ([self canHandleEvent:event])  {
-        @throw [NSException tb_cannotDeferRegisteredEvent:event.name];
+    if ([_priv_eventHandlers objectForKey:event])  {
+        @throw [NSException tb_cannotDeferRegisteredEvent:event];
     }
-    [_priv_deferredEvents setObject:event forKey:event.name];
+    [_priv_deferredEvents setObject:event forKey:event];
 }
 
 - (BOOL)canHandleEvent:(TBSMEvent *)event
@@ -112,7 +112,7 @@
     }
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event
 {
     if ([self canHandleEvent:event]) {
         TBSMEventHandler *eventHandler = [_priv_eventHandlers objectForKey:event.name];

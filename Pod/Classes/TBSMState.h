@@ -72,52 +72,52 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 - (instancetype)initWithName:(NSString *)name;
 
 /**
- *  Registers a `TBSMEvent` instance for transition to a specified target state.
+ *  Registers an event of a given name for transition to a specified target state.
  *
  *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
  *  See deferevent:
  *
- *  @param event  The given TBSMEvent instance.
+ *  @param event  The given event name.
  *  @param target The destination `TBSMState` instance.
  */
-- (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target;
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target;
 
 /**
- *  Registers a `TBSMEvent` instance for transition to a specified target state.
+ *  Registers an event of a given name for transition to a specified target state.
  *  If target parameter is `nil` an internal transition will be performed using the action block.
  *
  *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
  *  See deferevent:
  *
- *  @param event  The given `TBSMEvent` instance.
+ *  @param event  The given event name.
  *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
  *  @param action The action block associated with this event.
  */
-- (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target action:(TBSMActionBlock)action;
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target action:(TBSMActionBlock)action;
 
 /**
- *  Registers a `TBSMEvent` instance for transition to a specified target state.
+ *  Registers an event of a given name for transition to a specified target state.
  *  If target parameter is `nil` an internal transition will be performed using guard and action block.
  *
  *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
  *  See deferevent:
  *
- *  @param event  The given `TBSMEvent` instance.
+ *  @param event  The given event name.
  *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
  *  @param action The action block associated with this event.
  *  @param guard  The guard block associated with this event.
  */
-- (void)registerEvent:(TBSMEvent *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
- *  Registers a `TBSMEvent` instance which should be deferred when received by this state instance.
+ *  Registers an event of a given name which should be deferred when received by this state instance.
  *
  *  Throws a `TBSMException` if the specified event is already registered on this state.
  *  See registerEvent:target:action:guard:
  *
- *  @param event The given `TBSMEvent` instance.
+ *  @param event  The given event name.
  */
-- (void)deferEvent:(TBSMEvent *)event;
+- (void)deferEvent:(NSString *)event;
 
 /**
  *  Returns `YES` if a given event can be handled by the state.

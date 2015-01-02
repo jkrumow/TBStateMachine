@@ -20,15 +20,21 @@
 @property (nonatomic, copy, readonly) NSString *name;
 
 /**
+ *  The event's payload.
+ */
+@property (nonatomic, strong) NSDictionary *data;
+
+/**
  *  Creates a `TBSMEvent` instance from a given name.
  *
  *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The specified event name.
+ *  @param data Optional payload data.
  *
  *  @return The event instance.
  */
-+ (TBSMEvent *)eventWithName:(NSString *)name;
++ (TBSMEvent *)eventWithName:(NSString *)name data:(NSDictionary *)data;
 
 /**
  *  Initializes a `TBSMEvent` with a specified name.
@@ -36,9 +42,10 @@
  *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The name of this event. Must be unique.
+ *  @param data Optional payload data.
  *
  *  @return An initialized `TBSMEvent` instance.
  */
-- (instancetype)initWithName:(NSString *)name;
+- (instancetype)initWithName:(NSString *)name data:(NSDictionary *)data;
 
 @end

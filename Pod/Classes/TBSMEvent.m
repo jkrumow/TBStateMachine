@@ -11,12 +11,12 @@
 
 @implementation TBSMEvent
 
-+ (TBSMEvent *)eventWithName:(NSString *)name
++ (TBSMEvent *)eventWithName:(NSString *)name data:(NSDictionary *)data
 {
-    return [[TBSMEvent alloc] initWithName:name];
+    return [[TBSMEvent alloc] initWithName:name data:data];
 }
 
-- (instancetype)initWithName:(NSString *)name
+- (instancetype)initWithName:(NSString *)name data:(NSDictionary *)data
 {
     if (name == nil || [name isEqualToString:@""]) {
         @throw [NSException tb_noNameForEventException];
@@ -24,6 +24,7 @@
     self = [super init];
     if (self) {
         _name = name.copy;
+        _data = data;
     }
     return self;
 }

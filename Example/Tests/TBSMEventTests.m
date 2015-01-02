@@ -18,7 +18,7 @@ describe(@"TBSMEvent", ^{
         it (@"throws a TBSMException when name is nil.", ^{
             
             expect(^{
-                [TBSMEvent eventWithName:nil];
+                [TBSMEvent eventWithName:nil data:nil];
             }).to.raise(TBSMException);
             
         });
@@ -26,13 +26,13 @@ describe(@"TBSMEvent", ^{
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
-                [TBSMEvent eventWithName:@""];
+                [TBSMEvent eventWithName:@"" data:nil];
             }).to.raise(TBSMException);
             
         });
         
         it (@"returns its name.", ^{
-            TBSMEvent *event = [TBSMEvent eventWithName:@"a"];
+            TBSMEvent *event = [TBSMEvent eventWithName:@"a" data:nil];
             expect(event.name).to.equal(@"a");
         });
         

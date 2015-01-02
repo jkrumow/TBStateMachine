@@ -107,14 +107,14 @@
     [super exit:sourceState destinationState:destinationState data:data];
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event data:(NSDictionary *)data
+- (TBSMTransition *)handleEvent:(TBSMEvent *)event
 {
     dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
         TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-        [stateMachine handleEvent:event data:data];
+        [stateMachine handleEvent:event];
     });
-    return [super handleEvent:event data:data];
+    return [super handleEvent:event];
 }
 
 @end

@@ -34,8 +34,8 @@ describe(@"TBSMState", ^{
         stateA = [TBSMState stateWithName:@"a"];
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
-        eventB = [TBSMEvent eventWithName:EVENT_NAME_B];
+        eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
+        eventB = [TBSMEvent eventWithName:EVENT_NAME_B data:nil];
         
         stateMachine = [TBSMStateMachine stateMachineWithName:@"stateMachine"];
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"stateMachineA"];
@@ -83,7 +83,7 @@ describe(@"TBSMState", ^{
     
     it(@"registers TBSMEvent instances with a given target TBSMState.", ^{
         
-        [stateA registerEvent:eventA target:stateA];
+        [stateA registerEvent:eventA.name target:stateA];
         
         NSDictionary *registeredEvents = stateA.eventHandlers;
         expect(registeredEvents.allKeys).to.haveCountOf(1);
@@ -97,20 +97,20 @@ describe(@"TBSMState", ^{
         
         it(@"throws an exception when attempting to register an event which was already marked as deferred.", ^{
             
-            [stateA deferEvent:eventA];
+            [stateA deferEvent:eventA.name];
             
             expect(^{
-                [stateA registerEvent:eventA target:stateB];
+                [stateA registerEvent:eventA.name target:stateB];
             }).to.raise(TBSMException);
             
         });
         
         it(@"throws an exception when attempting to efer an event which was already registered.", ^{
             
-            [stateA registerEvent:eventA target:stateB];
+            [stateA registerEvent:eventA.name target:stateB];
             
             expect(^{
-                [stateA deferEvent:eventA];
+                [stateA deferEvent:eventA.name];
             }).to.raise(TBSMException);
             
         });
@@ -120,13 +120,13 @@ describe(@"TBSMState", ^{
     
     it(@"handles events by returning nil or a TBSMTransition containing source and destination state.", ^{
         
-        [stateA registerEvent:eventA target:nil];
-        [stateA registerEvent:eventB target:stateB];
+        [stateA registerEvent:eventA.name target:nil];
+        [stateA registerEvent:eventB.name target:stateB];
         
-        TBSMTransition *resultA = [stateA handleEvent:eventA data:nil];
+        TBSMTransition *resultA = [stateA handleEvent:eventA];
         expect(resultA).to.beNil;
         
-        TBSMTransition *resultB = [stateA handleEvent:eventB data:nil];
+        TBSMTransition *resultB = [stateA handleEvent:eventB];
         expect(resultB.sourceState).to.equal(stateA);
         expect(resultB.destinationState).to.equal(stateB);
     });

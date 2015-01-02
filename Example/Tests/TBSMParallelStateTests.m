@@ -43,7 +43,7 @@ describe(@"TBSMParallelState", ^{
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"SubB"];
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBSMEvent eventWithName:EVENT_NAME_A];
+        eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
     });
     
     afterEach(^{
