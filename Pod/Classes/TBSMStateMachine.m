@@ -174,23 +174,28 @@
     if (!block) {
         return nil;
     }
-    NSMutableSet *deferredEvents = [NSMutableSet new];
+    NSMutableSet *allValues = [NSMutableSet new];
     TBSMState *currentState = stateMachine.currentState;
-    if ([currentState isMemberOfClass:[TBSMState class]]) {
-        NSSet *values = block(currentState);
-        [deferredEvents unionSet:values];
-    } else if ([currentState isMemberOfClass:[TBSMSubState class]]) {
+    NSSet *values = block(currentState);
+    if (values) {
+        [allValues unionSet:values];
+    }
+    if ([currentState isMemberOfClass:[TBSMSubState class]]) {
         TBSMSubState *subState = (TBSMSubState *)currentState;
-        NSSet *events = [self _traverseCurrentStatemachineConfiguration:subState.stateMachine usingBlock:block];
-        [deferredEvents unionSet:events];
+        NSSet *values = [self _traverseCurrentStatemachineConfiguration:subState.stateMachine usingBlock:block];
+        if (values) {
+            [allValues unionSet:values];
+        }
     } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
         TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
         for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
-            NSSet *events = [self _traverseCurrentStatemachineConfiguration:stateMachine usingBlock:block];
-            [deferredEvents unionSet:events];
+            NSSet *values = [self _traverseCurrentStatemachineConfiguration:stateMachine usingBlock:block];
+            if (values) {
+                [allValues unionSet:values];
+            }
         }
     }
-    return deferredEvents;
+    return allValues;
 }
 
 - (TBSMTransition *)_handleEvent:(TBSMEvent *)event
@@ -241,7 +246,10 @@
             
             // If the event is deferred check wether higher prioritized states can consume the event.
             NSSet *activeLeafStates = [self _traverseCurrentStatemachineConfiguration:self usingBlock:^NSSet *(TBSMState *currentState) {
-                return [NSSet setWithObject:currentState];
+                if ([currentState isMemberOfClass:[TBSMState class]]) {
+                    return [NSSet setWithObject:currentState];
+                }
+                return nil;
             }];
             
             for (TBSMState *activeLeafState in activeLeafStates) {
