@@ -19,7 +19,7 @@
 
 - (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
 - (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
-- (NSSet *)_valuesFromCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine block:(NSSet * (^)(TBSMState *currentState))block;
+- (NSSet *)_traverseCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(NSSet * (^)(TBSMState *currentState))block;
 - (TBSMTransition *)_handleEvent:(TBSMEvent *)event;
 - (void)_handleNextEvent;
 
@@ -169,7 +169,7 @@
     return nil;
 }
 
-- (NSSet *)_valuesFromCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine block:(NSSet *(^)(TBSMState *currentState))block
+- (NSSet *)_traverseCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(NSSet *(^)(TBSMState *currentState))block
 {
     if (!block) {
         return nil;
@@ -181,12 +181,12 @@
         [deferredEvents unionSet:values];
     } else if ([currentState isMemberOfClass:[TBSMSubState class]]) {
         TBSMSubState *subState = (TBSMSubState *)currentState;
-        NSSet *events = [self _valuesFromCurrentStatemachineConfiguration:subState.stateMachine block:block];
+        NSSet *events = [self _traverseCurrentStatemachineConfiguration:subState.stateMachine usingBlock:block];
         [deferredEvents unionSet:events];
     } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
         TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
         for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
-            NSSet *events = [self _valuesFromCurrentStatemachineConfiguration:stateMachine block:block];
+            NSSet *events = [self _traverseCurrentStatemachineConfiguration:stateMachine usingBlock:block];
             [deferredEvents unionSet:events];
         }
     }
@@ -231,7 +231,7 @@
         [self.scheduledEventsQueue removeObject:queuedEvent];
         
         // Check wether the event is deferred by any state of the active state configuration.
-        NSSet *compositeDeferralList = [self _valuesFromCurrentStatemachineConfiguration:self block:^NSSet *(TBSMState *currentState) {
+        NSSet *compositeDeferralList = [self _traverseCurrentStatemachineConfiguration:self usingBlock:^NSSet *(TBSMState *currentState) {
             return [NSSet setWithArray:currentState.deferredEvents.allKeys];
         }];
         
@@ -240,7 +240,7 @@
             isDeferred = YES;
             
             // If the event is deferred check wether higher prioritized states can consume the event.
-            NSSet *activeLeafStates = [self _valuesFromCurrentStatemachineConfiguration:self block:^NSSet *(TBSMState *currentState) {
+            NSSet *activeLeafStates = [self _traverseCurrentStatemachineConfiguration:self usingBlock:^NSSet *(TBSMState *currentState) {
                 return [NSSet setWithObject:currentState];
             }];
             
