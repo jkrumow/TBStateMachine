@@ -1,6 +1,6 @@
 # TBStateMachine CHANGELOG
 
-# 4.0.1
+## 4.0.1
 
 - corrected event deferral algorithm
 
