@@ -223,6 +223,7 @@
                     action(transition.sourceState, transition.destinationState, event.data);
                 }
             }
+            return transition;
         }
     }
     return nil;

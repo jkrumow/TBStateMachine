@@ -68,11 +68,10 @@
 
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event
 {
-    [_stateMachine handleEvent:event];
+    if ([_stateMachine handleEvent:event]) {
+        return nil;
+    }
     return [super handleEvent:event];
-    // TODO: check what needs to happen: who handles to event first: the statemachine or self.
 }
-
-
 
 @end

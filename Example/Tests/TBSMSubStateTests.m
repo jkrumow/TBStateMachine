@@ -12,6 +12,7 @@ SpecBegin(TBSMSubState)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";
+NSString * const EVENT_NAME_C = @"DummyEventC";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
@@ -22,6 +23,7 @@ __block TBSMState *stateB;
 
 __block TBSMEvent *eventA;
 __block TBSMEvent *eventB;
+__block TBSMEvent *eventC;
 __block TBSMStateMachine *subStateMachineA;
 __block TBSMStateMachine *subStateMachineB;
 __block TBSMParallelState *parallelStates;
@@ -38,6 +40,7 @@ describe(@"TBSMSubState", ^{
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
         eventB = [TBSMEvent eventWithName:EVENT_NAME_B data:nil];
+        eventC = [TBSMEvent eventWithName:EVENT_NAME_C data:nil];
         
         stateMachine = [TBSMStateMachine stateMachineWithName:@"stateMachine"];
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"stateMachineA"];
@@ -55,6 +58,7 @@ describe(@"TBSMSubState", ^{
         eventDataB = nil;
         eventA = nil;
         eventB = nil;
+        eventC = nil;
         
         stateMachine = nil;
         subStateMachineA = nil;
@@ -232,10 +236,30 @@ describe(@"TBSMSubState", ^{
             expect(destinationState).to.equal(stateB);
         };
         
-        [subStateA registerEvent:eventA.name target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-            actionExecuted = YES;
+        __block BOOL subStateExecutedEventA = NO;
+        [subStateA registerEvent:eventA.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            subStateExecutedEventA = YES;
+        }];
+        
+        __block BOOL stateExecutedEventA = NO;
+        [stateA registerEvent:eventA.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateExecutedEventA = YES;
+        }];
+        
+        __block BOOL subStateAExecutedEventB = NO;
+        [subStateA registerEvent:eventB.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            subStateAExecutedEventB = YES;
+        }];
+        
+        __block BOOL stateAExecutedEventB = NO;
+        [stateA registerEvent:eventB.name target:nil action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateAExecutedEventB = YES;
         } guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
-            return YES;
+            return NO;
+        }];
+        
+        [subStateA registerEvent:eventC.name target:stateB action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            actionExecuted = YES;
         }];
         
         stateMachine.states = @[subStateA, stateB];
@@ -253,15 +277,26 @@ describe(@"TBSMSubState", ^{
         enterSubStateA = NO;
         exitSubStateA = NO;
         
+        // should be handled by state A, not bubble up to sub state A
         [stateMachine scheduleEvent:eventA];
+        
+        expect(subStateExecutedEventA).to.equal(NO);
+        expect(stateExecutedEventA).to.equal(YES);
+        
+        // should be handled by state A but blocked by guard, handled by sub state A instead
+        [stateMachine scheduleEvent:eventB];
+        
+        expect(stateAExecutedEventB).to.equal(NO);
+        expect(subStateAExecutedEventB).to.equal(YES);
+        
+        // should not be handled by state A, but bubble up to sub state A -> move to state B
+        [stateMachine scheduleEvent:eventC];
         
         expect(enterStateA).to.equal(NO);
         expect(exitStateA).to.equal(YES);
         expect(actionExecuted).to.equal(YES);
         expect(enterStateB).to.equal(YES);
-        
     });
-    
 });
 
 SpecEnd

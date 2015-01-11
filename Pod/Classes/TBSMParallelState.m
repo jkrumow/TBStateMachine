@@ -109,11 +109,15 @@
 
 - (TBSMTransition *)handleEvent:(TBSMEvent *)event
 {
+    __block TBSMTransition *transition = nil;
     dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
         TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-        [stateMachine handleEvent:event];
+        transition = [stateMachine handleEvent:event];
     });
+    if (transition) {
+        return nil;
+    }
     return [super handleEvent:event];
 }
 
