@@ -105,9 +105,11 @@
         [self.scheduledEventsQueue addObject:event];
         
         if (!self.isHandlingEvent) {
+            self.handlesEvent = YES;
             while (self.scheduledEventsQueue.count > 0) {
                 [self _handleNextEvent];
             }
+            self.handlesEvent = NO;
         }
     }
 }
@@ -228,8 +230,6 @@
 
 - (void)_handleNextEvent
 {
-    self.handlesEvent = YES;
-    
     if (self.scheduledEventsQueue.count > 0) {
         
         TBSMEvent *queuedEvent = self.scheduledEventsQueue[0];
@@ -270,7 +270,6 @@
             [self.deferredEventsQueue removeAllObjects];
         }
     }
-    self.handlesEvent = NO;
 }
 
 #pragma mark - TBSMNode
