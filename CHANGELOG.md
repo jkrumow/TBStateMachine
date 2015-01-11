@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 4.0.2
+
+- fixed bug which caused `TBSMParallelState` not to setup all sub machines when performing transition into one state machine
+
 ## 4.0.1
 
 - corrected event deferral algorithm

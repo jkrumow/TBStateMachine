@@ -557,7 +557,7 @@ describe(@"TBSMStateMachine", ^{
         };
         
         [stateA registerEvent:eventA.name target:stateB];
-        [stateB registerEvent:eventA.name target:parallelStates];
+        [stateB registerEvent:eventA.name target:stateC];
         [stateC registerEvent:eventA.name target:stateD];
         [stateD registerEvent:eventA.name target:nil];
         [stateE registerEvent:eventA.name target:stateF];
@@ -576,14 +576,16 @@ describe(@"TBSMStateMachine", ^{
         expect(destinationStateA).to.equal(stateB);
         expect(sourceStateB).to.equal(stateA);
         
-        // moves to parallel state wrapper
+        // moves to stateC inside parallel state wrapper
         // enters state C in subStateMachine A
         // enters state E in subStateMachine B
         [stateMachine scheduleEvent:eventA];
         
-        expect(destinationStateB).to.equal(parallelStates);
+        expect(destinationStateB).to.equal(stateC);
         expect(sourceStateC).to.beNil;
         expect(sourceStateE).to.beNil;
+        expect(subStateMachineA.currentState).to.equal(stateC);
+        expect(subStateMachineB.currentState).to.equal(stateE);
         
         // moves subStateMachine A from C to state D
         // moves subStateMachine B from E to state F

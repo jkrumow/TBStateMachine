@@ -84,10 +84,10 @@
     dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
         TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-        if (destinationState == nil || destinationState == self) {
-            [stateMachine setUp];
-        } else {
+        if ([destinationState.getPath containsObject:stateMachine]) {
             [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
+        } else {
+            [stateMachine setUp];
         }
     });
 }
