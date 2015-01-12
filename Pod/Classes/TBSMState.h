@@ -138,6 +138,15 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 - (BOOL)canDeferEvent:(TBSMEvent *)event;
 
 /**
+ *  Returns a `TBSMTransition` instance fo a given event.
+ *
+ *  @param event The event to handle
+ *
+ *  @return The corresponding transition.
+ */
+- (TBSMTransition *)transitionForEvent:(TBSMEvent *)event;
+
+/**
  *  Executes the enter block of the state.
  *
  *  @param sourceState      The source state.

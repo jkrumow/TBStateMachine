@@ -32,7 +32,7 @@
  *
  *  @return An array containing all parent nodes.
  */
-- (NSMutableArray *)getPath;
+- (NSMutableArray *)path;
 
 /**
  *  Returns the parent state machine.
@@ -47,16 +47,5 @@
  *  @param parentState The parent state.
  */
 - (void)setParentState:(id<TBSMNode>)parentState;
-
-/**
- *  Receives a specified `TBSMEvent` instance.
- *
- *  If the node recognizes the given `TBSMEvent` it will return the corresponding `TBSMTransition` instance.
- *
- *  @param event The given `TBSMEvent` instance.
- *
- *  @return A `TBSMTransition` to the next state or `nil`.
- */
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event;
 
 @end

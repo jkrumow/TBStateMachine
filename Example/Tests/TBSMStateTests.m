@@ -118,15 +118,15 @@ describe(@"TBSMState", ^{
         
     });
     
-    it(@"handles events by returning nil or a TBSMTransition containing source and destination state.", ^{
+    it(@"should return a TBSMTransition containing source and destination state for a given event.", ^{
         
         [stateA registerEvent:eventA.name target:nil];
         [stateA registerEvent:eventB.name target:stateB];
         
-        TBSMTransition *resultA = [stateA handleEvent:eventA];
+        TBSMTransition *resultA = [stateA transitionForEvent:eventA];
         expect(resultA).to.beNil;
         
-        TBSMTransition *resultB = [stateA handleEvent:eventB];
+        TBSMTransition *resultB = [stateA transitionForEvent:eventB];
         expect(resultB.sourceState).to.equal(stateA);
         expect(resultB.destinationState).to.equal(stateB);
     });
@@ -141,7 +141,7 @@ describe(@"TBSMState", ^{
         stateMachine.states = @[parallelStates];
         stateMachine.initialState = parallelStates;
         
-        NSArray *path = [stateA getPath];
+        NSArray *path = [stateA path];
         
         expect(path.count).to.equal(5);
         expect(path[0]).to.equal(stateMachine);

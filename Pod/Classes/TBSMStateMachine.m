@@ -10,19 +10,20 @@
 
 @interface TBSMStateMachine ()
 
-@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, weak) TBSMState *parentState;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *scheduledEventsQueue;
 @property (nonatomic, strong) NSMutableArray *deferredEventsQueue;
 @property (nonatomic, assign, getter = isHandlingEvent) BOOL handlesEvent;
 
-- (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
-- (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
-- (NSSet *)_traverseCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(NSSet * (^)(TBSMState *currentState))block;
-- (TBSMTransition *)_handleEvent:(TBSMEvent *)event;
 - (void)_handleNextEvent;
-
+- (BOOL)_performTransition:(TBSMTransition *)transition withData:(NSDictionary *)data;
+- (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
+- (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
+- (NSSet *)_compositeDeferralListForActiveStateConfiguration;
+- (NSSet *)_leafStatesForActiveStateConfiguration;
+- (void)_traverseCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void (^)(TBSMState *currentState))block;
 @end
 
 @implementation TBSMStateMachine
@@ -130,104 +131,24 @@
     }
 }
 
-#pragma mark - private methods
-
-- (TBSMState *)_findNextNodeForState:(TBSMState *)state
+- (BOOL)handleEvent:(TBSMEvent *)event
 {
-    if (state == nil) {
-        return nil;
-    }
-    
-    // return destination state right away
-    NSArray *path = [state getPath];
-    if (self == [path lastObject]) {
-        return state;
-    }
-    
-    if (![path containsObject:self]) {
-        return nil;
-    }
-    
-    // return next state in path
-    NSUInteger index = [path indexOfObject:self];
-    return path[index + 1];
-}
-
-- (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState
-{
-    NSArray *sourcePath = [sourceState getPath];
-    NSArray *destinationPath = [destinationState getPath];
-    
-    for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
-        TBSMState *state = sourcePath[i];
-        if (![state isKindOfClass:[TBSMStateMachine class]]) {
-            continue;
-        }
-        TBSMStateMachine *stateMachine = (TBSMStateMachine *)state;
-        if ([destinationPath containsObject:stateMachine]) {
-            return stateMachine;
-        }
-    }
-    return nil;
-}
-
-- (NSSet *)_traverseCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(NSSet *(^)(TBSMState *currentState))block
-{
-    if (!block) {
-        return nil;
-    }
-    NSMutableSet *allValues = [NSMutableSet new];
-    TBSMState *currentState = stateMachine.currentState;
-    NSSet *values = block(currentState);
-    if (values) {
-        [allValues unionSet:values];
-    }
-    if ([currentState isMemberOfClass:[TBSMSubState class]]) {
-        TBSMSubState *subState = (TBSMSubState *)currentState;
-        NSSet *values = [self _traverseCurrentStatemachineConfiguration:subState.stateMachine usingBlock:block];
-        if (values) {
-            [allValues unionSet:values];
-        }
-    } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
-        TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
-        for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
-            NSSet *values = [self _traverseCurrentStatemachineConfiguration:stateMachine usingBlock:block];
-            if (values) {
-                [allValues unionSet:values];
-            }
-        }
-    }
-    return allValues;
-}
-
-- (TBSMTransition *)_handleEvent:(TBSMEvent *)event
-{
-    TBSMTransition *transition;
     if (_currentState) {
-        transition = [_currentState handleEvent:event];
-    }
-    if (transition) {
-        TBSMActionBlock action = transition.action;
-        TBSMGuardBlock guard = transition.guard;
-        if (guard == nil || guard(transition.sourceState, transition.destinationState, event.data)) {
-            if (transition.destinationState) {
-                TBSMStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
-                if (lowestCommonAncestor) {
-                    [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:event.data action:action];
-                } else {
-                    NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
-                }
-            } else {
-                // Perform internal transition
-                if (action) {
-                    action(transition.sourceState, transition.destinationState, event.data);
-                }
+        if ([_currentState respondsToSelector:@selector(handleEvent:)]) {
+            if ([_currentState performSelector:@selector(handleEvent:) withObject:event]) {
+                return YES;
             }
-            return transition;
+        }
+        TBSMTransition *transition = nil;
+        transition = [_currentState transitionForEvent:event];
+        if (transition) {
+            return [self _performTransition:transition withData:event.data];
         }
     }
-    return nil;
+    return NO;
 }
+
+#pragma mark - private methods
 
 - (void)_handleNextEvent
 {
@@ -237,22 +158,14 @@
         [self.scheduledEventsQueue removeObject:queuedEvent];
         
         // Check wether the event is deferred by any state of the active state configuration.
-        NSSet *compositeDeferralList = [self _traverseCurrentStatemachineConfiguration:self usingBlock:^NSSet *(TBSMState *currentState) {
-            return [NSSet setWithArray:currentState.deferredEvents.allKeys];
-        }];
+        NSSet *compositeDeferralList = [self _compositeDeferralListForActiveStateConfiguration];
         
         BOOL isDeferred = NO;
         if ([compositeDeferralList containsObject:queuedEvent.name]) {
             isDeferred = YES;
             
             // If the event is deferred check wether higher prioritized states can consume the event.
-            NSSet *activeLeafStates = [self _traverseCurrentStatemachineConfiguration:self usingBlock:^NSSet *(TBSMState *currentState) {
-                if ([currentState isMemberOfClass:[TBSMState class]]) {
-                    return [NSSet setWithObject:currentState];
-                }
-                return nil;
-            }];
-            
+            NSSet *activeLeafStates = [self _leafStatesForActiveStateConfiguration];
             for (TBSMState *activeLeafState in activeLeafStates) {
                 if ([activeLeafState canHandleEvent:queuedEvent]) {
                     isDeferred = NO;
@@ -273,9 +186,104 @@
     }
 }
 
+- (BOOL)_performTransition:(TBSMTransition *)transition withData:(NSDictionary *)data
+{
+    if (transition.guard == nil || transition.guard(transition.sourceState, transition.destinationState, data)) {
+        if (transition.destinationState) {
+            TBSMStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
+            if (lowestCommonAncestor) {
+                [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:transition.action];
+            } else {
+                NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
+            }
+        } else {
+            // Perform internal transition
+            if (transition.action) {
+                transition.action(transition.sourceState, transition.destinationState, data);
+            }
+        }
+        return YES;
+    }
+    return NO;
+}
+
+- (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState
+{
+    NSArray *sourcePath = [sourceState path];
+    NSArray *destinationPath = [destinationState path];
+    
+    for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
+        TBSMState *state = sourcePath[i];
+        if (![state isKindOfClass:[TBSMStateMachine class]]) {
+            continue;
+        }
+        TBSMStateMachine *stateMachine = (TBSMStateMachine *)state;
+        if ([destinationPath containsObject:stateMachine]) {
+            return stateMachine;
+        }
+    }
+    return nil;
+}
+
+- (TBSMState *)_findNextNodeForState:(TBSMState *)state
+{
+    if (state == nil) {
+        return nil;
+    }
+    
+    // return destination state right away
+    NSArray *path = [state path];
+    if (self == [path lastObject]) {
+        return state;
+    }
+    
+    if (![path containsObject:self]) {
+        return nil;
+    }
+    
+    // return next state in path
+    NSUInteger index = [path indexOfObject:self];
+    return path[index + 1];
+}
+
+- (NSSet *)_compositeDeferralListForActiveStateConfiguration
+{
+    NSMutableSet *deferralList = NSMutableSet.new;
+    [self _traverseCurrentStatemachineConfiguration:self usingBlock:^void(TBSMState *currentState) {
+        [deferralList unionSet:[NSSet setWithArray:currentState.deferredEvents.allKeys]];
+    }];
+    return deferralList;
+}
+
+- (NSSet *)_leafStatesForActiveStateConfiguration
+{
+    NSMutableSet *activeLeafStates = NSMutableSet.new;
+    [self _traverseCurrentStatemachineConfiguration:self usingBlock:^void(TBSMState *currentState) {
+        if ([currentState isMemberOfClass:[TBSMState class]]) {
+            [activeLeafStates unionSet:[NSSet setWithObject:currentState]];
+        }
+    }];
+    return activeLeafStates;
+}
+
+- (void)_traverseCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void(^)(TBSMState *currentState))block
+{
+    TBSMState *currentState = stateMachine.currentState;
+    block(currentState);
+    if ([currentState isMemberOfClass:[TBSMSubState class]]) {
+        TBSMSubState *subState = (TBSMSubState *)currentState;
+        [self _traverseCurrentStatemachineConfiguration:subState.stateMachine usingBlock:block];
+    } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
+        TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
+        for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
+            [self _traverseCurrentStatemachineConfiguration:stateMachine usingBlock:block];
+        }
+    }
+}
+
 #pragma mark - TBSMNode
 
-- (NSArray *)getPath
+- (NSArray *)path
 {
     NSMutableArray *path = [NSMutableArray new];
     TBSMState *state = self.parentState;
@@ -284,11 +292,6 @@
         state = state.parentState;
     }
     return path;
-}
-
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
-{
-    return [self _handleEvent:event];
 }
 
 @end

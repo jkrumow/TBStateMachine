@@ -66,12 +66,9 @@
     [super exit:sourceState destinationState:destinationState data:data];
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
+- (BOOL)handleEvent:(TBSMEvent *)event
 {
-    if ([_stateMachine handleEvent:event]) {
-        return nil;
-    }
-    return [super handleEvent:event];
+    return [_stateMachine handleEvent:event];
 }
 
 @end

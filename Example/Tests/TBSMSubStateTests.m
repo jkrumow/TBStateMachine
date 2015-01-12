@@ -119,7 +119,7 @@ describe(@"TBSMSubState", ^{
         stateMachine.states = @[parallelStates];
         stateMachine.initialState = parallelStates;
         
-        NSArray *path = [subStateB getPath];
+        NSArray *path = [subStateB path];
         
         expect(path.count).to.equal(3);
         expect(path[0]).to.equal(stateMachine);

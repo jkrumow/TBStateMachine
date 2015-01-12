@@ -85,17 +85,13 @@
     return ([_priv_deferredEvents objectForKey:event.name] != nil);
 }
 
-#pragma mark - TBSMNode
-
-- (NSArray *)getPath
+- (TBSMTransition *)transitionForEvent:(TBSMEvent *)event
 {
-    NSMutableArray *path = [NSMutableArray new];
-    TBSMState *state = self.parentState;
-    while (state) {
-        [path insertObject:state atIndex:0];
-        state = state.parentState;
+    if ([self canHandleEvent:event]) {
+        TBSMEventHandler *eventHandler = [_priv_eventHandlers objectForKey:event.name];
+        return [TBSMTransition transitionWithSourceState:self destinationState:eventHandler.target action:eventHandler.action guard:eventHandler.guard];
     }
-    return path;
+    return nil;
 }
 
 - (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
@@ -112,13 +108,17 @@
     }
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
+#pragma mark - TBSMNode
+
+- (NSArray *)path
 {
-    if ([self canHandleEvent:event]) {
-        TBSMEventHandler *eventHandler = [_priv_eventHandlers objectForKey:event.name];
-        return [TBSMTransition transitionWithSourceState:self destinationState:eventHandler.target action:eventHandler.action guard:eventHandler.guard];
+    NSMutableArray *path = [NSMutableArray new];
+    TBSMState *state = self.parentState;
+    while (state) {
+        [path insertObject:state atIndex:0];
+        state = state.parentState;
     }
-    return nil;
+    return path;
 }
 
 @end

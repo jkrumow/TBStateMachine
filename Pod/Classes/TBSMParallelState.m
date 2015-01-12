@@ -84,7 +84,7 @@
     dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
         TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-        if ([destinationState.getPath containsObject:stateMachine]) {
+        if ([destinationState.path containsObject:stateMachine]) {
             [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
         } else {
             [stateMachine setUp];
@@ -107,18 +107,15 @@
     [super exit:sourceState destinationState:destinationState data:data];
 }
 
-- (TBSMTransition *)handleEvent:(TBSMEvent *)event
+- (BOOL)handleEvent:(TBSMEvent *)event
 {
-    __block TBSMTransition *transition = nil;
+    __block BOOL didHandleEvent = NO;
     dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
         TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-        transition = [stateMachine handleEvent:event];
+        didHandleEvent = [stateMachine handleEvent:event];
     });
-    if (transition) {
-        return nil;
-    }
-    return [super handleEvent:event];
+    return didHandleEvent;
 }
 
 @end

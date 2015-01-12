@@ -45,5 +45,15 @@
  */
 - (instancetype)initWithName:(NSString *)name stateMachine:(TBSMStateMachine *)stateMachine;
 
+/**
+ *  Receives a specified `TBSMEvent` instance.
+ *
+ *  If the node recognizes the given `TBSMEvent` it will return `YES`.
+ *
+ *  @param event The given `TBSMEvent` instance.
+ *
+ *  @return `YES` if teh transition has been handled.
+ */
+- (BOOL)handleEvent:(TBSMEvent *)event;
 
 @end
