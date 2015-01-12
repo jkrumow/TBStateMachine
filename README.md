@@ -147,7 +147,7 @@ You can also register events, add enter and exit blocks on `TBSMSubState`, since
 
 ### Parallel State Machines
 
-To run multiple state machines in parallel you will use the `TBSMParallelState`:
+To build orthogonal regions you will use the `TBSMParallelState`:
 
 ```objective-c
 TBSMParallelState *parallel = [TBSMParallelState parallelStateWithName:@"P"];
@@ -158,6 +158,13 @@ stateMachine.states = @[stateA, stateB, parallel];
 ### Concurrency
 
 Actions, guards, enter and exit blocks of states within a `TBSMParallelState` will be executed on a concurrent background queue. Make sure the code in these blocks is dispatched back onto the expected queue.
+
+
+## Helpful theory
+
+* [http://www.omg.org/spec/UML/2.5/Beta2/](http://www.omg.org/spec/UML/2.5/Beta2/)
+* [http://www.comp.nus.edu.sg/~lius87/uml/techreport/uml_sm_semantics.pdf](http://www.comp.nus.edu.sg/~lius87/uml/techreport/uml_sm_semantics.pdf)
+
 
 ## Author
 
