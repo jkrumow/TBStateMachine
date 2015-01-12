@@ -30,18 +30,10 @@
     return self;
 }
 
-#pragma mark - TBSMNode
-
 - (void)setStateMachine:(TBSMStateMachine *)stateMachine
 {
     _stateMachine = stateMachine;
     [_stateMachine setParentState:self.parentState];
-}
-
-- (void)setParentState:(id<TBSMNode>)parentState
-{
-    [super setParentState:parentState];
-    [_stateMachine setParentState:self];
 }
 
 - (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
@@ -69,6 +61,14 @@
 - (BOOL)handleEvent:(TBSMEvent *)event
 {
     return [_stateMachine handleEvent:event];
+}
+
+#pragma mark - TBSMNode
+
+- (void)setParentState:(id<TBSMNode>)parentState
+{
+    [super setParentState:parentState];
+    [_stateMachine setParentState:self];
 }
 
 @end

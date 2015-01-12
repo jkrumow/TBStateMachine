@@ -67,16 +67,6 @@
     }
 }
 
-#pragma mark - TBSMNode
-
-- (void)setParentState:(id<TBSMNode>)parentState
-{
-    _parentState = parentState;
-    for (TBSMStateMachine *subMachine in self.priv_parallelStateMachines) {
-        subMachine.parentState = self;
-    }
-}
-
 - (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
     [super enter:sourceState destinationState:destinationState data:data];
@@ -116,6 +106,16 @@
         didHandleEvent = [stateMachine handleEvent:event];
     });
     return didHandleEvent;
+}
+
+#pragma mark - TBSMNode
+
+- (void)setParentState:(id<TBSMNode>)parentState
+{
+    _parentState = parentState;
+    for (TBSMStateMachine *subMachine in self.priv_parallelStateMachines) {
+        subMachine.parentState = self;
+    }
 }
 
 @end
