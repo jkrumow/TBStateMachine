@@ -1,6 +1,6 @@
 # TBStateMachine CHANGELOG
 
-## 4.0.2
+## 4.1.0
 
 - fixed bug which caused `TBSMParallelState` not to setup all sub machines when performing transition into one state machine
 - fixed a bug which caused events not to bubble up to super states when not being handled by a sub state
