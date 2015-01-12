@@ -911,7 +911,7 @@ describe(@"TBSMStateMachine", ^{
         [subStateA deferEvent:eventB.name];
         [stateA registerEvent:eventA.name target:stateB];
         [stateA deferEvent:eventB.name];
-        [stateB registerEvent:eventB.name target:parallelStates];
+        [stateB registerEvent:eventB.name target:stateC];
         
         // setup sub state machine wrapper B
         NSArray *subStatesB = @[stateC, stateD];
@@ -945,7 +945,7 @@ describe(@"TBSMStateMachine", ^{
         expect(stateMachine.currentState).to.equal(subStateA);
         expect(subStateA.stateMachine.currentState).to.equal(stateA);
         
-        // should switch from stateA to stateB --> handle eventB --> switch to parallel wrapper
+        // should switch from stateA to stateB --> handle eventB --> switch to stateC (and enter stateE)
         [stateMachine scheduleEvent:eventA];
         
         expect(stateMachine.currentState).to.equal(parallelStates);
