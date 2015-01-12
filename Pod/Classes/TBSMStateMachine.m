@@ -21,7 +21,7 @@
 - (BOOL)_performTransition:(TBSMTransition *)transition withData:(NSDictionary *)data;
 - (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
 - (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
-- (NSSet *)_compositeDeferralListForActiveStateConfiguration;
+- (NSSet *)_compoundDeferralListForActiveStateConfiguration;
 - (NSSet *)_leafStatesForActiveStateConfiguration;
 - (void)_traverseActiveStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void (^)(TBSMState *currentState))block;
 @end
@@ -158,7 +158,7 @@
         [self.scheduledEventsQueue removeObject:queuedEvent];
         
         // Check wether the event is deferred by any state of the active state configuration.
-        NSSet *compositeDeferralList = [self _compositeDeferralListForActiveStateConfiguration];
+        NSSet *compositeDeferralList = [self _compoundDeferralListForActiveStateConfiguration];
         
         BOOL isDeferred = NO;
         if ([compositeDeferralList containsObject:queuedEvent.name]) {
@@ -246,7 +246,7 @@
     return path[index + 1];
 }
 
-- (NSSet *)_compositeDeferralListForActiveStateConfiguration
+- (NSSet *)_compoundDeferralListForActiveStateConfiguration
 {
     NSMutableSet *deferralList = NSMutableSet.new;
     [self _traverseActiveStatemachineConfiguration:self usingBlock:^void(TBSMState *currentState) {
