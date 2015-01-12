@@ -212,17 +212,16 @@
     NSArray *sourcePath = [sourceState path];
     NSArray *destinationPath = [destinationState path];
     
-    for (NSInteger i = sourcePath.count-1; i >= 0; i--) {
-        TBSMState *state = sourcePath[i];
-        if (![state isKindOfClass:[TBSMStateMachine class]]) {
-            continue;
+    __block TBSMStateMachine *lca = nil;
+    [sourcePath enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[TBSMStateMachine class]]) {
+            if ([destinationPath containsObject:obj]) {
+                lca = (TBSMStateMachine *)obj;
+                *stop = YES;
+            }
         }
-        TBSMStateMachine *stateMachine = (TBSMStateMachine *)state;
-        if ([destinationPath containsObject:stateMachine]) {
-            return stateMachine;
-        }
-    }
-    return nil;
+    }];
+    return lca;
 }
 
 - (TBSMState *)_findNextNodeForState:(TBSMState *)state
