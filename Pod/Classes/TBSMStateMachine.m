@@ -23,7 +23,7 @@
 - (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
 - (NSSet *)_compositeDeferralListForActiveStateConfiguration;
 - (NSSet *)_leafStatesForActiveStateConfiguration;
-- (void)_traverseCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void (^)(TBSMState *currentState))block;
+- (void)_traverseActiveStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void (^)(TBSMState *currentState))block;
 @end
 
 @implementation TBSMStateMachine
@@ -249,7 +249,7 @@
 - (NSSet *)_compositeDeferralListForActiveStateConfiguration
 {
     NSMutableSet *deferralList = NSMutableSet.new;
-    [self _traverseCurrentStatemachineConfiguration:self usingBlock:^void(TBSMState *currentState) {
+    [self _traverseActiveStatemachineConfiguration:self usingBlock:^void(TBSMState *currentState) {
         [deferralList unionSet:[NSSet setWithArray:currentState.deferredEvents.allKeys]];
     }];
     return deferralList;
@@ -258,7 +258,7 @@
 - (NSSet *)_leafStatesForActiveStateConfiguration
 {
     NSMutableSet *activeLeafStates = NSMutableSet.new;
-    [self _traverseCurrentStatemachineConfiguration:self usingBlock:^void(TBSMState *currentState) {
+    [self _traverseActiveStatemachineConfiguration:self usingBlock:^void(TBSMState *currentState) {
         if ([currentState isMemberOfClass:[TBSMState class]]) {
             [activeLeafStates unionSet:[NSSet setWithObject:currentState]];
         }
@@ -266,17 +266,17 @@
     return activeLeafStates;
 }
 
-- (void)_traverseCurrentStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void(^)(TBSMState *currentState))block
+- (void)_traverseActiveStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void(^)(TBSMState *currentState))block
 {
     TBSMState *currentState = stateMachine.currentState;
     block(currentState);
     if ([currentState isMemberOfClass:[TBSMSubState class]]) {
         TBSMSubState *subState = (TBSMSubState *)currentState;
-        [self _traverseCurrentStatemachineConfiguration:subState.stateMachine usingBlock:block];
+        [self _traverseActiveStatemachineConfiguration:subState.stateMachine usingBlock:block];
     } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
         TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
         for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
-            [self _traverseCurrentStatemachineConfiguration:stateMachine usingBlock:block];
+            [self _traverseActiveStatemachineConfiguration:stateMachine usingBlock:block];
         }
     }
 }
