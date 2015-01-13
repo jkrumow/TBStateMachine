@@ -177,11 +177,12 @@
         if (isDeferred) {
             [self.deferredEventsQueue addObject:queuedEvent];
         } else {
-            [self handleEvent:queuedEvent];
+            if ([self handleEvent:queuedEvent]) {
             
-            // Since another state has been entered move all deferred events to the beginning of the event queue.
-            [self.scheduledEventsQueue insertObjects:self.deferredEventsQueue atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.deferredEventsQueue.count)]];
-            [self.deferredEventsQueue removeAllObjects];
+                // Since another state has been entered move all deferred events to the beginning of the event queue.
+                [self.scheduledEventsQueue insertObjects:self.deferredEventsQueue atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.deferredEventsQueue.count)]];
+                [self.deferredEventsQueue removeAllObjects];
+            }
         }
     }
 }
