@@ -103,7 +103,9 @@
     dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
         
         TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-        didHandleEvent = [stateMachine handleEvent:event];
+        if ([stateMachine handleEvent:event]) {
+            didHandleEvent = YES;
+        }
     });
     return didHandleEvent;
 }
