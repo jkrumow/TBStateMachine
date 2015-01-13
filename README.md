@@ -114,7 +114,7 @@ Under certain conditions you may want to handle an event later in another state:
 ```objective-c
 [stateA deferEvent:@"EventB"];
 ```
-Now the event will be queued until another state has been entered which can process the event.
+Now the event will be queued until another state has been entered which can consume the event.
 
 #### Scheduling events
 
@@ -127,7 +127,7 @@ TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:@{@"myPayload":aPaylo
 
 The state machine will queue all events it receives until processing of the current event has finished.
 
-The payload will be available in all action, guard, enter and exit blocks which are passed until the event is successfully handled.
+The payload will be available in all action, guard, enter and exit blocks which are executed until the event is successfully handled.
 
 ### Nested State Machines
 
