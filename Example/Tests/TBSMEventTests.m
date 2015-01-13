@@ -64,9 +64,7 @@ describe(@"TBSMEventHandler", ^{
             TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:@"a" target:nil action:nil guard:nil];
             expect(eventHandler.name).to.equal(@"a");
         });
-        
     });
-    
 });
 
 SpecEnd

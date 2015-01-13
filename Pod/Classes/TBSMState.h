@@ -27,7 +27,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 /**
  *  The state's parent state inside the state machine hierarchy.
  */
-@property (nonatomic, weak) id<TBSMNode> parentState;
+@property (nonatomic, weak) id<TBSMNode> parentNode;
 
 /**
  *  Block that is executed when the state is entered.

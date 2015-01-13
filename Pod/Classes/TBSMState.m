@@ -113,10 +113,10 @@
 - (NSArray *)path
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBSMState *state = self.parentState;
+    TBSMState *state = self.parentNode;
     while (state) {
         [path insertObject:state atIndex:0];
-        state = state.parentState;
+        state = state.parentNode;
     }
     return path;
 }

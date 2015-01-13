@@ -33,7 +33,7 @@
 - (void)setStateMachine:(TBSMStateMachine *)stateMachine
 {
     _stateMachine = stateMachine;
-    [_stateMachine setParentState:self.parentState];
+    [_stateMachine setParentNode:self.parentNode];
 }
 
 - (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
@@ -65,10 +65,10 @@
 
 #pragma mark - TBSMNode
 
-- (void)setParentState:(id<TBSMNode>)parentState
+- (void)setParentNode:(id<TBSMNode>)parentNode
 {
-    [super setParentState:parentState];
-    [_stateMachine setParentState:self];
+    [super setParentNode:parentNode];
+    [_stateMachine setParentNode:self];
 }
 
 @end

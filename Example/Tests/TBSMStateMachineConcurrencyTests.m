@@ -83,7 +83,7 @@ describe(@"TBSMStateMachine", ^{
     
     describe(@"Concurrency", ^{
         
-        it(@"queues up events if an event is currently handled", ^{
+        it(@"queues up events if an event is being currently handled", ^{
             
             NSArray *expectedExecutionSequence = @[@"stateA_enter",
                                                    @"stateA_exit",
@@ -286,11 +286,8 @@ describe(@"TBSMStateMachine", ^{
             });
             
             expect(executionSequence).to.equal(expectedExecutionSequence);
-            
         });
-        
     });
-    
 });
 
 SpecEnd

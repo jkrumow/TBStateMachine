@@ -28,24 +28,24 @@
 - (NSString *)name;
 
 /**
- *  Returns the path of the node inside the state machine hierarchy.
+ *  Returns its path inside the state machine hierarchy containing all parent nodes in descending order.
  *
  *  @return An array containing all parent nodes.
  */
 - (NSMutableArray *)path;
 
 /**
- *  Returns the parent state machine.
+ *  Returns the parent node in the state machine hierarchy.
  *
  *  @return The parent `TBSMNode`.
  */
-- (id<TBSMNode>)parentState;
+- (id<TBSMNode>)parentNode;
 
 /**
- *  Sets the parent state machine.
+ *  Sets the parent node.
  *
- *  @param parentState The parent state.
+ *  @param parentNode The parent node.
  */
-- (void)setParentState:(id<TBSMNode>)parentState;
+- (void)setParentNode:(id<TBSMNode>)parentNode;
 
 @end

@@ -123,7 +123,7 @@ describe(@"TBSMStateMachine", ^{
     
     describe(@"Location inside hierarchy.", ^{
         
-        it(@"returns its path inside the state machine hierarchy.", ^{
+        it(@"returns its path inside the state machine hierarchy containing all parent nodes in descending order", ^{
             
             subStateMachineB.states = @[stateA];
             TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];

@@ -60,7 +60,6 @@ describe(@"TBSMTransition", ^{
         TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA destinationState:stateB action:nil guard:guard];
         expect(transition.guard).to.equal(guard);
     });
-    
 });
 
 SpecEnd

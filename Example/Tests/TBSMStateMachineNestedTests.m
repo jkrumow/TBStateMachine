@@ -466,7 +466,7 @@ describe(@"TBSMStateMachine", ^{
         stateMachine.initialState = subStateA;
         [stateMachine setUp];
         
-        // moves to state F
+        // will not move to state F
         [stateMachine scheduleEvent:eventA];
         
         NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];

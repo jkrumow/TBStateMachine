@@ -24,7 +24,7 @@
 
 @implementation TBSMParallelState
 
-@synthesize parentState = _parentState;
+@synthesize parentNode = _parentNode;
 
 + (TBSMParallelState *)parallelStateWithName:(NSString *)name
 {
@@ -112,11 +112,11 @@
 
 #pragma mark - TBSMNode
 
-- (void)setParentState:(id<TBSMNode>)parentState
+- (void)setParentNode:(id<TBSMNode>)parentNode
 {
-    _parentState = parentState;
+    _parentNode = parentNode;
     for (TBSMStateMachine *subMachine in self.priv_parallelStateMachines) {
-        subMachine.parentState = self;
+        subMachine.parentNode = self;
     }
 }
 

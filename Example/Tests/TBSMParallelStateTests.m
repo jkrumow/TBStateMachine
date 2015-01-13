@@ -134,7 +134,7 @@ describe(@"TBSMParallelState", ^{
         NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
         parallelStates.stateMachines = parallelSubStateMachines;
         
-        [parallelStates enter:nil destinationState:parallelStates data:nil];
+        [parallelStates enter:nil destinationState:nil data:nil];
         
         expect(enteredStateA).to.equal(YES);
         expect(enteredStateB).to.equal(YES);
@@ -144,7 +144,6 @@ describe(@"TBSMParallelState", ^{
         expect(exitedStateA).to.equal(YES);
         expect(exitedStateB).to.equal(YES);
     });
-    
 });
 
 SpecEnd

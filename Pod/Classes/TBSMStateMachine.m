@@ -11,7 +11,7 @@
 @interface TBSMStateMachine ()
 
 @property (nonatomic, copy, readonly) NSString *name;
-@property (nonatomic, weak) TBSMState *parentState;
+@property (nonatomic, weak) id<TBSMNode> parentNode;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *scheduledEventsQueue;
 @property (nonatomic, strong) NSMutableArray *deferredEventsQueue;
@@ -79,7 +79,7 @@
     for (id object in states) {
         if ([object isKindOfClass:[TBSMState class]])  {
             TBSMState *state = object;
-            [state setParentState:self];
+            [state setParentNode:self];
             [self.priv_states setObject:state forKey:state.name];
         } else {
             @throw ([NSException tb_notOfTypeStateException:object]);
@@ -286,10 +286,10 @@
 - (NSArray *)path
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBSMState *state = self.parentState;
+    TBSMState *state = self.parentNode;
     while (state) {
         [path insertObject:state atIndex:0];
-        state = state.parentState;
+        state = state.parentNode;
     }
     return path;
 }

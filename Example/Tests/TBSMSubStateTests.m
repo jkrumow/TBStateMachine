@@ -94,14 +94,14 @@ describe(@"TBSMSubState", ^{
         
     });
     
-    it(@"returns the hosted state machine.", ^{
+    it(@"returns the nested state machine.", ^{
         subStateMachineB.states = @[stateA];
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
         expect(subStateB.stateMachine).to.equal(subStateMachineB);
     
     });
     
-    it(@"registers TBSMEventBlock instances by the name of a provided TBSMEvent instance.", ^{
+    it(@"registers events by the name of a provided TBSMEvent instance.", ^{
         [subState registerEvent:eventA.name target:nil];
         
         NSDictionary *registeredEvents = subState.eventHandlers;
@@ -109,7 +109,7 @@ describe(@"TBSMSubState", ^{
         expect(registeredEvents).to.contain(eventA.name);
     });
     
-    it(@"returns its path inside the state machine hierarchy", ^{
+    it(@"returns its path inside the state machine hierarchy containing all parent nodes in descending order", ^{
         
         subStateMachineB.states = @[stateA];
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];

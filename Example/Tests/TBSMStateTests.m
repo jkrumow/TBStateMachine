@@ -131,7 +131,7 @@ describe(@"TBSMState", ^{
         expect(resultB.destinationState).to.equal(stateB);
     });
     
-    it(@"returns its path inside the state machine hierarchy.", ^{
+    it(@"returns its path inside the state machine hierarchy containing all parent nodes in descending order", ^{
         
         subStateMachineB.states = @[stateA];
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
@@ -150,7 +150,6 @@ describe(@"TBSMState", ^{
         expect(path[3]).to.equal(subStateB);
         expect(path[4]).to.equal(subStateMachineB);
     });
-    
 });
 
 SpecEnd
