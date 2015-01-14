@@ -346,6 +346,62 @@ describe(@"TBSMStateMachine", ^{
             expect(didExecuteEnterB).to.equal(NO);
         });
         
+        it(@"evaluates multiple guard functions, and switched to the next state.", ^{
+            
+            NSArray *states = @[stateA, stateB];
+            
+            __block BOOL didExecuteEnterA = NO;
+            __block BOOL didExecuteExitA = NO;
+            __block BOOL didExecuteEnterB = NO;
+            __block BOOL didExecuteActionA = NO;
+            __block BOOL didExecuteActionB = NO;
+            
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                didExecuteEnterA = YES;
+            };
+            
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                didExecuteExitA = YES;
+            };
+            
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                didExecuteEnterB = YES;
+            };
+            
+            [stateA registerEvent:eventA.name
+                           target:stateB
+                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                               didExecuteActionA = YES;
+                           }
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                                return NO;
+                            }];
+            
+            [stateA registerEvent:eventA.name
+                           target:stateB
+                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                               didExecuteActionB = YES;
+                           }
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                                return YES;
+                            }];
+            
+            stateMachine.states = states;
+            stateMachine.initialState = stateA;
+            [stateMachine setUp];
+            
+            expect(didExecuteEnterA).to.equal(YES);
+            
+            // will enter state B through second transition
+            [stateMachine scheduleEvent:eventA];
+            
+            expect(didExecuteActionA).to.equal(NO);
+            expect(didExecuteActionB).to.equal(YES);
+            expect(didExecuteExitA).to.equal(YES);
+            expect(didExecuteEnterB).to.equal(YES);
+        });
+
+        
         it(@"passes source and destination state and event data into the guard function and transition action of the involved state.", ^{
             
             NSArray *states = @[stateA, stateB];

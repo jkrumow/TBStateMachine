@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 4.2.0
+
+- states can register multiple event handlers for the same event, guard block decides which one gets executed
+
 ## 4.1.0
 
 - fixed bug which caused `TBSMParallelState` not to setup all sub machines when performing transition into one state machine

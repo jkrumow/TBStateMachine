@@ -64,7 +64,12 @@
         @throw [NSException tb_cannotRegisterDeferredEvent:event];
     }
     TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target action:action guard:guard];
-    [_priv_eventHandlers setObject:eventHandler forKey:event];
+    NSMutableArray *eventHandlers = _priv_eventHandlers[event];
+    if (!eventHandlers) {
+        eventHandlers = NSMutableArray.new;
+        [_priv_eventHandlers setObject:eventHandlers forKey:event];
+    }
+    [eventHandlers addObject:eventHandler];
 }
 
 - (void)deferEvent:(NSString *)event
@@ -85,11 +90,10 @@
     return ([_priv_deferredEvents objectForKey:event.name] != nil);
 }
 
-- (TBSMTransition *)transitionForEvent:(TBSMEvent *)event
+- (NSArray *)eventHandlersForEvent:(TBSMEvent *)event
 {
     if ([self canHandleEvent:event]) {
-        TBSMEventHandler *eventHandler = [_priv_eventHandlers objectForKey:event.name];
-        return [TBSMTransition transitionWithSourceState:self destinationState:eventHandler.target action:eventHandler.action guard:eventHandler.guard];
+        return [_priv_eventHandlers objectForKey:event.name];
     }
     return nil;
 }

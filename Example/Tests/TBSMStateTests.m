@@ -89,7 +89,9 @@ describe(@"TBSMState", ^{
         expect(registeredEvents.allKeys).to.haveCountOf(1);
         expect(registeredEvents).to.contain(eventA.name);
         
-        TBSMEventHandler *eventHandler = registeredEvents[eventA.name];
+        NSArray *eventHandlers = registeredEvents[eventA.name];
+        expect(eventHandlers.count).to.equal(1);
+        TBSMEventHandler *eventHandler = eventHandlers[0];
         expect(eventHandler.target).to.equal(stateA);
     });
     
@@ -105,7 +107,7 @@ describe(@"TBSMState", ^{
             
         });
         
-        it(@"throws an exception when attempting to efer an event which was already registered.", ^{
+        it(@"throws an exception when attempting to defer an event which was already registered.", ^{
             
             [stateA registerEvent:eventA.name target:stateB];
             
@@ -114,21 +116,20 @@ describe(@"TBSMState", ^{
             }).to.raise(TBSMException);
             
         });
-        
-        
     });
     
-    it(@"should return a TBSMTransition containing source and destination state for a given event.", ^{
+    it(@"should return an array of TBSMEventHandler instances containing source and destination state for a given event.", ^{
         
         [stateA registerEvent:eventA.name target:nil];
         [stateA registerEvent:eventB.name target:stateB];
         
-        TBSMTransition *resultA = [stateA transitionForEvent:eventA];
+        NSArray *resultA = [stateA eventHandlersForEvent:eventA];
         expect(resultA).to.beNil;
         
-        TBSMTransition *resultB = [stateA transitionForEvent:eventB];
-        expect(resultB.sourceState).to.equal(stateA);
-        expect(resultB.destinationState).to.equal(stateB);
+        NSArray *resultB = [stateA eventHandlersForEvent:eventB];
+        expect(resultB.count).to.equal(1);
+        TBSMEventHandler *eventHandlerB = resultB[0];
+        expect(eventHandlerB.target).to.equal(stateB);
     });
     
     it(@"returns its path inside the state machine hierarchy containing all parent nodes in descending order", ^{

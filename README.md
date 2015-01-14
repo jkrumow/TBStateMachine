@@ -99,6 +99,9 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictio
 
 [stateA registerEvent:@"EventA" target:stateB action:action guard:guard];
 ```
+
+If you register multiple transitions for the same event the guard blocks decide which one will be fired. Only the first valid transition will be fired.
+
 #### Internal transitions
 
 If you set the target state to `nil` the resulting transition will be an internal transition. In this case only guard and action blocks will be executed:

@@ -139,10 +139,12 @@
                 return YES;
             }
         }
-        TBSMTransition *transition = nil;
-        transition = [_currentState transitionForEvent:event];
-        if (transition) {
-            return [self _performTransition:transition withData:event.data];
+        NSArray *eventHandlers = [_currentState eventHandlersForEvent:event];
+        for (TBSMEventHandler *eventHandler in eventHandlers) {
+            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:_currentState destinationState:eventHandler.target action:eventHandler.action guard:eventHandler.guard];
+            if ([self _performTransition:transition withData:event.data]) {
+                return YES;
+            }
         }
     }
     return NO;
