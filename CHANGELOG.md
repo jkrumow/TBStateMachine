@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 4.3.0
+
+- made concurrent queue in `TBSMParallelState` optional
+
 ## 4.2.0
 
 - states can register multiple event handlers for the same event, guard block decides which one gets executed

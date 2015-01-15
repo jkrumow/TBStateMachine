@@ -158,10 +158,13 @@ parallel.states = @[subMachineA, subMachineB, subMachineC];
     
 stateMachine.states = @[stateA, stateB, parallel];
 ```
-### Concurrency
 
-Actions, guards, enter and exit blocks of states within a `TBSMParallelState` will be executed on a concurrent background queue. Make sure the code in these blocks is dispatched back onto the expected queue.
+Optionally you can set a concurrent queue to run all submachines in parallel:
 
+```objective-c
+dispatch_queue_t parallelQueue = dispatch_queue_create("ParallelStateQueue", DISPATCH_QUEUE_CONCURRENT);
+parallelStates.parallelQueue = parallelQueue;
+```
 
 ## Helpful theory
 

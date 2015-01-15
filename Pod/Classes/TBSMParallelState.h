@@ -15,12 +15,17 @@
  *
  *  **Notice:** When sending events into the TBSMParallelState instance each sub machine will handle the event, but only the follow-up state
  *  which was returned first to the wrapper will switch out of the parallel state.
- *
- *  **Concurrency:**
- *  Event handlers, enter and exit handlers will be executed on a background queue.
- *  Make sure the code in these blocks is dispatched back onto the right queue.
  */
 @interface TBSMParallelState : TBSMState
+
+/**
+ *  Optional concurrent queue.
+ */
+#if OS_OBJECT_USE_OBJC
+@property (nonatomic, strong) dispatch_queue_t parallelQueue;
+#else
+@property (nonatomic, assign) dispatch_queue_t parallelQueue;
+#endif
 
 /**
  *  Creates a `TBSMParallelState` instance from a given name.

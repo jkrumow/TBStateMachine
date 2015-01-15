@@ -33,8 +33,21 @@ __block TBSMParallelState *parallelStates;
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
 
+__block dispatch_queue_t parallelQueue;
+
 
 describe(@"TBSMStateMachine", ^{
+    
+    beforeAll(^{
+        parallelQueue = dispatch_queue_create("ParallelStateQueue", DISPATCH_QUEUE_CONCURRENT);
+    });
+    
+    afterAll(^{
+#if !OS_OBJECT_USE_OBJC
+        dispatch_release(parallelQueue);
+        parallelQueue = nil;
+#endif
+    });
     
     beforeEach(^{
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
@@ -287,6 +300,58 @@ describe(@"TBSMStateMachine", ^{
             
             expect(executionSequence).to.equal(expectedExecutionSequence);
         });
+    });
+    
+    describe(@"Concurrency in parallel state wrapper", ^{
+        
+        it(@"should switch all parallel states concurrently.", ^{
+            
+            // setup sub-machine A
+            NSArray *subStatesA = @[stateC, stateD];
+            subStateMachineA.states = subStatesA;
+            subStateMachineA.initialState = stateC;
+            
+            // setup sub-machine B
+            NSArray *subStatesB = @[stateE, stateF];
+            subStateMachineB.states = subStatesB;
+            subStateMachineB.initialState = stateE;
+            
+            // setup parallel wrapper
+            NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
+            parallelStates.stateMachines = parallelSubStateMachines;
+            parallelStates.parallelQueue = parallelQueue;
+            
+            // setup main state machine
+            [stateA registerEvent:eventA.name target:stateC];
+            [stateC registerEvent:eventA.name target:stateD];
+            [stateD registerEvent:eventA.name target:nil];
+            [stateE registerEvent:eventA.name target:stateF];
+            [stateF registerEvent:eventA.name target:stateA];
+            
+            NSArray *states = @[stateA, parallelStates];
+            stateMachine.states = states;
+            stateMachine.initialState = stateA;
+            [stateMachine setUp];
+            
+            // moves to stateC inside parallel state wrapper
+            // enters state C in subStateMachine A
+            // enters state E in subStateMachine B
+            [stateMachine scheduleEvent:eventA];
+            
+            expect(subStateMachineA.currentState).to.equal(stateC);
+            expect(subStateMachineB.currentState).to.equal(stateE);
+            
+            // moves subStateMachine A from C to state D
+            // moves subStateMachine B from E to state F
+            [stateMachine scheduleEvent:eventA];
+            
+            expect(subStateMachineA.currentState).to.equal(stateD);
+            expect(subStateMachineB.currentState).to.equal(stateF);
+            
+            eventA.data = eventDataA;
+            [stateMachine scheduleEvent:eventA];
+        });
+        
     });
 });
 
