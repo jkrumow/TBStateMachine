@@ -48,12 +48,12 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *destinationStat
 /**
  *  The action associated with the transition.
  */
-@property (nonatomic, strong, readonly) TBSMActionBlock action;
+@property (nonatomic, copy, readonly) TBSMActionBlock action;
 
 /**
  *  The guard function associated with the transition.
  */
-@property (nonatomic, strong, readonly) TBSMGuardBlock guard;
+@property (nonatomic, copy, readonly) TBSMGuardBlock guard;
 
 /**
  *  Creates a `TBSMTransition` instance from a given source and destination state, action and guard.

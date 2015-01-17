@@ -30,12 +30,12 @@
 /**
  *  The action of the transition triggered by the event.
  */
-@property (nonatomic, strong, readonly) TBSMActionBlock action;
+@property (nonatomic, copy, readonly) TBSMActionBlock action;
 
 /**
  *  The guard function of the transition triggered by the event.
  */
-@property (nonatomic, strong, readonly) TBSMGuardBlock guard;
+@property (nonatomic, copy, readonly) TBSMGuardBlock guard;
 
 /**
  *  Creates a `TBSMEventHandler` instance from a given event name, target, action and guard.

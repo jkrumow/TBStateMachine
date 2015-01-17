@@ -32,12 +32,12 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 /**
  *  Block that is executed when the state is entered.
  */
-@property (nonatomic, strong) TBSMStateBlock enterBlock;
+@property (nonatomic, copy) TBSMStateBlock enterBlock;
 
 /**
  *  Block that is executed when the state is exited.
  */
-@property (nonatomic, strong) TBSMStateBlock exitBlock;
+@property (nonatomic, copy) TBSMStateBlock exitBlock;
 
 /**
  *  All `TBSMEvent` instances registered to this state instance.
