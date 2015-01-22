@@ -7,6 +7,7 @@
 //
 
 #import "StateB.h"
+#import "TBSMStateMachine.h"
 
 @implementation StateB
 
@@ -15,6 +16,9 @@
     [self.executionSequence addObject:[NSString stringWithFormat:@"%@_enter", self.name]];
     
     [super enter:sourceState destinationState:destinationState data:data];
+    
+    TBSMStateMachine *parentStateMachine = self.parentNode;
+    [parentStateMachine scheduleEvent:[TBSMEvent eventWithName:@"DummyEventB" data:nil]];
 }
 
 - (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data

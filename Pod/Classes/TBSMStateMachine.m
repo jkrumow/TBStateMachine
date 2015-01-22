@@ -101,6 +101,12 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event
 {
+    if (self.parentNode) {
+        TBSMStateMachine *topStateMachine = [self.parentNode parentNode];
+        [topStateMachine scheduleEvent:event];
+        return;
+    }
+    
     @synchronized(self.scheduledEventsQueue) {
         
         [self.scheduledEventsQueue addObject:event];
