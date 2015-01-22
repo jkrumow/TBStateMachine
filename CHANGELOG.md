@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 4.4.0
+
+- made changes to `TBSMStateMachine` so TBSMState class and subtypes can be inherited
+
 ## 4.3.0
 
 - made concurrent queue in `TBSMParallelState` optional
