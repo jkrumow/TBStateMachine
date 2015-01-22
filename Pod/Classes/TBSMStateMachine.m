@@ -261,7 +261,7 @@
 {
     NSMutableSet *activeLeafStates = NSMutableSet.new;
     [self _traverseActiveStatemachineConfiguration:self usingBlock:^void(TBSMState *currentState) {
-        if ([currentState isMemberOfClass:[TBSMState class]]) {
+        if (!([currentState isKindOfClass:[TBSMSubState class]] || [currentState isKindOfClass:[TBSMParallelState class]])) {
             [activeLeafStates unionSet:[NSSet setWithObject:currentState]];
         }
     }];
@@ -272,10 +272,10 @@
 {
     TBSMState *currentState = stateMachine.currentState;
     block(currentState);
-    if ([currentState isMemberOfClass:[TBSMSubState class]]) {
+    if ([currentState isKindOfClass:[TBSMSubState class]]) {
         TBSMSubState *subState = (TBSMSubState *)currentState;
         [self _traverseActiveStatemachineConfiguration:subState.stateMachine usingBlock:block];
-    } else if ([currentState isMemberOfClass:[TBSMParallelState class]]) {
+    } else if ([currentState isKindOfClass:[TBSMParallelState class]]) {
         TBSMParallelState *parallelState = (TBSMParallelState *)currentState;
         for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
             [self _traverseActiveStatemachineConfiguration:stateMachine usingBlock:block];
