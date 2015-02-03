@@ -14,9 +14,8 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 * block based API
 * wrapper class for nested state machines (sub state machines)
 * wrapper class for parallel state machines (orthogonal regions)
-* local transitions with guards and actions, enter and exit blocks
-* internal transitions with guards and actions
-* state switching using lowest common ancestor algorithm (LCA)
+* external, local and internal transitions with guards and actions
+* state switching using least common ancestor algorithm (LCA)
 * event deferral
 
 ## Example Project
@@ -68,7 +67,7 @@ Add states and set state machine up. The state machine will always set the first
 ```objective-c
 stateMachine.states = @[stateA, stateB, ...];
 stateMachine.initialState = stateB;
-[stateMachine setup];
+[stateMachine setUp:nil];
 ```
 
 The state machine will immediately enter the initial state.
@@ -102,13 +101,15 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictio
 
 If you register multiple transitions for the same event the guard blocks decide which one will be fired. Only the first valid transition will be fired.
 
-#### Internal transitions
+### Different kinds of Transitions
 
-If you set the target state to `nil` the resulting transition will be an internal transition. In this case only guard and action blocks will be executed:
+TODO
 
-```objective-c
-[stateA registerEvent:@"EventA" target:nil action:action guard:guard];
-```
+- external (default)
+- local
+- internal
+
+TODO
 
 #### Event deferral
 

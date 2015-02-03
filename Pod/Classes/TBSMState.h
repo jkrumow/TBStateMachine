@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "TBSMNode.h"
+#import "TBSMTransitionType.h"
 
 /**
  *  This type represents a block that is executed on entry and exit of a `TBSMState`.
@@ -73,14 +74,27 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
+ *  Defaults to external transition.
  *
  *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
  *  See deferevent:
  *
  *  @param event  The given event name.
- *  @param target The destination `TBSMState` instance.
+ *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
  */
 - (void)registerEvent:(NSString *)event target:(TBSMState *)target;
+
+/**
+ *  Registers an event of a given name for transition to a specified target state.
+ *
+ *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
+ *  See deferevent:
+ *
+ *  @param event  The given event name.
+ *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param type   The type of transition.
+ */
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -91,9 +105,10 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
  *
  *  @param event  The given event name.
  *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param type   The type of transition.
  *  @param action The action block associated with this event.
  */
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target action:(TBSMActionBlock)action;
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -104,10 +119,11 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
  *
  *  @param event  The given event name.
  *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param type   The type of transition.
  *  @param action The action block associated with this event.
  *  @param guard  The guard block associated with this event.
  */
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
  *  Registers an event of a given name which should be deferred when received by this state instance.

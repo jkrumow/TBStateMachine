@@ -39,22 +39,12 @@
 - (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
     [super enter:sourceState destinationState:destinationState data:data];
-    
-    if (destinationState == self) {
-        [_stateMachine setUp];
-    } else {
-        [_stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
-    }
+    [_stateMachine enterState:sourceState destinationState:destinationState data:data];
 }
 
 - (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
 {
-    if (destinationState == nil) {
-        [_stateMachine tearDown];
-    } else {
-        [_stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
-    }
-    
+    [_stateMachine tearDown:data];
     [super exit:sourceState destinationState:destinationState data:data];
 }
 

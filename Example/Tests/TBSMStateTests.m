@@ -120,7 +120,7 @@ describe(@"TBSMState", ^{
     
     it(@"should return an array of TBSMEventHandler instances containing source and destination state for a given event.", ^{
         
-        [stateA registerEvent:eventA.name target:nil];
+        [stateA registerEvent:eventA.name target:nil type:TBSMTransitionInternal];
         [stateA registerEvent:eventB.name target:stateB];
         
         NSArray *resultA = [stateA eventHandlersForEvent:eventA];
@@ -144,12 +144,13 @@ describe(@"TBSMState", ^{
         
         NSArray *path = [stateA path];
         
-        expect(path.count).to.equal(5);
+        expect(path.count).to.equal(6);
         expect(path[0]).to.equal(stateMachine);
         expect(path[1]).to.equal(parallelStates);
         expect(path[2]).to.equal(subStateMachineA);
         expect(path[3]).to.equal(subStateB);
         expect(path[4]).to.equal(subStateMachineB);
+        expect(path[5]).to.equal(stateA);
     });
 });
 

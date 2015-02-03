@@ -9,21 +9,12 @@
 #import "TBSMStateMachine.h"
 
 @interface TBSMStateMachine ()
-
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, weak) id<TBSMNode> parentNode;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
 @property (nonatomic, strong) NSMutableArray *scheduledEventsQueue;
 @property (nonatomic, strong) NSMutableArray *deferredEventsQueue;
 @property (nonatomic, assign, getter = isHandlingEvent) BOOL handlesEvent;
-
-- (void)_handleNextEvent;
-- (BOOL)_performTransition:(TBSMTransition *)transition withData:(NSDictionary *)data;
-- (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState;
-- (TBSMSubState *)_findNextNodeForState:(TBSMState *)state;
-- (NSSet *)_compoundDeferralListForActiveStateConfiguration;
-- (NSSet *)_leafStatesForActiveStateConfiguration;
-- (void)_traverseActiveStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void (^)(TBSMState *currentState))block;
 @end
 
 @implementation TBSMStateMachine
@@ -49,20 +40,18 @@
     return self;
 }
 
-- (void)setUp
+- (void)setUp:(NSDictionary *)data
 {
-    if (_initialState) {
-        [self switchState:nil destinationState:_initialState data:nil action:nil];
+    if (self.initialState) {
+        [self enterState:nil destinationState:self.initialState data:data];
     } else {
         @throw [NSException tb_noInitialStateException:@"initialState"];
     }
 }
 
-- (void)tearDown
+- (void)tearDown:(NSDictionary *)data
 {
-    if (_currentState) {
-        [self switchState:_currentState destinationState:nil data:nil action:nil];
-    }
+    [self exitState:self.currentState destinationState:nil data:data];
     _currentState = nil;
     [self.priv_states removeAllObjects];
 }
@@ -99,6 +88,8 @@
     }
 }
 
+#pragma mark - handling events
+
 - (void)scheduleEvent:(TBSMEvent *)event
 {
     if (self.parentNode) {
@@ -121,22 +112,6 @@
     }
 }
 
-- (void)switchState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data action:(TBSMActionBlock)action
-{
-    if (_currentState) {
-        [_currentState exit:sourceState destinationState:destinationState data:data];
-    }
-    
-    if (action) {
-        action(sourceState, destinationState, data);
-    }
-    
-    _currentState = [self _findNextNodeForState:destinationState];
-    if (_currentState) {
-        [_currentState enter:sourceState destinationState:destinationState data:data];
-    }
-}
-
 - (BOOL)handleEvent:(TBSMEvent *)event
 {
     if (_currentState) {
@@ -147,7 +122,11 @@
         }
         NSArray *eventHandlers = [_currentState eventHandlersForEvent:event];
         for (TBSMEventHandler *eventHandler in eventHandlers) {
-            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:_currentState destinationState:eventHandler.target action:eventHandler.action guard:eventHandler.guard];
+            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:_currentState
+                                                                  destinationState:eventHandler.target
+                                                                              type:eventHandler.type
+                                                                            action:eventHandler.action
+                                                                             guard:eventHandler.guard];
             if ([self _performTransition:transition withData:event.data]) {
                 return YES;
             }
@@ -155,8 +134,6 @@
     }
     return NO;
 }
-
-#pragma mark - private methods
 
 - (void)_handleNextEvent
 {
@@ -186,29 +163,62 @@
             [self.deferredEventsQueue addObject:queuedEvent];
         } else {
             if ([self handleEvent:queuedEvent]) {
-            
+                
                 // Since another state has been entered move all deferred events to the beginning of the event queue.
-                [self.scheduledEventsQueue insertObjects:self.deferredEventsQueue atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.deferredEventsQueue.count)]];
+                [self.scheduledEventsQueue insertObjects:self.deferredEventsQueue
+                                               atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.deferredEventsQueue.count)]];
                 [self.deferredEventsQueue removeAllObjects];
             }
         }
     }
 }
 
+#pragma mark - state switching
+
+- (void)_switchState:(TBSMTransition *)transition data:(NSDictionary *)data
+{
+    [_currentState exit:transition.sourceState destinationState:transition.destinationState data:data];
+    if (transition.action) {
+        transition.action(transition.sourceState, transition.destinationState, data);
+    }
+    [self enterState:transition.sourceState destinationState:transition.destinationState data:data];
+}
+
+- (void)enterState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+{
+    NSUInteger targetLevel = [[destinationState.parentNode path] count];
+    NSUInteger thisLevel = self.path.count;
+    
+    if (targetLevel < thisLevel) {
+        _currentState = self.initialState;
+    } else if (targetLevel == thisLevel) {
+        _currentState = destinationState;
+    } else {
+        NSArray *destinationPath = [destinationState.parentNode path];
+        id<TBSMNode> node = destinationPath[thisLevel];
+        _currentState = node.parentNode;
+    }
+    [self.currentState enter:sourceState destinationState:destinationState data:data];
+}
+
+- (void)exitState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+{
+    [self.currentState exit:sourceState destinationState:destinationState data:data];
+}
+
 - (BOOL)_performTransition:(TBSMTransition *)transition withData:(NSDictionary *)data
 {
     if (transition.guard == nil || transition.guard(transition.sourceState, transition.destinationState, data)) {
-        if (transition.destinationState) {
-            TBSMStateMachine *lowestCommonAncestor = [self _findLowestCommonAncestorForSourceState:transition.sourceState destinationState:transition.destinationState];
-            if (lowestCommonAncestor) {
-                [lowestCommonAncestor switchState:_currentState destinationState:transition.destinationState data:data action:transition.action];
-            } else {
-                NSLog(@"No transition possible from source state %@ to destination state %@ via statemachine %@.", transition.sourceState.name, transition.destinationState.name, self.name);
-            }
-        } else {
-            // Perform internal transition
+        if (transition.type == TBSMTransitionInternal) {
             if (transition.action) {
                 transition.action(transition.sourceState, transition.destinationState, data);
+            }
+        } else {
+            TBSMStateMachine *leastCommonAncestor = [self _findLeastCommonAncestorForTransition:transition];
+            if (leastCommonAncestor) {
+                [leastCommonAncestor _switchState:transition data:data];
+            } else {
+                NSLog(@"No transition possible for transition %@ via statemachine %@.", transition.name, self.name);
             }
         }
         return YES;
@@ -216,10 +226,10 @@
     return NO;
 }
 
-- (TBSMStateMachine *)_findLowestCommonAncestorForSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState
+- (TBSMStateMachine *)_findLeastCommonAncestorForTransition:(TBSMTransition *)transition
 {
-    NSArray *sourcePath = [sourceState path];
-    NSArray *destinationPath = [destinationState path];
+    NSArray *sourcePath = [transition.sourceState path];
+    NSArray *destinationPath = [transition.destinationState path];
     
     __block TBSMStateMachine *lca = nil;
     [sourcePath enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -233,26 +243,7 @@
     return lca;
 }
 
-- (TBSMState *)_findNextNodeForState:(TBSMState *)state
-{
-    if (state == nil) {
-        return nil;
-    }
-    
-    // return destination state right away
-    NSArray *path = [state path];
-    if (self == [path lastObject]) {
-        return state;
-    }
-    
-    if (![path containsObject:self]) {
-        return nil;
-    }
-    
-    // return next state in path
-    NSUInteger index = [path indexOfObject:self];
-    return path[index + 1];
-}
+#pragma Helper methods
 
 - (NSSet *)_compoundDeferralListForActiveStateConfiguration
 {
@@ -294,10 +285,10 @@
 - (NSArray *)path
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBSMState *state = self.parentNode;
-    while (state) {
-        [path insertObject:state atIndex:0];
-        state = state.parentNode;
+    TBSMStateMachine *stateMachine = self;
+    while (stateMachine) {
+        [path insertObject:stateMachine atIndex:0];
+        stateMachine = stateMachine.parentNode.parentNode;
     }
     return path;
 }

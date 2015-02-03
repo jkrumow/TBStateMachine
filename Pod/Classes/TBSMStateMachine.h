@@ -75,12 +75,12 @@
  *
  *  Throws `TBSMException` if initial state has not been set beforehand.
  */
-- (void)setUp;
+- (void)setUp:(NSDictionary *)data;
 
 /**
  *  Leaves the current state and shuts down the state machine.
  */
-- (void)tearDown;
+- (void)tearDown:(NSDictionary *)data;
 
 /**
  *  Returns the states the state machine manages.
@@ -127,13 +127,21 @@
 - (BOOL)handleEvent:(TBSMEvent *)event;
 
 /**
- *  Switches from a given source state into a specified destination state.
+ *  Enters a given state.
  *
  *  @param sourceState      The source state.
  *  @param destinationState The destination state.
  *  @param data             The payload data.
- *  @param action           The transition action.
  */
-- (void)switchState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data action:(TBSMActionBlock)action;
+- (void)enterState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data;
+
+/**
+ *  Exits a given state.
+ *
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
+ *  @param data             The payload data.
+ */
+- (void)exitState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data;
 
 @end

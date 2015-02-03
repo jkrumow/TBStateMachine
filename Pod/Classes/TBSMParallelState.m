@@ -11,9 +11,7 @@
 #import "NSException+TBStateMachine.h"
 
 @interface TBSMParallelState ()
-
 @property (nonatomic, strong) NSMutableArray *priv_parallelStateMachines;
-
 @end
 
 @implementation TBSMParallelState
@@ -67,17 +65,17 @@
             
             TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
             if ([destinationState.path containsObject:stateMachine]) {
-                [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
+                [stateMachine enterState:sourceState destinationState:destinationState data:data];
             } else {
-                [stateMachine setUp];
+                [stateMachine setUp:data];
             }
         });
     } else {
         for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
             if ([destinationState.path containsObject:stateMachine]) {
-                [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
+                [stateMachine enterState:sourceState destinationState:destinationState data:data];
             } else {
-                [stateMachine setUp];
+                [stateMachine setUp:data];
             }
         }
     }
@@ -89,18 +87,18 @@
         dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
             
             TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-            if (destinationState == nil) {
-                [stateMachine tearDown];
+            if ([destinationState.path containsObject:stateMachine]) {
+                [stateMachine exitState:sourceState destinationState:destinationState data:data];
             } else {
-                [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
+                [stateMachine tearDown:data];
             }
         });
     } else {
         for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
-            if (destinationState == nil) {
-                [stateMachine tearDown];
+            if ([destinationState.path containsObject:stateMachine]) {
+                [stateMachine exitState:sourceState destinationState:destinationState data:data];
             } else {
-                [stateMachine switchState:sourceState destinationState:destinationState data:data action:nil];
+                [stateMachine tearDown:data];
             }
         }
     }

@@ -11,7 +11,6 @@
 #import "TBSMEventHandler.h"
 
 @interface TBSMState ()
-
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableDictionary *priv_eventHandlers;
 @property (nonatomic, strong) NSMutableDictionary *priv_deferredEvents;
@@ -50,20 +49,25 @@
 
 - (void)registerEvent:(NSString *)event target:(TBSMState *)target
 {
-    [self registerEvent:event target:target action:nil guard:nil];
+    [self registerEvent:event target:target type:TBSMTransitionExternal];
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target action:(TBSMActionBlock)action
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type
 {
-    [self registerEvent:event target:target action:action guard:nil];
+    [self registerEvent:event target:target type:type action:nil guard:nil];
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action
+{
+    [self registerEvent:event target:target type:type action:action guard:nil];
+}
+
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if ([_priv_deferredEvents objectForKey:event])  {
         @throw [NSException tb_cannotRegisterDeferredEvent:event];
     }
-    TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target action:action guard:guard];
+    TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target type:type action:action guard:guard];
     NSMutableArray *eventHandlers = _priv_eventHandlers[event];
     if (!eventHandlers) {
         eventHandlers = NSMutableArray.new;
@@ -117,7 +121,7 @@
 - (NSArray *)path
 {
     NSMutableArray *path = [NSMutableArray new];
-    TBSMState *state = self.parentNode;
+    id<TBSMNode> state = self;
     while (state) {
         [path insertObject:state atIndex:0];
         state = state.parentNode;

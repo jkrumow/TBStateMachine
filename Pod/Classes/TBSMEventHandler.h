@@ -10,7 +10,7 @@
 
 #import "TBSMTransition.h"
 
-@class TBSMState;
+#import "TBSMState.h"
 
 /**
  *  This class represents an event handler object. It stores information associated with a given event registered on a `TBSMState` instance.
@@ -38,16 +38,22 @@
 @property (nonatomic, copy, readonly) TBSMGuardBlock guard;
 
 /**
+ *  The type of transition to perform.
+ */
+@property (nonatomic, assign, readonly) TBSMTransitionType type;
+
+/**
  *  Creates a `TBSMEventHandler` instance from a given event name, target, action and guard.
  *
  *  @param name   The name of this event. Must be unique.
  *  @param target The destination state.
  *  @param action The action.
- *  @param guard  the guard function.
+ *  @param guard  The guard function.
+ *  @param type   The type of transition.
  *
  *  @return The event instance.
  */
-+ (instancetype)eventHandlerWithName:(NSString *)name target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
++ (instancetype)eventHandlerWithName:(NSString *)name target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
  *  Initializes a `TBSMEventHandler` from a given event name, target, action and guard.
@@ -57,10 +63,11 @@
  *  @param name   The name of this event. Must be unique.
  *  @param target The destination state.
  *  @param action The action.
- *  @param guard  the guard function.
+ *  @param guard  The guard function.
+ *  @param type   The type of transition.
  *
  *  @return An initialized `TBSMEventHandler` instance.
  */
-- (instancetype)initWithName:(NSString *)name target:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (instancetype)initWithName:(NSString *)name target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 @end

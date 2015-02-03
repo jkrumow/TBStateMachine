@@ -1,5 +1,10 @@
 # TBStateMachine CHANGELOG
 
+## 5.0.0
+
+- separation between transition types external, local, internal
+- updated documentation
+
 ## 4.4.0
 
 - made changes to `TBSMStateMachine` so TBSMState class and subtypes can be inherited
@@ -67,7 +72,7 @@
 
 ### enhanced state switching:
 
-- state machine can now switch from a substate of a sub state machine deep into another submachine. Implementation uses LCA (Lowest Common Ancestor) - algorithm
+- state machine can now switch from a substate of a sub state machine deep into another submachine. Implementation uses LCA (Least Common Ancestor) - algorithm
 
 ### re-worked event handling:
 

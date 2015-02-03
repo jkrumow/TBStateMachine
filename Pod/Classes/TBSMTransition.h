@@ -7,15 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TBSMTransition.h"
+
+#import "TBSMTransitionType.h"
 
 @class TBSMState;
 
 /**
  *  This type represents an action of a given `TBSMTransition`.
  *
- *  @param sourceState      The source `TBSMState`.
- *  @param destinationState The destination `TBSMState`.
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
  *  @param data             The payload data.
  */
 typedef void(^TBSMActionBlock)(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data);
@@ -23,9 +24,9 @@ typedef void(^TBSMActionBlock)(TBSMState *sourceState, TBSMState *destinationSta
 /**
  *  This type represents a guard function of a given `TBSMTransition`.
  *
- *  @param sourceState      The source `TBSMNode`.
- *  @param destinationState The destination `TBSMNode`.
- *  @param data      The payload data.
+ *  @param sourceState      The source state.
+ *  @param destinationState The destination state.
+ *  @param data             The payload data.
  */
 typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data);
 
@@ -46,6 +47,11 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *destinationStat
 @property (nonatomic, weak, readonly) TBSMState *destinationState;
 
 /**
+ *  The type of transition.
+ */
+@property (nonatomic, assign, readonly) TBSMTransitionType type;
+
+/**
  *  The action associated with the transition.
  */
 @property (nonatomic, copy, readonly) TBSMActionBlock action;
@@ -57,27 +63,37 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *destinationStat
 
 /**
  *  Creates a `TBSMTransition` instance from a given source and destination state, action and guard.
- * 
+ *
  *  @param sourceState      The specified source state.
  *  @param destinationState The specified destination state.
+ *  @param type             The type of transition.
  *  @param action           The action associated with this transition.
  *  @param guard            The guard function associated with the transition.
  *
  *  @return The transition object.
  */
-+ (TBSMTransition *)transitionWithSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
++ (TBSMTransition *)transitionWithSourceState:(TBSMState *)sourceState
+                             destinationState:(TBSMState *)destinationState
+                                         type:(TBSMTransitionType)type
+                                       action:(TBSMActionBlock)action
+                                        guard:(TBSMGuardBlock)guard;
 
 /**
  *  Initializes a `TBSMTransition` instance from a given source and destination state, action and guard.
  *
  *  @param sourceState      The specified source state.
  *  @param destinationState The specified destination state.
+ *  @param type             The type of transition.
  *  @param action           The action associated with this transition.
  *  @param guard            The guard function associated with the transition.
  *
  *  @return The transition object.
  */
-- (instancetype)initWithSourceState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (instancetype)initWithSourceState:(TBSMState *)sourceState
+                   destinationState:(TBSMState *)destinationState
+                               type:(TBSMTransitionType)type
+                             action:(TBSMActionBlock)action
+                              guard:(TBSMGuardBlock)guard;
 
 /**
  *  The transition's name.

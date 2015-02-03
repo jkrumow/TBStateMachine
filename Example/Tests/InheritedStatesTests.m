@@ -45,7 +45,7 @@ describe(@"InheritedStates", ^{
     
     afterEach(^{
         
-        [stateMachine tearDown];
+        [stateMachine tearDown:nil];
         stateMachine = nil;
         
         stateA = nil;
@@ -54,13 +54,13 @@ describe(@"InheritedStates", ^{
         stateD = nil;
         parallelStates = nil;
         
-        [subStateMachineA tearDown];
-        [subStateMachineB tearDown];
+        [subStateMachineA tearDown:nil];
+        [subStateMachineB tearDown:nil];
         subStateMachineA = nil;
         subStateMachineB = nil;
     });
     
-    it(@"can deeply switch into and out of sub-state and parallel machines using lowest common ancestor algorithm while scheduling events from within the state.", ^{
+    it(@"can deeply switch into and out of sub-state and parallel machines using least common ancestor algorithm while scheduling events from within the state.", ^{
         
         NSArray *expectedExecutionSequence = @[@"subStateA_enter",
                                                @"stateA_enter",
@@ -114,7 +114,7 @@ describe(@"InheritedStates", ^{
         stateMachine.initialState = subStateA;
         
         // enters state A
-        [stateMachine setUp];
+        [stateMachine setUp:nil];
         
         // moves to state B
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
