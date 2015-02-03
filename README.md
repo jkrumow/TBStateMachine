@@ -14,7 +14,7 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 * block based API
 * wrapper class for nested state machines (sub state machines)
 * wrapper class for parallel state machines (orthogonal regions)
-* external, local and internal transitions with guards and actions
+* external and internal transitions with guards and actions
 * state switching using least common ancestor algorithm (LCA)
 * event deferral
 
@@ -106,7 +106,6 @@ If you register multiple transitions for the same event the guard blocks decide 
 TODO
 
 - external (default)
-- local
 - internal
 
 TODO
