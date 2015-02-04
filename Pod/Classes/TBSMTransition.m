@@ -12,16 +12,16 @@
 @implementation TBSMTransition
 
 + (TBSMTransition *)transitionWithSourceState:(TBSMState *)sourceState
-                             destinationState:(TBSMState *)destinationState
+                             targetState:(TBSMState *)targetState
                                          type:(TBSMTransitionType)type
                                        action:(TBSMActionBlock)action
                                         guard:(TBSMGuardBlock)guard
 {
-    return [[TBSMTransition alloc] initWithSourceState:sourceState destinationState:destinationState type:type action:action guard:guard];
+    return [[TBSMTransition alloc] initWithSourceState:sourceState targetState:targetState type:type action:action guard:guard];
 }
 
 - (instancetype)initWithSourceState:(TBSMState *)sourceState
-                   destinationState:(TBSMState *)destinationState
+                   targetState:(TBSMState *)targetState
                                type:(TBSMTransitionType)type
                              action:(TBSMActionBlock)action
                               guard:(TBSMGuardBlock)guard
@@ -29,7 +29,7 @@
     self = [super init];
     if (self) {
         _sourceState = sourceState;
-        _destinationState = destinationState;
+        _targetState = targetState;
         _type = type;
         _action = action;
         _guard = guard;
@@ -39,7 +39,7 @@
 
 - (NSString *)name
 {
-    return [NSString stringWithFormat:@"%@ --> %@", _sourceState.name, _destinationState.name];
+    return [NSString stringWithFormat:@"%@ --> %@", _sourceState.name, _targetState.name];
 }
 
 @end

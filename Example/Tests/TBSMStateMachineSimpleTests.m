@@ -201,25 +201,25 @@ describe(@"TBSMStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"enterA"];
             };
             
-            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitA"];
             };
             
-            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-enterB"];
             };
             
             [stateA registerEvent:eventA.name
                            target:stateB
                              type:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence appendString:@"-actionA"];
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                 [executionSequence appendString:@"-guardA"];
                                 return YES;
                             }];
@@ -243,10 +243,10 @@ describe(@"TBSMStateMachine", ^{
             [stateA registerEvent:eventA.name
                            target:stateB
                              type:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                didExecuteAction = YES;
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                 return NO;
                             }];
             
@@ -271,20 +271,20 @@ describe(@"TBSMStateMachine", ^{
             [stateA registerEvent:eventA.name
                            target:stateB
                              type:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                didExecuteActionA = YES;
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                 return NO;
                             }];
             
             [stateA registerEvent:eventA.name
                            target:stateB
                              type:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                didExecuteActionB = YES;
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                 return YES;
                             }];
             
@@ -305,61 +305,61 @@ describe(@"TBSMStateMachine", ^{
             NSArray *states = @[stateA, stateB];
             
             __block TBSMState *sourceStateEnter;
-            __block TBSMState *destinationStateEnter;
+            __block TBSMState *targetStateEnter;
             __block NSDictionary *stateDataEnter;
             __block TBSMState *sourceStateExit;
-            __block TBSMState *destinationStateExit;
+            __block TBSMState *targetStateExit;
             __block NSDictionary *stateDataExit;
             
             __block TBSMState *sourceStateGuard;
-            __block TBSMState *destinationStateGuard;
+            __block TBSMState *targetStateGuard;
             __block TBSMState *sourceStateAction;
-            __block TBSMState *destinationStateAction;
+            __block TBSMState *targetStateAction;
             __block NSDictionary *actionData;
             __block NSDictionary *guardData;
             
-            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 sourceStateEnter = sourceState;
-                destinationStateEnter = destinationState;
+                targetStateEnter = targetState;
                 stateDataEnter = data;
             };
             
-            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 sourceStateExit = sourceState;
-                destinationStateExit = destinationState;
+                targetStateExit = targetState;
                 stateDataExit = data;
             };
             
-            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 sourceStateEnter = sourceState;
-                destinationStateEnter = destinationState;
+                targetStateEnter = targetState;
                 stateDataEnter = data;
             };
             
-            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 sourceStateExit = sourceState;
-                destinationStateExit = destinationState;
+                targetStateExit = targetState;
                 stateDataExit = data;
             };
             
             [stateA registerEvent:eventA.name
                            target:stateB
                              type:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                sourceStateAction = sourceState;
-                               destinationStateAction = destinationState;
+                               targetStateAction = targetState;
                                actionData = data;
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                 sourceStateGuard = sourceState;
-                                destinationStateGuard = destinationState;
+                                targetStateGuard = targetState;
                                 guardData = data;
                                 return YES;
                             }];
             
-            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 sourceStateEnter = sourceState;
-                destinationStateEnter = destinationState;
+                targetStateEnter = targetState;
                 stateDataEnter = data;
             };
             
@@ -368,7 +368,7 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp:nil];
             
             expect(sourceStateEnter).to.beNil;
-            expect(destinationStateEnter).to.equal(stateA);
+            expect(targetStateEnter).to.equal(stateA);
             expect(stateDataEnter).to.beNil;
             
             // enters state B
@@ -376,7 +376,7 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine scheduleEvent:eventA];
             
             expect(sourceStateExit).to.equal(stateA);
-            expect(destinationStateExit).to.equal(stateB);
+            expect(targetStateExit).to.equal(stateB);
             
             expect(stateDataExit).to.equal(eventDataA);
             expect(stateDataExit.allKeys).haveCountOf(1);
@@ -394,7 +394,7 @@ describe(@"TBSMStateMachine", ^{
             expect(actionData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
             
             expect(sourceStateEnter).to.equal(stateA);
-            expect(destinationStateEnter).to.equal(stateB);
+            expect(targetStateEnter).to.equal(stateB);
             
             expect(stateDataEnter).to.equal(eventDataA);
             expect(stateDataEnter.allKeys).haveCountOf(1);
@@ -409,11 +409,11 @@ describe(@"TBSMStateMachine", ^{
             __block BOOL didEnterStateA = NO;
             __block BOOL didExitStateA = NO;
             
-            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 didEnterStateA = YES;
             };
             
-            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 didExitStateA = YES;
             };
             
@@ -438,29 +438,29 @@ describe(@"TBSMStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-enterA"];
             };
             
-            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitA"];
             };
             
-            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-enterB"];
             };
             
-            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitB"];
             };
             
             [stateA registerEvent:eventA.name
                            target:nil
                              type:TBSMTransitionInternal
-                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence appendString:@"-action"];
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                 [executionSequence appendString:@"-guard"];
                                 return YES;
                             }];
@@ -482,26 +482,26 @@ describe(@"TBSMStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"enterA"];
             };
             
-            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitA"];
             };
             
-            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-enterB"];
             };
             
-            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitB"];
             };
             
             [stateA registerEvent:eventA.name
                            target:nil
                              type:TBSMTransitionInternal
-                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence appendString:@"-action"];
                            }];
             
@@ -522,29 +522,29 @@ describe(@"TBSMStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"enterA"];
             };
             
-            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitA"];
             };
             
-            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-enterB"];
             };
             
-            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitB"];
             };
             
             [stateA registerEvent:eventA.name
                            target:nil
                              type:TBSMTransitionInternal
-                           action:^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence appendString:@"-action"];
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                 [executionSequence appendString:@"-guard"];
                                 return NO;
                             }];
@@ -566,27 +566,27 @@ describe(@"TBSMStateMachine", ^{
             
             NSArray *states = @[stateA, stateB, stateC];
             
-            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"enterA"];
             };
             
-            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitA"];
             };
             
-            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-enterB"];
             };
             
-            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitB"];
             };
             
-            stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateC.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-enterC"];
             };
             
-            stateC.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+            stateC.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence appendString:@"-exitC"];
             };
             

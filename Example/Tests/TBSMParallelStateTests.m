@@ -109,19 +109,19 @@ describe(@"TBSMParallelState", ^{
         __block BOOL enteredStateB = NO;
         __block BOOL exitedStateB = NO;
         
-        stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             enteredStateA = YES;
         };
         
-        stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             exitedStateA = YES;
         };
         
-        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             enteredStateB = YES;
         };
         
-        stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data) {
+        stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             exitedStateB = YES;
         };
         
@@ -134,12 +134,12 @@ describe(@"TBSMParallelState", ^{
         NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
         parallelStates.stateMachines = parallelSubStateMachines;
         
-        [parallelStates enter:nil destinationState:nil data:nil];
+        [parallelStates enter:nil targetState:nil data:nil];
         
         expect(enteredStateA).to.equal(YES);
         expect(enteredStateB).to.equal(YES);
         
-        [parallelStates exit:nil destinationState:nil data:nil];
+        [parallelStates exit:nil targetState:nil data:nil];
         
         expect(exitedStateA).to.equal(YES);
         expect(exitedStateB).to.equal(YES);

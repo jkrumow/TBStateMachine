@@ -15,10 +15,10 @@
  *  This type represents a block that is executed on entry and exit of a `TBSMState`.
  *
  *  @param sourceState      The source state.
- *  @param destinationState The destination state.
+ *  @param targetState The destination state.
  *  @param data The payload data.
  */
-typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationState, NSDictionary *data);
+typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data);
 
 /**
  *  This class represents a state in a state machine.
@@ -166,18 +166,18 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *destinationSta
  *  Executes the enter block of the state.
  *
  *  @param sourceState      The source state.
- *  @param destinationState The destination state.
+ *  @param targetState The destination state.
  *  @param data             The payload data.
  */
-- (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data;
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 
 /**
  *  Executes the exit block of the state.
  *
  *  @param sourceState      The source state.
- *  @param destinationState The destination state.
+ *  @param targetState The destination state.
  *  @param data             The payload data.
  */
-- (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data;
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 
 @end

@@ -28,14 +28,8 @@
     self = [super initWithName:name];
     if (self) {
         _priv_parallelStateMachines = [NSMutableArray new];
-        _parallelQueue = nil;
     }
     return self;
-}
-
-- (void)dealloc
-{
-    self.parallelQueue = nil;
 }
 
 - (NSArray *)stateMachines
@@ -56,77 +50,40 @@
     }
 }
 
-- (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    [super enter:sourceState destinationState:destinationState data:data];
+    [super enter:sourceState targetState:targetState data:data];
     
-    if (self.parallelQueue) {
-        dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
-            
-            TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-            if ([destinationState.path containsObject:stateMachine]) {
-                [stateMachine enterState:sourceState destinationState:destinationState data:data];
-            } else {
-                [stateMachine setUp:data];
-            }
-        });
-    } else {
-        for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
-            if ([destinationState.path containsObject:stateMachine]) {
-                [stateMachine enterState:sourceState destinationState:destinationState data:data];
-            } else {
-                [stateMachine setUp:data];
-            }
+    for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
+        if ([targetState.path containsObject:stateMachine]) {
+            [stateMachine enterState:sourceState targetState:targetState data:data];
+        } else {
+            [stateMachine setUp:data];
         }
     }
 }
 
-- (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    if (self.parallelQueue) {
-        dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
-            
-            TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-            if ([destinationState.path containsObject:stateMachine]) {
-                [stateMachine exitState:sourceState destinationState:destinationState data:data];
-            } else {
-                [stateMachine tearDown:data];
-            }
-        });
-    } else {
-        for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
-            if ([destinationState.path containsObject:stateMachine]) {
-                [stateMachine exitState:sourceState destinationState:destinationState data:data];
-            } else {
-                [stateMachine tearDown:data];
-            }
+    for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
+        if ([targetState.path containsObject:stateMachine]) {
+            [stateMachine exitState:sourceState targetState:targetState data:data];
+        } else {
+            [stateMachine tearDown:data];
         }
     }
-    
-    [super exit:sourceState destinationState:destinationState data:data];
+    [super exit:sourceState targetState:targetState data:data];
 }
 
 - (BOOL)handleEvent:(TBSMEvent *)event
 {
-    if (self.parallelQueue) {
-        __block BOOL didHandleEvent = NO;
-        dispatch_apply(self.priv_parallelStateMachines.count, self.parallelQueue, ^(size_t idx) {
-            
-            TBSMStateMachine *stateMachine = self.priv_parallelStateMachines[idx];
-            if ([stateMachine handleEvent:event]) {
-                didHandleEvent = YES;
-            }
-        });
-        return didHandleEvent;
-    } else {
-        BOOL didHandleEvent = NO;
-        for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
-            if ([stateMachine handleEvent:event]) {
-                didHandleEvent = YES;
-            }
+    BOOL didHandleEvent = NO;
+    for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
+        if ([stateMachine handleEvent:event]) {
+            didHandleEvent = YES;
         }
-        return didHandleEvent;
     }
+    return didHandleEvent;
 }
 
 #pragma mark - TBSMNode

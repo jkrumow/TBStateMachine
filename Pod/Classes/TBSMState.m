@@ -102,18 +102,39 @@
     return nil;
 }
 
-- (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
+    NSString *name = [NSString stringWithFormat:@"%@_enter_notification", self.name];
+    [self _postNotificationWithName:name sourceState:sourceState targetState:targetState data:data];
+    
     if (_enterBlock) {
-        _enterBlock(sourceState, destinationState, data);
+        _enterBlock(sourceState, targetState, data);
     }
 }
 
-- (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
+    NSString *name = [NSString stringWithFormat:@"%@_exit_notification", self.name];
+    [self _postNotificationWithName:name sourceState:sourceState targetState:targetState data:data];
+    
     if (_exitBlock) {
-        _exitBlock(sourceState, destinationState, data);
+        _exitBlock(sourceState, targetState, data);
     }
+}
+
+- (void)_postNotificationWithName:(NSString *)name sourceState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+{
+    NSMutableDictionary *userInfo = NSMutableDictionary.new;
+    if (sourceState) {
+        [userInfo setObject:sourceState forKey:@"sourceState"];
+    }
+    if (targetState) {
+        [userInfo setObject:targetState forKey:@"targetState"];
+    }
+    if (data) {
+        [userInfo setObject:data forKey:@"data"];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
 
 #pragma mark - TBSMNode

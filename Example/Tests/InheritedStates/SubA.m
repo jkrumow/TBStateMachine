@@ -10,16 +10,16 @@
 
 @implementation SubA
 
-- (void)enter:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
     [self.executionSequence addObject:[NSString stringWithFormat:@"%@_enter", self.name]];
     
-    [super enter:sourceState destinationState:destinationState data:data];
+    [super enter:sourceState targetState:targetState data:data];
 }
 
-- (void)exit:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    [super exit:sourceState destinationState:destinationState data:data];
+    [super exit:sourceState targetState:targetState data:data];
     
     [self.executionSequence addObject:[NSString stringWithFormat:@"%@_exit", self.name]];
 }

@@ -99,7 +99,7 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictio
 [stateA registerEvent:@"EventA" target:stateB action:action guard:guard];
 ```
 
-If you register multiple transitions for the same event the guard blocks decide which one will be fired. Only the first valid transition will be fired.
+If you register multiple transitions for the same event the guard blocks decide which one will be fired.
 
 ### Different kinds of Transitions
 
@@ -159,12 +159,9 @@ parallel.states = @[subMachineA, subMachineB, subMachineC];
 stateMachine.states = @[stateA, stateB, parallel];
 ```
 
-Optionally you can set a concurrent queue to run all submachines in parallel:
+### Notfications
 
-```objective-c
-dispatch_queue_t parallelQueue = dispatch_queue_create("ParallelStateQueue", DISPATCH_QUEUE_CONCURRENT);
-parallelStates.parallelQueue = parallelQueue;
-```
+`TBSMState` posts NSNotifications on entry and exit. The naming scheme is `[state name]_enter_notification`.
 
 ## Helpful theory
 

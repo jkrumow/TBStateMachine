@@ -130,18 +130,18 @@
  *  Enters a given state.
  *
  *  @param sourceState      The source state.
- *  @param destinationState The destination state.
+ *  @param targetState The destination state.
  *  @param data             The payload data.
  */
-- (void)enterState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data;
+- (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 
 /**
  *  Exits a given state.
  *
  *  @param sourceState      The source state.
- *  @param destinationState The destination state.
+ *  @param targetState The destination state.
  *  @param data             The payload data.
  */
-- (void)exitState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data;
+- (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 
 @end

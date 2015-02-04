@@ -19,15 +19,6 @@
 @interface TBSMParallelState : TBSMState
 
 /**
- *  Optional concurrent queue.
- */
-#if OS_OBJECT_USE_OBJC
-@property (nonatomic, strong) dispatch_queue_t parallelQueue;
-#else
-@property (nonatomic, assign) dispatch_queue_t parallelQueue;
-#endif
-
-/**
  *  Creates a `TBSMParallelState` instance from a given name.
  *
  *  Throws a `TBSMException` when name is nil or an empty string.

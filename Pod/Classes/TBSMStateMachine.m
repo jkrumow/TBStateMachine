@@ -43,7 +43,7 @@
 - (void)setUp:(NSDictionary *)data
 {
     if (self.initialState) {
-        [self enterState:nil destinationState:self.initialState data:data];
+        [self enterState:nil targetState:self.initialState data:data];
     } else {
         @throw [NSException tb_noInitialStateException:@"initialState"];
     }
@@ -51,7 +51,7 @@
 
 - (void)tearDown:(NSDictionary *)data
 {
-    [self exitState:self.currentState destinationState:nil data:data];
+    [self exitState:self.currentState targetState:nil data:data];
     _currentState = nil;
     [self.priv_states removeAllObjects];
 }
@@ -123,7 +123,7 @@
         NSArray *eventHandlers = [_currentState eventHandlersForEvent:event];
         for (TBSMEventHandler *eventHandler in eventHandlers) {
             TBSMTransition *transition = [TBSMTransition transitionWithSourceState:_currentState
-                                                                  destinationState:eventHandler.target
+                                                                  targetState:eventHandler.target
                                                                               type:eventHandler.type
                                                                             action:eventHandler.action
                                                                              guard:eventHandler.guard];
@@ -177,41 +177,41 @@
 
 - (void)_switchState:(TBSMTransition *)transition data:(NSDictionary *)data
 {
-    [_currentState exit:transition.sourceState destinationState:transition.destinationState data:data];
+    [_currentState exit:transition.sourceState targetState:transition.targetState data:data];
     if (transition.action) {
-        transition.action(transition.sourceState, transition.destinationState, data);
+        transition.action(transition.sourceState, transition.targetState, data);
     }
-    [self enterState:transition.sourceState destinationState:transition.destinationState data:data];
+    [self enterState:transition.sourceState targetState:transition.targetState data:data];
 }
 
-- (void)enterState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+- (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    NSUInteger targetLevel = [[destinationState.parentNode path] count];
+    NSUInteger targetLevel = [[targetState.parentNode path] count];
     NSUInteger thisLevel = self.path.count;
     
     if (targetLevel < thisLevel) {
         _currentState = self.initialState;
     } else if (targetLevel == thisLevel) {
-        _currentState = destinationState;
+        _currentState = targetState;
     } else {
-        NSArray *destinationPath = [destinationState.parentNode path];
+        NSArray *destinationPath = [targetState.parentNode path];
         id<TBSMNode> node = destinationPath[thisLevel];
         _currentState = node.parentNode;
     }
-    [self.currentState enter:sourceState destinationState:destinationState data:data];
+    [self.currentState enter:sourceState targetState:targetState data:data];
 }
 
-- (void)exitState:(TBSMState *)sourceState destinationState:(TBSMState *)destinationState data:(NSDictionary *)data
+- (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    [self.currentState exit:sourceState destinationState:destinationState data:data];
+    [self.currentState exit:sourceState targetState:targetState data:data];
 }
 
 - (BOOL)_performTransition:(TBSMTransition *)transition withData:(NSDictionary *)data
 {
-    if (transition.guard == nil || transition.guard(transition.sourceState, transition.destinationState, data)) {
+    if (transition.guard == nil || transition.guard(transition.sourceState, transition.targetState, data)) {
         if (transition.type == TBSMTransitionInternal) {
             if (transition.action) {
-                transition.action(transition.sourceState, transition.destinationState, data);
+                transition.action(transition.sourceState, transition.targetState, data);
             }
         } else {
             TBSMStateMachine *leastCommonAncestor = [self _findLeastCommonAncestorForTransition:transition];
@@ -229,7 +229,7 @@
 - (TBSMStateMachine *)_findLeastCommonAncestorForTransition:(TBSMTransition *)transition
 {
     NSArray *sourcePath = [transition.sourceState path];
-    NSArray *destinationPath = [transition.destinationState path];
+    NSArray *destinationPath = [transition.targetState path];
     
     __block TBSMStateMachine *lca = nil;
     [sourcePath enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
