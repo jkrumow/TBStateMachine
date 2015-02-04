@@ -104,7 +104,7 @@
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    NSString *name = [NSString stringWithFormat:@"%@_enter_notification", self.name];
+    NSString *name = [NSString stringWithFormat:@"%@_DidEnterNotification", self.name];
     [self _postNotificationWithName:name sourceState:sourceState targetState:targetState data:data];
     
     if (_enterBlock) {
@@ -114,7 +114,7 @@
 
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    NSString *name = [NSString stringWithFormat:@"%@_exit_notification", self.name];
+    NSString *name = [NSString stringWithFormat:@"%@_DidExitNotification", self.name];
     [self _postNotificationWithName:name sourceState:sourceState targetState:targetState data:data];
     
     if (_exitBlock) {
