@@ -11,12 +11,13 @@ A lightweight event-driven hierarchical state machine implementation in Objectiv
 
 ## Features
 
-* block based API
-* wrapper class for nested state machines (sub state machines)
-* wrapper class for parallel state machines (orthogonal regions)
-* external and internal transitions with guards and actions
-* state switching using least common ancestor algorithm (LCA)
-* event deferral
+* Block based API
+* Wrapper class for nested state machines (sub state machines)
+* Wrapper class for parallel state machines (orthogonal regions)
+* External and internal transitions with guards and actions
+* State switching using least common ancestor algorithm (LCA)
+* Cocoa notifications support
+* Event deferral
 
 ## Example Project
 
@@ -161,7 +162,7 @@ stateMachine.states = @[stateA, stateB, parallel];
 
 ### Notfications
 
-`TBSMState` posts NSNotifications on entry and exit. The naming scheme is `[state name]_DidEnterNotification` and [state name]_DidExitNotification`.
+`TBSMState` posts NSNotifications on entry and exit. The naming scheme is `[state name]_DidEnterNotification` and `[state name]_DidExitNotification`.
 
 ## Helpful theory
 
