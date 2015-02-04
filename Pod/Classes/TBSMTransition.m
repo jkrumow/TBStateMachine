@@ -39,7 +39,10 @@
 
 - (NSString *)name
 {
-    return [NSString stringWithFormat:@"%@ --> %@", _sourceState.name, _targetState.name];
+    if (self.targetState == nil) {
+        return self.sourceState.name;
+    }
+    return [NSString stringWithFormat:@"%@_to_%@", self.sourceState.name, self.targetState.name];
 }
 
 @end
