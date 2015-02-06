@@ -163,6 +163,16 @@ stateMachine.states = @[stateA, stateB, parallel];
 
 `TBSMState` posts NSNotifications on entry and exit. The naming scheme is `[state name]_DidEnterNotification` and `[state name]_DidExitNotification`.
 
+The notification's `userInfo` contains:
+
+```
+{
+    TBSMSourceStateUserInfo:theSourceState,
+    TBSMTargetStateUserInfo:theTargetState,
+    TBSMDataUserInfo:theData
+}
+```
+
 ## Helpful theory
 
 * [http://www.omg.org/spec/UML/2.5/Beta2/](http://www.omg.org/spec/UML/2.5/Beta2/)

@@ -10,6 +10,10 @@
 #import "NSException+TBStateMachine.h"
 #import "TBSMEventHandler.h"
 
+NSString * const TBSMSourceStateUserInfo = @"sourceState";
+NSString * const TBSMTargetStateUserInfo = @"targetState";
+NSString * const TBSMDataUserInfo = @"data";
+
 @interface TBSMState ()
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableDictionary *priv_eventHandlers;
@@ -126,13 +130,13 @@
 {
     NSMutableDictionary *userInfo = NSMutableDictionary.new;
     if (sourceState) {
-        [userInfo setObject:sourceState forKey:@"sourceState"];
+        [userInfo setObject:sourceState forKey:TBSMSourceStateUserInfo];
     }
     if (targetState) {
-        [userInfo setObject:targetState forKey:@"targetState"];
+        [userInfo setObject:targetState forKey:TBSMTargetStateUserInfo];
     }
     if (data) {
-        [userInfo setObject:data forKey:@"data"];
+        [userInfo setObject:data forKey:TBSMDataUserInfo];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
