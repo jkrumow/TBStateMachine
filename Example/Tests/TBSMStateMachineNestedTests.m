@@ -159,7 +159,8 @@ describe(@"TBSMStateMachine", ^{
         __block TBSMState *targetStateEnterSubA;
         __block TBSMState *sourceStateExitSubA;
         __block TBSMState *targetStateExitSubA;
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA"];
+        subStateA.stateMachine = subStateMachineA;
         
         subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_enter"];
@@ -354,7 +355,8 @@ describe(@"TBSMStateMachine", ^{
         parallelStates.stateMachines = @[subStateMachineB];
         
         // setup sub state machine wrapper
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA"];
+        subStateA.stateMachine = subStateMachineA;
         
         subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_enter"];
@@ -445,8 +447,10 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineB.initialState = stateB;
         
         // setup sub state machine wrapper
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
-        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"SubStateB" stateMachine:subStateMachineB];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA"];
+        subStateA.stateMachine = subStateMachineA;
+        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"SubStateB"];
+        subStateB.stateMachine = subStateMachineB;
         
         subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_enter"];
@@ -717,7 +721,8 @@ describe(@"TBSMStateMachine", ^{
         parallelStates.stateMachines = @[subStateMachineB];
         
         // setup sub state machine wrapper
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA"];
+        subStateA.stateMachine = subStateMachineA;
         
         subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_enter"];
@@ -851,7 +856,8 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineA.states = subStatesA;
         subStateMachineA.initialState = stateA;
         
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA"];
+        subStateA.stateMachine = subStateMachineA;
         
         [subStateA deferEvent:eventB.name];
         [stateA registerEvent:eventA.name target:stateB];
@@ -865,7 +871,8 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineB.states = subStatesB;
         subStateMachineB.initialState = stateD;
         
-        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"SubStateB" stateMachine:subStateMachineB];
+        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"SubStateB"];
+        subStateB.stateMachine = subStateMachineB;
         
         [subStateB deferEvent:eventC.name];
         [subStateB deferEvent:eventE.name];
@@ -921,7 +928,8 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineA.states = subStatesA;
         subStateMachineA.initialState = stateA;
         
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA"];
+        subStateA.stateMachine = subStateMachineA;
         
         [subStateA deferEvent:eventB.name];
         [stateA registerEvent:eventA.name target:stateB];
@@ -995,7 +1003,64 @@ describe(@"TBSMStateMachine", ^{
         expect(subStateA.stateMachine.currentState).to.equal(stateA);
     });
     
-    it(@"scratch scratch.", ^{
+    it(@"performs an external transition from superstate to substate.", ^{
+        
+        NSArray *expectedExecutionSequence = @[@"subStateA_enter",
+                                               @"stateA_enter",
+                                               @"stateA_exit",
+                                               @"subStateA_exit",
+                                               @"subStateA_enter",
+                                               @"stateB_enter"];
+        
+        NSMutableArray *executionSequence = [NSMutableArray new];
+        
+        // setup sub-state machine A
+        stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"stateA_enter"];
+        };
+        
+        stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"stateA_exit"];
+        };
+        
+        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"stateB_enter"];
+        };
+        
+        stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"stateB_exit"];
+        };
+        
+        subStateMachineA.states = @[stateA, stateB];
+        subStateMachineA.initialState = stateA;
+        
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA"];
+        subStateA.stateMachine = subStateMachineA;
+        
+        subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"subStateA_enter"];
+        };
+        
+        subStateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"subStateA_exit"];
+        };
+        
+        [subStateA registerEvent:eventA.name target:stateB];
+        
+        
+        // setup main state machine
+        stateMachine.states = @[subStateA];
+        stateMachine.initialState = subStateA;
+        [stateMachine setUp:nil];
+        
+        [stateMachine scheduleEvent:eventA];
+        
+        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
+        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
+        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+    });
+    
+    it(@"performs an external transition from substate to superstate.", ^{
         
         NSArray *expectedExecutionSequence = @[@"subStateA_enter",
                                                @"stateA_enter",
@@ -1015,10 +1080,19 @@ describe(@"TBSMStateMachine", ^{
             [executionSequence addObject:@"stateA_exit"];
         };
         
-        subStateMachineA.states = @[stateA];
+        stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"stateB_enter"];
+        };
+        
+        stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"stateB_exit"];
+        };
+        
+        subStateMachineA.states = @[stateA, stateB];
         subStateMachineA.initialState = stateA;
         
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"SubStateA"];
+        subStateA.stateMachine = subStateMachineA;
         
         subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"subStateA_enter"];
@@ -1028,7 +1102,7 @@ describe(@"TBSMStateMachine", ^{
             [executionSequence addObject:@"subStateA_exit"];
         };
         
-        [subStateA registerEvent:eventA.name target:stateA];
+        [stateA registerEvent:eventA.name target:subStateA];
         
         
         // setup main state machine

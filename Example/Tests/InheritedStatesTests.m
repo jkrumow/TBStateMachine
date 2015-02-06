@@ -105,7 +105,8 @@ describe(@"InheritedStates", ^{
         parallelStates.stateMachines = @[subStateMachineB];
         
         // setup sub state machine wrapper
-        SubA *subStateA = [[SubA alloc] initWithName:@"subStateA" stateMachine:subStateMachineA];
+        SubA *subStateA = [[SubA alloc] initWithName:@"subStateA"];
+        subStateA.stateMachine = subStateMachineA;
         subStateA.executionSequence = executionSequence;
         
         // setup main state machine

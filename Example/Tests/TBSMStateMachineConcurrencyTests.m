@@ -130,7 +130,8 @@ describe(@"TBSMStateMachine", ^{
             };
             
             subStateMachineA.states = @[stateC];
-            TBSMSubState *subStateC = [TBSMSubState subStateWithName:@"SubStateC" stateMachine:subStateMachineA];
+            TBSMSubState *subStateC = [TBSMSubState subStateWithName:@"SubStateC"];
+            subStateC.stateMachine = subStateMachineA;
             
             subStateC.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence addObject:@"subStateC_enter"];
@@ -257,7 +258,8 @@ describe(@"TBSMStateMachine", ^{
             };
             
             subStateMachineA.states = @[stateC];
-            TBSMSubState *subStateC = [TBSMSubState subStateWithName:@"SubStateC" stateMachine:subStateMachineA];
+            TBSMSubState *subStateC = [TBSMSubState subStateWithName:@"SubStateC"];
+            subStateC.stateMachine = subStateMachineA;
             
             subStateC.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence addObject:@"subStateC_enter"];

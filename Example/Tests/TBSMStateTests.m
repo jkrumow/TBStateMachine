@@ -135,7 +135,8 @@ describe(@"TBSMState", ^{
     it(@"returns its path inside the state machine hierarchy containing all parent nodes in descending order", ^{
         
         subStateMachineB.states = @[stateA];
-        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
+        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB"];
+        subStateB.stateMachine = subStateMachineB;
         subStateMachineA.states = @[subStateB];
         
         parallelStates.stateMachines = @[subStateMachineA];

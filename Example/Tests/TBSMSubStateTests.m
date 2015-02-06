@@ -47,7 +47,8 @@ describe(@"TBSMSubState", ^{
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"stateMachineB"];
         parallelStates = [TBSMParallelState parallelStateWithName:@"parallelStates"];
         
-        subState = [TBSMSubState subStateWithName:@"subState" stateMachine:subStateMachineA];
+        subState = [TBSMSubState subStateWithName:@"subState"];
+        subState.stateMachine = subStateMachineA;
     });
     
     afterEach(^{
@@ -71,7 +72,7 @@ describe(@"TBSMSubState", ^{
         it (@"throws a TBSMException when name is nil.", ^{
             
             expect(^{
-                subState = [TBSMSubState subStateWithName:nil stateMachine:subStateMachineA];
+                subState = [TBSMSubState subStateWithName:nil];
             }).to.raise(TBSMException);
             
         });
@@ -79,7 +80,7 @@ describe(@"TBSMSubState", ^{
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
-                subState = [TBSMSubState subStateWithName:@"" stateMachine:subStateMachineA];
+                subState = [TBSMSubState subStateWithName:@""];
             }).to.raise(TBSMException);
             
         });
@@ -87,17 +88,16 @@ describe(@"TBSMSubState", ^{
         it (@"throws a TBSMException when stateMachine is nil.", ^{
             
             expect(^{
-                subState = [TBSMSubState subStateWithName:@"subState" stateMachine:nil];
+                subState = [TBSMSubState subStateWithName:@"subState"];
+                [subState enter:nil targetState:nil data:nil];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                subState = [TBSMSubState subStateWithName:@"subState"];
+                [subState exit:nil targetState:nil data:nil];
             }).to.raise(TBSMException);
             
         });
-        
-    });
-    
-    it(@"returns the nested state machine.", ^{
-        subStateMachineB.states = @[stateA];
-        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
-        expect(subStateB.stateMachine).to.equal(subStateMachineB);
         
     });
     
@@ -112,7 +112,8 @@ describe(@"TBSMSubState", ^{
     it(@"returns its path inside the state machine hierarchy containing all parent nodes in descending order", ^{
         
         subStateMachineB.states = @[stateA];
-        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB" stateMachine:subStateMachineB];
+        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB"];
+        subStateB.stateMachine = subStateMachineB;
         subStateMachineA.states = @[subStateB];
         
         parallelStates.stateMachines = @[subStateMachineA];
@@ -136,7 +137,8 @@ describe(@"TBSMSubState", ^{
         __block BOOL exitSubStateA = NO;
         
         subStateMachineA.states = @[stateA];
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"subStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"subStateA"];
+        subStateA.stateMachine = subStateMachineA;
         
         __block TBSMState *weakSubStateA = subStateA;
         subStateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -193,7 +195,8 @@ describe(@"TBSMSubState", ^{
     
     it(@"handles registered events", ^{
         
-        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"subStateA" stateMachine:subStateMachineA];
+        TBSMSubState *subStateA = [TBSMSubState subStateWithName:@"subStateA"];
+        subStateA.stateMachine = subStateMachineA;
         
         __block BOOL enterStateA = NO;
         __block BOOL exitStateA = NO;

@@ -19,31 +19,18 @@
 /**
  *  The `TBSMStateMachine` instance wrapped by this sub state.
  */
-@property (nonatomic, strong, readonly) TBSMStateMachine *stateMachine;
+@property (nonatomic, strong) TBSMStateMachine *stateMachine;
 
 /**
- *  Creates a `TBSMSUBState` with a specified name and a `TBSMStateMachine` instance.
+ *  Creates a `TBSMSUBState` with a specified name.
  *
  *  Throws a `TBSMException` when name is nil or an empty string.
  *
- *  @param name         The name of this wrapper. Must be unique.
- *  @param stateMachine The sub state machine to wrap.
+ *  @param name The name of this wrapper. Must be unique.
  *
  *  @return A new `TBSMSubState` instance.
  */
-+ (TBSMSubState *)subStateWithName:(NSString *)name stateMachine:(TBSMStateMachine *)stateMachine;
-
-/**
- *  Initializes a `TBSMSUBState` with a specified name and a `TBSMStateMachine` instance.
- *
- *  Throws a `TBSMException` when name is nil or an empty string.
- *
- *  @param name         The name of this wrapper. Must be unique.
- *  @param stateMachine The sub state machine to wrap.
- *
- *  @return An initialized `TBSMSubState` instance.
- */
-- (instancetype)initWithName:(NSString *)name stateMachine:(TBSMStateMachine *)stateMachine;
++ (TBSMSubState *)subStateWithName:(NSString *)name;
 
 /**
  *  Receives a specified `TBSMEvent` instance.
