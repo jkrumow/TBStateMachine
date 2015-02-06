@@ -10,6 +10,10 @@
 #import "NSException+TBStateMachine.h"
 #import "TBSMEventHandler.h"
 
+NSString * const TBSMSourceStateUserInfo = @"sourceState";
+NSString * const TBSMTargetStateUserInfo = @"targetState";
+NSString * const TBSMDataUserInfo = @"data";
+
 @interface TBSMState ()
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableDictionary *priv_eventHandlers;
@@ -49,25 +53,25 @@
 
 - (void)registerEvent:(NSString *)event target:(TBSMState *)target
 {
-    [self registerEvent:event target:target type:TBSMTransitionExternal];
+    [self registerEvent:event target:target kind:TBSMTransitionExternal];
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind
 {
-    [self registerEvent:event target:target type:type action:nil guard:nil];
+    [self registerEvent:event target:target kind:kind action:nil guard:nil];
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action
 {
-    [self registerEvent:event target:target type:type action:action guard:nil];
+    [self registerEvent:event target:target kind:kind action:action guard:nil];
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
+- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if ([_priv_deferredEvents objectForKey:event])  {
         @throw [NSException tb_cannotRegisterDeferredEvent:event];
     }
-    TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target type:type action:action guard:guard];
+    TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target kind:kind action:action guard:guard];
     NSMutableArray *eventHandlers = _priv_eventHandlers[event];
     if (!eventHandlers) {
         eventHandlers = NSMutableArray.new;
@@ -126,13 +130,13 @@
 {
     NSMutableDictionary *userInfo = NSMutableDictionary.new;
     if (sourceState) {
-        [userInfo setObject:sourceState forKey:@"sourceState"];
+        [userInfo setObject:sourceState forKey:TBSMSourceStateUserInfo];
     }
     if (targetState) {
-        [userInfo setObject:targetState forKey:@"targetState"];
+        [userInfo setObject:targetState forKey:TBSMTargetStateUserInfo];
     }
     if (data) {
-        [userInfo setObject:data forKey:@"data"];
+        [userInfo setObject:data forKey:TBSMDataUserInfo];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }

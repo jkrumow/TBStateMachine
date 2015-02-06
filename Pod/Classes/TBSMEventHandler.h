@@ -28,6 +28,11 @@
 @property (nonatomic, strong, readonly) TBSMState *target;
 
 /**
+ *  The kind of transition to perform.
+ */
+@property (nonatomic, assign, readonly) TBSMTransitionKind kind;
+
+/**
  *  The action of the transition triggered by the event.
  */
 @property (nonatomic, copy, readonly) TBSMActionBlock action;
@@ -37,23 +42,19 @@
  */
 @property (nonatomic, copy, readonly) TBSMGuardBlock guard;
 
-/**
- *  The type of transition to perform.
- */
-@property (nonatomic, assign, readonly) TBSMTransitionType type;
 
 /**
  *  Creates a `TBSMEventHandler` instance from a given event name, target, action and guard.
  *
  *  @param name   The name of this event. Must be unique.
  *  @param target The destination state.
+ *  @param type   The kind of transition.
  *  @param action The action.
  *  @param guard  The guard function.
- *  @param type   The type of transition.
  *
  *  @return The event instance.
  */
-+ (instancetype)eventHandlerWithName:(NSString *)name target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
++ (instancetype)eventHandlerWithName:(NSString *)name target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
  *  Initializes a `TBSMEventHandler` from a given event name, target, action and guard.
@@ -62,12 +63,12 @@
  *
  *  @param name   The name of this event. Must be unique.
  *  @param target The destination state.
+ *  @param kind   The kind of transition.
  *  @param action The action.
  *  @param guard  The guard function.
- *  @param type   The type of transition.
  *
  *  @return An initialized `TBSMEventHandler` instance.
  */
-- (instancetype)initWithName:(NSString *)name target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (instancetype)initWithName:(NSString *)name target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 @end

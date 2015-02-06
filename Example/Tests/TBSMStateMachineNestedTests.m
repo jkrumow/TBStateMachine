@@ -559,7 +559,7 @@ describe(@"TBSMStateMachine", ^{
         [stateA registerEvent:eventA.name target:stateB];
         [stateB registerEvent:eventA.name target:stateC];
         [stateC registerEvent:eventA.name target:stateD];
-        [stateD registerEvent:eventA.name target:nil type:TBSMTransitionInternal];
+        [stateD registerEvent:eventA.name target:nil kind:TBSMTransitionInternal];
         [stateE registerEvent:eventA.name target:stateF];
         [stateF registerEvent:eventA.name target:stateA];
         
@@ -700,7 +700,7 @@ describe(@"TBSMStateMachine", ^{
         
         [stateD registerEvent:eventInternal.name
                        target:nil
-                         type:TBSMTransitionInternal
+                         kind:TBSMTransitionInternal
                        action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                            [executionSequence addObject:@"stateD_action_internal"];
                        } guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -803,28 +803,28 @@ describe(@"TBSMStateMachine", ^{
         
         [stateA registerEvent:eventInternal.name
                        target:nil
-                         type:TBSMTransitionInternal
+                         kind:TBSMTransitionInternal
                        action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                            actionStateA = YES;
                        }];
         
         [stateB registerEvent:eventInternal.name
                        target:nil
-                         type:TBSMTransitionInternal
+                         kind:TBSMTransitionInternal
                        action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                            actionStateB = YES;
                        }];
         
         [stateC registerEvent:eventInternal.name
                        target:nil
-                         type:TBSMTransitionInternal
+                         kind:TBSMTransitionInternal
                        action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                            actionStateC = YES;
                        }];
         
         [stateD registerEvent:eventInternal.name
                        target:nil
-                         type:TBSMTransitionInternal
+                         kind:TBSMTransitionInternal
                        action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                            actionStateD = YES;
                        }];

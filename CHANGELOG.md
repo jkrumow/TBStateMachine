@@ -2,9 +2,9 @@
 
 ## 5.0.0
 
-- clear separation between transition types external, local, internal
+- clear separation between transition types external, local, internal when registering events
+- local transitions
 - added notifications for enter and exit handlers
-- updated documentation
 
 ## 4.4.0
 

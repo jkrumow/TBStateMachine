@@ -181,7 +181,7 @@ describe(@"TBSMStateMachine", ^{
             
             NSArray *states = @[stateA, stateB];
             
-            [stateA registerEvent:eventA.name target:stateB type:TBSMTransitionExternal];
+            [stateA registerEvent:eventA.name target:stateB kind:TBSMTransitionExternal];
             
             stateMachine.states = states;
             stateMachine.initialState = stateA;
@@ -215,7 +215,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:stateB
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence appendString:@"-actionA"];
                            }
@@ -242,7 +242,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:stateB
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                didExecuteAction = YES;
                            }
@@ -270,7 +270,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:stateB
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                didExecuteActionA = YES;
                            }
@@ -280,7 +280,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:stateB
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                didExecuteActionB = YES;
                            }
@@ -344,7 +344,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:stateB
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                sourceStateAction = sourceState;
                                targetStateAction = targetState;
@@ -417,7 +417,7 @@ describe(@"TBSMStateMachine", ^{
                 didExitStateA = YES;
             };
             
-            [stateA registerEvent:eventA.name target:stateA type:TBSMTransitionExternal];
+            [stateA registerEvent:eventA.name target:stateA kind:TBSMTransitionExternal];
             
             stateMachine.states = states;
             stateMachine.initialState = stateA;
@@ -456,7 +456,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:nil
-                             type:TBSMTransitionInternal
+                             kind:TBSMTransitionInternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence appendString:@"-action"];
                            }
@@ -500,7 +500,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:nil
-                             type:TBSMTransitionInternal
+                             kind:TBSMTransitionInternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence appendString:@"-action"];
                            }];
@@ -540,7 +540,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:nil
-                             type:TBSMTransitionInternal
+                             kind:TBSMTransitionInternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence appendString:@"-action"];
                            }
@@ -590,9 +590,9 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitC"];
             };
             
-            [stateA registerEvent:eventA.name target:stateB type:TBSMTransitionExternal];
+            [stateA registerEvent:eventA.name target:stateB kind:TBSMTransitionExternal];
             [stateA deferEvent:eventB.name];
-            [stateB registerEvent:eventB.name target:stateC type:TBSMTransitionExternal];
+            [stateB registerEvent:eventB.name target:stateC kind:TBSMTransitionExternal];
             
             stateMachine.states = states;
             stateMachine.initialState = stateA;

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TBSMTransitionType.h"
+#import "TBSMTransitionKind.h"
 
 @class TBSMState;
 
@@ -47,9 +47,9 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
 @property (nonatomic, weak, readonly) TBSMState *targetState;
 
 /**
- *  The type of transition.
+ *  The kind of transition.
  */
-@property (nonatomic, assign, readonly) TBSMTransitionType type;
+@property (nonatomic, assign, readonly) TBSMTransitionKind kind;
 
 /**
  *  The action associated with the transition.
@@ -66,7 +66,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  *
  *  @param sourceState      The specified source state.
  *  @param targetState The specified destination state.
- *  @param type             The type of transition.
+ *  @param kind             The kind of transition.
  *  @param action           The action associated with this transition.
  *  @param guard            The guard function associated with the transition.
  *
@@ -74,7 +74,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  */
 + (TBSMTransition *)transitionWithSourceState:(TBSMState *)sourceState
                              targetState:(TBSMState *)targetState
-                                         type:(TBSMTransitionType)type
+                                         kind:(TBSMTransitionKind)kind
                                        action:(TBSMActionBlock)action
                                         guard:(TBSMGuardBlock)guard;
 
@@ -83,7 +83,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  *
  *  @param sourceState      The specified source state.
  *  @param targetState The specified destination state.
- *  @param type             The type of transition.
+ *  @param kind             The kind of transition.
  *  @param action           The action associated with this transition.
  *  @param guard            The guard function associated with the transition.
  *
@@ -91,7 +91,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  */
 - (instancetype)initWithSourceState:(TBSMState *)sourceState
                    targetState:(TBSMState *)targetState
-                               type:(TBSMTransitionType)type
+                               kind:(TBSMTransitionKind)kind
                              action:(TBSMActionBlock)action
                               guard:(TBSMGuardBlock)guard;
 

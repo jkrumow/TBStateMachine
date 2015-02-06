@@ -143,7 +143,7 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:stateB
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateA_action"];
                                [stateMachine scheduleEvent:eventB];
@@ -154,14 +154,14 @@ describe(@"TBSMStateMachine", ^{
             
             [stateB registerEvent:eventB.name
                            target:subStateC
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateB_action"];
                            }];
             
             [subStateC registerEvent:eventC.name
                               target:stateA
-                                type:TBSMTransitionExternal
+                                kind:TBSMTransitionExternal
                               action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                   [executionSequence addObject:@"subStateC_action"];
                               }];
@@ -269,28 +269,28 @@ describe(@"TBSMStateMachine", ^{
             
             [stateA registerEvent:eventA.name
                            target:stateB
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateA_action"];
                            }];
             
             [stateB registerEvent:eventA.name
                            target:stateC
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateB_action"];
                            }];
             
             [subStateC registerEvent:eventA.name
                               target:stateD
-                                type:TBSMTransitionExternal
+                                kind:TBSMTransitionExternal
                               action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                   [executionSequence addObject:@"subStateC_action"];
                               }];
             
             [stateD registerEvent:eventA.name
                            target:stateA
-                             type:TBSMTransitionExternal
+                             kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateD_action"];
                            }];
@@ -329,11 +329,11 @@ describe(@"TBSMStateMachine", ^{
             parallelStates.stateMachines = parallelSubStateMachines;
             
             // setup main state machine
-            [stateA registerEvent:eventA.name target:stateC type:TBSMTransitionExternal];
-            [stateC registerEvent:eventA.name target:stateD type:TBSMTransitionExternal];
-            [stateD registerEvent:eventA.name target:nil type:TBSMTransitionInternal];
-            [stateE registerEvent:eventA.name target:stateF type:TBSMTransitionExternal];
-            [stateF registerEvent:eventA.name target:stateA type:TBSMTransitionExternal];
+            [stateA registerEvent:eventA.name target:stateC kind:TBSMTransitionExternal];
+            [stateC registerEvent:eventA.name target:stateD kind:TBSMTransitionExternal];
+            [stateD registerEvent:eventA.name target:nil kind:TBSMTransitionInternal];
+            [stateE registerEvent:eventA.name target:stateF kind:TBSMTransitionExternal];
+            [stateF registerEvent:eventA.name target:stateA kind:TBSMTransitionExternal];
             
             NSArray *states = @[stateA, parallelStates];
             stateMachine.states = states;
