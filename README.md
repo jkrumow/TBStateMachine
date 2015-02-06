@@ -7,17 +7,17 @@
 [![Coverage Status](https://img.shields.io/coveralls/tarbrain/TBStateMachine/master.svg?style=flat)](https://coveralls.io/r/tarbrain/TBStateMachine)
 
 
-A lightweight event-driven hierarchical state machine implementation in Objective-C.
+A lightweight hierarchical state machine implementation in Objective-C.
 
 ## Features
 
 * Block based API
-* Wrapper class for nested state machines (sub state machines)
-* Wrapper class for parallel state machines (orthogonal regions)
-* External and internal transitions with guards and actions
+* Wrapper class for nested states
+* Wrapper class for orthogonal regions
+* External, local and internal transitions with guards and actions
 * State switching using least common ancestor algorithm (LCA)
-* Cocoa notifications support
 * Event deferral
+* NSNotificationCenter support
 
 ## Example Project
 
@@ -44,13 +44,13 @@ Create a state, set enter and exit blocks:
 
 ```objective-c
 TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
-stateA.enterBlock = ^(TBSMState *source, TBSMState *destination, NSDictionary *data) {
+stateA.enterBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
         
     // ...
        
 };
     
-stateA.exitBlock = ^(TBSMState *source, TBSMState *destination, NSDictionary *data) {
+stateA.exitBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
         
     // ...
        
@@ -75,8 +75,6 @@ The state machine will immediately enter the initial state.
 
 ### Event Handling
 
-#### Defining transitions
-
 You can register an event which triggers the transition to a specified target state:
 
 ```objective-c
@@ -87,31 +85,32 @@ You can also register an event with additional action and guard blocks:
 
 ```objective-c
 
-TBSMActionBlock action = ^(TBSMState *source, TBSMState *destination, NSDictionary *data) {
+TBSMActionBlock action = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
                 
     // ...
 };
 
-TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *destination, NSDictionary *data) {
+TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, NSDictionary *data) {
 
     return YES;
 };
 
-[stateA registerEvent:@"EventA" target:stateB action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionExternal action:action guard:guard];
 ```
 
 If you register multiple transitions for the same event the guard blocks decide which one will be fired.
 
-### Different kinds of Transitions
+#### Different Types of Transitions
 
-TODO
+By default transitions are external. To define a transition type explicitly choose one of the three types:
 
-- external (default)
-- internal
+```objective-c
+[stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionExternal action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionLocal action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateA type:TBSMTransitionInternal action:action guard:guard];
+```
 
-TODO
-
-#### Event deferral
+#### Event Deferral
 
 Under certain conditions you may want to handle an event later in another state:
 
@@ -120,7 +119,7 @@ Under certain conditions you may want to handle an event later in another state:
 ```
 Now the event will be queued until another state has been entered which can consume the event.
 
-#### Scheduling events
+#### Scheduling Events
 
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
@@ -129,11 +128,11 @@ TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:@{@"myPayload":aPaylo
 [stateMachine scheduleEvent:event];
 ```
 
-The state machine will queue all events it receives until processing of the current event has finished.
+Event processing follows the Run to Completion model. All events will be queued until processing of the current event has finished.
 
 The payload will be available in all action, guard, enter and exit blocks which are executed until the event is successfully handled.
 
-### Nested State Machines
+### Nested States
 
 `TBSMStateMachine` instances can also be nested as sub-state machines. To achieve this you will use the `TBSMSubState` wrapper class:
 
@@ -149,7 +148,7 @@ stateMachine.states = @[stateA, stateB, subState];
 
 You can also register events, add enter and exit blocks on `TBSMSubState`, since it is a subtype of `TBSMState`.
 
-### Parallel State Machines
+### Orthogonal Regions
 
 To build orthogonal regions you will use the `TBSMParallelState`:
 
