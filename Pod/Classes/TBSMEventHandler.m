@@ -12,12 +12,12 @@
 
 @implementation TBSMEventHandler
 
-+ (instancetype)eventHandlerWithName:(NSString *)name target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
++ (instancetype)eventHandlerWithName:(NSString *)name target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
-    return [[TBSMEventHandler alloc] initWithName:name target:target type:type action:action guard:guard];
+    return [[TBSMEventHandler alloc] initWithName:name target:target kind:kind action:action guard:guard];
 }
 
-- (instancetype)initWithName:(NSString *)name target:(TBSMState *)target type:(TBSMTransitionType)type action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
+- (instancetype)initWithName:(NSString *)name target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if (name == nil || [name isEqualToString:@""]) {
         @throw [NSException tb_noNameForEventException];
@@ -26,7 +26,7 @@
     if (self) {
         _name = name.copy;
         _target = target;
-        _type = type;
+        _kind = kind;
         _action = action;
         _guard = guard;
     }

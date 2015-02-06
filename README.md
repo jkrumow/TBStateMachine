@@ -14,7 +14,7 @@ A lightweight hierarchical state machine implementation in Objective-C.
 * Block based API
 * Wrapper class for nested states
 * Wrapper class for orthogonal regions
-* External, local and internal transitions with guards and actions
+* External, internal and local transitions with guards and actions
 * State switching using least common ancestor algorithm (LCA)
 * Event deferral
 * NSNotificationCenter support
@@ -106,8 +106,8 @@ By default transitions are external. To define a transition type explicitly choo
 
 ```objective-c
 [stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionExternal action:action guard:guard];
-[stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionLocal action:action guard:guard];
 [stateA registerEvent:@"EventA" target:stateA type:TBSMTransitionInternal action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionLocal action:action guard:guard];
 ```
 
 #### Event Deferral

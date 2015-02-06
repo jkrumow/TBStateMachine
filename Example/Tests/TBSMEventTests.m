@@ -47,7 +47,7 @@ describe(@"TBSMEventHandler", ^{
         it (@"throws a TBSMException when name is nil.", ^{
             
             expect(^{
-                [TBSMEventHandler eventHandlerWithName:nil target:nil type:TBSMTransitionExternal action:nil guard:nil];
+                [TBSMEventHandler eventHandlerWithName:nil target:nil kind:TBSMTransitionExternal action:nil guard:nil];
             }).to.raise(TBSMException);
             
         });
@@ -55,13 +55,13 @@ describe(@"TBSMEventHandler", ^{
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
-                [TBSMEventHandler eventHandlerWithName:@"" target:nil type:TBSMTransitionExternal action:nil guard:nil];
+                [TBSMEventHandler eventHandlerWithName:@"" target:nil kind:TBSMTransitionExternal action:nil guard:nil];
             }).to.raise(TBSMException);
             
         });
         
         it (@"returns its name.", ^{
-            TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:@"a" target:nil type:TBSMTransitionExternal action:nil guard:nil];
+            TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:@"a" target:nil kind:TBSMTransitionExternal action:nil guard:nil];
             expect(eventHandler.name).to.equal(@"a");
         });
     });

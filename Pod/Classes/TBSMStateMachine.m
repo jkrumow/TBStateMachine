@@ -124,7 +124,7 @@
         for (TBSMEventHandler *eventHandler in eventHandlers) {
             TBSMTransition *transition = [TBSMTransition transitionWithSourceState:_currentState
                                                                   targetState:eventHandler.target
-                                                                              type:eventHandler.type
+                                                                              kind:eventHandler.kind
                                                                             action:eventHandler.action
                                                                              guard:eventHandler.guard];
             if ([self _performTransition:transition withData:event.data]) {
@@ -209,7 +209,7 @@
 - (BOOL)_performTransition:(TBSMTransition *)transition withData:(NSDictionary *)data
 {
     if (transition.guard == nil || transition.guard(transition.sourceState, transition.targetState, data)) {
-        if (transition.type == TBSMTransitionInternal) {
+        if (transition.kind == TBSMTransitionInternal) {
             if (transition.action) {
                 transition.action(transition.sourceState, transition.targetState, data);
             }

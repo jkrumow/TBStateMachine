@@ -102,7 +102,7 @@ describe(@"TBSMSubState", ^{
     });
     
     it(@"registers events by the name of a provided TBSMEvent instance.", ^{
-        [subState registerEvent:eventA.name target:nil type:TBSMTransitionInternal];
+        [subState registerEvent:eventA.name target:nil kind:TBSMTransitionInternal];
         
         NSDictionary *registeredEvents = subState.eventHandlers;
         expect(registeredEvents.allKeys).to.haveCountOf(1);
@@ -240,7 +240,7 @@ describe(@"TBSMSubState", ^{
         __block BOOL subStateExecutedEventA = NO;
         [subStateA registerEvent:eventA.name
                           target:nil
-                            type:TBSMTransitionInternal
+                            kind:TBSMTransitionInternal
                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                               subStateExecutedEventA = YES;
                           }];
@@ -248,7 +248,7 @@ describe(@"TBSMSubState", ^{
         __block BOOL stateExecutedEventA = NO;
         [stateA registerEvent:eventA.name
                        target:nil
-                         type:TBSMTransitionInternal
+                         kind:TBSMTransitionInternal
                        action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                            stateExecutedEventA = YES;
                        }];
@@ -256,7 +256,7 @@ describe(@"TBSMSubState", ^{
         __block BOOL subStateAExecutedEventB = NO;
         [subStateA registerEvent:eventB.name
                           target:nil
-                            type:TBSMTransitionInternal
+                            kind:TBSMTransitionInternal
                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                               subStateAExecutedEventB = YES;
                           }];
@@ -264,7 +264,7 @@ describe(@"TBSMSubState", ^{
         __block BOOL stateAExecutedEventB = NO;
         [stateA registerEvent:eventB.name
                        target:nil
-                         type:TBSMTransitionInternal
+                         kind:TBSMTransitionInternal
                        action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                            stateAExecutedEventB = YES;
                        } guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -273,7 +273,7 @@ describe(@"TBSMSubState", ^{
         
         [subStateA registerEvent:eventC.name
                           target:stateB
-                            type:TBSMTransitionExternal
+                            kind:TBSMTransitionExternal
                           action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                               actionExecuted = YES;
                           }];

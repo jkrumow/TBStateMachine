@@ -120,7 +120,7 @@ describe(@"TBSMState", ^{
     
     it(@"should return an array of TBSMEventHandler instances containing source and destination state for a given event.", ^{
         
-        [stateA registerEvent:eventA.name target:nil type:TBSMTransitionInternal];
+        [stateA registerEvent:eventA.name target:nil kind:TBSMTransitionInternal];
         [stateA registerEvent:eventB.name target:stateB];
         
         NSArray *resultA = [stateA eventHandlersForEvent:eventA];

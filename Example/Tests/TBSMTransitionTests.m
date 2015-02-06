@@ -27,20 +27,20 @@ describe(@"TBSMTransition", ^{
     });
     
     it (@"returns its name.", ^{
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:nil type:TBSMTransitionInternal action:nil guard:nil];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:nil kind:TBSMTransitionInternal action:nil guard:nil];
         expect(transition.name).to.equal(@"a");
         
-        transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB type:TBSMTransitionExternal action:nil guard:nil];
+        transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:nil];
         expect(transition.name).to.equal(@"a_to_b");
     });
     
     it (@"returns source state.", ^{
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB type:TBSMTransitionExternal action:nil guard:nil];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:nil];
         expect(transition.sourceState).to.equal(stateA);
     });
     
     it (@"returns destination state.", ^{
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB type:TBSMTransitionExternal action:nil guard:nil];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:nil];
         expect(transition.targetState).to.equal(stateB);
     });
     
@@ -50,7 +50,7 @@ describe(@"TBSMTransition", ^{
             
         };
         
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB type:TBSMTransitionExternal action:action guard:nil];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:action guard:nil];
         expect(transition.action).to.equal(action);
     });
     
@@ -60,7 +60,7 @@ describe(@"TBSMTransition", ^{
             return YES;
         };
         
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB type:TBSMTransitionExternal action:nil guard:guard];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:guard];
         expect(transition.guard).to.equal(guard);
     });
 });
