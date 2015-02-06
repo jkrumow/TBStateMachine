@@ -127,20 +127,30 @@
 - (BOOL)handleEvent:(TBSMEvent *)event;
 
 /**
+ *  Switches between states defined in a specified transition.
+ *
+ *  @param sourceState The source state.
+ *  @param targetState The destination state.
+ *  @param action      The action to execute.
+ *  @param data        The payload data.
+ */
+- (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data;
+
+/**
  *  Enters a given state.
  *
- *  @param sourceState      The source state.
+ *  @param sourceState The source state.
  *  @param targetState The destination state.
- *  @param data             The payload data.
+ *  @param data        The payload data.
  */
 - (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 
 /**
  *  Exits a given state.
  *
- *  @param sourceState      The source state.
+ *  @param sourceState The source state.
  *  @param targetState The destination state.
- *  @param data             The payload data.
+ *  @param data        The payload data.
  */
 - (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 

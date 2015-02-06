@@ -11,6 +11,7 @@
 #import "TBSMTransitionKind.h"
 
 @class TBSMState;
+@class TBSMStateMachine;
 
 /**
  *  This type represents an action of a given `TBSMTransition`.
@@ -39,12 +40,12 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
 /**
  *  The source state.
  */
-@property (nonatomic, weak, readonly) TBSMState *sourceState;
+@property (nonatomic, weak) TBSMState *sourceState;
 
 /**
  *  The destination state.
  */
-@property (nonatomic, weak, readonly) TBSMState *targetState;
+@property (nonatomic, weak) TBSMState *targetState;
 
 /**
  *  The kind of transition.
@@ -73,7 +74,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  *  @return The transition object.
  */
 + (TBSMTransition *)transitionWithSourceState:(TBSMState *)sourceState
-                             targetState:(TBSMState *)targetState
+                                  targetState:(TBSMState *)targetState
                                          kind:(TBSMTransitionKind)kind
                                        action:(TBSMActionBlock)action
                                         guard:(TBSMGuardBlock)guard;
@@ -90,10 +91,22 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  *  @return The transition object.
  */
 - (instancetype)initWithSourceState:(TBSMState *)sourceState
-                   targetState:(TBSMState *)targetState
+                        targetState:(TBSMState *)targetState
                                kind:(TBSMTransitionKind)kind
                              action:(TBSMActionBlock)action
                               guard:(TBSMGuardBlock)guard;
+
+
+/**
+ *  Performs the transition between source and target state.
+ *  Evaluates guard and action blocks.
+ *  Calculates the lca regarding the transiton kind.
+ *
+ *  @param data The payload data.
+ *
+ *  @return Returns YES if the transition could be performed.
+ */
+- (BOOL)performTransitionWithData:(NSDictionary *)data;
 
 /**
  *  The transition's name.

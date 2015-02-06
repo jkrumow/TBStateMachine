@@ -63,6 +63,15 @@ describe(@"TBSMTransition", ^{
         TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:guard];
         expect(transition.guard).to.equal(guard);
     });
+    
+    it(@"throws an exception if no lca was found.", ^{
+    
+        expect(^{
+            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:nil];
+            [transition performTransitionWithData:nil];
+        }).to.raise(TBSMException);
+    
+    });
 });
 
 SpecEnd
