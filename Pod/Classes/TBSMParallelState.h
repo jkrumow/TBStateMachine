@@ -52,9 +52,9 @@
  *
  *  Throws `TBSMException` if the instances are not of type `TBSMStateMachine`.
  *
- *  @param states An array of `TBSMStateMachine` instances.
+ *  @param stateMachines An array of `TBSMStateMachine` instances.
  */
-- (void)setStateMachines:(NSArray *)states;
+- (void)setStateMachines:(NSArray *)stateMachines;
 
 /**
  *  Receives a specified `TBSMEvent` instance.

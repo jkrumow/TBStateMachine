@@ -137,11 +137,8 @@ The payload will be available in all action, guard, enter and exit blocks which 
 `TBSMState` instances can also be nested by using the `TBSMSubState` wrapper class:
 
 ```objective-c
-TBSMStateMachine *subMachine = [TBSMStateMachine stateMachineWithName:@"Sub"];
-subMachine.states = @[stateC, stateD];
-
-TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState" 
-                                           stateMachine:subMachine];
+TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState"];
+substate.stateMachine = subMachine;
 
 stateMachine.states = @[stateA, stateB, subState];
 ```
@@ -153,8 +150,8 @@ You can also register events, add enter and exit blocks on `TBSMSubState`, since
 To build orthogonal regions you will use the `TBSMParallelState`:
 
 ```objective-c
-TBSMParallelState *parallel = [TBSMParallelState parallelStateWithName:@"P"];
-parallel.states = @[subMachineA, subMachineB, subMachineC];
+TBSMParallelState *parallel = [TBSMParallelState parallelStateWithName:@"ParallelState"];
+parallel.stateMachines = @[subMachineA, subMachineB, subMachineC];
     
 stateMachine.states = @[stateA, stateB, parallel];
 ```
@@ -172,12 +169,6 @@ The notification's `userInfo` contains:
     TBSMDataUserInfo:theData
 }
 ```
-
-## Helpful theory
-
-* [http://www.omg.org/spec/UML/2.5/Beta2/](http://www.omg.org/spec/UML/2.5/Beta2/)
-* [http://www.comp.nus.edu.sg/~lius87/uml/techreport/uml_sm_semantics.pdf](http://www.comp.nus.edu.sg/~lius87/uml/techreport/uml_sm_semantics.pdf)
-
 
 ## Author
 
