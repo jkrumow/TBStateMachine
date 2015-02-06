@@ -134,7 +134,7 @@ The payload will be available in all action, guard, enter and exit blocks which 
 
 ### Nested States
 
-`TBSMStateMachine` instances can also be nested as sub-state machines. To achieve this you will use the `TBSMSubState` wrapper class:
+`TBSMState` instances can also be nested by using the `TBSMSubState` wrapper class:
 
 ```objective-c
 TBSMStateMachine *subMachine = [TBSMStateMachine stateMachineWithName:@"Sub"];
