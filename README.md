@@ -95,19 +95,19 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, NSDictionary 
     return YES;
 };
 
-[stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionExternal action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
 ```
 
 If you register multiple transitions for the same event the guard blocks decide which one will be fired.
 
-#### Different Types of Transitions
+#### Different Kinds of Transitions
 
-By default transitions are external. To define a transition type explicitly choose one of the three types:
+By default transitions are external. To define a transition kind explicitly choose one of the three kind attributes:
 
 ```objective-c
-[stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionExternal action:action guard:guard];
-[stateA registerEvent:@"EventA" target:stateA type:TBSMTransitionInternal action:action guard:guard];
-[stateA registerEvent:@"EventA" target:stateB type:TBSMTransitionLocal action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateA kind:TBSMTransitionInternal action:action guard:guard];
+[stateA registerEvent:@"EventA" target:stateB kind:TBSMTransitionLocal action:action guard:guard];
 ```
 
 #### Event Deferral
