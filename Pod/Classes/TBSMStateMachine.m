@@ -215,11 +215,7 @@
             }
         } else {
             TBSMStateMachine *leastCommonAncestor = [self _findLeastCommonAncestorForTransition:transition];
-            if (leastCommonAncestor) {
-                [leastCommonAncestor _switchState:transition data:data];
-            } else {
-                NSLog(@"No transition possible for transition %@ via statemachine %@.", transition.name, self.name);
-            }
+            [leastCommonAncestor _switchState:transition data:data];
         }
         return YES;
     }
@@ -240,6 +236,11 @@
             }
         }
     }];
+    
+    if (!lca) {
+        @throw [NSException tb_noLcaForTransition:transition.name];
+    }
+    
     return lca;
 }
 

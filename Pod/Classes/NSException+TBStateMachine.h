@@ -100,4 +100,13 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  */
 + (NSException *)tb_missingStateMachineException:(NSString *)stateMachineName;
 
+/**
+ *  Thrown when no least common ancestor could be found for a given transition.
+ *
+ *  @param transitionName The name of the transition.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_noLcaForTransition:(NSString *)transitionName;
+
 @end

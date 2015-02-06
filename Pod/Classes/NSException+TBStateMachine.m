@@ -20,7 +20,7 @@ static NSString * const TBSMCannotDeferRegisteredEventExceptionReason = @"Can no
 static NSString * const TBSMCannotRegisterDeferredEventExceptionReason = @"Can not register event %@ which is already defered.";
 static NSString * const TBSMNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBSMStateMachine.";
 static NSString * const TBSMMissingStateMachineExceptionReason = @"Sub state '%@' needs to be initialized with a valid TBSMStateMachine instance.";
-
+static NSString * const TBSMNoLcaForTransitionExceptionReason = @"No transition possible for transition %@.";
 
 @implementation NSException (TBStateMachine)
 
@@ -67,6 +67,11 @@ static NSString * const TBSMMissingStateMachineExceptionReason = @"Sub state '%@
 + (NSException *)tb_missingStateMachineException:(NSString *)stateName
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMMissingStateMachineExceptionReason, stateName] userInfo:nil];
+}
+
++ (NSException *)tb_noLcaForTransition:(NSString *)transitionName
+{
+	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoLcaForTransitionExceptionReason, transitionName] userInfo:nil];
 }
 
 @end
