@@ -11,7 +11,6 @@
 #import "TBSMTransitionKind.h"
 
 @class TBSMState;
-@class TBSMStateMachine;
 
 /**
  *  This type represents an action of a given `TBSMTransition`.
@@ -40,12 +39,12 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
 /**
  *  The source state.
  */
-@property (nonatomic, weak) TBSMState *sourceState;
+@property (nonatomic, weak, readonly) TBSMState *sourceState;
 
 /**
  *  The destination state.
  */
-@property (nonatomic, weak) TBSMState *targetState;
+@property (nonatomic, weak, readonly) TBSMState *targetState;
 
 /**
  *  The kind of transition.
