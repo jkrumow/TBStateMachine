@@ -24,9 +24,6 @@ __block TBSMState *stateD;
 __block TBSMState *stateE;
 __block TBSMState *stateF;
 
-__block TBSMEvent *eventA;
-__block TBSMEvent *eventB;
-__block TBSMEvent *eventC;
 __block TBSMStateMachine *subStateMachineA;
 __block TBSMStateMachine *subStateMachineB;
 __block TBSMParallelState *parallelStates;
@@ -47,9 +44,6 @@ describe(@"TBSMStateMachine", ^{
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
-        eventB = [TBSMEvent eventWithName:EVENT_NAME_B data:nil];
-        eventC = [TBSMEvent eventWithName:EVENT_NAME_C data:nil];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"SubA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"SubB"];
@@ -70,9 +64,6 @@ describe(@"TBSMStateMachine", ^{
         
         eventDataA = nil;
         eventDataB = nil;
-        eventA = nil;
-        eventB = nil;
-        eventC = nil;
         
         [subStateMachineA tearDown:nil];
         [subStateMachineB tearDown:nil];
@@ -86,6 +77,7 @@ describe(@"TBSMStateMachine", ^{
         it(@"queues up events if an event is being currently handled", ^{
             
             NSArray *expectedExecutionSequence = @[@"stateA_enter",
+                                                   @"stateA_guard",
                                                    @"stateA_exit",
                                                    @"stateA_action",
                                                    @"stateB_enter",
@@ -96,7 +88,9 @@ describe(@"TBSMStateMachine", ^{
                                                    @"stateC_exit",
                                                    @"subStateC_exit",
                                                    @"subStateC_action",
-                                                   @"stateA_enter"];
+                                                   @"stateA_enter",
+                                                   @"stateA_guard",
+                                                   @"stateA_guard"];
             
             NSMutableArray *executionSequence = [NSMutableArray new];
             
@@ -105,7 +99,7 @@ describe(@"TBSMStateMachine", ^{
             stateA.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence addObject:@"stateA_enter"];
                 enteredCount++;
-                [stateMachine scheduleEvent:eventA];
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
             };
             
             stateA.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -114,7 +108,7 @@ describe(@"TBSMStateMachine", ^{
             
             stateB.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence addObject:@"stateB_enter"];
-                [stateMachine scheduleEvent:eventC];
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_C data:nil]];
             };
             
             stateB.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -135,42 +129,40 @@ describe(@"TBSMStateMachine", ^{
             
             subStateC.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence addObject:@"subStateC_enter"];
-                [stateMachine scheduleEvent:eventA];
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
             };
             
             subStateC.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                 [executionSequence addObject:@"subStateC_exit"];
             };
             
-            [stateA registerEvent:eventA.name
+            [stateA registerEvent:EVENT_NAME_A
                            target:stateB
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateA_action"];
-                               [stateMachine scheduleEvent:eventB];
+                               [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
                            } guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+                               [executionSequence addObject:@"stateA_guard"];
                                guardExecutedCount++;
                                return (enteredCount == 1);
                            }];
             
-            [stateB registerEvent:eventB.name
+            [stateB registerEvent:EVENT_NAME_B
                            target:subStateC
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateB_action"];
                            }];
             
-            [subStateC registerEvent:eventC.name
+            [subStateC registerEvent:EVENT_NAME_C
                               target:stateA
                                 kind:TBSMTransitionExternal
                               action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                   [executionSequence addObject:@"subStateC_action"];
                               }];
             
-            
-            NSArray *states = @[stateA, stateB, subStateC];
-            stateMachine.states = states;
-            stateMachine.initialState = stateA;
+            stateMachine.states = @[stateA, stateB, subStateC];
             [stateMachine setUp:nil];
             
             // enter A --> send eventA
@@ -190,7 +182,7 @@ describe(@"TBSMStateMachine", ^{
             // guard evaluates as false
             
             expect(enteredCount).to.equal(2);
-            expect(guardExecutedCount).to.equal(2);
+            expect(guardExecutedCount).to.equal(3);
             
             NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
             NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
@@ -269,43 +261,40 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence addObject:@"subStateC_exit"];
             };
             
-            [stateA registerEvent:eventA.name
+            [stateA registerEvent:EVENT_NAME_A
                            target:stateB
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateA_action"];
                            }];
             
-            [stateB registerEvent:eventA.name
+            [stateB registerEvent:EVENT_NAME_A
                            target:stateC
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateB_action"];
                            }];
             
-            [subStateC registerEvent:eventA.name
+            [subStateC registerEvent:EVENT_NAME_A
                               target:stateD
                                 kind:TBSMTransitionExternal
                               action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                   [executionSequence addObject:@"subStateC_action"];
                               }];
             
-            [stateD registerEvent:eventA.name
+            [stateD registerEvent:EVENT_NAME_A
                            target:stateA
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
                                [executionSequence addObject:@"stateD_action"];
                            }];
             
-            
-            NSArray *states = @[stateA, stateB, subStateC, stateD];
-            stateMachine.states = states;
-            stateMachine.initialState = stateA;
+            stateMachine.states = @[stateA, stateB, subStateC, stateD];
             [stateMachine setUp:nil];
             
             // send all events concurrently.
             dispatch_apply(stateMachine.states.count, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t idx) {
-                [stateMachine scheduleEvent:eventA];
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
             });
             
             expect(executionSequence).to.equal(expectedExecutionSequence);
@@ -316,49 +305,39 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"should switch all parallel states concurrently.", ^{
             
-            // setup sub-machine A
-            NSArray *subStatesA = @[stateC, stateD];
-            subStateMachineA.states = subStatesA;
-            subStateMachineA.initialState = stateC;
-            
-            // setup sub-machine B
-            NSArray *subStatesB = @[stateE, stateF];
-            subStateMachineB.states = subStatesB;
-            subStateMachineB.initialState = stateE;
+            subStateMachineA.states = @[stateC, stateD];
+            subStateMachineB.states = @[stateE, stateF];
             
             // setup parallel wrapper
             NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
             parallelStates.stateMachines = parallelSubStateMachines;
             
             // setup main state machine
-            [stateA registerEvent:eventA.name target:stateC kind:TBSMTransitionExternal];
-            [stateC registerEvent:eventA.name target:stateD kind:TBSMTransitionExternal];
-            [stateD registerEvent:eventA.name target:nil kind:TBSMTransitionInternal];
-            [stateE registerEvent:eventA.name target:stateF kind:TBSMTransitionExternal];
-            [stateF registerEvent:eventA.name target:stateA kind:TBSMTransitionExternal];
+            [stateA registerEvent:EVENT_NAME_A target:stateC kind:TBSMTransitionExternal];
+            [stateC registerEvent:EVENT_NAME_A target:stateD kind:TBSMTransitionExternal];
+            [stateD registerEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
+            [stateE registerEvent:EVENT_NAME_A target:stateF kind:TBSMTransitionExternal];
+            [stateF registerEvent:EVENT_NAME_A target:stateA kind:TBSMTransitionExternal];
             
-            NSArray *states = @[stateA, parallelStates];
-            stateMachine.states = states;
-            stateMachine.initialState = stateA;
+            stateMachine.states = @[stateA, parallelStates];
             [stateMachine setUp:nil];
             
             // moves to stateC inside parallel state wrapper
             // enters state C in subStateMachine A
             // enters state E in subStateMachine B
-            [stateMachine scheduleEvent:eventA];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
             
             expect(subStateMachineA.currentState).to.equal(stateC);
             expect(subStateMachineB.currentState).to.equal(stateE);
             
             // moves subStateMachine A from C to state D
             // moves subStateMachine B from E to state F
-            [stateMachine scheduleEvent:eventA];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
             
             expect(subStateMachineA.currentState).to.equal(stateD);
             expect(subStateMachineB.currentState).to.equal(stateF);
             
-            eventA.data = eventDataA;
-            [stateMachine scheduleEvent:eventA];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:eventDataA]];
         });
         
     });

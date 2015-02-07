@@ -5,6 +5,7 @@
 - clear separation between transition types external, local, internal when registering events
 - local transitions
 - added notifications for enter and exit handlers
+- remove option for concurrent queue in `TBSMParallelState`
 
 ## 4.4.0
 

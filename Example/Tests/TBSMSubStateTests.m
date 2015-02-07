@@ -118,7 +118,6 @@ describe(@"TBSMSubState", ^{
         
         parallelStates.stateMachines = @[subStateMachineA];
         stateMachine.states = @[parallelStates];
-        stateMachine.initialState = parallelStates;
         
         NSArray *path = [subStateB path];
         
@@ -171,7 +170,6 @@ describe(@"TBSMSubState", ^{
         };
         
         stateMachine.states = @[subStateA];
-        stateMachine.initialState = subStateA;
         
         [stateMachine setUp:nil];
         
@@ -282,7 +280,6 @@ describe(@"TBSMSubState", ^{
                           }];
         
         stateMachine.states = @[subStateA, stateB];
-        stateMachine.initialState = subStateA;
         
         [stateMachine setUp:nil];
         

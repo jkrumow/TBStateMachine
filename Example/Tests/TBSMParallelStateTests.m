@@ -126,10 +126,7 @@ describe(@"TBSMParallelState", ^{
         };
         
         subStateMachineA.states = @[stateA];
-        subStateMachineA.initialState = stateA;
-        
         subStateMachineB.states = @[stateB];
-        subStateMachineB.initialState = stateB;
         
         NSArray *parallelSubStateMachines = @[subStateMachineA, subStateMachineB];
         parallelStates.stateMachines = parallelSubStateMachines;

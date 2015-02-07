@@ -92,14 +92,10 @@ describe(@"InheritedStates", ^{
         [stateB registerEvent:EVENT_NAME_A target:stateD];
         [stateD registerEvent:EVENT_NAME_B target:stateA];
         
-        NSArray *subStatesA = @[stateA, stateB];
-        subStateMachineA.states = subStatesA;
-        subStateMachineA.initialState = stateA;
+        subStateMachineA.states = @[stateA, stateB];
         
         // setup sub-state machine B
-        NSArray *subStatesB = @[stateC, stateD];
-        subStateMachineB.states = subStatesB;
-        subStateMachineB.initialState = stateC;
+        subStateMachineB.states = @[stateC, stateD];
         
         // setup parallel wrapper
         parallelStates.stateMachines = @[subStateMachineB];
@@ -110,9 +106,7 @@ describe(@"InheritedStates", ^{
         subStateA.executionSequence = executionSequence;
         
         // setup main state machine
-        NSArray *states = @[subStateA, parallelStates];
-        stateMachine.states = states;
-        stateMachine.initialState = subStateA;
+        stateMachine.states = @[subStateA, parallelStates];
         
         // enters state A
         [stateMachine setUp:nil];

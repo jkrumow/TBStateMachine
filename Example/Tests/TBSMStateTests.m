@@ -141,7 +141,6 @@ describe(@"TBSMState", ^{
         
         parallelStates.stateMachines = @[subStateMachineA];
         stateMachine.states = @[parallelStates];
-        stateMachine.initialState = parallelStates;
         
         NSArray *path = [stateA path];
         
