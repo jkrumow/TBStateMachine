@@ -390,8 +390,6 @@ describe(@"TBSMStateMachine", ^{
         }).to.raise(TBSMException);
         
     });
-
-    // event deferral
 });
 
 SpecEnd
