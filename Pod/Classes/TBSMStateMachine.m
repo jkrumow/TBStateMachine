@@ -53,7 +53,8 @@
 {
     [self exitState:self.currentState targetState:nil data:data];
     _currentState = nil;
-    [self.priv_states removeAllObjects];
+    [self.scheduledEventsQueue removeAllObjects];
+    [self.deferredEventsQueue removeAllObjects];
 }
 
 - (NSArray *)states
@@ -114,15 +115,15 @@
 
 - (BOOL)handleEvent:(TBSMEvent *)event
 {
-    if (_currentState) {
-        if ([_currentState respondsToSelector:@selector(handleEvent:)]) {
-            if ([_currentState performSelector:@selector(handleEvent:) withObject:event]) {
+    if (self.currentState) {
+        if ([self.currentState respondsToSelector:@selector(handleEvent:)]) {
+            if ([self.currentState performSelector:@selector(handleEvent:) withObject:event]) {
                 return YES;
             }
         }
-        NSArray *eventHandlers = [_currentState eventHandlersForEvent:event];
+        NSArray *eventHandlers = [self.currentState eventHandlersForEvent:event];
         for (TBSMEventHandler *eventHandler in eventHandlers) {
-            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:_currentState targetState:eventHandler.target
+            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:self.currentState targetState:eventHandler.target
                                                                               kind:eventHandler.kind action:eventHandler.action guard:eventHandler.guard];
             if ([transition performTransitionWithData:event.data]) {
                 return YES;
@@ -172,7 +173,7 @@
 
 - (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data
 {
-    [_currentState exit:sourceState targetState:targetState data:data];
+    [self.currentState exit:sourceState targetState:targetState data:data];
     if (action) {
         action(sourceState, targetState, data);
     }
