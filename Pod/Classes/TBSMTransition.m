@@ -57,6 +57,8 @@
         if ([self.sourceState.path containsObject:self.targetState] || [self.targetState.path containsObject:self.sourceState]) {
             TBSMSubState *containingSubState = (TBSMSubState *)lca.currentState;
             lca = containingSubState.stateMachine;
+        } else {
+            lca = nil;
         }
     }
     if (!lca) {
