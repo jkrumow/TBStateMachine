@@ -21,7 +21,7 @@
 - (void)setStateMachine:(TBSMStateMachine *)stateMachine
 {
     _stateMachine = stateMachine;
-    [_stateMachine setParentNode:self.parentNode];
+    [_stateMachine setParentNode:self];
 }
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
