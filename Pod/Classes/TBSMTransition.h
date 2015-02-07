@@ -32,7 +32,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
 
 
 /**
- *  This class represents a transition in a state machine.
+ *  This class represents a transition inside a state machine.
  */
 @interface TBSMTransition : NSObject
 
@@ -99,7 +99,9 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
 /**
  *  Performs the transition between source and target state.
  *  Evaluates guard and action blocks.
- *  Calculates the lca regarding the transiton kind.
+ *  Determines the lca considering the transiton kind.
+ *
+ *  Throws as exception if no LCA could be determined.
  *
  *  @param data The payload data.
  *
