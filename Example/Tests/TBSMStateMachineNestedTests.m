@@ -19,6 +19,8 @@ NSString * const TRANSITION_6 = @"transition_6";
 NSString * const TRANSITION_7 = @"transition_7";
 NSString * const TRANSITION_8 = @"transition_8";
 NSString * const TRANSITION_9 = @"transition_9";
+NSString * const TRANSITION_10 = @"transition_10";
+NSString * const TRANSITION_11 = @"transition_11";
 NSString * const TRANSITION_BROKEN = @"transition_broken";
 
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
@@ -38,9 +40,15 @@ __block TBSMSubState *b2;
 __block TBSMState *b21;
 __block TBSMState *b22;
 
+__block TBSMParallelState *b3;
+__block TBSMState *b31;
+__block TBSMState *b32;
+
 __block TBSMStateMachine *subStateMachineA;
 __block TBSMStateMachine *subStateMachineB;
 __block TBSMStateMachine *subStateMachineB2;
+__block TBSMStateMachine *subStateMachineB31;
+__block TBSMStateMachine *subStateMachineB32;
 
 __block NSDictionary *eventDataA;
 __block NSDictionary *eventDataB;
@@ -51,6 +59,9 @@ __block NSMutableArray *executionSequence;
 describe(@"TBSMStateMachine", ^{
     
     beforeEach(^{
+        
+        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
+        eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
         
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
         a = [TBSMSubState subStateWithName:@"a"];
@@ -66,12 +77,17 @@ describe(@"TBSMStateMachine", ^{
         b21 = [TBSMState stateWithName:@"b21"];
         b22 = [TBSMState stateWithName:@"b22"];
         
-        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
+        
+        b3 = [TBSMParallelState parallelStateWithName:@"b3"];
+        b31 = [TBSMState stateWithName:@"b31"];
+        b32 = [TBSMState stateWithName:@"b31"];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"smA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"smB"];
         subStateMachineB2 = [TBSMStateMachine stateMachineWithName:@"smB2"];
+        
+        subStateMachineB31 = [TBSMStateMachine stateMachineWithName:@"smB31"];
+        subStateMachineB32 = [TBSMStateMachine stateMachineWithName:@"smB32"];
         
         a.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"a_enter"];
@@ -144,6 +160,30 @@ describe(@"TBSMStateMachine", ^{
         b22.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"b22_exit"];
         };
+
+        b3.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b3_enter"];
+        };
+        
+        b3.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b3_exit"];
+        };
+
+        b31.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b31_enter"];
+        };
+        
+        b31.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b31_exit"];
+        };
+        
+        b32.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b32_enter"];
+        };
+        
+        b32.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b32_exit"];
+        };
         
         // superstates / substates guards
         [a registerEvent:TRANSITION_1 target:b];
@@ -175,14 +215,24 @@ describe(@"TBSMStateMachine", ^{
         
         [b registerEvent:TRANSITION_BROKEN target:a3 kind:TBSMTransitionLocal];
         
-        subStateMachineA.states = @[a1, a2, a3];
-        subStateMachineB.states = @[b1, b2];
+        // parallel state with default setup
+        [b registerEvent:TRANSITION_10 target:b3];
+        
+        // parallel state with deep switching
+        [a3 registerEvent:TRANSITION_11 target:b32];
+        
         subStateMachineB2.states = @[b21, b22];
+        subStateMachineB31.states = @[b31];
+        subStateMachineB32.states = @[b32];
         
         a.stateMachine = subStateMachineA;
         b.stateMachine = subStateMachineB;
         b2.stateMachine = subStateMachineB2;
-        
+        b3.stateMachines = @[subStateMachineB31, subStateMachineB32];
+
+        subStateMachineA.states = @[a1, a2, a3];
+        subStateMachineB.states = @[b1, b2, b3];
+
         stateMachine.states = @[a, b];
         [stateMachine setUp:nil];
         
@@ -192,7 +242,6 @@ describe(@"TBSMStateMachine", ^{
     afterEach(^{
         
         [stateMachine tearDown:nil];
-        
         stateMachine = nil;
         
         a = nil;
@@ -207,12 +256,12 @@ describe(@"TBSMStateMachine", ^{
         b21 = nil;
         b22 = nil;
         
-        eventDataA = nil;
-        eventDataB = nil;
-        
         subStateMachineA = nil;
         subStateMachineB = nil;
         subStateMachineB2 = nil;
+        
+        eventDataA = nil;
+        eventDataB = nil;
         
         executionSequence = nil;
     });
@@ -228,9 +277,7 @@ describe(@"TBSMStateMachine", ^{
                                                @"b_enter",
                                                @"b1_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     it(@"evalutes the guards and chooses the first transition defined on sub state.", ^{
@@ -241,9 +288,7 @@ describe(@"TBSMStateMachine", ^{
         NSArray *expectedExecutionSequence = @[@"a1_exit",
                                                @"a2_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     it(@"evalutes the guards and chooses the second transition defined on sub state.", ^{
@@ -254,9 +299,7 @@ describe(@"TBSMStateMachine", ^{
         NSArray *expectedExecutionSequence = @[@"a1_exit",
                                                @"a3_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     it(@"handles events which are scheduled in the middle of a transition considering the run to completion model.", ^{
@@ -273,9 +316,7 @@ describe(@"TBSMStateMachine", ^{
                                                @"a3_exit",
                                                @"a1_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     
@@ -292,9 +333,7 @@ describe(@"TBSMStateMachine", ^{
                                                @"b2_enter",
                                                @"b21_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     it(@"switches even deeper from and into a specified sub state.", ^{
@@ -310,9 +349,7 @@ describe(@"TBSMStateMachine", ^{
                                                @"b2_enter",
                                                @"b22_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     it(@"performs an external transition from containing source state to contained target state.", ^{
@@ -324,9 +361,7 @@ describe(@"TBSMStateMachine", ^{
                                                @"a_enter",
                                                @"a2_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     it(@"performs an external transition from contained source state to containing target state.", ^{
@@ -341,9 +376,7 @@ describe(@"TBSMStateMachine", ^{
                                                @"a_enter",
                                                @"a1_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     it(@"performs a local transition from containing source state to contained target state.", ^{
@@ -357,9 +390,7 @@ describe(@"TBSMStateMachine", ^{
                                                @"b2_enter",
                                                @"b22_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
     it(@"performs a local transition from contained source state to containing target state.", ^{
@@ -374,9 +405,29 @@ describe(@"TBSMStateMachine", ^{
                                                @"b2_exit",
                                                @"b1_enter"];
         
-        NSString *expectedExecutionSequenceString = [expectedExecutionSequence componentsJoinedByString:@"-"];
-        NSString *executionSequenceString = [executionSequence componentsJoinedByString:@"-"];
-        expect(executionSequenceString).to.equal(expectedExecutionSequenceString);
+        expect(executionSequence).to.equal(expectedExecutionSequence);
+    });
+    
+    it(@"performs a transition into a parrel state and enters default sub states.", ^{
+        
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
+        
+        expect(stateMachine.currentState).to.equal(b);
+        expect(subStateMachineB.currentState).to.equal(b3);
+        expect(subStateMachineB31.currentState).to.equal(b31);
+        expect(subStateMachineB32.currentState).to.equal(b32);
+    });
+    
+    it(@"performs a transition into a parrel state and enters specified sub state while entering all other parallel machines with default state.", ^{
+        
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
+        
+        expect(stateMachine.currentState).to.equal(b);
+        expect(subStateMachineB.currentState).to.equal(b3);
+        expect(subStateMachineB31.currentState).to.equal(b31);
+        expect(subStateMachineB32.currentState).to.equal(b32);
     });
     
     it(@"throws an exception when no lca could be found", ^{

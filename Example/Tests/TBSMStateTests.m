@@ -12,48 +12,20 @@ SpecBegin(TBSMState)
 
 NSString * const EVENT_NAME_A = @"DummyEventA";
 NSString * const EVENT_NAME_B = @"DummyEventB";
-NSString * const EVENT_DATA_KEY = @"DummyDataKey";
-NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
-__block TBSMStateMachine *stateMachine;
-__block TBSMState *stateA;
-__block TBSMState *stateB;
-
-__block TBSMEvent *eventA;
-__block TBSMEvent *eventB;
-__block TBSMStateMachine *subStateMachineA;
-__block TBSMStateMachine *subStateMachineB;
-__block TBSMParallelState *parallelStates;
-__block NSDictionary *eventDataA;
-__block NSDictionary *eventDataB;
-
+__block TBSMState *a;
+__block TBSMState *b;
 
 describe(@"TBSMState", ^{
     
     beforeEach(^{
-        stateA = [TBSMState stateWithName:@"a"];
-        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventA = [TBSMEvent eventWithName:EVENT_NAME_A data:nil];
-        eventB = [TBSMEvent eventWithName:EVENT_NAME_B data:nil];
-        
-        stateMachine = [TBSMStateMachine stateMachineWithName:@"stateMachine"];
-        subStateMachineA = [TBSMStateMachine stateMachineWithName:@"stateMachineA"];
-        subStateMachineB = [TBSMStateMachine stateMachineWithName:@"stateMachineB"];
-        parallelStates = [TBSMParallelState parallelStateWithName:@"parallelStates"];
+        a = [TBSMState stateWithName:@"a"];
+        b = [TBSMState stateWithName:@"b"];
     });
     
     afterEach(^{
-        stateA = nil;
-        eventDataA = nil;
-        eventDataB = nil;
-        eventA = nil;
-        eventB = nil;
-        
-        stateMachine = nil;
-        subStateMachineA = nil;
-        subStateMachineB = nil;
-        parallelStates = nil;
+        a = nil;
+        b = nil;
     });
     
     describe(@"Exception handling on setup.", ^{
@@ -61,7 +33,7 @@ describe(@"TBSMState", ^{
         it (@"throws a TBSMException when name is nil.", ^{
             
             expect(^{
-                stateA = [TBSMState stateWithName:nil];
+                [TBSMState stateWithName:nil];
             }).to.raise(TBSMException);
             
         });
@@ -69,7 +41,7 @@ describe(@"TBSMState", ^{
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
-                stateA = [TBSMState stateWithName:@""];
+                [TBSMState stateWithName:@""];
             }).to.raise(TBSMException);
             
         });
@@ -83,36 +55,36 @@ describe(@"TBSMState", ^{
     
     it(@"registers TBSMEvent instances with a given target TBSMState.", ^{
         
-        [stateA registerEvent:eventA.name target:stateA];
+        [a registerEvent:EVENT_NAME_A target:a];
         
-        NSDictionary *registeredEvents = stateA.eventHandlers;
+        NSDictionary *registeredEvents = a.eventHandlers;
         expect(registeredEvents.allKeys).to.haveCountOf(1);
-        expect(registeredEvents).to.contain(eventA.name);
+        expect(registeredEvents).to.contain(EVENT_NAME_A);
         
-        NSArray *eventHandlers = registeredEvents[eventA.name];
+        NSArray *eventHandlers = registeredEvents[EVENT_NAME_A];
         expect(eventHandlers.count).to.equal(1);
         TBSMEventHandler *eventHandler = eventHandlers[0];
-        expect(eventHandler.target).to.equal(stateA);
+        expect(eventHandler.target).to.equal(a);
     });
     
     describe(@"Exception handling when registering and deferring events.", ^{
         
         it(@"throws an exception when attempting to register an event which was already marked as deferred.", ^{
             
-            [stateA deferEvent:eventA.name];
+            [a deferEvent:EVENT_NAME_A];
             
             expect(^{
-                [stateA registerEvent:eventA.name target:stateB];
+                [a registerEvent:EVENT_NAME_A target:a];
             }).to.raise(TBSMException);
             
         });
         
         it(@"throws an exception when attempting to defer an event which was already registered.", ^{
             
-            [stateA registerEvent:eventA.name target:stateB];
+            [a registerEvent:EVENT_NAME_A target:a];
             
             expect(^{
-                [stateA deferEvent:eventA.name];
+                [a deferEvent:EVENT_NAME_A];
             }).to.raise(TBSMException);
             
         });
@@ -120,29 +92,35 @@ describe(@"TBSMState", ^{
     
     it(@"should return an array of TBSMEventHandler instances containing source and destination state for a given event.", ^{
         
-        [stateA registerEvent:eventA.name target:nil kind:TBSMTransitionInternal];
-        [stateA registerEvent:eventB.name target:stateB];
+        [a registerEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
+        [a registerEvent:EVENT_NAME_B target:a];
         
-        NSArray *resultA = [stateA eventHandlersForEvent:eventA];
+        NSArray *resultA = [a eventHandlersForEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
         expect(resultA).to.beNil;
         
-        NSArray *resultB = [stateA eventHandlersForEvent:eventB];
+        NSArray *resultB = [a eventHandlersForEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
         expect(resultB.count).to.equal(1);
         TBSMEventHandler *eventHandlerB = resultB[0];
-        expect(eventHandlerB.target).to.equal(stateB);
+        expect(eventHandlerB.target).to.equal(a);
     });
     
     it(@"returns its path inside the state machine hierarchy containing all parent nodes in descending order", ^{
         
-        subStateMachineB.states = @[stateA];
+        TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"stateMachine"];
+        TBSMStateMachine *subStateMachineA = [TBSMStateMachine stateMachineWithName:@"stateMachineA"];
+        TBSMStateMachine *subStateMachineB = [TBSMStateMachine stateMachineWithName:@"stateMachineB"];
+        TBSMParallelState *parallelStates = [TBSMParallelState parallelStateWithName:@"parallelStates"];
+
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB"];
+        
+        subStateMachineB.states = @[b];
         subStateB.stateMachine = subStateMachineB;
         subStateMachineA.states = @[subStateB];
         
         parallelStates.stateMachines = @[subStateMachineA];
         stateMachine.states = @[parallelStates];
         
-        NSArray *path = [stateA path];
+        NSArray *path = [b path];
         
         expect(path.count).to.equal(6);
         expect(path[0]).to.equal(stateMachine);
@@ -150,7 +128,7 @@ describe(@"TBSMState", ^{
         expect(path[2]).to.equal(subStateMachineA);
         expect(path[3]).to.equal(subStateB);
         expect(path[4]).to.equal(subStateMachineB);
-        expect(path[5]).to.equal(stateA);
+        expect(path[5]).to.equal(b);
     });
 });
 

@@ -10,38 +10,38 @@
 
 SpecBegin(TBSMTransition)
 
-__block TBSMState *stateA;
-__block TBSMState *stateB;
+__block TBSMState *a;
+__block TBSMState *b;
 
 
 describe(@"TBSMTransition", ^{
     
     beforeEach(^{
-        stateA = [TBSMState stateWithName:@"a"];
-        stateB = [TBSMState stateWithName:@"b"];
+        a = [TBSMState stateWithName:@"a"];
+        b = [TBSMState stateWithName:@"b"];
     });
     
     afterEach(^{
-        stateA = nil;
-        stateB = nil;
+        a = nil;
+        b = nil;
     });
     
     it (@"returns its name.", ^{
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:nil kind:TBSMTransitionInternal action:nil guard:nil];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:nil kind:TBSMTransitionInternal action:nil guard:nil];
         expect(transition.name).to.equal(@"a");
         
-        transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:nil];
+        transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
         expect(transition.name).to.equal(@"a_to_b");
     });
     
     it (@"returns source state.", ^{
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:nil];
-        expect(transition.sourceState).to.equal(stateA);
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
+        expect(transition.sourceState).to.equal(a);
     });
     
     it (@"returns destination state.", ^{
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:nil];
-        expect(transition.targetState).to.equal(stateB);
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
+        expect(transition.targetState).to.equal(b);
     });
     
     it (@"returns action block.", ^{
@@ -50,7 +50,7 @@ describe(@"TBSMTransition", ^{
             
         };
         
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:action guard:nil];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:action guard:nil];
         expect(transition.action).to.equal(action);
     });
     
@@ -60,14 +60,14 @@ describe(@"TBSMTransition", ^{
             return YES;
         };
         
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:guard];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:guard];
         expect(transition.guard).to.equal(guard);
     });
     
     it(@"throws an exception if no lca was found.", ^{
     
         expect(^{
-            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:stateA targetState:stateB kind:TBSMTransitionExternal action:nil guard:nil];
+            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
             [transition performTransitionWithData:nil];
         }).to.raise(TBSMException);
     

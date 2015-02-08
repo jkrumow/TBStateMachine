@@ -10,8 +10,8 @@
 
 SpecBegin(TBSMStateMachineSimple)
 
-NSString * const EVENT_NAME_A = @"DummyEventA";
-NSString * const EVENT_NAME_B = @"DummyEventB";
+NSString * const EVENT_A = @"DummyEventA";
+NSString * const EVENT_B = @"DummyEventB";
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
@@ -137,7 +137,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"switches to the specified state.", ^{
             
-            [stateA registerEvent:EVENT_NAME_A target:stateB kind:TBSMTransitionExternal];
+            [stateA registerEvent:EVENT_A target:stateB kind:TBSMTransitionExternal];
             
             stateMachine.states = @[stateA, stateB];
             [stateMachine setUp:nil];
@@ -145,7 +145,7 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachine.currentState).to.equal(stateA);
             
             // enters state B
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(stateMachine.currentState).to.equal(stateB);
         });
@@ -166,7 +166,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-enterB"];
             };
             
-            [stateA registerEvent:EVENT_NAME_A
+            [stateA registerEvent:EVENT_A
                            target:stateB
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -181,7 +181,7 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp:nil];
             
             // will enter state B
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(executionSequence).to.equal(@"enterA-guardA-exitA-actionA-enterB");
         });
@@ -190,7 +190,7 @@ describe(@"TBSMStateMachine", ^{
             
             __block BOOL didExecuteAction = NO;
             
-            [stateA registerEvent:EVENT_NAME_A
+            [stateA registerEvent:EVENT_A
                            target:stateB
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -204,7 +204,7 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp:nil];
             
             // will not enter state B
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(didExecuteAction).to.equal(NO);
             expect(stateMachine.currentState).to.equal(stateA);
@@ -215,7 +215,7 @@ describe(@"TBSMStateMachine", ^{
             __block BOOL didExecuteActionA = NO;
             __block BOOL didExecuteActionB = NO;
             
-            [stateA registerEvent:EVENT_NAME_A
+            [stateA registerEvent:EVENT_A
                            target:stateB
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -225,7 +225,7 @@ describe(@"TBSMStateMachine", ^{
                                 return NO;
                             }];
             
-            [stateA registerEvent:EVENT_NAME_A
+            [stateA registerEvent:EVENT_A
                            target:stateB
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -239,7 +239,7 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp:nil];
             
             // will enter state B through second transition
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(didExecuteActionA).to.equal(NO);
             expect(didExecuteActionB).to.equal(YES);
@@ -286,7 +286,7 @@ describe(@"TBSMStateMachine", ^{
                 stateDataExit = data;
             };
             
-            [stateA registerEvent:EVENT_NAME_A
+            [stateA registerEvent:EVENT_A
                            target:stateB
                              kind:TBSMTransitionExternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -315,7 +315,7 @@ describe(@"TBSMStateMachine", ^{
             expect(stateDataEnter).to.beNil;
             
             // enters state B
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:eventDataA]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:eventDataA]];
             
             expect(sourceStateExit).to.equal(stateA);
             expect(targetStateExit).to.equal(stateB);
@@ -357,14 +357,14 @@ describe(@"TBSMStateMachine", ^{
                 didExitStateA = YES;
             };
             
-            [stateA registerEvent:EVENT_NAME_A target:stateA kind:TBSMTransitionExternal];
+            [stateA registerEvent:EVENT_A target:stateA kind:TBSMTransitionExternal];
             
             stateMachine.states = @[stateA, stateB];
             
             [stateMachine setUp:nil];
             
             didEnterStateA = NO;
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(stateMachine.currentState).to.equal(stateA);
             expect(didExitStateA).to.equal(YES);
@@ -391,7 +391,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitB"];
             };
             
-            [stateA registerEvent:EVENT_NAME_A
+            [stateA registerEvent:EVENT_A
                            target:nil
                              kind:TBSMTransitionInternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -406,8 +406,8 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp:nil];
             
             // will perform two internal transitions
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(executionSequence).to.equal(@"-enterA-guard-action-guard-action");
         });
@@ -432,7 +432,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitB"];
             };
             
-            [stateA registerEvent:EVENT_NAME_A
+            [stateA registerEvent:EVENT_A
                            target:nil
                              kind:TBSMTransitionInternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -443,8 +443,8 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp:nil];
             
             // will perform two internal transitions
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(executionSequence).to.equal(@"enterA-action-action");
         });
@@ -469,7 +469,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitB"];
             };
             
-            [stateA registerEvent:EVENT_NAME_A
+            [stateA registerEvent:EVENT_A
                            target:nil
                              kind:TBSMTransitionInternal
                            action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -484,8 +484,8 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp:nil];
             
             // will perform no internal transitions
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(executionSequence).to.equal(@"enterA-guard-guard");
         });
@@ -518,18 +518,18 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-exitC"];
             };
             
-            [stateA registerEvent:EVENT_NAME_A target:stateB kind:TBSMTransitionExternal];
-            [stateA deferEvent:EVENT_NAME_B];
-            [stateB registerEvent:EVENT_NAME_B target:stateC kind:TBSMTransitionExternal];
+            [stateA registerEvent:EVENT_A target:stateB kind:TBSMTransitionExternal];
+            [stateA deferEvent:EVENT_B];
+            [stateB registerEvent:EVENT_B target:stateC kind:TBSMTransitionExternal];
             
             stateMachine.states = @[stateA, stateB, stateC];
             [stateMachine setUp:nil];
             
             // event should be deferred
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_B data:nil]];
             
             // should switch to state B --> handle eventB --> switch to stateC
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             
             expect(stateMachine.currentState).to.equal(stateC);
             expect(executionSequence).to.equal(@"enterA-exitA-enterB-exitB-enterC");
