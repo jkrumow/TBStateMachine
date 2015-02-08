@@ -86,7 +86,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param event  The given event name.
  *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
  */
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target;
+- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -98,7 +98,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
  *  @param kind   The kind of transition.
  */
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind;
+- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -112,7 +112,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param kind   The kind of transition.
  *  @param action The action block associated with this event.
  */
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action;
+- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -127,13 +127,13 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param action The action block associated with this event.
  *  @param guard  The guard block associated with this event.
  */
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
  *  Registers an event of a given name which should be deferred when received by this state instance.
  *
  *  Throws a `TBSMException` if the specified event is already registered on this state.
- *  See registerEvent:target:action:guard:
+ *  See addHandlerForEvent:target:action:guard:
  *
  *  @param event  The given event name.
  */

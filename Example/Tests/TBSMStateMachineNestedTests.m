@@ -186,40 +186,40 @@ describe(@"TBSMStateMachine", ^{
         };
         
         // superstates / substates guards
-        [a registerEvent:TRANSITION_1 target:b];
-        [a1 registerEvent:TRANSITION_1 target:a2 kind:TBSMTransitionExternal action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a addHandlerForEvent:TRANSITION_1 target:b];
+        [a1 addHandlerForEvent:TRANSITION_1 target:a2 kind:TBSMTransitionExternal action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             return (data && data[EVENT_DATA_KEY] == EVENT_DATA_VALUE);
         }];
-        [a1 registerEvent:TRANSITION_1 target:a3 kind:TBSMTransitionExternal action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a1 addHandlerForEvent:TRANSITION_1 target:a3 kind:TBSMTransitionExternal action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             return (data && data[EVENT_DATA_KEY] != EVENT_DATA_VALUE);
         }];
         
         // run to completion test / queuing
-        [a2 registerEvent:TRANSITION_2 target:a3 kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a2 addHandlerForEvent:TRANSITION_2 target:a3 kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"a2_action"];
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_3 data:nil]];
         }];
-        [a3 registerEvent:TRANSITION_3 target:a1];
+        [a3 addHandlerForEvent:TRANSITION_3 target:a1];
         
         // lca
-        [a3 registerEvent:TRANSITION_4 target:b2];
-        [a3 registerEvent:TRANSITION_5 target:b22];
+        [a3 addHandlerForEvent:TRANSITION_4 target:b2];
+        [a3 addHandlerForEvent:TRANSITION_5 target:b22];
         
         // external transitions
-        [a registerEvent:TRANSITION_6 target:a2];
-        [a2 registerEvent:TRANSITION_7 target:a];
+        [a addHandlerForEvent:TRANSITION_6 target:a2];
+        [a2 addHandlerForEvent:TRANSITION_7 target:a];
         
         // local transitions
-        [b registerEvent:TRANSITION_8 target:b22 kind:TBSMTransitionLocal];
-        [b22 registerEvent:TRANSITION_9 target:b kind:TBSMTransitionLocal];
+        [b addHandlerForEvent:TRANSITION_8 target:b22 kind:TBSMTransitionLocal];
+        [b22 addHandlerForEvent:TRANSITION_9 target:b kind:TBSMTransitionLocal];
         
-        [b registerEvent:TRANSITION_BROKEN target:a3 kind:TBSMTransitionLocal];
+        [b addHandlerForEvent:TRANSITION_BROKEN target:a3 kind:TBSMTransitionLocal];
         
         // parallel state with default setup
-        [b registerEvent:TRANSITION_10 target:b3];
+        [b addHandlerForEvent:TRANSITION_10 target:b3];
         
         // parallel state with deep switching
-        [a3 registerEvent:TRANSITION_11 target:b32];
+        [a3 addHandlerForEvent:TRANSITION_11 target:b32];
         
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b31];

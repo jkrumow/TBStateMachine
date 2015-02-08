@@ -60,9 +60,9 @@ describe(@"InheritedStates", ^{
         b1.executionSequence = executionSequence;
         b2.executionSequence = executionSequence;
         
-        [a1 registerEvent:EVENT_A target:a2];
-        [a2 registerEvent:EVENT_A target:b2];
-        [b2 registerEvent:EVENT_B target:a1];
+        [a1 addHandlerForEvent:EVENT_A target:a2];
+        [a2 addHandlerForEvent:EVENT_A target:b2];
+        [b2 addHandlerForEvent:EVENT_B target:a1];
         
         subStateMachineA.states = @[a1, a2];
         subStateMachineB.states = @[b1, b2];

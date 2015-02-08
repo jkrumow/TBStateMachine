@@ -78,7 +78,7 @@ The state machine will immediately enter the initial state.
 You can register an event which triggers the transition to a specified target state:
 
 ```objective-c
-[stateA registerEvent:@"EventA" target:stateB];
+[stateA addHandlerForEvent:@"EventA" target:stateB];
 ```
 
 You can also register an event with additional action and guard blocks:
@@ -95,7 +95,7 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, NSDictionary 
     return YES;
 };
 
-[stateA registerEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
+[stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
 ```
 
 If you register multiple transitions for the same event the guard blocks decide which one will be fired.
@@ -105,9 +105,9 @@ If you register multiple transitions for the same event the guard blocks decide 
 By default transitions are external. To define a transition kind explicitly choose one of the three kind attributes:
 
 ```objective-c
-[stateA registerEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
-[stateA registerEvent:@"EventA" target:stateA kind:TBSMTransitionInternal action:action guard:guard];
-[stateA registerEvent:@"EventA" target:stateB kind:TBSMTransitionLocal action:action guard:guard];
+[stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
+[stateA addHandlerForEvent:@"EventA" target:stateA kind:TBSMTransitionInternal action:action guard:guard];
+[stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionLocal action:action guard:guard];
 ```
 
 #### Event Deferral

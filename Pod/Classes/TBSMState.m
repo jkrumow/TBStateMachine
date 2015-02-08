@@ -51,22 +51,22 @@ NSString * const TBSMDataUserInfo = @"data";
     return _priv_deferredEvents.copy;
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target
+- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target
 {
-    [self registerEvent:event target:target kind:TBSMTransitionExternal];
+    [self addHandlerForEvent:event target:target kind:TBSMTransitionExternal];
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind
+- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind
 {
-    [self registerEvent:event target:target kind:kind action:nil guard:nil];
+    [self addHandlerForEvent:event target:target kind:kind action:nil guard:nil];
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action
+- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action
 {
-    [self registerEvent:event target:target kind:kind action:action guard:nil];
+    [self addHandlerForEvent:event target:target kind:kind action:action guard:nil];
 }
 
-- (void)registerEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
+- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if ([_priv_deferredEvents objectForKey:event])  {
         @throw [NSException tb_cannotRegisterDeferredEvent:event];

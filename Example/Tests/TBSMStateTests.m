@@ -55,7 +55,7 @@ describe(@"TBSMState", ^{
     
     it(@"registers TBSMEvent instances with a given target TBSMState.", ^{
         
-        [a registerEvent:EVENT_NAME_A target:a];
+        [a addHandlerForEvent:EVENT_NAME_A target:a];
         
         NSDictionary *registeredEvents = a.eventHandlers;
         expect(registeredEvents.allKeys).to.haveCountOf(1);
@@ -74,14 +74,14 @@ describe(@"TBSMState", ^{
             [a deferEvent:EVENT_NAME_A];
             
             expect(^{
-                [a registerEvent:EVENT_NAME_A target:a];
+                [a addHandlerForEvent:EVENT_NAME_A target:a];
             }).to.raise(TBSMException);
             
         });
         
         it(@"throws an exception when attempting to defer an event which was already registered.", ^{
             
-            [a registerEvent:EVENT_NAME_A target:a];
+            [a addHandlerForEvent:EVENT_NAME_A target:a];
             
             expect(^{
                 [a deferEvent:EVENT_NAME_A];
@@ -92,8 +92,8 @@ describe(@"TBSMState", ^{
     
     it(@"should return an array of TBSMEventHandler instances containing source and destination state for a given event.", ^{
         
-        [a registerEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
-        [a registerEvent:EVENT_NAME_B target:a];
+        [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
+        [a addHandlerForEvent:EVENT_NAME_B target:a];
         
         NSArray *resultA = [a eventHandlersForEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
         expect(resultA).to.beNil;
