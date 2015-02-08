@@ -43,12 +43,12 @@ NSString * const TBSMDataUserInfo = @"data";
 
 - (NSDictionary *)eventHandlers
 {
-    return _priv_eventHandlers.copy;
+    return self.priv_eventHandlers.copy;
 }
 
 - (NSDictionary *)deferredEvents
 {
-    return _priv_deferredEvents.copy;
+    return self.priv_deferredEvents.copy;
 }
 
 - (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target
@@ -68,40 +68,40 @@ NSString * const TBSMDataUserInfo = @"data";
 
 - (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
-    if ([_priv_deferredEvents objectForKey:event])  {
+    if ([self.priv_deferredEvents objectForKey:event])  {
         @throw [NSException tb_cannotRegisterDeferredEvent:event];
     }
     TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target kind:kind action:action guard:guard];
-    NSMutableArray *eventHandlers = _priv_eventHandlers[event];
+    NSMutableArray *eventHandlers = self.priv_eventHandlers[event];
     if (!eventHandlers) {
         eventHandlers = NSMutableArray.new;
-        [_priv_eventHandlers setObject:eventHandlers forKey:event];
+        [self.priv_eventHandlers setObject:eventHandlers forKey:event];
     }
     [eventHandlers addObject:eventHandler];
 }
 
 - (void)deferEvent:(NSString *)event
 {
-    if ([_priv_eventHandlers objectForKey:event])  {
+    if ([self.priv_eventHandlers objectForKey:event])  {
         @throw [NSException tb_cannotDeferRegisteredEvent:event];
     }
-    [_priv_deferredEvents setObject:event forKey:event];
+    [self.priv_deferredEvents setObject:event forKey:event];
 }
 
 - (BOOL)canHandleEvent:(TBSMEvent *)event
 {
-    return ([_priv_eventHandlers objectForKey:event.name] != nil);
+    return ([self.priv_eventHandlers objectForKey:event.name] != nil);
 }
 
 - (BOOL)canDeferEvent:(TBSMEvent *)event
 {
-    return ([_priv_deferredEvents objectForKey:event.name] != nil);
+    return ([self.priv_deferredEvents objectForKey:event.name] != nil);
 }
 
 - (NSArray *)eventHandlersForEvent:(TBSMEvent *)event
 {
     if ([self canHandleEvent:event]) {
-        return [_priv_eventHandlers objectForKey:event.name];
+        return [self.priv_eventHandlers objectForKey:event.name];
     }
     return nil;
 }

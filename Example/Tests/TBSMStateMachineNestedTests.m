@@ -21,6 +21,7 @@ NSString * const TRANSITION_8 = @"transition_8";
 NSString * const TRANSITION_9 = @"transition_9";
 NSString * const TRANSITION_10 = @"transition_10";
 NSString * const TRANSITION_11 = @"transition_11";
+NSString * const TRANSITION_12 = @"transition_12";
 NSString * const TRANSITION_BROKEN = @"transition_broken";
 
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
@@ -196,7 +197,7 @@ describe(@"TBSMStateMachine", ^{
         
         // run to completion test / queuing
         [a2 addHandlerForEvent:TRANSITION_2 target:a3 kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"a2_action"];
+            [executionSequence addObject:@"a2_to_a3_action"];
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_3 data:nil]];
         }];
         [a3 addHandlerForEvent:TRANSITION_3 target:a1];
@@ -215,11 +216,15 @@ describe(@"TBSMStateMachine", ^{
         
         [b addHandlerForEvent:TRANSITION_BROKEN target:a3 kind:TBSMTransitionLocal];
         
+        [a1 addHandlerForEvent:TRANSITION_10 target:a1 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"a1_internal_action"];
+        }];
+        
         // parallel state with default setup
-        [b addHandlerForEvent:TRANSITION_10 target:b3];
+        [b addHandlerForEvent:TRANSITION_11 target:b3];
         
         // parallel state with deep switching
-        [a3 addHandlerForEvent:TRANSITION_11 target:b32];
+        [a3 addHandlerForEvent:TRANSITION_12 target:b32];
         
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b31];
@@ -311,7 +316,7 @@ describe(@"TBSMStateMachine", ^{
         
         
         NSArray *expectedExecutionSequence = @[@"a2_exit",
-                                               @"a2_action",
+                                               @"a2_to_a3_action",
                                                @"a3_enter",
                                                @"a3_exit",
                                                @"a1_enter"];
@@ -408,10 +413,23 @@ describe(@"TBSMStateMachine", ^{
         expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
+    it(@"performs an internal transition.", ^{
+    
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
+        
+        NSArray *expectedExecutionSequence = @[@"a1_internal_action",
+                                               @"a1_internal_action",
+                                               @"a1_internal_action"];
+        
+        expect(executionSequence).to.equal(expectedExecutionSequence);
+    });
+    
     it(@"performs a transition into a parrel state and enters default sub states.", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
         
         expect(stateMachine.currentState).to.equal(b);
         expect(subStateMachineB.currentState).to.equal(b3);
@@ -422,7 +440,7 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a transition into a parrel state and enters specified sub state while entering all other parallel machines with default state.", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_12 data:nil]];
         
         expect(stateMachine.currentState).to.equal(b);
         expect(subStateMachineB.currentState).to.equal(b3);

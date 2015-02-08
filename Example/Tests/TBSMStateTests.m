@@ -90,6 +90,25 @@ describe(@"TBSMState", ^{
         });
     });
     
+    it(@"should return YES if an event can be handled.", ^{
+        
+        [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
+        BOOL canHandle = [a canHandleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+        expect(canHandle).to.equal(YES);
+        canHandle = [a canHandleEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
+        expect(canHandle).to.equal(NO);
+        
+    });
+    
+    it(@"should return YES if an event can be deferred.", ^{
+        
+        [a deferEvent:EVENT_NAME_A];
+        BOOL canHandle = [a canDeferEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+        expect(canHandle).to.equal(YES);
+        canHandle = [a canDeferEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
+        expect(canHandle).to.equal(NO);
+    });
+    
     it(@"should return an array of TBSMEventHandler instances containing source and destination state for a given event.", ^{
         
         [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
@@ -110,7 +129,7 @@ describe(@"TBSMState", ^{
         TBSMStateMachine *subStateMachineA = [TBSMStateMachine stateMachineWithName:@"stateMachineA"];
         TBSMStateMachine *subStateMachineB = [TBSMStateMachine stateMachineWithName:@"stateMachineB"];
         TBSMParallelState *parallelStates = [TBSMParallelState parallelStateWithName:@"parallelStates"];
-
+        
         TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB"];
         
         subStateMachineB.states = @[b];
