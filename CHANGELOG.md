@@ -6,6 +6,7 @@
 - local transitions
 - added notifications for enter and exit handlers
 - remove option for concurrent queue in `TBSMParallelState`
+- renamed `-registerEvent:` to `-addHandlerForEvent:`
 
 ## 4.4.0
 

@@ -22,6 +22,8 @@ NSString * const TRANSITION_9 = @"transition_9";
 NSString * const TRANSITION_10 = @"transition_10";
 NSString * const TRANSITION_11 = @"transition_11";
 NSString * const TRANSITION_12 = @"transition_12";
+NSString * const TRANSITION_13 = @"transition_13";
+NSString * const TRANSITION_14 = @"transition_14";
 NSString * const TRANSITION_BROKEN = @"transition_broken";
 
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
@@ -226,6 +228,14 @@ describe(@"TBSMStateMachine", ^{
         // parallel state with deep switching
         [a3 addHandlerForEvent:TRANSITION_12 target:b32];
         
+        // event deferral
+        [a deferEvent:TRANSITION_13];
+        [a1 addHandlerForEvent:TRANSITION_13 target:a3];
+        
+        [a1 deferEvent:TRANSITION_14];
+        [a addHandlerForEvent:TRANSITION_14 target:b];
+        [a3 addHandlerForEvent:TRANSITION_14 target:b];
+        
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b31];
         subStateMachineB32.states = @[b32];
@@ -276,7 +286,6 @@ describe(@"TBSMStateMachine", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
         
-        
         NSArray *expectedExecutionSequence = @[@"a1_exit",
                                                @"a_exit",
                                                @"b_enter",
@@ -289,7 +298,6 @@ describe(@"TBSMStateMachine", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:EVENT_DATA_VALUE}]];
         
-        
         NSArray *expectedExecutionSequence = @[@"a1_exit",
                                                @"a2_enter"];
         
@@ -299,7 +307,6 @@ describe(@"TBSMStateMachine", ^{
     it(@"evalutes the guards and chooses the second transition defined on sub state.", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
-        
         
         NSArray *expectedExecutionSequence = @[@"a1_exit",
                                                @"a3_enter"];
@@ -313,7 +320,6 @@ describe(@"TBSMStateMachine", ^{
         [executionSequence removeAllObjects];
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_2 data:nil]];
-        
         
         NSArray *expectedExecutionSequence = @[@"a2_exit",
                                                @"a2_to_a3_action",
@@ -331,6 +337,7 @@ describe(@"TBSMStateMachine", ^{
         [executionSequence removeAllObjects];
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_4 data:nil]];
+        
         
         NSArray *expectedExecutionSequence = @[@"a3_exit",
                                                @"a_exit",
@@ -446,6 +453,24 @@ describe(@"TBSMStateMachine", ^{
         expect(subStateMachineB.currentState).to.equal(b3);
         expect(subStateMachineB31.currentState).to.equal(b31);
         expect(subStateMachineB32.currentState).to.equal(b32);
+    });
+    
+    it(@"ignores event deferral on a super state if a sub state can consume the event.", ^{
+    
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_13 data:nil]];
+        
+        expect(subStateMachineA.currentState).to.equal(a3);
+    });
+    
+    it(@"defers an event a sub state until an active state can consume the event.", ^{
+    
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_14 data:nil]];
+        
+        expect(subStateMachineA.currentState).to.equal(a1);
+        
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
+        
+        expect(stateMachine.currentState).to.equal(b);
     });
     
     it(@"throws an exception when no lca could be found", ^{
