@@ -25,7 +25,7 @@ To run the example project, clone the repo, and run `pod install` from the `Exam
 
 ## Requirements
 
-* Xcode 5
+* Xcode 6
 * iOS 5.0
 * OS X 10.7
 
@@ -71,17 +71,15 @@ stateMachine.initialState = stateB;
 [stateMachine setUp:nil];
 ```
 
-The state machine will immediately enter the initial state.
-
 ### Event Handling
 
-You can register an event which triggers the transition to a specified target state:
+You can add event handlers which trigger transitions to specified target states:
 
 ```objective-c
 [stateA addHandlerForEvent:@"EventA" target:stateB];
 ```
 
-You can also register an event with additional action and guard blocks:
+You can also add event handlers with additional action and guard blocks:
 
 ```objective-c
 
@@ -98,7 +96,7 @@ TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, NSDictionary 
 [stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
 ```
 
-If you register multiple transitions for the same event the guard blocks decide which one will be fired.
+If you register multiple handlers for the same event the guard blocks decide which transition will be fired.
 
 #### Different Kinds of Transitions
 
@@ -162,7 +160,7 @@ stateMachine.states = @[stateA, stateB, parallel];
 
 The notification's `userInfo` contains:
 
-```
+```objective-c
 {
     TBSMSourceStateUserInfo:theSourceState,
     TBSMTargetStateUserInfo:theTargetState,
