@@ -55,13 +55,24 @@ describe(@"TBSMParallelState", ^{
             
         });
         
-        it(@"throws TBSMException when state object is not of type TBSMStateMachine.", ^{
+        it(@"throws a TBSMException when adding objects which are not of type TBSMStateMachine.", ^{
             
             id object = [[NSObject alloc] init];
-            NSArray *states = @[subStateMachineA, subStateMachineB, object];
             expect(^{
-                parallelStates.stateMachines = states;
+                parallelStates.stateMachines = @[subStateMachineA, subStateMachineB, object];
             }).to.raise(TBSMException);
+        });
+        
+        it (@"throws a TBSMException when instance does not contain one or more stateMachines.", ^{
+            
+            expect(^{
+                [parallelStates enter:nil targetState:nil data:nil];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                [parallelStates exit:nil targetState:nil data:nil];
+            }).to.raise(TBSMException);
+            
         });
         
     });

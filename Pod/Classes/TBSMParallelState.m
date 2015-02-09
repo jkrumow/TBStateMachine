@@ -41,11 +41,12 @@
 {
     [self.priv_parallelStateMachines removeAllObjects];
     
-    for (id object in stateMachines) {
-        if ([object isKindOfClass:[TBSMStateMachine class]]) {
-            [self.priv_parallelStateMachines addObject:object];
+    for (TBSMStateMachine *stateMachine in stateMachines) {
+        if ([stateMachine isKindOfClass:[TBSMStateMachine class]]) {
+            stateMachine.parentNode = self;
+            [self.priv_parallelStateMachines addObject:stateMachine];
         } else {
-            @throw ([NSException tb_notAStateMachineException:object]);
+            @throw ([NSException tb_notAStateMachineException:stateMachine]);
         }
     }
 }
@@ -54,6 +55,9 @@
 {
     [super enter:sourceState targetState:targetState data:data];
     
+    if (self.priv_parallelStateMachines.count == 0) {
+        @throw [NSException tb_missingStateMachineException:self.name];
+    }
     for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
         if ([targetState.path containsObject:stateMachine]) {
             [stateMachine enterState:sourceState targetState:targetState data:data];
@@ -65,6 +69,9 @@
 
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
+    if (self.priv_parallelStateMachines.count == 0) {
+        @throw [NSException tb_missingStateMachineException:self.name];
+    }
     for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
         [stateMachine tearDown:data];
     }
@@ -80,16 +87,6 @@
         }
     }
     return didHandleEvent;
-}
-
-#pragma mark - TBSMNode
-
-- (void)setParentNode:(id<TBSMNode>)parentNode
-{
-    _parentNode = parentNode;
-    for (TBSMStateMachine *subMachine in self.priv_parallelStateMachines) {
-        subMachine.parentNode = self;
-    }
 }
 
 @end

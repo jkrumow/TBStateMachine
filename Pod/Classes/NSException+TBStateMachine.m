@@ -13,13 +13,13 @@ NSString * const TBSMException = @"TBSMException";
 
 static NSString * const TBSMNotOfTypeStateExceptionReason = @"The specified object '%@' must be of type TBSMState.";
 static NSString * const TBSMNonExistingStateExceptionReason = @"The specified state '%@' does not exist.";
-static NSString * const TBSMNoInitialStateExceptionReason = @"Initial state needs to be set on %@.";
+static NSString * const TBSMNoInitialStateExceptionReason = @"Initial state needs to be set on state machine %@.";
 static NSString * const TBSMNoNameForStateExceptionReason = @"State needs to have a valid name.";
 static NSString * const TBSMNoNameForEventExceptionReason = @"Event needs to have a valid name.";
-static NSString * const TBSMCannotDeferRegisteredEventExceptionReason = @"Can not defer event %@ which is already registered.";
-static NSString * const TBSMCannotRegisterDeferredEventExceptionReason = @"Can not register event %@ which is already defered.";
+static NSString * const TBSMCannotDeferRegisteredEventExceptionReason = @"Can not defer an event %@ which is already registered.";
+static NSString * const TBSMCannotRegisterDeferredEventExceptionReason = @"Can not add a handler for  an event %@ which is already deferred.";
 static NSString * const TBSMNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBSMStateMachine.";
-static NSString * const TBSMMissingStateMachineExceptionReason = @"Sub state '%@' needs to be initialized with a valid TBSMStateMachine instance.";
+static NSString * const TBSMMissingStateMachineExceptionReason = @"Containing state '%@' needs to be set up with a valid TBSMStateMachine instance.";
 static NSString * const TBSMNoLcaForTransitionExceptionReason = @"No transition possible for transition %@.";
 static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous transition attributes for event %@";
 
@@ -37,7 +37,7 @@ static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous tr
 
 + (NSException *)tb_noInitialStateException:(NSString *)stateMachineName
 {
-    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNonExistingStateExceptionReason, stateMachineName] userInfo:nil];
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoInitialStateExceptionReason, stateMachineName] userInfo:nil];
 }
 
 + (NSException *)tb_noNameForStateException

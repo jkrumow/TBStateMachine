@@ -30,6 +30,15 @@ describe(@"TBSMSubState", ^{
             
         });
         
+        it(@"throws a TBSMException when adding an object which is not of type TBSMStateMachine.", ^{
+            
+            id object = [[NSObject alloc] init];
+            TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
+            expect(^{
+                subState.stateMachine = object;
+            }).to.raise(TBSMException);
+        });
+        
         it (@"throws a TBSMException when stateMachine is nil.", ^{
             
             expect(^{
