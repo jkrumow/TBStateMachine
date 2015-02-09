@@ -45,7 +45,7 @@
     if (self.initialState) {
         [self enterState:nil targetState:self.initialState data:data];
     } else {
-        @throw [NSException tb_noInitialStateException:@"initialState"];
+        @throw [NSException tb_noInitialStateException:self.name];
     }
 }
 

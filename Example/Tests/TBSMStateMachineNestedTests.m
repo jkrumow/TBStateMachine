@@ -26,7 +26,8 @@ NSString * const TRANSITION_13 = @"transition_13";
 NSString * const TRANSITION_14 = @"transition_14";
 NSString * const TRANSITION_15 = @"transition_15";
 NSString * const TRANSITION_16 = @"transition_16";
-NSString * const TRANSITION_BROKEN = @"transition_broken";
+NSString * const TRANSITION_BROKEN_LOCAL = @"transition_broken_local";
+NSString * const TRANSITION_BROKEN_EXTERNAL = @"transition_broken_external";
 
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
@@ -46,8 +47,12 @@ __block TBSMState *b21;
 __block TBSMState *b22;
 
 __block TBSMParallelState *b3;
-__block TBSMState *b31;
-__block TBSMState *b32;
+__block TBSMState *b311;
+__block TBSMState *b312;
+__block TBSMState *b321;
+__block TBSMState *b322;
+
+__block TBSMState *z;
 
 __block TBSMStateMachine *subStateMachineA;
 __block TBSMStateMachine *subStateMachineB;
@@ -84,8 +89,12 @@ describe(@"TBSMStateMachine", ^{
         
         
         b3 = [TBSMParallelState parallelStateWithName:@"b3"];
-        b31 = [TBSMState stateWithName:@"b31"];
-        b32 = [TBSMState stateWithName:@"b31"];
+        b311 = [TBSMState stateWithName:@"b311"];
+        b312 = [TBSMState stateWithName:@"b312"];
+        b321 = [TBSMState stateWithName:@"b321"];
+        b322 = [TBSMState stateWithName:@"b322"];
+        
+        z = [TBSMState stateWithName:@"z"];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"smA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"smB"];
@@ -174,20 +183,36 @@ describe(@"TBSMStateMachine", ^{
             [executionSequence addObject:@"b3_exit"];
         };
 
-        b31.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"b31_enter"];
+        b311.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b311_enter"];
         };
         
-        b31.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"b31_exit"];
+        b311.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b311_exit"];
         };
         
-        b32.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"b32_enter"];
+        b312.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b312_enter"];
         };
         
-        b32.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"b32_exit"];
+        b312.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b312_exit"];
+        };
+        
+        b321.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b321_enter"];
+        };
+        
+        b321.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b321_exit"];
+        };
+        
+        b322.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b322_enter"];
+        };
+        
+        b322.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b322_exit"];
         };
         
         // superstates / substates guards
@@ -218,29 +243,29 @@ describe(@"TBSMStateMachine", ^{
         [b addHandlerForEvent:TRANSITION_8 target:b22 kind:TBSMTransitionLocal];
         [b22 addHandlerForEvent:TRANSITION_9 target:b kind:TBSMTransitionLocal];
         
-        [b addHandlerForEvent:TRANSITION_BROKEN target:a3 kind:TBSMTransitionLocal];
-        
+        [b addHandlerForEvent:TRANSITION_BROKEN_LOCAL target:a3 kind:TBSMTransitionLocal];
+        [a1 addHandlerForEvent:TRANSITION_BROKEN_EXTERNAL target:z];
 
         // internal transitions
         [a1 addHandlerForEvent:TRANSITION_10 target:a1 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"a1_internal_action"];
         }];
         
-        [b31 addHandlerForEvent:TRANSITION_11 target:b31 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"b31_internal_action"];
+        [b311 addHandlerForEvent:TRANSITION_11 target:b311 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b311_internal_action"];
         }];
-        [b32 addHandlerForEvent:TRANSITION_11 target:b32 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"b32_internal_action"];
+        [b321 addHandlerForEvent:TRANSITION_11 target:b321 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b321_internal_action"];
         }];
         
         // out of parallel substate
-        [b31 addHandlerForEvent:TRANSITION_12 target:a1 kind:TBSMTransitionExternal];
+        [b311 addHandlerForEvent:TRANSITION_12 target:a1 kind:TBSMTransitionExternal];
         
         // parallel state with default setup
         [b addHandlerForEvent:TRANSITION_13 target:b3];
         
         // parallel state with deep switching
-        [a3 addHandlerForEvent:TRANSITION_14 target:b32];
+        [a3 addHandlerForEvent:TRANSITION_14 target:b322];
         
         // event deferral
         [a deferEvent:TRANSITION_15];
@@ -251,8 +276,8 @@ describe(@"TBSMStateMachine", ^{
         [a3 addHandlerForEvent:TRANSITION_16 target:b];
         
         subStateMachineB2.states = @[b21, b22];
-        subStateMachineB31.states = @[b31];
-        subStateMachineB32.states = @[b32];
+        subStateMachineB31.states = @[b311, b312];
+        subStateMachineB32.states = @[b321, b322];
         
         a.stateMachine = subStateMachineA;
         b.stateMachine = subStateMachineB;
@@ -456,10 +481,10 @@ describe(@"TBSMStateMachine", ^{
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
         
-        NSArray *expectedExecutionSequence = @[@"b31_internal_action",
-                                               @"b32_internal_action",
-                                               @"b31_internal_action",
-                                               @"b32_internal_action"];
+        NSArray *expectedExecutionSequence = @[@"b311_internal_action",
+                                               @"b321_internal_action",
+                                               @"b311_internal_action",
+                                               @"b321_internal_action"];
         
         expect(executionSequence).to.equal(expectedExecutionSequence);
     });
@@ -472,8 +497,8 @@ describe(@"TBSMStateMachine", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_12 data:nil]];
     
-        NSArray *expectedExecutionSequence = @[@"b31_exit",
-                                               @"b32_exit",
+        NSArray *expectedExecutionSequence = @[@"b311_exit",
+                                               @"b321_exit",
                                                @"b3_exit",
                                                @"b_exit",
                                                @"a_enter",
@@ -489,19 +514,19 @@ describe(@"TBSMStateMachine", ^{
         
         expect(stateMachine.currentState).to.equal(b);
         expect(subStateMachineB.currentState).to.equal(b3);
-        expect(subStateMachineB31.currentState).to.equal(b31);
-        expect(subStateMachineB32.currentState).to.equal(b32);
+        expect(subStateMachineB31.currentState).to.equal(b311);
+        expect(subStateMachineB32.currentState).to.equal(b321);
     });
     
-    it(@"performs a transition into a parrel state and enters specified sub state while entering all other parallel machines with default state.", ^{
+    it(@"performs a transition into a parralel state and enters specified sub state while entering all other parallel machines with default state.", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_14 data:nil]];
         
         expect(stateMachine.currentState).to.equal(b);
         expect(subStateMachineB.currentState).to.equal(b3);
-        expect(subStateMachineB31.currentState).to.equal(b31);
-        expect(subStateMachineB32.currentState).to.equal(b32);
+        expect(subStateMachineB31.currentState).to.equal(b311);
+        expect(subStateMachineB32.currentState).to.equal(b322);
     });
     
     it(@"ignores event deferral on a super state if a sub state can consume the event.", ^{
@@ -511,7 +536,7 @@ describe(@"TBSMStateMachine", ^{
         expect(subStateMachineA.currentState).to.equal(a3);
     });
     
-    it(@"defers an event a sub state until an active state can consume the event.", ^{
+    it(@"defers an event on a sub state until an active state can consume the event.", ^{
     
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_16 data:nil]];
         
@@ -522,14 +547,22 @@ describe(@"TBSMStateMachine", ^{
         expect(stateMachine.currentState).to.equal(b);
     });
     
-    it(@"throws an exception when no lca could be found", ^{
+    it(@"throws an exception when no lca could be found for a local transition.", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_5 data:nil]];
         [executionSequence removeAllObjects];
         
         expect(^{
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_BROKEN data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_BROKEN_LOCAL data:nil]];
+        }).to.raise(TBSMException);
+        
+    });
+    
+    it(@"throws an exception when no lca could be found for an external transition.", ^{
+        
+        expect(^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_BROKEN_EXTERNAL data:nil]];
         }).to.raise(TBSMException);
         
     });
