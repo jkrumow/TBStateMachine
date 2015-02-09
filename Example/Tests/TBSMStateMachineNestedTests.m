@@ -24,6 +24,8 @@ NSString * const TRANSITION_11 = @"transition_11";
 NSString * const TRANSITION_12 = @"transition_12";
 NSString * const TRANSITION_13 = @"transition_13";
 NSString * const TRANSITION_14 = @"transition_14";
+NSString * const TRANSITION_15 = @"transition_15";
+NSString * const TRANSITION_16 = @"transition_16";
 NSString * const TRANSITION_BROKEN = @"transition_broken";
 
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
@@ -218,23 +220,35 @@ describe(@"TBSMStateMachine", ^{
         
         [b addHandlerForEvent:TRANSITION_BROKEN target:a3 kind:TBSMTransitionLocal];
         
+
+        // internal transitions
         [a1 addHandlerForEvent:TRANSITION_10 target:a1 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"a1_internal_action"];
         }];
         
+        [b31 addHandlerForEvent:TRANSITION_11 target:b31 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b31_internal_action"];
+        }];
+        [b32 addHandlerForEvent:TRANSITION_11 target:b32 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"b32_internal_action"];
+        }];
+        
+        // out of parallel substate
+        [b31 addHandlerForEvent:TRANSITION_12 target:a1 kind:TBSMTransitionExternal];
+        
         // parallel state with default setup
-        [b addHandlerForEvent:TRANSITION_11 target:b3];
+        [b addHandlerForEvent:TRANSITION_13 target:b3];
         
         // parallel state with deep switching
-        [a3 addHandlerForEvent:TRANSITION_12 target:b32];
+        [a3 addHandlerForEvent:TRANSITION_14 target:b32];
         
         // event deferral
-        [a deferEvent:TRANSITION_13];
-        [a1 addHandlerForEvent:TRANSITION_13 target:a3];
+        [a deferEvent:TRANSITION_15];
+        [a1 addHandlerForEvent:TRANSITION_15 target:a3];
         
-        [a1 deferEvent:TRANSITION_14];
-        [a addHandlerForEvent:TRANSITION_14 target:b];
-        [a3 addHandlerForEvent:TRANSITION_14 target:b];
+        [a1 deferEvent:TRANSITION_16];
+        [a addHandlerForEvent:TRANSITION_16 target:b];
+        [a3 addHandlerForEvent:TRANSITION_16 target:b];
         
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b31];
@@ -433,10 +447,45 @@ describe(@"TBSMStateMachine", ^{
         expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
+    it(@"performs parallel internal transitions.", ^{
+        
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_13 data:nil]];
+        [executionSequence removeAllObjects];
+        
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
+        
+        NSArray *expectedExecutionSequence = @[@"b31_internal_action",
+                                               @"b32_internal_action",
+                                               @"b31_internal_action",
+                                               @"b32_internal_action"];
+        
+        expect(executionSequence).to.equal(expectedExecutionSequence);
+    });
+    
+    it(@"performs a transition out of a parallel sub state into a top level state.", ^{
+    
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_13 data:nil]];
+        [executionSequence removeAllObjects];
+        
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_12 data:nil]];
+    
+        NSArray *expectedExecutionSequence = @[@"b31_exit",
+                                               @"b32_exit",
+                                               @"b3_exit",
+                                               @"b_exit",
+                                               @"a_enter",
+                                               @"a1_enter"];
+        
+        expect(executionSequence).to.equal(expectedExecutionSequence);
+    });
+    
     it(@"performs a transition into a parrel state and enters default sub states.", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_13 data:nil]];
         
         expect(stateMachine.currentState).to.equal(b);
         expect(subStateMachineB.currentState).to.equal(b3);
@@ -447,7 +496,7 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a transition into a parrel state and enters specified sub state while entering all other parallel machines with default state.", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_12 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_14 data:nil]];
         
         expect(stateMachine.currentState).to.equal(b);
         expect(subStateMachineB.currentState).to.equal(b3);
@@ -457,14 +506,14 @@ describe(@"TBSMStateMachine", ^{
     
     it(@"ignores event deferral on a super state if a sub state can consume the event.", ^{
     
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_13 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_15 data:nil]];
         
         expect(subStateMachineA.currentState).to.equal(a3);
     });
     
     it(@"defers an event a sub state until an active state can consume the event.", ^{
     
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_14 data:nil]];
+        [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_16 data:nil]];
         
         expect(subStateMachineA.currentState).to.equal(a1);
         
