@@ -109,4 +109,6 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  */
 + (NSException *)tb_noLcaForTransition:(NSString *)transitionName;
 
++ (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName;
+
 @end

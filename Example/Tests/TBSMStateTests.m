@@ -76,7 +76,6 @@ describe(@"TBSMState", ^{
             expect(^{
                 [a addHandlerForEvent:EVENT_NAME_A target:a];
             }).to.raise(TBSMException);
-            
         });
         
         it(@"throws an exception when attempting to defer an event which was already registered.", ^{
@@ -86,7 +85,13 @@ describe(@"TBSMState", ^{
             expect(^{
                 [a deferEvent:EVENT_NAME_A];
             }).to.raise(TBSMException);
+        });
+        
+        it(@"throws an exception when attempting to add event handler which makes no sense.", ^{
             
+            expect(^{
+                [a addHandlerForEvent:EVENT_NAME_A target:b kind:TBSMTransitionInternal];
+            }).to.raise(TBSMException);
         });
     });
     

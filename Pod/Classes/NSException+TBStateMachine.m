@@ -21,6 +21,7 @@ static NSString * const TBSMCannotRegisterDeferredEventExceptionReason = @"Can n
 static NSString * const TBSMNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBSMStateMachine.";
 static NSString * const TBSMMissingStateMachineExceptionReason = @"Sub state '%@' needs to be initialized with a valid TBSMStateMachine instance.";
 static NSString * const TBSMNoLcaForTransitionExceptionReason = @"No transition possible for transition %@.";
+static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous transition attributes for event %@";
 
 @implementation NSException (TBStateMachine)
 
@@ -72,6 +73,11 @@ static NSString * const TBSMNoLcaForTransitionExceptionReason = @"No transition 
 + (NSException *)tb_noLcaForTransition:(NSString *)transitionName
 {
 	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoLcaForTransitionExceptionReason, transitionName] userInfo:nil];
+}
+
++ (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName
+{
+	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMAmbiguousTransitionAttributesReason, eventName] userInfo:nil];
 }
 
 @end
