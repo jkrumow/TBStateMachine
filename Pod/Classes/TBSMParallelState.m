@@ -66,11 +66,7 @@
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
     for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
-        if ([targetState.path containsObject:stateMachine]) {
-            [stateMachine exitState:sourceState targetState:targetState data:data];
-        } else {
-            [stateMachine tearDown:data];
-        }
+        [stateMachine tearDown:data];
     }
     [super exit:sourceState targetState:targetState data:data];
 }
