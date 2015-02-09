@@ -99,7 +99,7 @@
         return;
     }
     
-    @synchronized(self.scheduledEventsQueue) {
+    @synchronized(self) {
         
         [self.scheduledEventsQueue addObject:event];
         
