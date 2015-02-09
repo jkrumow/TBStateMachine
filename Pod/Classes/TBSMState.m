@@ -71,7 +71,11 @@ NSString * const TBSMDataUserInfo = @"data";
     if ([self.priv_deferredEvents objectForKey:event])  {
         @throw [NSException tb_cannotRegisterDeferredEvent:event];
     }
-    if (kind == TBSMTransitionInternal && !(self == target || target == nil)) {
+    if (kind == TBSMTransitionInternal) {
+        if (!(self == target || target == nil)) {
+            @throw [NSException tb_ambiguousTransitionAttributes:event];
+        }
+    } else if (target == nil) {
         @throw [NSException tb_ambiguousTransitionAttributes:event];
     }
     TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target kind:kind action:action guard:guard];

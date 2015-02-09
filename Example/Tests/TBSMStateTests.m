@@ -92,6 +92,14 @@ describe(@"TBSMState", ^{
             expect(^{
                 [a addHandlerForEvent:EVENT_NAME_A target:b kind:TBSMTransitionInternal];
             }).to.raise(TBSMException);
+            
+            expect(^{
+                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionExternal];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionLocal];
+            }).to.raise(TBSMException);
         });
     });
     

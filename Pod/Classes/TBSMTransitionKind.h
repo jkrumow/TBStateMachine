@@ -14,8 +14,8 @@
  */
 typedef NS_ENUM(NSUInteger, TBSMTransitionKind) {
     TBSMTransitionExternal,
-    TBSMTransitionInternal,
     TBSMTransitionLocal,
+    TBSMTransitionInternal
 };
 
 #endif
