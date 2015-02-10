@@ -547,16 +547,14 @@ describe(@"TBSMStateMachine", ^{
         expect(stateMachine.currentState).to.equal(b);
     });
     
-    it(@"throws an exception when no lca could be found for a local transition.", ^{
+    it(@"defaults to an external transition when source and target of a local transition are no ancestors.", ^{
         
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
         [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_5 data:nil]];
-        [executionSequence removeAllObjects];
-        
-        expect(^{
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_BROKEN_LOCAL data:nil]];
-        }).to.raise(TBSMException);
-        
+
+        expect(stateMachine.currentState).to.equal(b);
+        expect(subStateMachineB.currentState).to.equal(b2);
+        expect(subStateMachineB2.currentState).to.equal(b22);
     });
     
     it(@"throws an exception when no lca could be found for an external transition.", ^{
