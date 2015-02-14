@@ -3,6 +3,6 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'Tests', :exclusive => true do
   pod "TBStateMachine", :path => "../"
 
-  pod 'Specta', '~> 0.2.1'
+  pod 'Specta', '~> 0.3'
   pod 'Expecta'
 end
