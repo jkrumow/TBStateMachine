@@ -39,7 +39,7 @@ describe(@"TBSMTransition", ^{
         expect(transition.sourceState).to.equal(a);
     });
     
-    it (@"returns destination state.", ^{
+    it (@"returns target state.", ^{
         TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
         expect(transition.targetState).to.equal(b);
     });

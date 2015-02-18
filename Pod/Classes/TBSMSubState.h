@@ -12,19 +12,19 @@
 @class TBSMStateMachine;
 
 /**
- *  This class wraps a given `TBSMStateMachine` instance in a state.
+ *  This class allows the create nested states.
  */
 @interface TBSMSubState : TBSMState
 
 /**
- *  The `TBSMStateMachine` instance wrapped by this sub state.
+ *  The `TBSMStateMachine` instance contained in this sub state.
  */
 @property (nonatomic, strong) TBSMStateMachine *stateMachine;
 
 /**
  *  Creates a `TBSMSUBState` with a specified name.
  *
- *  Throws a `TBSMException` when name is nil or an empty string.
+ *  Throws an exception when name is nil or an empty string.
  *
  *  @param name The name of this wrapper. Must be unique.
  *
@@ -39,7 +39,7 @@
  *
  *  @param event The given `TBSMEvent` instance.
  *
- *  @return `YES` if teh transition has been handled.
+ *  @return `YES` if the transition has been handled.
  */
 - (BOOL)handleEvent:(TBSMEvent *)event;
 

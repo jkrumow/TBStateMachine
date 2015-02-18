@@ -190,8 +190,8 @@
     } else if (targetLevel == thisLevel) {
         _currentState = targetState;
     } else {
-        NSArray *destinationPath = [targetState.parentNode path];
-        id<TBSMNode> node = destinationPath[thisLevel];
+        NSArray *targetPath = [targetState.parentNode path];
+        id<TBSMNode> node = targetPath[thisLevel];
         _currentState = node.parentNode;
     }
     [self.currentState enter:sourceState targetState:targetState data:data];

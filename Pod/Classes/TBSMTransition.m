@@ -41,12 +41,12 @@
 - (TBSMStateMachine *)_findLeastCommonAncestor
 {
     NSArray *sourcePath = [self.sourceState path];
-    NSArray *destinationPath = [self.targetState path];
+    NSArray *targetPath = [self.targetState path];
     
     __block TBSMStateMachine *lca = nil;
     [sourcePath enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([obj isKindOfClass:[TBSMStateMachine class]]) {
-            if ([destinationPath containsObject:obj]) {
+            if ([targetPath containsObject:obj]) {
                 lca = (TBSMStateMachine *)obj;
                 *stop = YES;
             }

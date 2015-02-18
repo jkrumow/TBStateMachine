@@ -240,7 +240,7 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachine.currentState).to.equal(b);
         });
         
-        it(@"passes source and destination state and event data into the enter, exit, action and guard blocks of the involved states.", ^{
+        it(@"passes source and target state and event data into the enter, exit, action and guard blocks of the involved states.", ^{
             
             __block TBSMState *sourceStateEnter;
             __block TBSMState *targetStateEnter;

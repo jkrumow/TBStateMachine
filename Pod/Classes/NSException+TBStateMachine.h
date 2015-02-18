@@ -18,7 +18,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 /**
  *  Thrown when an object is not of type `TBSMState`.
  *
- *  The `reason:` string will contain a description of the object.
+ *  The `reason:` will contain a description of the object.
  *
  *  @param object The object in question.
  *
@@ -29,7 +29,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 /**
  *  Thrown when a specified `TBSMState` instance does not exist in the state machine.
  *
- *  The `reason:` string will contain the name of the state.
+ *  The `reason:` will contain the name of the state.
  *
  *  @param stateName The name of the specified `TBSMState`.
  *
@@ -40,13 +40,13 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 /**
  *  Thrown when no initial state has been set on the state machine.
  *
- *  The `reason:` string will contain the name of the state machine.
+ *  The `reason:` will contain the name of the state machine.
  *
- *  @param stateName The name of the specified `TBSMState`.
+ *  @param stateMachineName The name of the specified `TBSMState`.
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_noInitialStateException:(NSString *)stateName;
++ (NSException *)tb_noInitialStateException:(NSString *)stateMachineName;
 
 /**
  *  Thrown when no name was given to a `TBSMState` instance.
@@ -83,7 +83,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 /**
  *  Thrown when a given object is not of type `TBSMStateMachine`.
  *
- *  The `reason:` string will contain a description of the object.
+ *  The `reason:` will contain a description of the object.
  *
  *  @param object The object in question.
  *
@@ -92,7 +92,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_notAStateMachineException:(id)object;
 
 /**
- *  Thrown when a TBSMSubState was instanciated without a `TBSMStateMachine` instance.
+ *  Thrown when a `TBSMSubState` or `TBSMParallelState` was instanciated without a sub-machine instance.
  *
  *  @param stateMachineName The name of the specified `TBSMStateMachine` instance.
  *
@@ -109,6 +109,13 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  */
 + (NSException *)tb_noLcaForTransition:(NSString *)transitionName;
 
+/**
+ *  Thrown when an event handler has been added with contradicting or missing transition attributes.
+ *
+ *  @param eventName The name of the specified event.
+ *
+ *  @return THe `NSException` instance.
+ */
 + (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName;
 
 @end

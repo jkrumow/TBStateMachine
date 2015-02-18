@@ -13,7 +13,8 @@
 #import "TBSMState.h"
 
 /**
- *  This class represents an event handler object. It stores information associated with a given event registered on a `TBSMState` instance.
+ *  This class represents an event handler object.
+ *  It stores information associated with a given event registered on a `TBSMState` instance.
  */
 @interface TBSMEventHandler : NSObject
 
@@ -23,7 +24,7 @@
 @property (nonatomic, strong, readonly) NSString *name;
 
 /**
- *  The destination state of the transition triggered by the event.
+ *  The target state of the transition triggered by the event.
  */
 @property (nonatomic, strong, readonly) TBSMState *target;
 
@@ -46,23 +47,25 @@
 /**
  *  Creates a `TBSMEventHandler` instance from a given event name, target, action and guard.
  *
+ *  Throws an exception when name is nil or an empty string.
+ *
  *  @param name   The name of this event. Must be unique.
- *  @param target The destination state.
+ *  @param target The target state.
  *  @param type   The kind of transition.
  *  @param action The action.
  *  @param guard  The guard function.
  *
- *  @return The event instance.
+ *  @return The event handler instance.
  */
 + (instancetype)eventHandlerWithName:(NSString *)name target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
  *  Initializes a `TBSMEventHandler` from a given event name, target, action and guard.
  *
- *  Throws a `TBSMException` when name is nil or an empty string.
+ *  Throws an exception when name is nil or an empty string.
  *
  *  @param name   The name of this event. Must be unique.
- *  @param target The destination state.
+ *  @param target The target state.
  *  @param kind   The kind of transition.
  *  @param action The action.
  *  @param guard  The guard function.

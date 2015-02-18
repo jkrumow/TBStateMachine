@@ -122,7 +122,7 @@ describe(@"TBSMState", ^{
         expect(canHandle).to.equal(NO);
     });
     
-    it(@"should return an array of TBSMEventHandler instances containing source and destination state for a given event.", ^{
+    it(@"should return an array of TBSMEventHandler instances containing source and target state for a given event.", ^{
         
         [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
         [a addHandlerForEvent:EVENT_NAME_B target:a];

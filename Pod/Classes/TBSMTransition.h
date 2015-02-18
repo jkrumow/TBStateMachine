@@ -13,20 +13,20 @@
 @class TBSMState;
 
 /**
- *  This type represents an action of a given `TBSMTransition`.
+ *  This type represents an action of a `TBSMTransition`.
  *
- *  @param sourceState      The source state.
- *  @param targetState The destination state.
- *  @param data             The payload data.
+ *  @param sourceState The source state.
+ *  @param targetState The target state.
+ *  @param data        The payload data.
  */
 typedef void(^TBSMActionBlock)(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data);
 
 /**
- *  This type represents a guard function of a given `TBSMTransition`.
+ *  This type represents a guard function of a `TBSMTransition`.
  *
- *  @param sourceState      The source state.
- *  @param targetState The destination state.
- *  @param data             The payload data.
+ *  @param sourceState The source state.
+ *  @param targetState The target state.
+ *  @param data        The payload data.
  */
 typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data);
 
@@ -42,7 +42,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
 @property (nonatomic, weak, readonly) TBSMState *sourceState;
 
 /**
- *  The destination state.
+ *  The target state.
  */
 @property (nonatomic, weak, readonly) TBSMState *targetState;
 
@@ -62,13 +62,13 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
 @property (nonatomic, copy, readonly) TBSMGuardBlock guard;
 
 /**
- *  Creates a `TBSMTransition` instance from a given source and destination state, action and guard.
+ *  Creates a `TBSMTransition` instance from a given source and target state, action and guard.
  *
- *  @param sourceState      The specified source state.
- *  @param targetState The specified destination state.
- *  @param kind             The kind of transition.
- *  @param action           The action associated with this transition.
- *  @param guard            The guard function associated with the transition.
+ *  @param sourceState The specified source state.
+ *  @param targetState The specified target state.
+ *  @param kind        The kind of transition.
+ *  @param action      The action associated with this transition.
+ *  @param guard       The guard function associated with the transition.
  *
  *  @return The transition object.
  */
@@ -79,13 +79,13 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
                                         guard:(TBSMGuardBlock)guard;
 
 /**
- *  Initializes a `TBSMTransition` instance from a given source and destination state, action and guard.
+ *  Initializes a `TBSMTransition` instance from a given source and target state, action and guard.
  *
- *  @param sourceState      The specified source state.
- *  @param targetState The specified destination state.
- *  @param kind             The kind of transition.
- *  @param action           The action associated with this transition.
- *  @param guard            The guard function associated with the transition.
+ *  @param sourceState The specified source state.
+ *  @param targetState The specified target state.
+ *  @param kind        The kind of transition.
+ *  @param action      The action associated with this transition.
+ *  @param guard       The guard function associated with the transition.
  *
  *  @return The transition object.
  */
@@ -101,7 +101,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  *  Evaluates guard and action blocks.
  *  Determines the lca considering the transiton kind.
  *
- *  Throws as exception if no LCA could be determined.
+ *  Throws an exception if no LCA could be determined.
  *
  *  @param data The payload data.
  *

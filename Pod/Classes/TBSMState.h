@@ -18,9 +18,9 @@ FOUNDATION_EXPORT NSString * const TBSMDataUserInfo;
 /**
  *  This type represents a block that is executed on entry and exit of a `TBSMState`.
  *
- *  @param sourceState      The source state.
- *  @param targetState The destination state.
- *  @param data The payload data.
+ *  @param sourceState The source state.
+ *  @param targetState The target state.
+ *  @param data        The payload data.
  */
 typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data);
 
@@ -57,7 +57,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Creates a `TBSMState` instance from a given name.
  *
- *  Throws a `TBSMException` when name is nil or an empty string.
+ *  Throws an exception when name is nil or an empty string.
  *
  *  @param name The specified state name.
  *
@@ -68,7 +68,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Initializes a `TBSMState` with a specified name.
  *
- *  Throws a `TBSMException` when name is nil or an empty string.
+ *  Throws an exception when name is nil or an empty string.
  *
  *  @param name The name of the state. Must be unique.
  *
@@ -80,35 +80,34 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  Registers an event of a given name for transition to a specified target state.
  *  Defaults to external transition.
  *
- *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
+ *  Throws an exception if the specified event is already listed as deferred by this state.
  *  See deferevent:
  *
  *  @param event  The given event name.
- *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
  */
 - (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
  *
- *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
- *  See deferevent:
+ *  Throws an exception if the specified event is already listed as deferred by this state.
+ *  Throws an exception if the parameters are ambiguous.
  *
  *  @param event  The given event name.
- *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
  *  @param kind   The kind of transition.
  */
 - (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
- *  If target parameter is `nil` an internal transition will be performed using the action block.
  *
- *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
- *  See deferevent:
+ *  Throws an exception if the specified event is already listed as deferred by this state.
+ *  Throws an exception if the parameters are ambiguous.
  *
  *  @param event  The given event name.
- *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
  *  @param kind   The kind of transition.
  *  @param action The action block associated with this event.
  */
@@ -116,13 +115,12 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
- *  If target parameter is `nil` an internal transition will be performed using guard and action block.
  *
- *  Throws a `TBSMException` if the specified event is already listed as deferred by this state.
- *  See deferevent:
+ *  Throws an exception if the specified event is already listed as deferred by this state.
+ *  Throws an exception if the parameters are ambiguous.
  *
  *  @param event  The given event name.
- *  @param target The destination `TBSMState` instance. Can be `nil` for internal transitions.
+ *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
  *  @param kind   The kind of transition.
  *  @param action The action block associated with this event.
  *  @param guard  The guard block associated with this event.
@@ -132,8 +130,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Registers an event of a given name which should be deferred when received by this state instance.
  *
- *  Throws a `TBSMException` if the specified event is already registered on this state.
- *  See addHandlerForEvent:target:action:guard:
+ *  Throws an exception if the specified event is already registered on this state.
  *
  *  @param event  The given event name.
  */
@@ -169,18 +166,18 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Executes the enter block of the state.
  *
- *  @param sourceState      The source state.
- *  @param targetState The destination state.
- *  @param data             The payload data.
+ *  @param sourceState The source state.
+ *  @param targetState The target state.
+ *  @param data        The payload data.
  */
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 
 /**
  *  Executes the exit block of the state.
  *
- *  @param sourceState      The source state.
- *  @param targetState The destination state.
- *  @param data             The payload data.
+ *  @param sourceState The source state.
+ *  @param targetState The target state.
+ *  @param data        The payload data.
  */
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 

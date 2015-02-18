@@ -19,39 +19,31 @@
 /**
  *  This class represents a hierarchical state machine.
  *
- *  The state machine is able to switch between nodes.
- *  A node can be:
- *
- *  - a simple state - represented by `TBSMState`
- *  - a wrapper for a sub state machine - represented by `TBSMSubState`
- *  - a wrapper for parallel state machines - represented by `TBSMParallelState`
- *
- *  All classes mentioned above implement the `TBSMNode` protocol.
- *
  *  To set the state machine up properly:
  *
  *  - set at least one state via -setStates:
- *  - set an initial state (optional. The first state in the provided array is always set as the initial state)
- *  - call -setUp to activate the state machine
- *  - call -tearDown to deactivate the state machine
- *
+ *  - set an initial state (by default the first state in the provided array will be set)
+ *  - call -setUp: to activate the state machine
+ *  - call -tearDown: to deactivate the state machine
  */
 @interface TBSMStateMachine : NSObject <TBSMNode>
 
 /**
- *  The initial state of the state machine. Must be set before calling -setUp.
+ *  The state the state machine wil enter on setup (by default the first state in the provided array will be set).
+ *
+ *  Throws an exception if the state does not exist in the statemachine.
  */
-@property (nonatomic, strong, readonly) TBSMState *initialState;
+@property (nonatomic, strong) TBSMState *initialState;
 
 /**
- *  The current state the state machine resides in. Set to be nil before -setUp and after -tearDown being called.
+ *  The current state the state machine resides in. Set to be nil before -setUp: and after -tearDown: being called.
  */
 @property (nonatomic, strong, readonly) TBSMState *currentState;
 
 /**
  *  Creates a `TBSMStateMachine` instance from a given name.
  *
- *  Throws a `TBSMException` when name is nil or an empty string.
+ *  Throws an exception when name is nil or an empty string.
  *
  *  @param name The specified state machine name.
  *
@@ -62,7 +54,7 @@
 /**
  *  Initializes a `TBSMStateMachine` with a specified name.
  *
- *  Throws a `TBSMException` when name is nil or an empty string.
+ *  Throws an exception when name is nil or an empty string.
  *
  *  @param name The name of the state machine. Must be unique.
  *
@@ -71,7 +63,7 @@
 - (instancetype)initWithName:(NSString *)name;
 
 /**
- *  Starts up the state machine. Will switch into the state defined by -setInitialState:.
+ *  Starts up the state machine. Will enter the initial state.
  *
  *  Throws `TBSMException` if initial state has not been set beforehand.
  */
@@ -83,7 +75,7 @@
 - (void)tearDown:(NSDictionary *)data;
 
 /**
- *  Returns the states the state machine manages.
+ *  Returns all states inside the state machine.
  *
  *  @return An NSArray containing all `TBSMState` instances.
  */
@@ -92,20 +84,11 @@
 /**
  *  Sets all states the state machine will manage. First state in array wil be set as initialState.
  *
- *  Throws `TBSMException` if states do not conform to the `TBSMState` protocol.
+ *  Throws `TBSMException` if states are not of type `TBSMState`.
  *
  *  @param states An `NSArray` containing all state objects.
  */
 - (void)setStates:(NSArray *)states;
-
-/**
- *  Sets the initial state of the state machine.
- *
- *  Throws `TBSMException` if state has not been set through -setStates:.
- *
- *  @param initialState A given state object.
- */
-- (void)setInitialState:(TBSMState *)initialState;
 
 /**
  *  Schedules an event.
@@ -118,11 +101,9 @@
 /**
  *  Receives a specified `TBSMEvent` instance.
  *
- *  If the node recognizes the given `TBSMEvent` it will return `YES`.
- *
  *  @param event The given `TBSMEvent` instance.
  *
- *  @return `YES` if teh transition has been handled.
+ *  @return `YES` if the event has been handled.
  */
 - (BOOL)handleEvent:(TBSMEvent *)event;
 
@@ -130,26 +111,26 @@
  *  Switches between states defined in a specified transition.
  *
  *  @param sourceState The source state.
- *  @param targetState The destination state.
+ *  @param targetState The target state.
  *  @param action      The action to execute.
  *  @param data        The payload data.
  */
 - (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data;
 
 /**
- *  Enters a given state.
+ *  Enters a specified state.
  *
  *  @param sourceState The source state.
- *  @param targetState The destination state.
+ *  @param targetState The target state.
  *  @param data        The payload data.
  */
 - (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 
 /**
- *  Exits a given state.
+ *  Exits a specified state.
  *
  *  @param sourceState The source state.
- *  @param targetState The destination state.
+ *  @param targetState The target state.
  *  @param data        The payload data.
  */
 - (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;

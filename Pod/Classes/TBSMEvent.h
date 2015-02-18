@@ -27,7 +27,7 @@
 /**
  *  Creates a `TBSMEvent` instance from a given name.
  *
- *  Throws a `TBSMException` when name is nil or an empty string.
+ *  Throws an exception when name is nil or an empty string.
  *
  *  @param name The specified event name.
  *  @param data Optional payload data.
@@ -39,7 +39,7 @@
 /**
  *  Initializes a `TBSMEvent` with a specified name.
  *
- *  Throws a `TBSMException` when name is nil or an empty string.
+ *  Throws an exception when name is nil or an empty string.
  *
  *  @param name The name of this event. Must be unique.
  *  @param data Optional payload data.
