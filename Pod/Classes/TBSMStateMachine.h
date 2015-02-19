@@ -28,6 +28,8 @@
  */
 @interface TBSMStateMachine : NSObject <TBSMNode>
 
+@property (nonatomic, strong) NSOperationQueue *scheduledEventsQueue;
+
 /**
  *  The state the state machine wil enter on setup (by default the first state in the provided array will be set).
  *

@@ -18,6 +18,7 @@
 		1593A9C41A71A815002F6AED /* StateB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9B51A71A815002F6AED /* StateB.m */; };
 		1593A9C91A71A815002F6AED /* SubA.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9BF1A71A815002F6AED /* SubA.m */; };
 		15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */; };
+		15C997951A9660F0007DC041 /* TBSMStateMachine+TestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C997941A9660F0007DC041 /* TBSMStateMachine+TestHelper.m */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -43,6 +44,8 @@
 		1593A9BF1A71A815002F6AED /* SubA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubA.m; sourceTree = "<group>"; };
 		15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineNestedTests.m; sourceTree = "<group>"; };
 		15B1453719BCFDA700924D92 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		15C997931A9660F0007DC041 /* TBSMStateMachine+TestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBSMStateMachine+TestHelper.h"; sourceTree = "<group>"; };
+		15C997941A9660F0007DC041 /* TBSMStateMachine+TestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TBSMStateMachine+TestHelper.m"; sourceTree = "<group>"; };
 		45DE11B7756962DA59F9E54D /* Pods-TBStateMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBStateMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-TBStateMachine/Pods-TBStateMachine.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -137,6 +140,8 @@
 				6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */,
 				155BB54D19C612A400EB1C74 /* TBSMEventTests.m */,
 				150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */,
+				15C997931A9660F0007DC041 /* TBSMStateMachine+TestHelper.h */,
+				15C997941A9660F0007DC041 /* TBSMStateMachine+TestHelper.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -274,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5BC195388D20070C39A /* TBSMParallelStateTests.m in Sources */,
+				15C997951A9660F0007DC041 /* TBSMStateMachine+TestHelper.m in Sources */,
 				1593A9C21A71A815002F6AED /* ParallelA.m in Sources */,
 				150FD64019D8543E00D9D1BA /* TBSMTransitionTests.m in Sources */,
 				151C5C0C19CDF6A4003D21AE /* TBSMSubStateTests.m in Sources */,

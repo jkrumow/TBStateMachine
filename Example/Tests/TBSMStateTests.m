@@ -67,25 +67,7 @@ describe(@"TBSMState", ^{
         expect(eventHandler.target).to.equal(a);
     });
     
-    describe(@"Exception handling when registering and deferring events.", ^{
-        
-        it(@"throws an exception when attempting to register an event which was already marked as deferred.", ^{
-            
-            [a deferEvent:EVENT_NAME_A];
-            
-            expect(^{
-                [a addHandlerForEvent:EVENT_NAME_A target:a];
-            }).to.raise(TBSMException);
-        });
-        
-        it(@"throws an exception when attempting to defer an event which was already registered.", ^{
-            
-            [a addHandlerForEvent:EVENT_NAME_A target:a];
-            
-            expect(^{
-                [a deferEvent:EVENT_NAME_A];
-            }).to.raise(TBSMException);
-        });
+    describe(@"Exception handling when adding event handlers.", ^{
         
         it(@"throws an exception when attempting to add event handler which makes no sense.", ^{
             
@@ -111,15 +93,6 @@ describe(@"TBSMState", ^{
         canHandle = [a canHandleEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
         expect(canHandle).to.equal(NO);
         
-    });
-    
-    it(@"should return YES if an event can be deferred.", ^{
-        
-        [a deferEvent:EVENT_NAME_A];
-        BOOL canHandle = [a canDeferEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
-        expect(canHandle).to.equal(YES);
-        canHandle = [a canDeferEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
-        expect(canHandle).to.equal(NO);
     });
     
     it(@"should return an array of TBSMEventHandler instances containing source and target state for a given event.", ^{

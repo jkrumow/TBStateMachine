@@ -1,5 +1,11 @@
 # TBStateMachine CHANGELOG
 
+## 5.1.0
+
+- thread safety increased
+- event scheduling is asynchronuous now
+- removed event deferral
+
 ## 5.0.0
 
 - clear separation between transition types external, local, internal when registering events

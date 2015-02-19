@@ -16,12 +16,11 @@ static NSString * const TBSMNonExistingStateExceptionReason = @"The specified st
 static NSString * const TBSMNoInitialStateExceptionReason = @"Initial state needs to be set on state machine %@.";
 static NSString * const TBSMNoNameForStateExceptionReason = @"State needs to have a valid name.";
 static NSString * const TBSMNoNameForEventExceptionReason = @"Event needs to have a valid name.";
-static NSString * const TBSMCannotDeferRegisteredEventExceptionReason = @"Can not defer an event %@ which is already registered.";
-static NSString * const TBSMCannotRegisterDeferredEventExceptionReason = @"Can not add a handler for  an event %@ which is already deferred.";
 static NSString * const TBSMNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBSMStateMachine.";
 static NSString * const TBSMMissingStateMachineExceptionReason = @"Containing state '%@' needs to be set up with a valid TBSMStateMachine instance.";
 static NSString * const TBSMNoLcaForTransitionExceptionReason = @"No transition possible for transition %@.";
-static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous transition attributes for event %@";
+static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous transition attributes for event %@.";
+static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue is not a serial queue %@.";
 
 @implementation NSException (TBStateMachine)
 
@@ -50,16 +49,6 @@ static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous tr
     return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForEventExceptionReason userInfo:nil];
 }
 
-+ (NSException *)tb_cannotDeferRegisteredEvent:(NSString *)eventName
-{
-	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMCannotDeferRegisteredEventExceptionReason, eventName] userInfo:nil];
-}
-
-+ (NSException *)tb_cannotRegisterDeferredEvent:(NSString *)eventName
-{
-	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMCannotRegisterDeferredEventExceptionReason, eventName] userInfo:nil];
-}
-
 + (NSException *)tb_notAStateMachineException:(id)object
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNotAStateMachineExceptionReason, object] userInfo:nil];
@@ -78,6 +67,11 @@ static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous tr
 + (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName
 {
 	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMAmbiguousTransitionAttributesReason, eventName] userInfo:nil];
+}
+
++ (NSException *)tb_noSerialQueueException:(NSString *)queueName
+{
+	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoSerialQueueExceptionReason, queueName] userInfo:nil];
 }
 
 @end

@@ -16,7 +16,6 @@ A lightweight hierarchical state machine implementation in Objective-C.
 * Wrapper class for orthogonal regions
 * External, internal and local transitions with guards and actions
 * State switching using least common ancestor algorithm (LCA)
-* Event deferral
 * NSNotificationCenter support
 
 ## Example Project
@@ -107,15 +106,6 @@ By default transitions are external. To define a transition kind explicitly choo
 [stateA addHandlerForEvent:@"EventA" target:stateA kind:TBSMTransitionInternal action:action guard:guard];
 [stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionLocal action:action guard:guard];
 ```
-
-#### Event Deferral
-
-Under certain conditions you may want to handle an event later in another state:
-
-```objective-c
-[stateA deferEvent:@"EventB"];
-```
-Now the event will be queued until another state has been entered which can consume the event.
 
 #### Scheduling Events
 

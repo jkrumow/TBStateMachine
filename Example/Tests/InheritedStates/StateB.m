@@ -14,11 +14,10 @@
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
     [self.executionSequence addObject:[NSString stringWithFormat:@"%@_enter", self.name]];
-    
-    [super enter:sourceState targetState:targetState data:data];
-    
     TBSMStateMachine *parentStateMachine = self.parentNode;
     [parentStateMachine scheduleEvent:[TBSMEvent eventWithName:@"DummyEventB" data:nil]];
+    
+    [super enter:sourceState targetState:targetState data:data];
 }
 
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data

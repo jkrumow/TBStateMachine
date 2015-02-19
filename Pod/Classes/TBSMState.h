@@ -50,11 +50,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 @property (nonatomic, strong, readonly) NSDictionary *eventHandlers;
 
 /**
- *  All `TBSMEvent` instances deferred by this state instance.
- */
-@property (nonatomic, strong, readonly) NSDictionary *deferredEvents;
-
-/**
  *  Creates a `TBSMState` instance from a given name.
  *
  *  Throws an exception when name is nil or an empty string.
@@ -80,9 +75,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  Registers an event of a given name for transition to a specified target state.
  *  Defaults to external transition.
  *
- *  Throws an exception if the specified event is already listed as deferred by this state.
- *  See deferevent:
- *
  *  @param event  The given event name.
  *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
  */
@@ -91,7 +83,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Registers an event of a given name for transition to a specified target state.
  *
- *  Throws an exception if the specified event is already listed as deferred by this state.
  *  Throws an exception if the parameters are ambiguous.
  *
  *  @param event  The given event name.
@@ -103,7 +94,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Registers an event of a given name for transition to a specified target state.
  *
- *  Throws an exception if the specified event is already listed as deferred by this state.
  *  Throws an exception if the parameters are ambiguous.
  *
  *  @param event  The given event name.
@@ -116,7 +106,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Registers an event of a given name for transition to a specified target state.
  *
- *  Throws an exception if the specified event is already listed as deferred by this state.
  *  Throws an exception if the parameters are ambiguous.
  *
  *  @param event  The given event name.
@@ -128,15 +117,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 - (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
- *  Registers an event of a given name which should be deferred when received by this state instance.
- *
- *  Throws an exception if the specified event is already registered on this state.
- *
- *  @param event  The given event name.
- */
-- (void)deferEvent:(NSString *)event;
-
-/**
  *  Returns `YES` if a given event can be handled by the state.
  *
  *  @param event The event to check.
@@ -144,15 +124,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @return `YES` if the event can be handled.
  */
 - (BOOL)canHandleEvent:(TBSMEvent *)event;
-
-/**
- *  Returns `YES` if a given event can be defered by the state.
- *
- *  @param event The event to check.
- *
- *  @return `YES` if the event can be defered.
- */
-- (BOOL)canDeferEvent:(TBSMEvent *)event;
 
 /**
  *  Returns an array of  `TBSMEventHandler` instances for a given event.

@@ -90,6 +90,7 @@ describe(@"InheritedStates", ^{
         subStateMachineB = nil;
     });
     
+    /*
     it(@"can deeply switch into and out of sub-state and parallel machines using least common ancestor algorithm while scheduling events from within the state.", ^{
         
         NSArray *expectedExecutionSequence = @[@"a_enter",
@@ -107,12 +108,10 @@ describe(@"InheritedStates", ^{
                                                @"a1_exit",
                                                @"a2_enter"];
         
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
-        [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
-        
         expect(executionSequence).to.equal(expectedExecutionSequence);
+        
     });
+     */
 });
 
 SpecEnd

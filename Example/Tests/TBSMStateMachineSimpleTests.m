@@ -7,6 +7,7 @@
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
+#import "TBSMStateMachine+TestHelper.h"
 
 SpecBegin(TBSMStateMachineSimple)
 
@@ -53,14 +54,14 @@ describe(@"TBSMStateMachine", ^{
             }).to.raise(TBSMException);
         });
         
-        it(@"throws TBSMException when state object is not of type TBSMState.", ^{
+        it(@"throws a TBSMException when state object is not of type TBSMState.", ^{
             id object = [NSObject new];
             expect(^{
                 stateMachine.states = @[a, b, object];
             }).to.raise(TBSMException);
         });
         
-        it(@"throws TBSMException when initial state does not exist in set of defined states.", ^{
+        it(@"throws a TBSMException when initial state does not exist in set of defined states.", ^{
             stateMachine.states = @[a, b];
             expect(^{
                 stateMachine.initialState = c;
@@ -68,7 +69,18 @@ describe(@"TBSMStateMachine", ^{
             
         });
         
-        it(@"throws an TBSMException when initial state has not been set on setup.", ^{
+        it(@"throws a TBSMException when initial state has not been set on setup.", ^{
+            expect(^{
+                [stateMachine setUp:nil];
+            }).to.raise(TBSMException);
+        });
+        
+        it(@"throws a TBSMException when the configured queue is not a serial queue.", ^{
+            
+            NSOperationQueue *queue = [NSOperationQueue new];
+            queue.maxConcurrentOperationCount = 10;
+            stateMachine.scheduledEventsQueue = queue;
+            
             expect(^{
                 [stateMachine setUp:nil];
             }).to.raise(TBSMException);
@@ -131,6 +143,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"switches to the specified state.", ^{
             
+            
             [a addHandlerForEvent:EVENT_A target:b kind:TBSMTransitionExternal];
             
             stateMachine.states = @[a, b];
@@ -138,8 +151,14 @@ describe(@"TBSMStateMachine", ^{
             
             expect(stateMachine.currentState).to.equal(a);
             
-            // enters state B
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
+            waitUntil(^(DoneCallback done) {
+                
+                // enters state B
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                    done();
+                }];
+                
+            });
             
             expect(stateMachine.currentState).to.equal(b);
         });
@@ -174,8 +193,14 @@ describe(@"TBSMStateMachine", ^{
             stateMachine.states = @[a, b];
             [stateMachine setUp:nil];
             
-            // will enter state B
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
+            waitUntil(^(DoneCallback done) {
+                
+                // will enter state B
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                    done();
+                }];
+                
+            });
             
             expect(executionSequence).to.equal(@"enterA-guardA-exitA-actionA-enterB");
         });
@@ -197,8 +222,13 @@ describe(@"TBSMStateMachine", ^{
             stateMachine.states = @[a, b];
             [stateMachine setUp:nil];
             
-            // will not enter state B
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
+            waitUntil(^(DoneCallback done) {
+                
+                // will not enter state B
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                    done();
+                }];
+            });
             
             expect(didExecuteAction).to.equal(NO);
             expect(stateMachine.currentState).to.equal(a);
@@ -232,8 +262,13 @@ describe(@"TBSMStateMachine", ^{
             stateMachine.states = @[a, b];
             [stateMachine setUp:nil];
             
-            // will enter state B through second transition
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
+            waitUntil(^(DoneCallback done) {
+                
+                // will enter state B through second transition
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                    done();
+                }];
+            });
             
             expect(didExecuteActionA).to.equal(NO);
             expect(didExecuteActionB).to.equal(YES);
@@ -308,9 +343,14 @@ describe(@"TBSMStateMachine", ^{
             expect(targetStateEnter).to.equal(a);
             expect(stateDataEnter).to.beNil;
             
-            // enters state B
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:eventDataA]];
-            
+            waitUntil(^(DoneCallback done) {
+                
+                // enters state B
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:eventDataA] withCompletion:^{
+                    done();
+                }];
+                
+            });
             expect(sourceStateExit).to.equal(a);
             expect(targetStateExit).to.equal(b);
             
@@ -358,7 +398,13 @@ describe(@"TBSMStateMachine", ^{
             [stateMachine setUp:nil];
             
             didEnterStateA = NO;
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
+            
+            waitUntil(^(DoneCallback done) {
+                
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                    done();
+                }];
+            });
             
             expect(stateMachine.currentState).to.equal(a);
             expect(didExitStateA).to.equal(YES);

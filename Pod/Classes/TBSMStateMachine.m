@@ -12,8 +12,6 @@
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, weak) id<TBSMNode> parentNode;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
-@property (nonatomic, strong) NSMutableArray *scheduledEventsQueue;
-@property (nonatomic, strong) NSMutableArray *deferredEventsQueue;
 @property (nonatomic, assign, getter = isHandlingEvent) BOOL handlesEvent;
 @end
 
@@ -33,8 +31,9 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _scheduledEventsQueue = [NSMutableArray new];
-        _deferredEventsQueue = [NSMutableArray new];
+        _scheduledEventsQueue = [[NSOperationQueue alloc] init];
+        self.scheduledEventsQueue.name = @"TBStateMachine.scheduledEventsQueue.serial";
+        self.scheduledEventsQueue.maxConcurrentOperationCount = 1;
         _handlesEvent = NO;
     }
     return self;
@@ -47,14 +46,17 @@
     } else {
         @throw [NSException tb_noInitialStateException:self.name];
     }
+    
+    if (self.scheduledEventsQueue.maxConcurrentOperationCount > 1) {
+        @throw [NSException tb_noSerialQueueException:self.scheduledEventsQueue.name];
+    }
 }
 
 - (void)tearDown:(NSDictionary *)data
 {
     [self exitState:self.currentState targetState:nil data:data];
     _currentState = nil;
-    [self.scheduledEventsQueue removeAllObjects];
-    [self.deferredEventsQueue removeAllObjects];
+    [self.scheduledEventsQueue cancelAllOperations];
 }
 
 - (NSArray *)states
@@ -99,18 +101,9 @@
         return;
     }
     
-    @synchronized(self) {
-        
-        [self.scheduledEventsQueue addObject:event];
-        
-        if (!self.isHandlingEvent) {
-            self.handlesEvent = YES;
-            while (self.scheduledEventsQueue.count > 0) {
-                [self _handleNextEvent];
-            }
-            self.handlesEvent = NO;
-        }
-    }
+    [self.scheduledEventsQueue addOperationWithBlock:^{
+        [self handleEvent:event];
+    }];
 }
 
 - (BOOL)handleEvent:(TBSMEvent *)event
@@ -131,42 +124,6 @@
         }
     }
     return NO;
-}
-
-- (void)_handleNextEvent
-{
-    if (self.scheduledEventsQueue.count > 0) {
-        
-        TBSMEvent *queuedEvent = self.scheduledEventsQueue[0];
-        [self.scheduledEventsQueue removeObject:queuedEvent];
-        
-        // Check wether the event is deferred by any state of the active state configuration.
-        BOOL isDeferred = NO;
-        NSSet *compositeDeferralList = [self _compoundDeferralListForActiveStateConfiguration];
-        if ([compositeDeferralList containsObject:queuedEvent.name]) {
-            isDeferred = YES;
-            
-            // If the event is deferred check wether higher prioritized states can consume the event.
-            NSSet *activeLeafStates = [self _leafStatesForActiveStateConfiguration];
-            for (TBSMState *activeLeafState in activeLeafStates) {
-                if ([activeLeafState canHandleEvent:queuedEvent]) {
-                    isDeferred = NO;
-                    break;
-                }
-            }
-        }
-        if (isDeferred) {
-            [self.deferredEventsQueue addObject:queuedEvent];
-        } else {
-            if ([self handleEvent:queuedEvent]) {
-                
-                // Since another state has been entered move all deferred events to the beginning of the event queue.
-                [self.scheduledEventsQueue insertObjects:self.deferredEventsQueue
-                                               atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.deferredEventsQueue.count)]];
-                [self.deferredEventsQueue removeAllObjects];
-            }
-        }
-    }
 }
 
 #pragma mark - State switching
@@ -203,26 +160,6 @@
 }
 
 #pragma Helper methods
-
-- (NSSet *)_compoundDeferralListForActiveStateConfiguration
-{
-    NSMutableSet *deferralList = NSMutableSet.new;
-    [self _traverseActiveStatemachineConfiguration:self usingBlock:^void(TBSMState *state) {
-        [deferralList unionSet:[NSSet setWithArray:state.deferredEvents.allKeys]];
-    }];
-    return deferralList;
-}
-
-- (NSSet *)_leafStatesForActiveStateConfiguration
-{
-    NSMutableSet *activeLeafStates = NSMutableSet.new;
-    [self _traverseActiveStatemachineConfiguration:self usingBlock:^void(TBSMState *state) {
-        if (!([state isKindOfClass:[TBSMSubState class]] || [state isKindOfClass:[TBSMParallelState class]])) {
-            [activeLeafStates unionSet:[NSSet setWithObject:state]];
-        }
-    }];
-    return activeLeafStates;
-}
 
 - (void)_traverseActiveStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void(^)(TBSMState *state))block
 {

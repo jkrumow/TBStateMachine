@@ -17,7 +17,6 @@ NSString * const TBSMDataUserInfo = @"data";
 @interface TBSMState ()
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSMutableDictionary *priv_eventHandlers;
-@property (nonatomic, strong) NSMutableDictionary *priv_deferredEvents;
 @end
 
 @implementation TBSMState
@@ -36,7 +35,6 @@ NSString * const TBSMDataUserInfo = @"data";
     if (self) {
         _name = name.copy;
         _priv_eventHandlers = [NSMutableDictionary new];
-        _priv_deferredEvents = [NSMutableDictionary new];
     }
     return self;
 }
@@ -44,11 +42,6 @@ NSString * const TBSMDataUserInfo = @"data";
 - (NSDictionary *)eventHandlers
 {
     return self.priv_eventHandlers.copy;
-}
-
-- (NSDictionary *)deferredEvents
-{
-    return self.priv_deferredEvents.copy;
 }
 
 - (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target
@@ -68,9 +61,6 @@ NSString * const TBSMDataUserInfo = @"data";
 
 - (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
-    if ([self.priv_deferredEvents objectForKey:event])  {
-        @throw [NSException tb_cannotRegisterDeferredEvent:event];
-    }
     if (kind == TBSMTransitionInternal) {
         if (!(self == target || target == nil)) {
             @throw [NSException tb_ambiguousTransitionAttributes:event];
@@ -87,22 +77,9 @@ NSString * const TBSMDataUserInfo = @"data";
     [eventHandlers addObject:eventHandler];
 }
 
-- (void)deferEvent:(NSString *)event
-{
-    if ([self.priv_eventHandlers objectForKey:event])  {
-        @throw [NSException tb_cannotDeferRegisteredEvent:event];
-    }
-    [self.priv_deferredEvents setObject:event forKey:event];
-}
-
 - (BOOL)canHandleEvent:(TBSMEvent *)event
 {
     return ([self.priv_eventHandlers objectForKey:event.name] != nil);
-}
-
-- (BOOL)canDeferEvent:(TBSMEvent *)event
-{
-    return ([self.priv_deferredEvents objectForKey:event.name] != nil);
 }
 
 - (NSArray *)eventHandlersForEvent:(TBSMEvent *)event

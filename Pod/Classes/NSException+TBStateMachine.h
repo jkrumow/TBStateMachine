@@ -63,24 +63,6 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_noNameForEventException;
 
 /**
- *  Thrown when attempting to register a `TBSMEvent` instance which has already been defined as deferred.
- *
- *  @param eventName The name of the specified event.
- *
- *  @return The `NSException` instance.
- */
-+ (NSException *)tb_cannotDeferRegisteredEvent:(NSString *)eventName;
-
-/**
- *  Thrown when attempting to define a `TBSMEvent` as deferred instance which has already been registered.
- *
- *  @param eventName The name of the specified event.
- *
- *  @return The `NSException` instance.
- */
-+ (NSException *)tb_cannotRegisterDeferredEvent:(NSString *)eventName;
-
-/**
  *  Thrown when a given object is not of type `TBSMStateMachine`.
  *
  *  The `reason:` will contain a description of the object.
@@ -114,8 +96,17 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @param eventName The name of the specified event.
  *
- *  @return THe `NSException` instance.
+ *  @return The `NSException` instance.
  */
 + (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName;
+
+/**
+ *  Thrown when an NSOperaionQueue has been set which is not serial.
+ *
+ *  @param queueName The name of the queue.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_noSerialQueueException:(NSString *)queueName;
 
 @end
