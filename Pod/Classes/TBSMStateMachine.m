@@ -39,14 +39,14 @@
 
 - (void)setUp:(NSDictionary *)data
 {
+    if (self.scheduledEventsQueue.maxConcurrentOperationCount > 1) {
+        @throw [NSException tb_noSerialQueueException:self.scheduledEventsQueue.name];
+    }
+    
     if (self.initialState) {
         [self enterState:nil targetState:self.initialState data:data];
     } else {
         @throw [NSException tb_noInitialStateException:self.name];
-    }
-    
-    if (self.scheduledEventsQueue.maxConcurrentOperationCount > 1) {
-        @throw [NSException tb_noSerialQueueException:self.scheduledEventsQueue.name];
     }
 }
 

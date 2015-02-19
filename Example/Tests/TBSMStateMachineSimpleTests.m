@@ -76,7 +76,6 @@ describe(@"TBSMStateMachine", ^{
         });
         
         it(@"throws a TBSMException when the configured queue is not a serial queue.", ^{
-            
             NSOperationQueue *queue = [NSOperationQueue new];
             queue.maxConcurrentOperationCount = 10;
             stateMachine.scheduledEventsQueue = queue;
