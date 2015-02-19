@@ -7,6 +7,7 @@
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
+#import "TBSMStateMachine+TestHelper.h"
 
 #import "StateA.h"
 #import "StateB.h"
@@ -15,8 +16,9 @@
 
 SpecBegin(InheritedStates)
 
-NSString * const EVENT_A = @"DummyEventA";
-NSString * const EVENT_B = @"DummyEventB";
+NSString * const EVENT_A1 = @"event_a1";
+NSString * const EVENT_A2 = @"event_a2";
+NSString * const EVENT_B2 = @"event_b2";
 
 __block TBSMStateMachine *stateMachine;
 
@@ -60,9 +62,10 @@ describe(@"InheritedStates", ^{
         b1.executionSequence = executionSequence;
         b2.executionSequence = executionSequence;
         
-        [a1 addHandlerForEvent:EVENT_A target:a2];
-        [a2 addHandlerForEvent:EVENT_A target:b2];
-        [b2 addHandlerForEvent:EVENT_B target:a1];
+        [a1 addHandlerForEvent:EVENT_A1 target:a2];
+        [a2 addHandlerForEvent:EVENT_A2 target:b2];
+        
+        [b2 addHandlerForEvent:EVENT_B2 target:a1];
         
         subStateMachineA.states = @[a1, a2];
         subStateMachineB.states = @[b1, b2];
@@ -72,6 +75,8 @@ describe(@"InheritedStates", ^{
         
         stateMachine.states = @[a, b];
         [stateMachine setUp:nil];
+        
+        [executionSequence removeAllObjects];
     });
     
     afterEach(^{
@@ -90,12 +95,9 @@ describe(@"InheritedStates", ^{
         subStateMachineB = nil;
     });
     
-    /*
     it(@"can deeply switch into and out of sub-state and parallel machines using least common ancestor algorithm while scheduling events from within the state.", ^{
         
-        NSArray *expectedExecutionSequence = @[@"a_enter",
-                                               @"a1_enter",
-                                               @"a1_exit",
+        NSArray *expectedExecutionSequence = @[@"a1_exit",
                                                @"a2_enter",
                                                @"a2_exit",
                                                @"a_exit",
@@ -104,14 +106,20 @@ describe(@"InheritedStates", ^{
                                                @"b2_exit",
                                                @"b_exit",
                                                @"a_enter",
-                                               @"a1_enter",
-                                               @"a1_exit",
-                                               @"a2_enter"];
+                                               @"a1_enter"];
+        
+        waitUntil(^(DoneCallback done) {
+            
+            a1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+                done();
+            };
+            
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A1 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A2 data:nil]];
+        });
         
         expect(executionSequence).to.equal(expectedExecutionSequence);
-        
     });
-     */
 });
 
 SpecEnd

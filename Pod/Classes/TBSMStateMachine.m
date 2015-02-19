@@ -12,7 +12,6 @@
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, weak) id<TBSMNode> parentNode;
 @property (nonatomic, strong) NSMutableDictionary *priv_states;
-@property (nonatomic, assign, getter = isHandlingEvent) BOOL handlesEvent;
 @end
 
 @implementation TBSMStateMachine
@@ -34,7 +33,6 @@
         _scheduledEventsQueue = [[NSOperationQueue alloc] init];
         self.scheduledEventsQueue.name = @"TBStateMachine.scheduledEventsQueue.serial";
         self.scheduledEventsQueue.maxConcurrentOperationCount = 1;
-        _handlesEvent = NO;
     }
     return self;
 }
@@ -157,23 +155,6 @@
 - (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
     [self.currentState exit:sourceState targetState:targetState data:data];
-}
-
-#pragma Helper methods
-
-- (void)_traverseActiveStatemachineConfiguration:(TBSMStateMachine *)stateMachine usingBlock:(void(^)(TBSMState *state))block
-{
-    TBSMState *state = stateMachine.currentState;
-    block(state);
-    if ([state isKindOfClass:[TBSMSubState class]]) {
-        TBSMSubState *subState = (TBSMSubState *)state;
-        [self _traverseActiveStatemachineConfiguration:subState.stateMachine usingBlock:block];
-    } else if ([state isKindOfClass:[TBSMParallelState class]]) {
-        TBSMParallelState *parallelState = (TBSMParallelState *)state;
-        for (TBSMStateMachine *stateMachine in parallelState.stateMachines) {
-            [self _traverseActiveStatemachineConfiguration:stateMachine usingBlock:block];
-        }
-    }
 }
 
 #pragma mark - TBSMNode

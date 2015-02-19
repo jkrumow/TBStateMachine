@@ -119,7 +119,18 @@ describe(@"TBSMStateMachine", ^{
     
     describe(@"State switching.", ^{
         
-        it(@"enters initial state on set up.", ^{
+        it(@"enters initial state on set up when it has been set explicitly.", ^{
+            
+            stateMachine.states = @[a, b];
+            stateMachine.initialState = a;
+            
+            [stateMachine setUp:nil];
+            
+            expect(stateMachine.currentState).to.equal(stateMachine.initialState);
+            expect(stateMachine.currentState).to.equal(a);
+        });
+        
+        it(@"enters initial state on set up when it has been set implicitly.", ^{
             
             stateMachine.states = @[a, b];
             
@@ -142,7 +153,6 @@ describe(@"TBSMStateMachine", ^{
         });
         
         it(@"switches to the specified state.", ^{
-            
             
             [a addHandlerForEvent:EVENT_A target:b kind:TBSMTransitionExternal];
             
