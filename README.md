@@ -16,6 +16,7 @@ A lightweight hierarchical state machine implementation in Objective-C.
 * Wrapper class for orthogonal regions
 * External, internal and local transitions with guards and actions
 * State switching using least common ancestor algorithm (LCA)
+* Thread safe event handling / run to completion is asynchronuous
 * NSNotificationCenter support
 
 ## Example Project
