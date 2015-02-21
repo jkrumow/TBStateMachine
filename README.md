@@ -16,7 +16,8 @@ A lightweight hierarchical state machine implementation in Objective-C.
 * Wrapper class for orthogonal regions
 * External, internal and local transitions with guards and actions
 * State switching using least common ancestor algorithm (LCA)
-* Thread safe event handling / run to completion is asynchronuous
+* Thread safe event handling
+* Asynchronous event handling
 * NSNotificationCenter support
 
 ## Example Project
@@ -157,6 +158,19 @@ The notification's `userInfo` contains:
     TBSMTargetStateUserInfo:theTargetState,
     TBSMDataUserInfo:theData
 }
+```
+
+### Thread Safety and Concurrency
+
+`TBStateMachine` is thread safe. Each event is processed following the RTC (Run To Completion) model, encapsulated in a block which is dispatched asynchronously to the main queue by default.
+
+To use a custom queue simply set:
+
+```objective-c
+NSOperationQueue *queue = [NSOperationQueue new];
+queue.name = @"com.mycompany.queue";
+queue.maxConcurrentOperationCount = 1;
+stateMachine.scheduledEventsQueue = queue;
 ```
 
 ## Author
