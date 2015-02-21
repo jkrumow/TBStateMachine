@@ -79,9 +79,11 @@ describe(@"TBSMStateMachine", ^{
             NSOperationQueue *queue = [NSOperationQueue new];
             queue.maxConcurrentOperationCount = 10;
             stateMachine.scheduledEventsQueue = queue;
+            stateMachine.states = @[a, b];
+            [stateMachine setUp:nil];
             
             expect(^{
-                [stateMachine setUp:nil];
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil]];
             }).to.raise(TBSMException);
         });
     });

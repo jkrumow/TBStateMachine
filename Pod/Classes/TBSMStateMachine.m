@@ -37,10 +37,6 @@
 
 - (void)setUp:(NSDictionary *)data
 {
-    if (self.scheduledEventsQueue.maxConcurrentOperationCount > 1) {
-        @throw [NSException tb_noSerialQueueException:self.scheduledEventsQueue.name];
-    }
-    
     if (self.initialState) {
         [self enterState:nil targetState:self.initialState data:data];
     } else {
@@ -50,9 +46,9 @@
 
 - (void)tearDown:(NSDictionary *)data
 {
+    [self.scheduledEventsQueue cancelAllOperations];
     [self exitState:self.currentState targetState:nil data:data];
     _currentState = nil;
-    [self.scheduledEventsQueue cancelAllOperations];
 }
 
 - (NSArray *)states
@@ -97,6 +93,9 @@
         return;
     }
     
+    if (self.scheduledEventsQueue.maxConcurrentOperationCount > 1) {
+        @throw [NSException tb_noSerialQueueException:self.scheduledEventsQueue.name];
+    }
     [self.scheduledEventsQueue addOperationWithBlock:^{
         [self handleEvent:event];
     }];
