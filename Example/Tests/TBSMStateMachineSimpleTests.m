@@ -19,7 +19,7 @@ __block TBSMStateMachine *stateMachine;
 __block TBSMState *a;
 __block TBSMState *b;
 __block TBSMState *c;
-__block NSDictionary *eventDataA;
+__block NSDictionary *data;
 
 describe(@"TBSMStateMachine", ^{
     
@@ -28,7 +28,7 @@ describe(@"TBSMStateMachine", ^{
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];
         c = [TBSMState stateWithName:@"c"];
-        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
+        data = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
     });
     
     afterEach(^{
@@ -37,7 +37,7 @@ describe(@"TBSMStateMachine", ^{
         a = nil;
         b = nil;
         c = nil;
-        eventDataA = nil;
+        data = nil;
     });
     
     describe(@"Exception handling on setup.", ^{
@@ -114,6 +114,32 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachineXYZ.name).to.equal(@"StateMachineXYZ");
         });
         
+    });
+    
+    describe(@"NSNotifications.", ^{
+        
+        it(@"posts a notification when entering the specified state.", ^{
+            
+            NSNotification *notification = [NSNotification notificationWithName:@"a_DidEnterNotification" object:a userInfo:@{TBSMTargetStateUserInfo:a, TBSMDataUserInfo:data}];
+            
+            stateMachine.states = @[a];
+            
+            expect(^{
+                [stateMachine setUp:data];
+            }).to.notify(notification);
+        });
+        
+        it(@"posts a notification when exiting the specified state.", ^{
+            
+            NSNotification *notification = [NSNotification notificationWithName:@"a_DidExitNotification" object:a userInfo:@{TBSMSourceStateUserInfo:a, TBSMDataUserInfo:data}];
+            
+            stateMachine.states = @[a];
+            [stateMachine setUp:nil];
+            
+            expect(^{
+                [stateMachine tearDown:data];
+            }).to.notify(notification);
+        });
     });
     
     describe(@"State switching.", ^{
@@ -355,7 +381,7 @@ describe(@"TBSMStateMachine", ^{
             waitUntil(^(DoneCallback done) {
                 
                 // enters state B
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:eventDataA] withCompletion:^{
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:data] withCompletion:^{
                     done();
                 }];
                 
@@ -363,17 +389,17 @@ describe(@"TBSMStateMachine", ^{
             expect(sourceStateExit).to.equal(a);
             expect(targetStateExit).to.equal(b);
             
-            expect(stateDataExit).to.equal(eventDataA);
+            expect(stateDataExit).to.equal(data);
             expect(stateDataExit.allKeys).haveCountOf(1);
             expect(stateDataExit[EVENT_DATA_KEY]).toNot.beNil;
             expect(stateDataExit[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
             
-            expect(guardData).to.equal(eventDataA);
+            expect(guardData).to.equal(data);
             expect(guardData.allKeys).haveCountOf(1);
             expect(guardData[EVENT_DATA_KEY]).toNot.beNil;
             expect(guardData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
             
-            expect(actionData).to.equal(eventDataA);
+            expect(actionData).to.equal(data);
             expect(actionData.allKeys).haveCountOf(1);
             expect(actionData[EVENT_DATA_KEY]).toNot.beNil;
             expect(actionData[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);
@@ -381,7 +407,7 @@ describe(@"TBSMStateMachine", ^{
             expect(sourceStateEnter).to.equal(a);
             expect(targetStateEnter).to.equal(b);
             
-            expect(stateDataEnter).to.equal(eventDataA);
+            expect(stateDataEnter).to.equal(data);
             expect(stateDataEnter.allKeys).haveCountOf(1);
             expect(stateDataEnter[EVENT_DATA_KEY]).toNot.beNil;
             expect(stateDataEnter[EVENT_DATA_KEY]).to.equal(EVENT_DATA_VALUE);

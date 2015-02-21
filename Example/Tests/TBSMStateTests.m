@@ -28,7 +28,7 @@ describe(@"TBSMState", ^{
         b = nil;
     });
     
-    describe(@"Exception handling on setup.", ^{
+    describe(@"Exception handling.", ^{
         
         it (@"throws a TBSMException when name is nil.", ^{
             
@@ -44,6 +44,21 @@ describe(@"TBSMState", ^{
                 [TBSMState stateWithName:@""];
             }).to.raise(TBSMException);
             
+        });
+        
+        it(@"throws an exception when attempting to add event handler which makes no sense.", ^{
+            
+            expect(^{
+                [a addHandlerForEvent:EVENT_NAME_A target:b kind:TBSMTransitionInternal];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionExternal];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionLocal];
+            }).to.raise(TBSMException);
         });
         
     });
@@ -65,24 +80,6 @@ describe(@"TBSMState", ^{
         expect(eventHandlers.count).to.equal(1);
         TBSMEventHandler *eventHandler = eventHandlers[0];
         expect(eventHandler.target).to.equal(a);
-    });
-    
-    describe(@"Exception handling when adding event handlers.", ^{
-        
-        it(@"throws an exception when attempting to add event handler which makes no sense.", ^{
-            
-            expect(^{
-                [a addHandlerForEvent:EVENT_NAME_A target:b kind:TBSMTransitionInternal];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionExternal];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionLocal];
-            }).to.raise(TBSMException);
-        });
     });
     
     it(@"should return YES if an event can be handled.", ^{

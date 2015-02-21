@@ -27,7 +27,6 @@ NSString * const TRANSITION_12 = @"transition_12";
 NSString * const TRANSITION_13 = @"transition_13";
 NSString * const TRANSITION_14 = @"transition_14";
 NSString * const TRANSITION_BROKEN_LOCAL = @"transition_broken_local";
-NSString * const TRANSITION_BROKEN_EXTERNAL = @"transition_broken_external";
 
 NSString * const EVENT_DATA_KEY = @"DummyDataKey";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
@@ -243,8 +242,8 @@ describe(@"TBSMStateMachine", ^{
         [b addHandlerForEvent:TRANSITION_8 target:b22 kind:TBSMTransitionLocal];
         [b22 addHandlerForEvent:TRANSITION_9 target:b kind:TBSMTransitionLocal];
         
+        // local transitions beconing external
         [b addHandlerForEvent:TRANSITION_BROKEN_LOCAL target:a3 kind:TBSMTransitionLocal];
-        [a1 addHandlerForEvent:TRANSITION_BROKEN_EXTERNAL target:z];
         
         // internal transitions
         [a1 addHandlerForEvent:TRANSITION_10 target:a1 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
@@ -599,16 +598,6 @@ describe(@"TBSMStateMachine", ^{
         expect(subStateMachineB.currentState).to.equal(b2);
         expect(subStateMachineB2.currentState).to.equal(b22);
     });
-    
-    /*
-    it(@"throws an exception when no lca could be found for an external transition.", ^{
-        
-        expect(^{
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_BROKEN_EXTERNAL data:nil]];
-        }).to.raise(TBSMException);
-        
-    });
-     */
 });
 
 SpecEnd
