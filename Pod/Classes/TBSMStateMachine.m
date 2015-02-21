@@ -35,22 +35,6 @@
     return self;
 }
 
-- (void)setUp:(NSDictionary *)data
-{
-    if (self.initialState) {
-        [self enterState:nil targetState:self.initialState data:data];
-    } else {
-        @throw [NSException tb_noInitialStateException:self.name];
-    }
-}
-
-- (void)tearDown:(NSDictionary *)data
-{
-    [self.scheduledEventsQueue cancelAllOperations];
-    [self exitState:self.currentState targetState:nil data:data];
-    _currentState = nil;
-}
-
 - (NSArray *)states
 {
     return [NSArray arrayWithArray:self.priv_states.allValues];
@@ -83,6 +67,30 @@
     }
 }
 
+- (void)setScheduledEventsQueue:(NSOperationQueue *)scheduledEventsQueue
+{
+    if (scheduledEventsQueue.maxConcurrentOperationCount > 1) {
+        @throw [NSException tb_noSerialQueueException:scheduledEventsQueue.name];
+    }
+    _scheduledEventsQueue = scheduledEventsQueue;
+}
+
+- (void)setUp:(NSDictionary *)data
+{
+    if (self.initialState) {
+        [self enterState:nil targetState:self.initialState data:data];
+    } else {
+        @throw [NSException tb_noInitialStateException:self.name];
+    }
+}
+
+- (void)tearDown:(NSDictionary *)data
+{
+    [self.scheduledEventsQueue cancelAllOperations];
+    [self exitState:self.currentState targetState:nil data:data];
+    _currentState = nil;
+}
+
 #pragma mark - handling events
 
 - (void)scheduleEvent:(TBSMEvent *)event
@@ -93,9 +101,6 @@
         return;
     }
     
-    if (self.scheduledEventsQueue.maxConcurrentOperationCount > 1) {
-        @throw [NSException tb_noSerialQueueException:self.scheduledEventsQueue.name];
-    }
     [self.scheduledEventsQueue addOperationWithBlock:^{
         [self handleEvent:event];
     }];

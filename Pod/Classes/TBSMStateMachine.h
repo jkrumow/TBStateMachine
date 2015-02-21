@@ -28,6 +28,12 @@
  */
 @interface TBSMStateMachine : NSObject <TBSMNode>
 
+/**
+ *  The operation queue to handle the run to completion steps.
+ *  Should be serial.
+ *
+ *  Throws an exception when trying to set a queue which is not serial.
+ */
 @property (nonatomic, strong) NSOperationQueue *scheduledEventsQueue;
 
 /**

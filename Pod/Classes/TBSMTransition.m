@@ -38,6 +38,14 @@
     return self;
 }
 
+- (NSString *)name
+{
+    if (self.targetState == nil) {
+        return self.sourceState.name;
+    }
+    return [NSString stringWithFormat:@"%@_to_%@", self.sourceState.name, self.targetState.name];
+}
+
 - (TBSMStateMachine *)_findLeastCommonAncestor
 {
     NSArray *sourcePath = [self.sourceState path];
@@ -79,14 +87,6 @@
         return YES;
     }
     return NO;
-}
-
-- (NSString *)name
-{
-    if (self.targetState == nil) {
-        return self.sourceState.name;
-    }
-    return [NSString stringWithFormat:@"%@_to_%@", self.sourceState.name, self.targetState.name];
 }
 
 @end

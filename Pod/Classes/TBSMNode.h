@@ -42,7 +42,7 @@
 - (id<TBSMNode>)parentNode;
 
 /**
- *  Sets the parent node.
+ *  Sets the parent node in the state machine hierarchy.
  *
  *  @param parentNode The parent node.
  */
