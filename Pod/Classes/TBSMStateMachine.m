@@ -30,9 +30,7 @@
     if (self) {
         _name = name.copy;
         _priv_states = [NSMutableDictionary new];
-        _scheduledEventsQueue = [[NSOperationQueue alloc] init];
-        self.scheduledEventsQueue.name = @"TBStateMachine.scheduledEventsQueue.serial";
-        self.scheduledEventsQueue.maxConcurrentOperationCount = 1;
+        _scheduledEventsQueue = [NSOperationQueue mainQueue];
     }
     return self;
 }
