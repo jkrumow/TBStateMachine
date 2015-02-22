@@ -126,7 +126,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 - (BOOL)hasHandlerForEvent:(TBSMEvent *)event;
 
 /**
- *  Returns an array of  `TBSMEventHandler` instances for a given event.
+ *  Returns an array of `TBSMEventHandler` instances for a given event.
  *
  *  @param event The event to handle
  *
@@ -137,6 +137,8 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Executes the enter block of the state.
  *
+ *  If you overwrite this method you will need to call the super implementation.
+ *
  *  @param sourceState The source state.
  *  @param targetState The target state.
  *  @param data        The payload data.
@@ -145,6 +147,8 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 
 /**
  *  Executes the exit block of the state.
+ *
+ *  If you overwrite this method you will need to call the super implementation.
  *
  *  @param sourceState The source state.
  *  @param targetState The target state.
