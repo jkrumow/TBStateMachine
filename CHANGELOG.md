@@ -4,6 +4,7 @@
 
 - thread safety increased
 - event scheduling is asynchronuous now
+- simplified notification handling
 - removed event deferral
 
 ## 5.0.0

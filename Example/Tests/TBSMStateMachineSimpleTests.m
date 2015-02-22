@@ -435,7 +435,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"posts a notification when entering the specified state.", ^{
             
-            NSNotification *notification = [NSNotification notificationWithName:@"a_DidEnterNotification" object:a userInfo:@{TBSMTargetStateUserInfo:a, TBSMDataUserInfo:data}];
+            NSNotification *notification = [NSNotification notificationWithName:TBSMStateDidEnterNotification object:a userInfo:@{TBSMTargetStateUserInfo:a, TBSMDataUserInfo:data}];
             
             stateMachine.states = @[a];
             
@@ -446,7 +446,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"posts a notification when exiting the specified state.", ^{
             
-            NSNotification *notification = [NSNotification notificationWithName:@"a_DidExitNotification" object:a userInfo:@{TBSMSourceStateUserInfo:a, TBSMDataUserInfo:data}];
+            NSNotification *notification = [NSNotification notificationWithName:TBSMStateDidExitNotification object:a userInfo:@{TBSMSourceStateUserInfo:a, TBSMDataUserInfo:data}];
             
             stateMachine.states = @[a];
             [stateMachine setUp:nil];

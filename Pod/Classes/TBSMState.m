@@ -10,6 +10,8 @@
 #import "NSException+TBStateMachine.h"
 #import "TBSMEventHandler.h"
 
+NSString * const TBSMStateDidEnterNotification = @"TBSMStateDidEnterNotification";
+NSString * const TBSMStateDidExitNotification = @"TBSMStateDidExitNotification";
 NSString * const TBSMSourceStateUserInfo = @"sourceState";
 NSString * const TBSMTargetStateUserInfo = @"targetState";
 NSString * const TBSMDataUserInfo = @"data";
@@ -92,8 +94,7 @@ NSString * const TBSMDataUserInfo = @"data";
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    NSString *name = [NSString stringWithFormat:@"%@_DidEnterNotification", self.name];
-    [self _postNotificationWithName:name sourceState:sourceState targetState:targetState data:data];
+    [self _postNotificationWithName:TBSMStateDidEnterNotification sourceState:sourceState targetState:targetState data:data];
     
     if (_enterBlock) {
         _enterBlock(sourceState, targetState, data);
@@ -102,8 +103,7 @@ NSString * const TBSMDataUserInfo = @"data";
 
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    NSString *name = [NSString stringWithFormat:@"%@_DidExitNotification", self.name];
-    [self _postNotificationWithName:name sourceState:sourceState targetState:targetState data:data];
+    [self _postNotificationWithName:TBSMStateDidExitNotification sourceState:sourceState targetState:targetState data:data];
     
     if (_exitBlock) {
         _exitBlock(sourceState, targetState, data);

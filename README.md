@@ -148,7 +148,10 @@ stateMachine.states = @[stateA, stateB, parallel];
 
 ### Notfications
 
-`TBSMState` posts NSNotifications on entry and exit. The naming scheme is `[state name]_DidEnterNotification` and `[state name]_DidExitNotification`.
+`TBSMState` posts NSNotifications on entry and exit:
+
+* TBSMStateDidEnterNotification
+* TBSMStateDidExitNotification
 
 The notification's `userInfo` contains:
 

@@ -11,6 +11,8 @@
 #import "TBSMNode.h"
 #import "TBSMTransitionKind.h"
 
+FOUNDATION_EXPORT NSString * const TBSMStateDidEnterNotification;
+FOUNDATION_EXPORT NSString * const TBSMStateDidExitNotification;
 FOUNDATION_EXPORT NSString * const TBSMSourceStateUserInfo;
 FOUNDATION_EXPORT NSString * const TBSMTargetStateUserInfo;
 FOUNDATION_EXPORT NSString * const TBSMDataUserInfo;
