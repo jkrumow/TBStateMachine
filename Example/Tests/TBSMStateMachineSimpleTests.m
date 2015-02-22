@@ -75,13 +75,24 @@ describe(@"TBSMStateMachine", ^{
             }).to.raise(TBSMException);
         });
         
-        it(@"throws a TBSMException when the configured queue is not a serial queue.", ^{
+        it(@"throws a TBSMException when the scheduledEventsQueue is not a serial queue.", ^{
             NSOperationQueue *queue = [NSOperationQueue new];
             queue.maxConcurrentOperationCount = 10;
             
             expect(^{
                 stateMachine.scheduledEventsQueue = queue;
             }).to.raise(TBSMException);
+        });
+    });
+    
+    describe(@"Setup and configuration.", ^{
+        
+        it(@"accepts a serial NSOperationQueue as scheduledEventsQueue.", ^{
+            NSOperationQueue *queue = [NSOperationQueue new];
+            queue.maxConcurrentOperationCount = 1;
+            stateMachine.scheduledEventsQueue = queue;
+            
+            expect(stateMachine.scheduledEventsQueue).to.equal(queue);
         });
     });
     
@@ -113,32 +124,6 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachineXYZ.name).to.equal(@"StateMachineXYZ");
         });
         
-    });
-    
-    describe(@"NSNotifications.", ^{
-        
-        it(@"posts a notification when entering the specified state.", ^{
-            
-            NSNotification *notification = [NSNotification notificationWithName:@"a_DidEnterNotification" object:a userInfo:@{TBSMTargetStateUserInfo:a, TBSMDataUserInfo:data}];
-            
-            stateMachine.states = @[a];
-            
-            expect(^{
-                [stateMachine setUp:data];
-            }).to.notify(notification);
-        });
-        
-        it(@"posts a notification when exiting the specified state.", ^{
-            
-            NSNotification *notification = [NSNotification notificationWithName:@"a_DidExitNotification" object:a userInfo:@{TBSMSourceStateUserInfo:a, TBSMDataUserInfo:data}];
-            
-            stateMachine.states = @[a];
-            [stateMachine setUp:nil];
-            
-            expect(^{
-                [stateMachine tearDown:data];
-            }).to.notify(notification);
-        });
     });
     
     describe(@"State switching.", ^{
@@ -443,6 +428,32 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachine.currentState).to.equal(a);
             expect(didExitStateA).to.equal(YES);
             expect(didEnterStateA).to.equal(YES);
+        });
+    });
+    
+    describe(@"NSNotificationCenter support.", ^{
+        
+        it(@"posts a notification when entering the specified state.", ^{
+            
+            NSNotification *notification = [NSNotification notificationWithName:@"a_DidEnterNotification" object:a userInfo:@{TBSMTargetStateUserInfo:a, TBSMDataUserInfo:data}];
+            
+            stateMachine.states = @[a];
+            
+            expect(^{
+                [stateMachine setUp:data];
+            }).to.notify(notification);
+        });
+        
+        it(@"posts a notification when exiting the specified state.", ^{
+            
+            NSNotification *notification = [NSNotification notificationWithName:@"a_DidExitNotification" object:a userInfo:@{TBSMSourceStateUserInfo:a, TBSMDataUserInfo:data}];
+            
+            stateMachine.states = @[a];
+            [stateMachine setUp:nil];
+            
+            expect(^{
+                [stateMachine tearDown:data];
+            }).to.notify(notification);
         });
     });
 });
