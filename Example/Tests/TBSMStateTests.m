@@ -85,9 +85,9 @@ describe(@"TBSMState", ^{
     it(@"should return YES if an event can be handled.", ^{
         
         [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
-        BOOL canHandle = [a canHandleEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
+        BOOL canHandle = [a hasHandlerForEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
         expect(canHandle).to.equal(YES);
-        canHandle = [a canHandleEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
+        canHandle = [a hasHandlerForEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
         expect(canHandle).to.equal(NO);
         
     });

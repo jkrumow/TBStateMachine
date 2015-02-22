@@ -77,14 +77,14 @@ NSString * const TBSMDataUserInfo = @"data";
     [eventHandlers addObject:eventHandler];
 }
 
-- (BOOL)canHandleEvent:(TBSMEvent *)event
+- (BOOL)hasHandlerForEvent:(TBSMEvent *)event
 {
     return ([self.priv_eventHandlers objectForKey:event.name] != nil);
 }
 
 - (NSArray *)eventHandlersForEvent:(TBSMEvent *)event
 {
-    if ([self canHandleEvent:event]) {
+    if ([self hasHandlerForEvent:event]) {
         return [self.priv_eventHandlers objectForKey:event.name];
     }
     return nil;

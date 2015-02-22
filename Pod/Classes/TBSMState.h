@@ -117,13 +117,13 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 - (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
- *  Returns `YES` if a given event can be handled by the state.
+ *  Returns `YES` if a given event can be consumed by the state.
  *
  *  @param event The event to check.
  *
- *  @return `YES` if the event can be handled.
+ *  @return `YES` if the event can be consumed.
  */
-- (BOOL)canHandleEvent:(TBSMEvent *)event;
+- (BOOL)hasHandlerForEvent:(TBSMEvent *)event;
 
 /**
  *  Returns an array of  `TBSMEventHandler` instances for a given event.
