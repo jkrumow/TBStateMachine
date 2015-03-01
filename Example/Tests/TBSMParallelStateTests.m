@@ -77,6 +77,17 @@ describe(@"TBSMParallelState", ^{
         
     });
     
+    describe(@"getters", ^{
+        
+        it(@"return the stored states.", ^{
+            parallelStates.stateMachines = @[subStateMachineA, subStateMachineB];
+            expect(parallelStates.stateMachines).haveCountOf(2);
+            expect(parallelStates.stateMachines).contain(subStateMachineA);
+            expect(parallelStates.stateMachines).contain(subStateMachineB);
+        });
+    });
+    
+    
     it(@"enters and exits all initial states", ^{
         
         subStateMachineA.states = @[a];

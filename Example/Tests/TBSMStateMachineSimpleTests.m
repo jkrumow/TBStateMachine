@@ -119,11 +119,21 @@ describe(@"TBSMStateMachine", ^{
             expect(path[2]).to.equal(subStateMachineB);
         });
         
+    });
+    
+    describe(@"getters", ^{
+        
         it(@"returns its name.", ^{
             TBSMStateMachine *stateMachineXYZ = [TBSMStateMachine stateMachineWithName:@"StateMachineXYZ"];
             expect(stateMachineXYZ.name).to.equal(@"StateMachineXYZ");
         });
         
+        it(@"return the stored states.", ^{
+            stateMachine.states = @[a, b];
+            expect(stateMachine.states).haveCountOf(2);
+            expect(stateMachine.states).contain(a);
+            expect(stateMachine.states).contain(b);
+        });
     });
     
     describe(@"State switching.", ^{
