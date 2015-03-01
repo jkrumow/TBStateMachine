@@ -163,6 +163,21 @@ The notification's `userInfo` contains:
 }
 ```
 
+To receive a notification:
+
+```objective-c
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myHandler:) name:TBSMStateDidEnterNotification object:stateA];
+
+- (void)myHandler:(NSNotification *)notification
+{
+    NSDictionary *data = notification.userInfo[TBSMDataUserInfo];
+    
+    id myPayloadObject = data[@"myPayload"];
+    
+    // ...
+}
+```
+
 ### Thread Safety and Concurrency
 
 `TBStateMachine` is thread safe. Each event is processed following the RTC (Run To Completion) model, encapsulated in a block which is dispatched asynchronously to the main queue by default.
