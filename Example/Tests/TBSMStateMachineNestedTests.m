@@ -242,7 +242,7 @@ describe(@"TBSMStateMachine", ^{
         [b addHandlerForEvent:TRANSITION_8 target:b22 kind:TBSMTransitionLocal];
         [b22 addHandlerForEvent:TRANSITION_9 target:b kind:TBSMTransitionLocal];
         
-        // local transitions beconing external
+        // local transitions becoming external
         [b addHandlerForEvent:TRANSITION_BROKEN_LOCAL target:a3 kind:TBSMTransitionLocal];
         
         // internal transitions
@@ -494,6 +494,19 @@ describe(@"TBSMStateMachine", ^{
         expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
+    it(@"defaults to an external transition when source and target of a local transition are no ancestors.", ^{
+        
+        waitUntil(^(DoneCallback done) {
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_BROKEN_LOCAL data:nil] withCompletion:^{
+                done();
+            }];
+        });
+        
+        expect(stateMachine.currentState).to.equal(a);
+        expect(subStateMachineA.currentState).to.equal(a3);
+    });
+    
     it(@"performs an internal transition.", ^{
         
         waitUntil(^(DoneCallback done) {
@@ -583,20 +596,6 @@ describe(@"TBSMStateMachine", ^{
         expect(subStateMachineB.currentState).to.equal(b3);
         expect(subStateMachineB31.currentState).to.equal(b311);
         expect(subStateMachineB32.currentState).to.equal(b322);
-    });
-    
-    it(@"defaults to an external transition when source and target of a local transition are no ancestors.", ^{
-        
-        waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_5 data:nil] withCompletion:^{
-                done();
-            }];
-        });
-        
-        expect(stateMachine.currentState).to.equal(b);
-        expect(subStateMachineB.currentState).to.equal(b2);
-        expect(subStateMachineB2.currentState).to.equal(b22);
     });
 });
 
