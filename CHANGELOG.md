@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.2.0
+
+- improved error messages
+
 ## 5.1.0
 
 - thread safety increased
