@@ -65,10 +65,10 @@ NSString * const TBSMDataUserInfo = @"data";
 {
     if (kind == TBSMTransitionInternal) {
         if (!(self == target || target == nil)) {
-            @throw [NSException tb_ambiguousTransitionAttributes:event];
+            @throw [NSException tb_ambiguousTransitionAttributes:event source:self.name target:target.name];
         }
     } else if (target == nil) {
-        @throw [NSException tb_ambiguousTransitionAttributes:event];
+        @throw [NSException tb_ambiguousTransitionAttributes:event source:self.name target:target.name];
     }
     TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target kind:kind action:action guard:guard];
     NSMutableArray *eventHandlers = self.priv_eventHandlers[event];

@@ -94,11 +94,13 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 /**
  *  Thrown when an event handler has been added with contradicting or missing transition attributes.
  *
- *  @param eventName The name of the specified event.
+ *  @param eventName   The name of the specified event.
+ *  @param sourceState The name of the source state.
+ *  @param targetState The name of the target state.
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName;
++ (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName source:(NSString *)sourceState target:(NSString *)targetState;
 
 /**
  *  Thrown when an NSOperaionQueue has been set which is not serial.
