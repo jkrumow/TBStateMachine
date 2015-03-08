@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "TBStateMachine"
-  s.version          = "5.2.0"
+  s.version          = "5.2.1"
   s.summary          = "A lightweight implementation of a hierarchical state machine in Objective-C."
   s.description      = <<-DESC
                        A lightweight implementation of a hierarchical state machine in Objective-C.

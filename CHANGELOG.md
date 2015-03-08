@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.2.1
+
+- minor fixes
+
 ## 5.2.0
 
 - improved error messages
