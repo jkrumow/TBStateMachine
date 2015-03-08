@@ -24,11 +24,11 @@
     }
     self = [super init];
     if (self) {
-        _name = name.copy;
-        _target = target;
-        _kind = kind;
-        _action = action;
-        _guard = guard;
+        self.name = name;
+        self.target = target;
+        self.kind = kind;
+        self.action = action;
+        self.guard = guard;
     }
     return self;
 }

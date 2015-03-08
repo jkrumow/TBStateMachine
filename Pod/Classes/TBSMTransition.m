@@ -29,11 +29,11 @@
 {
     self = [super init];
     if (self) {
-        _sourceState = sourceState;
-        _targetState = targetState;
-        _kind = kind;
-        _action = action;
-        _guard = guard;
+        self.sourceState = sourceState;
+        self.targetState = targetState;
+        self.kind = kind;
+        self.action = action;
+        self.guard = guard;
     }
     return self;
 }

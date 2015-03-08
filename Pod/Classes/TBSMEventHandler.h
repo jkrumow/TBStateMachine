@@ -21,27 +21,27 @@
 /**
  *  The event's name.
  */
-@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, copy) NSString *name;
 
 /**
  *  The target state of the transition triggered by the event.
  */
-@property (nonatomic, strong, readonly) TBSMState *target;
+@property (nonatomic, strong) TBSMState *target;
 
 /**
  *  The kind of transition to perform.
  */
-@property (nonatomic, assign, readonly) TBSMTransitionKind kind;
+@property (nonatomic, assign) TBSMTransitionKind kind;
 
 /**
  *  The action of the transition triggered by the event.
  */
-@property (nonatomic, copy, readonly) TBSMActionBlock action;
+@property (nonatomic, copy) TBSMActionBlock action;
 
 /**
  *  The guard function of the transition triggered by the event.
  */
-@property (nonatomic, copy, readonly) TBSMGuardBlock guard;
+@property (nonatomic, copy) TBSMGuardBlock guard;
 
 
 /**
