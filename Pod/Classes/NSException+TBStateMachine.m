@@ -15,6 +15,7 @@ static NSString * const TBSMNotOfTypeStateExceptionReason = @"The specified obje
 static NSString * const TBSMNonExistingStateExceptionReason = @"The specified state '%@' does not exist.";
 static NSString * const TBSMNoInitialStateExceptionReason = @"Initial state needs to be set on state machine '%@'.";
 static NSString * const TBSMNoNameForStateExceptionReason = @"State needs to have a valid name.";
+static NSString * const TBSMNoNameForPseudoStateExceptionReason = @"PseudoState needs to have a valid name.";
 static NSString * const TBSMNoNameForEventExceptionReason = @"Event needs to have a valid name.";
 static NSString * const TBSMNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBSMStateMachine.";
 static NSString * const TBSMMissingStateMachineExceptionReason = @"Containing state '%@' needs to be set up with a valid TBSMStateMachine instance.";
@@ -42,6 +43,11 @@ static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue
 + (NSException *)tb_noNameForStateException
 {
     return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForStateExceptionReason userInfo:nil];
+}
+
++ (NSException *)tb_noNameForPseudoStateException
+{
+    return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForPseudoStateExceptionReason userInfo:nil];
 }
 
 + (NSException *)tb_noNameForEventException

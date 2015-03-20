@@ -14,6 +14,8 @@
 #import "TBSMEventHandler.h"
 #import "TBSMParallelState.h"
 #import "TBSMSubState.h"
+#import "TBSMFork.h"
+#import "TBSMJoin.h"
 #import "NSException+TBStateMachine.h"
 
 /**

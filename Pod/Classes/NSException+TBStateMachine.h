@@ -56,6 +56,13 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_noNameForStateException;
 
 /**
+ *  Thrown when no name was given to a pseudo state instance.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_noNameForPseudoStateException;
+
+/**
  *  Thrown when no name was given to a `TBSMEvent` instance.
  *
  *  @return The `NSException` instance.
