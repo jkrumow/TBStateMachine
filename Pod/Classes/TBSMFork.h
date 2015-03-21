@@ -1,17 +1,22 @@
 //
 //  TBSMFork.h
-//  Pods
+//  TBStateMachine
 //
 //  Created by Julian Krumow on 20.03.15.
-//
+//  Copyright (c) 2014 Julian Krumow. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import "TBSMTransitionVertex.h"
+
+
+@class TBSMState;
+@class TBSMParallelState;
 
 /**
  *  This class represents a 'fork' pseudo state in a state machine.
  */
-@interface TBSMFork : NSObject
+@interface TBSMFork : NSObject <TBSMTransitionVertex>
 
 @property (nonatomic, copy, readonly) NSString *name;
 
@@ -36,4 +41,7 @@
  *  @return An initialized `TBSMFork` instance.
  */
 - (instancetype)initWithName:(NSString *)name;
+
+- (void)addTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region;
+
 @end
