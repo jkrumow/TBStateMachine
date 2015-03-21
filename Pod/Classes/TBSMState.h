@@ -10,6 +10,7 @@
 
 #import "TBSMNode.h"
 #import "TBSMTransitionKind.h"
+#import "TBSMTransitionVertex.h"
 
 FOUNDATION_EXPORT NSString * const TBSMStateDidEnterNotification;
 FOUNDATION_EXPORT NSString * const TBSMStateDidExitNotification;
@@ -29,7 +30,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  This class represents a state in a state machine.
  */
-@interface TBSMState : NSObject<TBSMNode>
+@interface TBSMState : NSObject<TBSMNode, TBSMTransitionVertex>
 
 /**
  *  The state's parent state inside the state machine hierarchy.
@@ -80,7 +81,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param event  The given event name.
  *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
  */
-- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target;
+- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -91,7 +92,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
  *  @param kind   The kind of transition.
  */
-- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind;
+- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -103,7 +104,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param kind   The kind of transition.
  *  @param action The action block associated with this event.
  */
-- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action;
+- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -116,7 +117,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param action The action block associated with this event.
  *  @param guard  The guard block associated with this event.
  */
-- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
  *  Returns `YES` if a given event can be consumed by the state.

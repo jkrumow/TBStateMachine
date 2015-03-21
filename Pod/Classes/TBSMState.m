@@ -46,22 +46,22 @@ NSString * const TBSMDataUserInfo = @"data";
     return self.priv_eventHandlers.copy;
 }
 
-- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target
+- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target
 {
     [self addHandlerForEvent:event target:target kind:TBSMTransitionExternal];
 }
 
-- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind
+- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind
 {
     [self addHandlerForEvent:event target:target kind:kind action:nil guard:nil];
 }
 
-- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action
+- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action
 {
     [self addHandlerForEvent:event target:target kind:kind action:action guard:nil];
 }
 
-- (void)addHandlerForEvent:(NSString *)event target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
+- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if (kind == TBSMTransitionInternal) {
         if (!(self == target || target == nil)) {

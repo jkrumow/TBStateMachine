@@ -26,7 +26,7 @@
 /**
  *  The target state of the transition triggered by the event.
  */
-@property (nonatomic, strong) TBSMState *target;
+@property (nonatomic, strong) id <TBSMTransitionVertex> target;
 
 /**
  *  The kind of transition to perform.
@@ -57,7 +57,7 @@
  *
  *  @return The event handler instance.
  */
-+ (instancetype)eventHandlerWithName:(NSString *)name target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
++ (instancetype)eventHandlerWithName:(NSString *)name target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
  *  Initializes a `TBSMEventHandler` from a given event name, target, action and guard.
@@ -72,6 +72,6 @@
  *
  *  @return An initialized `TBSMEventHandler` instance.
  */
-- (instancetype)initWithName:(NSString *)name target:(TBSMState *)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (instancetype)initWithName:(NSString *)name target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 @end
