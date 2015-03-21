@@ -30,5 +30,5 @@
 + (TBSMJoin *)joinWithName:(NSString *)name;
 
 - (void)addSourceStates:(NSArray *)sourceStates inRegion:(TBSMParallelState *)region target:(TBSMState *)target;
-
+- (BOOL)joinSourceState:(TBSMState *)sourceState;
 @end

@@ -28,6 +28,7 @@
 
 - (void)addTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region
 {
+    // TODO: throw exception when region is nil
     _priv_targetStates = targetStates;
     _region = region;
 }

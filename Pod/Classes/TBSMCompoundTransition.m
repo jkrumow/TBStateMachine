@@ -7,6 +7,7 @@
 //
 
 #import "TBSMCompoundTransition.h"
+#import "TBSMStateMachine.h"
 #import "TBSMState.h"
 #import "TBSMFork.h"
 #import "TBSMJoin.h"
@@ -46,9 +47,13 @@
     if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
         
         if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
-            
+            // TODO: enter parallel states sta the same time.
         } else if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {
-            
+            TBSMJoin *join = (TBSMJoin *)self.targetPseudoState;
+            if ([join joinSourceState:self.sourceState]) {
+                TBSMStateMachine *lca = [self findLeastCommonAncestor];
+                [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
+            }
         }
         return YES;
     }
