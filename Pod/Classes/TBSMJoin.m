@@ -7,11 +7,10 @@
 //
 
 #import "TBSMJoin.h"
-#import "NSException+TBStateMachine.h"
+
 #import "TBSMParallelState.h"
 
 @interface TBSMJoin ()
-@property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSArray *priv_sourceStates;
 @property (nonatomic, strong) TBSMParallelState *region;
 @property (nonatomic, strong) TBSMState *target;
@@ -24,16 +23,9 @@
     return [[TBSMJoin alloc] initWithName:name];
 }
 
-- (instancetype)initWithName:(NSString *)name
+- (TBSMState *)targetState
 {
-    if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForPseudoStateException];
-    }
-    self = [super init];
-    if (self) {
-        _name = name.copy;
-    }
-    return self;
+    return self.target;
 }
 
 - (void)addSourceStates:(NSArray *)sourceStates inRegion:(TBSMParallelState *)region target:(TBSMState *)target

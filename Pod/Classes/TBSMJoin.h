@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TBSMTransitionVertex.h"
+#import "TBSMPseudoState.h"
 
 
 @class TBSMState;
@@ -16,7 +16,7 @@
 /**
  *  This class represents a 'join' pseudo state in a state machine.
  */
-@interface TBSMJoin : NSObject <TBSMTransitionVertex>
+@interface TBSMJoin : TBSMPseudoState
 
 /**
  *  Creates a `TBSMJoin` instance from a given name.
@@ -28,17 +28,6 @@
  *  @return The join instance.
  */
 + (TBSMJoin *)joinWithName:(NSString *)name;
-
-/**
- *  Initializes a `TBSMJoin` with a specified name.
- *
- *  Throws an exception when name is nil or an empty string.
- *
- *  @param name The name of the join. Must be unique.
- *
- *  @return An initialized `TBSMJoin` instance.
- */
-- (instancetype)initWithName:(NSString *)name;
 
 - (void)addSourceStates:(NSArray *)sourceStates inRegion:(TBSMParallelState *)region target:(TBSMState *)target;
 

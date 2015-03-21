@@ -40,8 +40,8 @@ describe(@"TBSMJoin", ^{
     });
     
     it(@"returns its name.", ^{
-        TBSMJoin *joinXYZ = [TBSMJoin joinWithName:@"JoinXYZ"];
-        expect(joinXYZ.name).to.equal(@"JoinXYZ");
+        TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
+        expect(join.name).to.equal(@"Join");
     });
 });
 

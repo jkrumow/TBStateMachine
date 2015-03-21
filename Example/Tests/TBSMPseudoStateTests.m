@@ -1,31 +1,24 @@
 //
-//  TBSMForkTests.m
+//  TBSMPseudoStateTests.m
 //  TBStateMachine
 //
-//  Created by Julian Krumow on 20.03.15.
+//  Created by Julian Krumow on 21.03.15.
 //  Copyright (c) 2015 Julian Krumow. All rights reserved.
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
 
-SpecBegin(TBSMFork)
+SpecBegin(TBSMPseudoState)
 
-describe(@"TBSMFork", ^{
+describe(@"TBSMPseudoState", ^{
     
-    beforeEach(^{
-        
-    });
-    
-    afterEach(^{
-        
-    });
-
     describe(@"Exception handling.", ^{
         
         it (@"throws a TBSMException when name is nil.", ^{
             
             expect(^{
-                [TBSMFork forkWithName:nil];
+                TBSMPseudoState *pseudoState = [[TBSMPseudoState alloc] initWithName:nil];
+                pseudoState = nil;
             }).to.raise(TBSMException);
             
         });
@@ -33,15 +26,16 @@ describe(@"TBSMFork", ^{
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
-                [TBSMFork forkWithName:@""];
+                TBSMPseudoState *pseudoState = [[TBSMPseudoState alloc] initWithName:@""];
+                pseudoState = nil;
             }).to.raise(TBSMException);
             
         });
     });
     
     it(@"returns its name.", ^{
-        TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];
-        expect(fork.name).to.equal(@"Fork");
+        TBSMPseudoState *pseudoState = [[TBSMPseudoState alloc] initWithName:@"name"];
+        expect(pseudoState.name).to.equal(@"name");
     });
 });
 

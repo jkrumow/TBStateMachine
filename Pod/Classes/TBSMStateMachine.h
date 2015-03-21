@@ -10,6 +10,7 @@
 
 #import "TBSMState.h"
 #import "TBSMTransition.h"
+#import "TBSMCompoundTransition.h"
 #import "TBSMEvent.h"
 #import "TBSMEventHandler.h"
 #import "TBSMParallelState.h"

@@ -7,11 +7,9 @@
 //
 
 #import "TBSMFork.h"
-#import "NSException+TBStateMachine.h"
 #import "TBSMParallelState.h"
 
 @interface TBSMFork ()
-@property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSArray *priv_targetStates;
 @property (nonatomic, strong) TBSMParallelState *region;
 @end
@@ -23,16 +21,9 @@
     return [[TBSMFork alloc] initWithName:name];
 }
 
-- (instancetype)initWithName:(NSString *)name
+- (TBSMState *)targetState
 {
-    if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForPseudoStateException];
-    }
-    self = [super init];
-    if (self) {
-        _name = name.copy;
-    }
-    return self;
+    return self.region;
 }
 
 - (void)addTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region

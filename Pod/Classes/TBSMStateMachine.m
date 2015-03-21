@@ -116,8 +116,15 @@
         }
         NSArray *eventHandlers = [self.currentState eventHandlersForEvent:event];
         for (TBSMEventHandler *eventHandler in eventHandlers) {
-            TBSMTransition *transition = [TBSMTransition transitionWithSourceState:self.currentState targetState:eventHandler.target
-                                                                              kind:eventHandler.kind action:eventHandler.action guard:eventHandler.guard];
+            
+            TBSMTransition *transition = nil;
+            if ([eventHandler.target isKindOfClass:[TBSMState class]]) {
+                transition = [TBSMTransition transitionWithSourceState:self.currentState targetState:(TBSMState *)eventHandler.target
+                                                                  kind:eventHandler.kind action:eventHandler.action guard:eventHandler.guard];
+            } else {
+                transition = [TBSMCompoundTransition compoundTransitionWithSourceState:self.currentState targetPseudoState:(TBSMPseudoState *)eventHandler.target
+                                                                          action:eventHandler.action guard:eventHandler.guard];
+            }
             if ([transition performTransitionWithData:event.data]) {
                 return YES;
             }
@@ -149,7 +156,7 @@
     } else {
         NSArray *targetPath = [targetState.parentNode path];
         id<TBSMNode> node = targetPath[thisLevel];
-        _currentState = node.parentNode;
+        _currentState = (TBSMState *)node.parentNode;
     }
     [self.currentState enter:sourceState targetState:targetState data:data];
 }
