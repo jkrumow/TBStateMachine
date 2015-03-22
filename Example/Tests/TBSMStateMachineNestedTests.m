@@ -57,8 +57,10 @@ __block TBSMState *b321;
 __block TBSMState *b322;
 
 __block TBSMParallelState *c;
-__block TBSMState *c1;
-__block TBSMState *c2;
+__block TBSMState *c11;
+__block TBSMState *c12;
+__block TBSMState *c21;
+__block TBSMState *c22;
 
 __block TBSMState *z;
 
@@ -108,8 +110,10 @@ describe(@"TBSMStateMachine", ^{
         b322 = [TBSMState stateWithName:@"b322"];
         
         c = [TBSMParallelState parallelStateWithName:@"c"];
-        c1 = [TBSMState stateWithName:@"c1"];
-        c2 = [TBSMState stateWithName:@"c2"];
+        c11 = [TBSMState stateWithName:@"c11"];
+        c12 = [TBSMState stateWithName:@"c12"];
+        c21 = [TBSMState stateWithName:@"c21"];
+        c22 = [TBSMState stateWithName:@"c22"];
         
         z = [TBSMState stateWithName:@"z"];
         
@@ -246,20 +250,36 @@ describe(@"TBSMStateMachine", ^{
             [executionSequence addObject:@"c_exit"];
         };
         
-        c1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"c1_enter"];
+        c11.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"c11_enter"];
         };
         
-        c1.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"c1_exit"];
+        c11.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"c11_exit"];
         };
         
-        c2.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"c2_enter"];
+        c12.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"c12_enter"];
         };
         
-        c2.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            [executionSequence addObject:@"c2_exit"];
+        c12.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"c12_exit"];
+        };
+        
+        c21.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"c21_enter"];
+        };
+        
+        c21.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"c21_exit"];
+        };
+        
+        c22.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"c22_enter"];
+        };
+        
+        c22.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"c22_exit"];
         };
         
         // superstates / substates guards
@@ -318,15 +338,15 @@ describe(@"TBSMStateMachine", ^{
         [b addHandlerForEvent:TRANSITION_15 target:c];
         
         // join out of paralle state
-        [c1 addHandlerForEvent:TRANSITION_16 target:join];
-        [c2 addHandlerForEvent:TRANSITION_17 target:join];
-        [join addSourceStates:@[c1, c2] inRegion:c target:b];
+        [c11 addHandlerForEvent:TRANSITION_16 target:join];
+        [c21 addHandlerForEvent:TRANSITION_17 target:join];
+        [join addSourceStates:@[c11, c21] inRegion:c target:b];
         
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b311, b312];
         subStateMachineB32.states = @[b321, b322];
-        subStateMachineC1.states = @[c1];
-        subStateMachineC2.states = @[c2];
+        subStateMachineC1.states = @[c11, c12];
+        subStateMachineC2.states = @[c21, c22];
         
         a.stateMachine = subStateMachineA;
         b.stateMachine = subStateMachineB;
@@ -367,8 +387,10 @@ describe(@"TBSMStateMachine", ^{
         b322 = nil;
         
         c = nil;
-        c1 = nil;
-        c2 = nil;
+        c11 = nil;
+        c12 = nil;
+        c21 = nil;
+        c22 = nil;
         
         z = nil;
         
@@ -673,7 +695,7 @@ describe(@"TBSMStateMachine", ^{
         expect(subStateMachineB32.currentState).to.equal(b322);
     });
     
-    it(@"performs a join compound transition from parallel region into the join target state.", ^{
+    it(@"performs a join compound transition into the join target state.", ^{
         
         waitUntil(^(DoneCallback done) {
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
