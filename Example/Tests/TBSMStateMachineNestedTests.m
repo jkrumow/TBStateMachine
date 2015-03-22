@@ -643,7 +643,7 @@ describe(@"TBSMStateMachine", ^{
         expect(executionSequence).to.equal(expectedExecutionSequence);
     });
     
-    it(@"performs a transition into a parrel state and enters default sub states.", ^{
+    it(@"performs a transition into a parallel state and enters default sub states.", ^{
         
         waitUntil(^(DoneCallback done) {
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
@@ -658,7 +658,7 @@ describe(@"TBSMStateMachine", ^{
         expect(subStateMachineB32.currentState).to.equal(b321);
     });
     
-    it(@"performs a transition into a parralel state and enters specified sub state while entering all other parallel machines with default state.", ^{
+    it(@"performs a transition into a parallel state and enters specified sub state while entering all other parallel machines with default state.", ^{
         
         waitUntil(^(DoneCallback done) {
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
