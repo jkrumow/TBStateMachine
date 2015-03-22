@@ -29,6 +29,14 @@
  */
 + (TBSMFork *)forkWithName:(NSString *)name;
 
+/**
+ *  Sets the target states for the fork transition.
+ *
+ *  Throws an exception when parameters are invalid.
+ *
+ *  @param targetStates The states to enter.
+ *  @param region       The containing region.
+ */
 - (void)setTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region;
 
 @end

@@ -29,6 +29,24 @@
  */
 + (TBSMJoin *)joinWithName:(NSString *)name;
 
+/**
+ *  Sets the source states of the join transition.
+ *
+ *  Throws an exception when parameters are invalid.
+ *
+ *  @param sourceStates An Array of TBSMState objects.
+ *  @param target       The target state.
+ */
 - (void)setSourceStates:(NSArray *)sourceStates target:(TBSMState *)target;
+
+/**
+ *  Performs the TODO: [???] transition towards the join pseudostate for a given source state.
+ *  If all source states have been handled the transition switches to the target state.
+ *
+ *  @param sourceState The source state to join.
+ *
+ *  @return `YES` if the complete compound transition has been performed.
+ */
 - (BOOL)joinSourceState:(TBSMState *)sourceState;
+
 @end
