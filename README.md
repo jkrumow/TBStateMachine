@@ -14,6 +14,7 @@ A lightweight hierarchical state machine implementation in Objective-C.
 * Block based API
 * Wrapper class for nested states
 * Wrapper class for orthogonal regions
+* Pseudo states
 * External, internal and local transitions with guards and actions
 * State switching using least common ancestor algorithm (LCA)
 * Thread safe event handling
@@ -144,6 +145,26 @@ TBSMParallelState *parallel = [TBSMParallelState parallelStateWithName:@"Paralle
 parallel.stateMachines = @[subMachineA, subMachineB, subMachineC];
     
 stateMachine.states = @[stateA, stateB, parallel];
+```
+
+### Pseudostates
+
+TBStateMachine supports fork and join pseudo states to construct compound transitions:
+
+#### Fork
+
+```objective-c
+TBSMFork *fork = [TBSMFork forkWithName:@"fork"];
+[fork setTargetStates:@[stateA,stateB] inRegion:parallel];
+```
+
+#### Join
+
+```objective-c
+TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
+[stateA addHandlerForEvent:@"leaveA" target:join];
+[stateB addHandlerForEvent:@"leaveB" target:join];
+[join setSourceStates:@[stateA,stateB] target:stateC];
 ```
 
 ### Notfications

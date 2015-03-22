@@ -1,5 +1,10 @@
 # TBStateMachine CHANGELOG
 
+## 5.x.x
+
+- support for pseudo states
+- implementation of join pseudo state
+
 ## 5.2.1
 
 - minor fixes
