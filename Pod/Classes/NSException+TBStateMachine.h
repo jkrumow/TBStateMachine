@@ -110,6 +110,15 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName source:(NSString *)sourceState target:(NSString *)targetState;
 
 /**
+ *  Thrown when a compound transition is not well contructed.
+ *
+ *  @param pseudoStateName The name of the pseudo state.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName;
+
+/**
  *  Thrown when an NSOperaionQueue has been set which is not serial.
  *
  *  @param queueName The name of the queue.

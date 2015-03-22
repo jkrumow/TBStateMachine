@@ -48,6 +48,24 @@ describe(@"TBSMJoin", ^{
             }).to.raise(TBSMException);
             
         });
+        
+        it(@"throws an exception when source and target states are invalid.", ^{
+            
+            expect(^{
+                TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
+                [join setSourceStates:nil target:c];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
+                [join setSourceStates:@[] target:c];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
+                [join setSourceStates:@[a,b] target:nil];
+            }).to.raise(TBSMException);
+        });
     });
     
     it(@"returns its name.", ^{
@@ -59,7 +77,7 @@ describe(@"TBSMJoin", ^{
     
         it(@"returns YES if all source states have been joined.", ^{
             TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-            [join addSourceStates:@[a,b] inRegion:parallel target:c];
+            [join setSourceStates:@[a,b] target:c];
             expect([join joinSourceState:a]).to.equal(NO);
             expect([join joinSourceState:b]).to.equal(YES);
         });

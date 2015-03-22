@@ -340,7 +340,7 @@ describe(@"TBSMStateMachine", ^{
         // join out of paralle state
         [c11 addHandlerForEvent:TRANSITION_16 target:join];
         [c21 addHandlerForEvent:TRANSITION_17 target:join];
-        [join addSourceStates:@[c11, c21] inRegion:c target:b];
+        [join setSourceStates:@[c11, c21] target:b];
         
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b311, b312];

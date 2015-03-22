@@ -22,7 +22,7 @@ describe(@"TBSMCompoundTransition", ^{
         b = [TBSMState stateWithName:@"b"];
         parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
         join = [TBSMJoin joinWithName:@"join"];
-        [join addSourceStates:@[] inRegion:parallel target:b];
+        [join setSourceStates:@[a] target:b];
     });
     
     afterEach(^{

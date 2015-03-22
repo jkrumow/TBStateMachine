@@ -29,6 +29,6 @@
  */
 + (TBSMFork *)forkWithName:(NSString *)name;
 
-- (void)addTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region;
+- (void)setTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region;
 
 @end

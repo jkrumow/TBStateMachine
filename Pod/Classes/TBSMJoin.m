@@ -13,7 +13,6 @@
 @interface TBSMJoin ()
 @property (nonatomic, strong) NSArray *priv_sourceStates;
 @property (nonatomic, strong) NSMutableArray *joinedSourceStates;
-@property (nonatomic, strong) TBSMParallelState *region;
 @property (nonatomic, strong) TBSMState *target;
 @end
 
@@ -38,17 +37,17 @@
     return self.target;
 }
 
-- (void)addSourceStates:(NSArray *)sourceStates inRegion:(TBSMParallelState *)region target:(TBSMState *)target
+- (void)setSourceStates:(NSArray *)sourceStates target:(TBSMState *)target
 {
-    // TODO: throw exception when region or target is nil
+    if (sourceStates == nil || sourceStates.count == 0 || target == nil) {
+        @throw [NSException tb_ambiguousCompoundTransitionAttributes:self.name];
+    }
     _priv_sourceStates = sourceStates;
-    _region = region;
     _target = target;
 }
 
 - (BOOL)joinSourceState:(TBSMState *)sourceState
 {
-    // TODO: throw exception if source state has not been added
     [self.joinedSourceStates addObject:sourceState];
     return ([self.joinedSourceStates isEqualToArray:self.priv_sourceStates]);
 }

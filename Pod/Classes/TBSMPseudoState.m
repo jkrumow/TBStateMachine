@@ -7,7 +7,6 @@
 //
 
 #import "TBSMPseudoState.h"
-#import "NSException+TBStateMachine.h"
 
 
 @implementation TBSMPseudoState

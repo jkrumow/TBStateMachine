@@ -10,14 +10,25 @@
 
 SpecBegin(TBSMFork)
 
+__block TBSMState *a;
+__block TBSMState *b;
+__block TBSMState *c;
+__block TBSMParallelState *parallel;
+
 describe(@"TBSMFork", ^{
     
     beforeEach(^{
-        
+        a = [TBSMState stateWithName:@"a"];
+        b = [TBSMState stateWithName:@"b"];
+        c = [TBSMState stateWithName:@"c"];
+        parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
     });
     
     afterEach(^{
-        
+        a = nil;
+        b = nil;
+        c = nil;
+        parallel = nil;
     });
 
     describe(@"Exception handling.", ^{
@@ -36,6 +47,24 @@ describe(@"TBSMFork", ^{
                 [TBSMFork forkWithName:@""];
             }).to.raise(TBSMException);
             
+        });
+        
+        it(@"throws an exception when source and target states are invalid.", ^{
+            
+            expect(^{
+                TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];
+                [fork setTargetStates:nil inRegion:parallel];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];
+                [fork setTargetStates:@[] inRegion:parallel];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];
+                [fork setTargetStates:@[a,b] inRegion:nil];
+            }).to.raise(TBSMException);
         });
     });
     

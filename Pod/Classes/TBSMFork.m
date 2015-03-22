@@ -26,9 +26,11 @@
     return self.region;
 }
 
-- (void)addTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region
+- (void)setTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region
 {
-    // TODO: throw exception when region is nil
+    if (targetStates == nil || targetStates.count == 0 || region == nil) {
+        @throw [NSException tb_ambiguousCompoundTransitionAttributes:self.name];
+    }
     _priv_targetStates = targetStates;
     _region = region;
 }

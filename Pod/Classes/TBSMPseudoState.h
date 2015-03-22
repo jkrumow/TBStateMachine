@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NSException+TBStateMachine.h"
 #import "TBSMTransitionVertex.h"
 #import "TBSMState.h"
 
