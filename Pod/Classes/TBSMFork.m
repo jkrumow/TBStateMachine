@@ -11,7 +11,6 @@
 
 @interface TBSMFork ()
 @property (nonatomic, strong) NSArray *priv_targetStates;
-@property (nonatomic, strong) TBSMParallelState *region;
 @end
 
 @implementation TBSMFork

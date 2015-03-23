@@ -18,6 +18,8 @@
  */
 @interface TBSMFork : TBSMPseudoState
 
+@property (nonatomic, strong, readonly) TBSMParallelState *region;
+
 /**
  *  Creates a `TBSMFork` instance from a given name.
  *
@@ -29,6 +31,11 @@
  */
 + (TBSMFork *)forkWithName:(NSString *)name;
 
+/**
+ *  The fork's target states inside the region.
+ *
+ *  @return An array containing the target states.
+ */
 - (NSArray *)targetStates;
 
 /**
