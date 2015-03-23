@@ -147,7 +147,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param data        The payload data.
  */
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
-- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMState *)region data:(NSDictionary *)data;
 
 /**
  *  Executes the exit block of the state.

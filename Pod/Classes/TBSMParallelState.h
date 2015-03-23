@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TBSMState.h"
+#import "TBSMContainingState.h"
 
 /**
  *  This class wraps multiple `TBSMStateMachine` instances to an orthogonal region.
  */
-@interface TBSMParallelState : TBSMState
+@interface TBSMParallelState : TBSMContainingState
 
 /**
  *  Creates a `TBSMParallelState` instance from a given name.
@@ -63,7 +63,5 @@
  *  @return `YES` if the transition has been handled.
  */
 - (BOOL)handleEvent:(TBSMEvent *)event;
-
-- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data;
 
 @end

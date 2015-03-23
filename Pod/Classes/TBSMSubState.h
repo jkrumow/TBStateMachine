@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TBSMState.h"
+#import "TBSMContainingState.h"
 
 @class TBSMStateMachine;
 
 /**
  *  This class allows the create nested states.
  */
-@interface TBSMSubState : TBSMState
+@interface TBSMSubState : TBSMContainingState
 
 /**
  *  The `TBSMStateMachine` instance contained in this sub state.
@@ -42,7 +42,5 @@
  *  @return `YES` if the transition has been handled.
  */
 - (BOOL)handleEvent:(TBSMEvent *)event;
-
-- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data;
 
 @end

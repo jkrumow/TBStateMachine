@@ -10,6 +10,7 @@
 #import "TBSMTransitionVertex.h"
 #import "TBSMPseudoState.h"
 
+
 /**
  *  This class represents a compound transition inside a state machine.
  */

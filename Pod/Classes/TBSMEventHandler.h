@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "TBSMTransition.h"
-
 #import "TBSMState.h"
+
 
 /**
  *  This class represents an event handler object.
