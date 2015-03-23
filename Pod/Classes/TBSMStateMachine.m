@@ -175,11 +175,9 @@
     NSUInteger targetLevel = [[region.parentNode path] count];
     NSUInteger thisLevel = self.path.count;
     
-    if (targetLevel < thisLevel) {
-        _currentState = self.initialState;
-    } else if (targetLevel == thisLevel) {
+    if (targetLevel == thisLevel) {
         _currentState = region;
-    } else {
+    } else if (targetLevel > thisLevel) {
         NSArray *targetPath = [region.parentNode path];
         id<TBSMNode> node = targetPath[thisLevel];
         _currentState = (TBSMState *)node.parentNode;

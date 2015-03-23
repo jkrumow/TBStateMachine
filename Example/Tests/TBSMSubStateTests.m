@@ -48,6 +48,11 @@ describe(@"TBSMSubState", ^{
             
             expect(^{
                 TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
+                [subState enter:nil targetStates:nil region:nil data:nil];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
                 [subState exit:nil targetState:nil data:nil];
             }).to.raise(TBSMException);
             

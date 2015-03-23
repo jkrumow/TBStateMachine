@@ -81,7 +81,7 @@ describe(@"TBSMParallelState", ^{
         it (@"throws a TBSMException when instance does not contain one or more stateMachines.", ^{
             
             expect(^{
-                [parallelStates enter:nil targetStates:nil region:nil data:nil];
+                [parallelStates enter:nil targetState:nil data:nil];
             }).to.raise(TBSMException);
             
             expect(^{
@@ -89,7 +89,7 @@ describe(@"TBSMParallelState", ^{
             }).to.raise(TBSMException);
             
             expect(^{
-                [parallelStates enter:nil targetStates:nil region:nil data:nil];
+                [parallelStates exit:nil targetState:nil data:nil];
             }).to.raise(TBSMException);
             
         });
