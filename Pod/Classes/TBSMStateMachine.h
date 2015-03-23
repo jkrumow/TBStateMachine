@@ -153,7 +153,7 @@
  *
  *  @param sourceState The source state.
  *  @param targetState The target states inside the specified region.
- *  @param region       The target region.
+ *  @param region      The target region.
  *  @param data        The payload data.
  */
 - (void)enterState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data;
