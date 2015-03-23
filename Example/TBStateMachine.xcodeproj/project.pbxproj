@@ -18,7 +18,11 @@
 		1593A9C41A71A815002F6AED /* StateB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9B51A71A815002F6AED /* StateB.m */; };
 		1593A9C91A71A815002F6AED /* SubA.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9BF1A71A815002F6AED /* SubA.m */; };
 		15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */; };
+		15C716CB1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */; };
+		15C716CD1ABE08FB00E3076A /* TBSMPseudoStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */; };
 		15C997951A9660F0007DC041 /* TBSMStateMachine+TestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C997941A9660F0007DC041 /* TBSMStateMachine+TestHelper.m */; };
+		15CC17F01ABCB6B3009ABEEC /* TBSMJoinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */; };
+		15CC17F21ABCB72E009ABEEC /* TBSMForkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -44,8 +48,12 @@
 		1593A9BF1A71A815002F6AED /* SubA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubA.m; sourceTree = "<group>"; };
 		15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineNestedTests.m; sourceTree = "<group>"; };
 		15B1453719BCFDA700924D92 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMCompoundTransitionTests.m; sourceTree = "<group>"; };
+		15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMPseudoStateTests.m; sourceTree = "<group>"; };
 		15C997931A9660F0007DC041 /* TBSMStateMachine+TestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBSMStateMachine+TestHelper.h"; sourceTree = "<group>"; };
 		15C997941A9660F0007DC041 /* TBSMStateMachine+TestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TBSMStateMachine+TestHelper.m"; sourceTree = "<group>"; };
+		15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMJoinTests.m; sourceTree = "<group>"; };
+		15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMForkTests.m; sourceTree = "<group>"; };
 		45DE11B7756962DA59F9E54D /* Pods-TBStateMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBStateMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-TBStateMachine/Pods-TBStateMachine.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -138,8 +146,12 @@
 				155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */,
 				151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */,
 				6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */,
+				15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */,
+				15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */,
+				15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */,
 				155BB54D19C612A400EB1C74 /* TBSMEventTests.m */,
 				150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */,
+				15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */,
 				15C997931A9660F0007DC041 /* TBSMStateMachine+TestHelper.h */,
 				15C997941A9660F0007DC041 /* TBSMStateMachine+TestHelper.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
@@ -279,18 +291,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5BC195388D20070C39A /* TBSMParallelStateTests.m in Sources */,
+				15C716CB1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m in Sources */,
 				15C997951A9660F0007DC041 /* TBSMStateMachine+TestHelper.m in Sources */,
 				1593A9C21A71A815002F6AED /* ParallelA.m in Sources */,
 				150FD64019D8543E00D9D1BA /* TBSMTransitionTests.m in Sources */,
 				151C5C0C19CDF6A4003D21AE /* TBSMSubStateTests.m in Sources */,
 				155BB54A19C610D200EB1C74 /* TBSMStateMachineSimpleTests.m in Sources */,
+				15C716CD1ABE08FB00E3076A /* TBSMPseudoStateTests.m in Sources */,
 				155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */,
 				15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */,
 				1593A9C91A71A815002F6AED /* SubA.m in Sources */,
 				1593A9921A71A6F1002F6AED /* InheritedStatesTests.m in Sources */,
 				155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */,
 				1593A9C41A71A815002F6AED /* StateB.m in Sources */,
+				15CC17F21ABCB72E009ABEEC /* TBSMForkTests.m in Sources */,
 				1593A9C31A71A815002F6AED /* StateA.m in Sources */,
+				15CC17F01ABCB6B3009ABEEC /* TBSMJoinTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

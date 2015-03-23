@@ -15,11 +15,13 @@ static NSString * const TBSMNotOfTypeStateExceptionReason = @"The specified obje
 static NSString * const TBSMNonExistingStateExceptionReason = @"The specified state '%@' does not exist.";
 static NSString * const TBSMNoInitialStateExceptionReason = @"Initial state needs to be set on state machine '%@'.";
 static NSString * const TBSMNoNameForStateExceptionReason = @"State needs to have a valid name.";
+static NSString * const TBSMNoNameForPseudoStateExceptionReason = @"PseudoState needs to have a valid name.";
 static NSString * const TBSMNoNameForEventExceptionReason = @"Event needs to have a valid name.";
 static NSString * const TBSMNotAStateMachineExceptionReason = @"The specified object '%@' is not of type TBSMStateMachine.";
 static NSString * const TBSMMissingStateMachineExceptionReason = @"Containing state '%@' needs to be set up with a valid TBSMStateMachine instance.";
 static NSString * const TBSMNoLcaForTransitionExceptionReason = @"No transition possible for transition '%@'.";
 static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous transition attributes for event '%@' source '%@' target '%@'.";
+static NSString * const TBSMAmbiguousCompoundTransitionAttributesReason = @"Ambiguous compound transition attributes for pseudo state '%@'.";
 static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue is not a serial queue '%@'.";
 
 @implementation NSException (TBStateMachine)
@@ -42,6 +44,11 @@ static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue
 + (NSException *)tb_noNameForStateException
 {
     return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForStateExceptionReason userInfo:nil];
+}
+
++ (NSException *)tb_noNameForPseudoStateException
+{
+    return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForPseudoStateExceptionReason userInfo:nil];
 }
 
 + (NSException *)tb_noNameForEventException
@@ -67,6 +74,11 @@ static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue
 + (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName source:(NSString *)sourceState target:(NSString *)targetState
 {
 	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMAmbiguousTransitionAttributesReason, eventName, sourceState, targetState] userInfo:nil];
+}
+
++ (NSException *)tb_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName
+{
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMAmbiguousCompoundTransitionAttributesReason, pseudoStateName] userInfo:nil];
 }
 
 + (NSException *)tb_noSerialQueueException:(NSString *)queueName

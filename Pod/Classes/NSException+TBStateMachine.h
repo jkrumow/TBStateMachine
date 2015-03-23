@@ -56,6 +56,13 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_noNameForStateException;
 
 /**
+ *  Thrown when no name was given to a pseudo state instance.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_noNameForPseudoStateException;
+
+/**
  *  Thrown when no name was given to a `TBSMEvent` instance.
  *
  *  @return The `NSException` instance.
@@ -101,6 +108,15 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *  @return The `NSException` instance.
  */
 + (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName source:(NSString *)sourceState target:(NSString *)targetState;
+
+/**
+ *  Thrown when a compound transition is not well contructed.
+ *
+ *  @param pseudoStateName The name of the pseudo state.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName;
 
 /**
  *  Thrown when an NSOperaionQueue has been set which is not serial.

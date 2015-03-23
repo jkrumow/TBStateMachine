@@ -13,7 +13,7 @@
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(void (^)(void))completion
 {
     if (self.parentNode) {
-        TBSMStateMachine *topStateMachine = [self.parentNode parentNode];
+        TBSMStateMachine *topStateMachine = (TBSMStateMachine *)[self.parentNode parentNode];
         [topStateMachine scheduleEvent:event];
         return;
     }

@@ -11,6 +11,7 @@
 #import "TBSMTransitionKind.h"
 
 @class TBSMState;
+@class TBSMStateMachine;
 
 /**
  *  This type represents an action of a `TBSMTransition`.
@@ -95,6 +96,8 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
                              action:(TBSMActionBlock)action
                               guard:(TBSMGuardBlock)guard;
 
+
+- (TBSMStateMachine *)findLeastCommonAncestor;
 
 /**
  *  Performs the transition between source and target state.

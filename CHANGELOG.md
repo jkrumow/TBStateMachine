@@ -1,5 +1,10 @@
 # TBStateMachine CHANGELOG
 
+## 5.3.0
+
+- support for pseudo states
+- implementation of fork and join pseudo states
+
 ## 5.2.1
 
 - minor fixes

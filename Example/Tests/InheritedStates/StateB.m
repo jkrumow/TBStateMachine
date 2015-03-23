@@ -16,7 +16,7 @@
     [super enter:sourceState targetState:targetState data:data];
     
     [self.executionSequence addObject:[NSString stringWithFormat:@"%@_enter", self.name]];
-    TBSMStateMachine *parentStateMachine = self.parentNode;
+    TBSMStateMachine *parentStateMachine = (TBSMStateMachine *)self.parentNode;
     [parentStateMachine scheduleEvent:[TBSMEvent eventWithName:@"event_b2" data:nil]];
 }
 

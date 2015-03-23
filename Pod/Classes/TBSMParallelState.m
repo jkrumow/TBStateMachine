@@ -60,8 +60,29 @@
     }
     for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
         if ([targetState.path containsObject:stateMachine]) {
-            [stateMachine enterState:sourceState targetState:targetState data:data];
+            [stateMachine enter:sourceState targetState:targetState data:data];
         } else {
+            [stateMachine setUp:data];
+        }
+    }
+}
+
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
+{
+    [super enter:sourceState targetState:region data:data];
+    
+    if (self.priv_parallelStateMachines.count == 0) {
+        @throw [NSException tb_missingStateMachineException:self.name];
+    }
+    for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
+        BOOL isEntered = NO;
+        for (TBSMState *targetState in targetStates) {
+            if ([targetState.path containsObject:stateMachine]) {
+                [stateMachine enter:sourceState targetState:targetState data:data];
+                isEntered = YES;
+            }
+        }
+        if (!isEntered) {
             [stateMachine setUp:data];
         }
     }

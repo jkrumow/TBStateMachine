@@ -46,7 +46,7 @@
     return [NSString stringWithFormat:@"%@_to_%@", self.sourceState.name, self.targetState.name];
 }
 
-- (TBSMStateMachine *)_findLeastCommonAncestor
+- (TBSMStateMachine *)findLeastCommonAncestor
 {
     NSArray *sourcePath = [self.sourceState path];
     NSArray *targetPath = [self.targetState path];
@@ -81,7 +81,7 @@
                 self.action(self.sourceState, self.targetState, data);
             }
         } else {
-            TBSMStateMachine *lca = [self _findLeastCommonAncestor];
+            TBSMStateMachine *lca = [self findLeastCommonAncestor];
             [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
         }
         return YES;

@@ -10,10 +10,13 @@
 
 #import "TBSMState.h"
 #import "TBSMTransition.h"
+#import "TBSMCompoundTransition.h"
 #import "TBSMEvent.h"
 #import "TBSMEventHandler.h"
 #import "TBSMParallelState.h"
 #import "TBSMSubState.h"
+#import "TBSMFork.h"
+#import "TBSMJoin.h"
 #import "NSException+TBStateMachine.h"
 
 /**
@@ -26,7 +29,7 @@
  *  - call -setUp: to activate the state machine
  *  - call -tearDown: to deactivate the state machine
  */
-@interface TBSMStateMachine : NSObject <TBSMNode>
+@interface TBSMStateMachine : NSObject <TBSMContainingNode>
 
 /**
  *  The operation queue to handle the run to completion steps.
@@ -107,15 +110,6 @@
 - (void)scheduleEvent:(TBSMEvent *)event;
 
 /**
- *  Receives a specified `TBSMEvent` instance.
- *
- *  @param event The given `TBSMEvent` instance.
- *
- *  @return `YES` if the event has been handled.
- */
-- (BOOL)handleEvent:(TBSMEvent *)event;
-
-/**
  *  Switches between states defined in a specified transition.
  *
  *  @param sourceState The source state.
@@ -126,21 +120,14 @@
 - (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data;
 
 /**
- *  Enters a specified state.
+ *  Switches between states defined in a specified transition.
  *
- *  @param sourceState The source state.
- *  @param targetState The target state.
- *  @param data        The payload data.
+ *  @param sourceState  The source state.
+ *  @param targetStates The target states inside the specified region.
+ *  @param region       The target region.
+ *  @param action       The action to execute.
+ *  @param data         The payload data.
  */
-- (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
-
-/**
- *  Exits a specified state.
- *
- *  @param sourceState The source state.
- *  @param targetState The target state.
- *  @param data        The payload data.
- */
-- (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
+- (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data;
 
 @end

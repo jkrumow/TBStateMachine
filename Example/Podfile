@@ -1,5 +1,7 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
+plugin 'slather'
+
 target 'Tests', :exclusive => true do
   pod "TBStateMachine", :path => "../"
 
