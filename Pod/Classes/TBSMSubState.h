@@ -7,14 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TBSMContainingState.h"
+#import "TBSMState.h"
+#import "TBSMContainingNode.h"
 
 @class TBSMStateMachine;
 
 /**
  *  This class allows the create nested states.
  */
-@interface TBSMSubState : TBSMContainingState
+@interface TBSMSubState : TBSMState <TBSMContainingNode>
 
 /**
  *  The `TBSMStateMachine` instance contained in this sub state.
@@ -31,16 +32,5 @@
  *  @return A new `TBSMSubState` instance.
  */
 + (TBSMSubState *)subStateWithName:(NSString *)name;
-
-/**
- *  Receives a specified `TBSMEvent` instance.
- *
- *  If the node recognizes the given `TBSMEvent` it will return `YES`.
- *
- *  @param event The given `TBSMEvent` instance.
- *
- *  @return `YES` if the transition has been handled.
- */
-- (BOOL)handleEvent:(TBSMEvent *)event;
 
 @end

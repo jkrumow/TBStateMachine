@@ -60,7 +60,7 @@
     }
     for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
         if ([targetState.path containsObject:stateMachine]) {
-            [stateMachine enterState:sourceState targetState:targetState data:data];
+            [stateMachine enter:sourceState targetState:targetState data:data];
         } else {
             [stateMachine setUp:data];
         }
@@ -78,7 +78,7 @@
         BOOL isEntered = NO;
         for (TBSMState *targetState in targetStates) {
             if ([targetState.path containsObject:stateMachine]) {
-                [stateMachine enterState:sourceState targetState:targetState data:data];
+                [stateMachine enter:sourceState targetState:targetState data:data];
                 isEntered = YES;
             }
         }

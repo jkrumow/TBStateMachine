@@ -29,7 +29,7 @@
  *  - call -setUp: to activate the state machine
  *  - call -tearDown: to deactivate the state machine
  */
-@interface TBSMStateMachine : NSObject <TBSMNode>
+@interface TBSMStateMachine : NSObject <TBSMContainingNode>
 
 /**
  *  The operation queue to handle the run to completion steps.
@@ -110,15 +110,6 @@
 - (void)scheduleEvent:(TBSMEvent *)event;
 
 /**
- *  Receives a specified `TBSMEvent` instance.
- *
- *  @param event The given `TBSMEvent` instance.
- *
- *  @return `YES` if the event has been handled.
- */
-- (BOOL)handleEvent:(TBSMEvent *)event;
-
-/**
  *  Switches between states defined in a specified transition.
  *
  *  @param sourceState The source state.
@@ -138,33 +129,5 @@
  *  @param data         The payload data.
  */
 - (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data;
-
-/**
- *  Enters a specified state.
- *
- *  @param sourceState The source state.
- *  @param targetState The target state.
- *  @param data        The payload data.
- */
-- (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
-
-/**
- *  Enters a group of specified states inside a region.
- *
- *  @param sourceState The source state.
- *  @param targetState The target states inside the specified region.
- *  @param region      The target region.
- *  @param data        The payload data.
- */
-- (void)enterState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data;
-
-/**
- *  Exits a specified state.
- *
- *  @param sourceState The source state.
- *  @param targetState The target state.
- *  @param data        The payload data.
- */
-- (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
 
 @end

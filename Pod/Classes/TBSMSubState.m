@@ -34,7 +34,7 @@
         @throw [NSException tb_missingStateMachineException:self.name];
     }
     [super enter:sourceState targetState:targetState data:data];
-    [_stateMachine enterState:sourceState targetState:targetState data:data];
+    [_stateMachine enter:sourceState targetState:targetState data:data];
 }
 
 - (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
@@ -43,7 +43,7 @@
         @throw [NSException tb_missingStateMachineException:self.name];
     }
     [super enter:sourceState targetState:region data:data];
-    [_stateMachine enterState:sourceState targetStates:targetStates region:region data:data];
+    [_stateMachine enter:sourceState targetStates:targetStates region:region data:data];
 }
 
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data

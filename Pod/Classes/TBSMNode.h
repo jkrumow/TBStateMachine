@@ -47,4 +47,26 @@
  */
 - (void)setParentNode:(id<TBSMNode>)parentNode;
 
+/**
+ *  Executes the enter block of the state.
+ *
+ *  If you overwrite this method you will need to call the super implementation.
+ *
+ *  @param sourceState The source state.
+ *  @param targetState The target state.
+ *  @param data        The payload data.
+ */
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
+
+/**
+ *  Executes the exit block of the state.
+ *
+ *  If you overwrite this method you will need to call the super implementation.
+ *
+ *  @param sourceState The source state.
+ *  @param targetState The target state.
+ *  @param data        The payload data.
+ */
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
+
 @end

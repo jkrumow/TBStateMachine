@@ -78,7 +78,7 @@
 - (void)setUp:(NSDictionary *)data
 {
     if (self.initialState) {
-        [self enterState:nil targetState:self.initialState data:data];
+        [self enter:nil targetState:self.initialState data:data];
     } else {
         @throw [NSException tb_noInitialStateException:self.name];
     }
@@ -87,7 +87,7 @@
 - (void)tearDown:(NSDictionary *)data
 {
     [self.scheduledEventsQueue cancelAllOperations];
-    [self exitState:self.currentState targetState:nil data:data];
+    [self exit:self.currentState targetState:nil data:data];
     _currentState = nil;
 }
 
@@ -96,7 +96,7 @@
 - (void)scheduleEvent:(TBSMEvent *)event
 {
     if (self.parentNode) {
-        TBSMStateMachine *topStateMachine = [self.parentNode parentNode];
+        TBSMStateMachine *topStateMachine = (TBSMStateMachine *)[self.parentNode parentNode];
         [topStateMachine scheduleEvent:event];
         return;
     }
@@ -141,7 +141,7 @@
     if (action) {
         action(sourceState, targetState, data);
     }
-    [self enterState:sourceState targetState:targetState data:data];
+    [self enter:sourceState targetState:targetState data:data];
 }
 
 - (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data
@@ -150,10 +150,10 @@
     if (action) {
         action(sourceState, region, data);
     }
-    [self enterState:sourceState targetStates:targetStates region:region data:data];
+    [self enter:sourceState targetStates:targetStates region:region data:data];
 }
 
-- (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
     NSUInteger targetLevel = [[targetState.parentNode path] count];
     NSUInteger thisLevel = self.path.count;
@@ -170,7 +170,7 @@
     [self.currentState enter:sourceState targetState:targetState data:data];
 }
 
-- (void)enterState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
 {
     NSUInteger targetLevel = [[region.parentNode path] count];
     NSUInteger thisLevel = self.path.count;
@@ -182,11 +182,11 @@
         id<TBSMNode> node = targetPath[thisLevel];
         _currentState = (TBSMState *)node.parentNode;
     }
-    TBSMContainingState *container = (TBSMContainingState *)_currentState;
-    [container enter:sourceState targetStates:targetStates region:region data:data];
+    id<TBSMContainingNode> node = (id <TBSMContainingNode>)_currentState;
+    [node enter:sourceState targetStates:targetStates region:region data:data];
 }
 
-- (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
     [self.currentState exit:sourceState targetState:targetState data:data];
 }
@@ -199,7 +199,7 @@
     TBSMStateMachine *stateMachine = self;
     while (stateMachine) {
         [path insertObject:stateMachine atIndex:0];
-        stateMachine = stateMachine.parentNode.parentNode;
+        stateMachine = (TBSMStateMachine *)stateMachine.parentNode.parentNode;
     }
     return path;
 }
