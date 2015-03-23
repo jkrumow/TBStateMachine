@@ -67,9 +67,9 @@
     }
 }
 
-- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
 {
-    [super enter:sourceState targetState:self data:data];
+    [super enter:sourceState targetState:region data:data];
     
     if (self.priv_parallelStateMachines.count == 0) {
         @throw [NSException tb_missingStateMachineException:self.name];

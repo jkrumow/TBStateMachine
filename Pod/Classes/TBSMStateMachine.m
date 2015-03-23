@@ -177,15 +177,15 @@
     
     if (targetLevel < thisLevel) {
         _currentState = self.initialState;
-        [region enter:sourceState targetState:region data:data];
+        [_currentState enter:sourceState targetStates:targetStates region:region data:data];
     } else if (targetLevel == thisLevel) {
         _currentState = region;
-        [region enter:sourceState targetStates:targetStates data:data];
+        [_currentState enter:sourceState targetStates:targetStates region:region data:data];
     } else {
         NSArray *targetPath = [region.parentNode path];
         id<TBSMNode> node = targetPath[thisLevel];
         _currentState = (TBSMState *)node.parentNode;
-        [region enter:sourceState targetState:region data:data];
+        [_currentState enter:sourceState targetStates:targetStates region:region data:data];
     }
 }
 
