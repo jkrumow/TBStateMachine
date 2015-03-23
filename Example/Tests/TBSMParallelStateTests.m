@@ -10,31 +10,46 @@
 
 SpecBegin(TBSMParallelState)
 
-__block TBSMState *a;
-__block TBSMState *b;
+__block TBSMState *a1;
+__block TBSMState *a2;
+__block TBSMState *b1;
+__block TBSMState *b2;
+__block TBSMState *c1;
+__block TBSMState *c2;
 
 __block TBSMStateMachine *subStateMachineA;
 __block TBSMStateMachine *subStateMachineB;
+__block TBSMStateMachine *subStateMachineC;
 __block TBSMParallelState *parallelStates;
 
 describe(@"TBSMParallelState", ^{
     
     beforeEach(^{
         parallelStates = [TBSMParallelState parallelStateWithName:@"p"];
-        a = [TBSMState stateWithName:@"a"];
-        b = [TBSMState stateWithName:@"b"];
+        a1 = [TBSMState stateWithName:@"a1"];
+        a2 = [TBSMState stateWithName:@"a2"];
+        b1 = [TBSMState stateWithName:@"b1"];
+        b2 = [TBSMState stateWithName:@"b2"];
+        c1 = [TBSMState stateWithName:@"c1"];
+        c2 = [TBSMState stateWithName:@"c2"];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"smA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"smB"];
+        subStateMachineC = [TBSMStateMachine stateMachineWithName:@"smC"];
     });
     
     afterEach(^{
         parallelStates = nil;
-        a = nil;
-        b = nil;
+        a1 = nil;
+        a2 = nil;
+        b1 = nil;
+        b2 = nil;
+        c1 = nil;
+        c2 = nil;
         
         subStateMachineA = nil;
         subStateMachineB = nil;
+        subStateMachineC = nil;
     });
     
     describe(@"Exception handling on setup.", ^{
@@ -70,6 +85,10 @@ describe(@"TBSMParallelState", ^{
             }).to.raise(TBSMException);
             
             expect(^{
+                [parallelStates enter:nil targetStates:nil data:nil];
+            }).to.raise(TBSMException);
+            
+            expect(^{
                 [parallelStates exit:nil targetState:nil data:nil];
             }).to.raise(TBSMException);
             
@@ -90,20 +109,38 @@ describe(@"TBSMParallelState", ^{
     
     it(@"enters and exits all initial states", ^{
         
-        subStateMachineA.states = @[a];
-        subStateMachineB.states = @[b];
+        subStateMachineA.states = @[a1, a2];
+        subStateMachineB.states = @[b1, b2];
+        subStateMachineC.states = @[c1, c2];
         
-        parallelStates.stateMachines = @[subStateMachineA, subStateMachineB];
+        parallelStates.stateMachines = @[subStateMachineA, subStateMachineB, subStateMachineC];
         
         [parallelStates enter:nil targetState:nil data:nil];
         
-        expect(subStateMachineA.currentState).to.equal(a);
-        expect(subStateMachineB.currentState).to.equal(b);
+        expect(subStateMachineA.currentState).to.equal(a1);
+        expect(subStateMachineB.currentState).to.equal(b1);
+        expect(subStateMachineC.currentState).to.equal(c1);
         
         [parallelStates exit:nil targetState:nil data:nil];
         
         expect(subStateMachineA.currentState).to.beNil;
         expect(subStateMachineB.currentState).to.beNil;
+        expect(subStateMachineC.currentState).to.beNil;
+    });
+    
+    it(@"enters dedicated target states.", ^{
+    
+        subStateMachineA.states = @[a1, a2];
+        subStateMachineB.states = @[b1, b2];
+        subStateMachineC.states = @[c1, c2];
+        
+        parallelStates.stateMachines = @[subStateMachineA, subStateMachineB, subStateMachineC];
+        
+        [parallelStates enter:nil targetStates:@[a2, b2] data:nil];
+    
+        expect(subStateMachineA.currentState).to.equal(a2);
+        expect(subStateMachineB.currentState).to.equal(b2);
+        expect(subStateMachineC.currentState).to.equal(c1);
     });
 });
 
