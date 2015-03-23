@@ -29,6 +29,8 @@
  */
 + (TBSMFork *)forkWithName:(NSString *)name;
 
+- (NSArray *)targetStates;
+
 /**
  *  Sets the target states for the fork transition.
  *

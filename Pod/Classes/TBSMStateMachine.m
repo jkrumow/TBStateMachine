@@ -144,6 +144,15 @@
     [self enterState:sourceState targetState:targetState data:data];
 }
 
+- (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data
+{
+    [self.currentState exit:sourceState targetState:region data:data];
+    if (action) {
+        action(sourceState, region, data);
+    }
+    [self enterState:sourceState targetStates:targetStates region:region data:data];
+}
+
 - (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
     NSUInteger targetLevel = [[targetState.parentNode path] count];
@@ -159,6 +168,25 @@
         _currentState = (TBSMState *)node.parentNode;
     }
     [self.currentState enter:sourceState targetState:targetState data:data];
+}
+
+- (void)enterState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
+{
+    NSUInteger targetLevel = [[region.parentNode path] count];
+    NSUInteger thisLevel = self.path.count;
+    
+    if (targetLevel < thisLevel) {
+        _currentState = self.initialState;
+        [region enter:sourceState targetState:region data:data];
+    } else if (targetLevel == thisLevel) {
+        _currentState = region;
+        [region enter:sourceState targetStates:targetStates data:data];
+    } else {
+        NSArray *targetPath = [region.parentNode path];
+        id<TBSMNode> node = targetPath[thisLevel];
+        _currentState = (TBSMState *)node.parentNode;
+        [region enter:sourceState targetState:region data:data];
+    }
 }
 
 - (void)exitState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data

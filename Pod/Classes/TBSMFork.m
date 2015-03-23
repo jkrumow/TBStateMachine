@@ -26,6 +26,11 @@
     return self.region;
 }
 
+- (NSArray *)targetStates
+{
+    return self.priv_targetStates;
+}
+
 - (void)setTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region
 {
     if (targetStates == nil || targetStates.count == 0 || region == nil) {

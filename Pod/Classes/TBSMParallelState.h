@@ -64,4 +64,6 @@
  */
 - (BOOL)handleEvent:(TBSMEvent *)event;
 
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates data:(NSDictionary *)data;
+
 @end

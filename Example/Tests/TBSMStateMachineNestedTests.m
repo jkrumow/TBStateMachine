@@ -335,12 +335,13 @@ describe(@"TBSMStateMachine", ^{
         [a3 addHandlerForEvent:TRANSITION_14 target:b322];
         
         // fork into parallel state
-        [b addHandlerForEvent:TRANSITION_15 target:c];
+        [b addHandlerForEvent:TRANSITION_15 target:fork];
+        [fork setTargetStates:@[c12, c22] inRegion:c];
         
-        // join out of paralle state
-        [c11 addHandlerForEvent:TRANSITION_16 target:join];
-        [c21 addHandlerForEvent:TRANSITION_17 target:join];
-        [join setSourceStates:@[c11, c21] target:b];
+        // join out of parallel state
+        [c12 addHandlerForEvent:TRANSITION_16 target:join];
+        [c22 addHandlerForEvent:TRANSITION_17 target:join];
+        [join setSourceStates:@[c12, c22] target:b];
         
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b311, b312];
@@ -693,6 +694,19 @@ describe(@"TBSMStateMachine", ^{
         expect(subStateMachineB.currentState).to.equal(b3);
         expect(subStateMachineB31.currentState).to.equal(b311);
         expect(subStateMachineB32.currentState).to.equal(b322);
+    });
+    
+    it(@"performs a fork compound transition into the specified region.", ^{
+        
+        waitUntil(^(DoneCallback done) {
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_15 data:nil] withCompletion:^{
+                done();
+            }];
+        });
+        expect(stateMachine.currentState).to.equal(c);
+        expect(subStateMachineC1.currentState).to.equal(c12);
+        expect(subStateMachineC2.currentState).to.equal(c22);
     });
     
     it(@"performs a join compound transition into the join target state.", ^{

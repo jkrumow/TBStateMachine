@@ -67,6 +67,27 @@
     }
 }
 
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates data:(NSDictionary *)data
+{
+    [super enter:sourceState targetState:self data:data];
+    
+    if (self.priv_parallelStateMachines.count == 0) {
+        @throw [NSException tb_missingStateMachineException:self.name];
+    }
+    for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
+        BOOL isEntered = NO;
+        for (TBSMState *targetState in targetStates) {
+            if ([targetState.path containsObject:stateMachine]) {
+                [stateMachine enterState:sourceState targetState:targetState data:data];
+                isEntered = YES;
+            }
+        }
+        if (!isEntered) {
+            [stateMachine setUp:data];
+        }
+    }
+}
+
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
     if (self.priv_parallelStateMachines.count == 0) {

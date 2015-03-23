@@ -45,9 +45,10 @@
 - (BOOL)performTransitionWithData:(NSDictionary *)data
 {
     if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
-        
         if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
-            // TODO: enter parallel states at the same time.
+            TBSMFork *fork = (TBSMFork *)self.targetPseudoState;
+            TBSMStateMachine *lca = [self findLeastCommonAncestor];
+            [lca switchState:self.sourceState targetStates:fork.targetStates region:(TBSMParallelState *)fork.targetState action:self.action data:data];
         } else if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {
             TBSMJoin *join = (TBSMJoin *)self.targetPseudoState;
             if ([join joinSourceState:self.sourceState]) {

@@ -129,6 +129,17 @@
 - (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data;
 
 /**
+ *  Switches between states defined in a specified transition.
+ *
+ *  @param sourceState  The source state.
+ *  @param targetStates The target states inside the specified region.
+ *  @param region       The target region.
+ *  @param action       The action to execute.
+ *  @param data         The payload data.
+ */
+- (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data;
+
+/**
  *  Enters a specified state.
  *
  *  @param sourceState The source state.
@@ -136,6 +147,16 @@
  *  @param data        The payload data.
  */
 - (void)enterState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
+
+/**
+ *  Enters a group of specified states inside a region.
+ *
+ *  @param sourceState The source state.
+ *  @param targetState The target states inside the specified region.
+ *  @param region       The target region.
+ *  @param data        The payload data.
+ */
+- (void)enterState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data;
 
 /**
  *  Exits a specified state.
