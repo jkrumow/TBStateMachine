@@ -63,7 +63,7 @@ describe(@"TBSMJoin", ^{
             
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-                [join setSourceStates:@[a,b] target:nil];
+                [join setSourceStates:@[a, b] target:nil];
             }).to.raise(TBSMException);
         });
     });
@@ -77,7 +77,7 @@ describe(@"TBSMJoin", ^{
     
         it(@"returns YES if all source states have been joined.", ^{
             TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-            [join setSourceStates:@[a,b] target:c];
+            [join setSourceStates:@[a, b] target:c];
             expect([join joinSourceState:a]).to.equal(NO);
             expect([join joinSourceState:b]).to.equal(YES);
         });

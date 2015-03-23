@@ -63,7 +63,7 @@ describe(@"TBSMFork", ^{
             
             expect(^{
                 TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];
-                [fork setTargetStates:@[a,b] inRegion:nil];
+                [fork setTargetStates:@[a, b] inRegion:nil];
             }).to.raise(TBSMException);
         });
     });

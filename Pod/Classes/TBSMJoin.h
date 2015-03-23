@@ -40,7 +40,7 @@
 - (void)setSourceStates:(NSArray *)sourceStates target:(TBSMState *)target;
 
 /**
- *  Performs the TODO: [???] transition towards the join pseudostate for a given source state.
+ *  Performs the transition towards the join pseudostate for a given source state.
  *  If all source states have been handled the transition switches to the target state.
  *
  *  @param sourceState The source state to join.
