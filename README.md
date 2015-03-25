@@ -49,13 +49,11 @@ TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
 stateA.enterBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
         
     // ...
-       
 };
     
 stateA.exitBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
         
     // ...
-       
 };
 ```
 
@@ -147,7 +145,7 @@ parallel.stateMachines = @[subMachineA, subMachineB, subMachineC];
 stateMachine.states = @[stateA, stateB, parallel];
 ```
 
-### Pseudostates
+### Pseudo States
 
 TBStateMachine supports fork and join pseudo states to construct compound transitions:
 
@@ -165,10 +163,10 @@ TBSMFork *fork = [TBSMFork forkWithName:@"fork"];
 TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
 [stateA addHandlerForEvent:@"EventA" target:join];
 [stateB addHandlerForEvent:@"EventB" target:join];
-[join setSourceStates:@[stateA,stateB] target:stateC];
+[join setSourceStates:@[stateA, stateB] target:stateC];
 ```
 
-### Notfications
+### Notifications
 
 `TBSMState` posts NSNotifications on entry and exit:
 
