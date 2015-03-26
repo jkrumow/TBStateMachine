@@ -153,8 +153,8 @@ TBStateMachine supports fork and join pseudo states to construct compound transi
 
 ```objective-c
 TBSMFork *fork = [TBSMFork forkWithName:@"fork"];
-[fork setTargetStates:@[stateB,stateC] inRegion:parallel];
 [stateA addHandlerForEvent:@"EventA" target:fork];
+[fork setTargetStates:@[stateB,stateC] inRegion:parallel];
 ```
 
 #### Join
