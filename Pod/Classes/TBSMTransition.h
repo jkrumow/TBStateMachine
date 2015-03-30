@@ -104,7 +104,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  *  Evaluates guard and action blocks.
  *  Determines the lca considering the transiton kind.
  *
- *  Throws an exception if no LCA could be determined.
+ *  Throws an exception if transition could not be resolved.
  *
  *  @param data The payload data.
  *

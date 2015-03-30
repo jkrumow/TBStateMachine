@@ -13,6 +13,7 @@ SpecBegin(TBSMCompoundTransition)
 __block TBSMState *a;
 __block TBSMState *b;
 __block TBSMParallelState *parallel;
+__block TBSMParallelState *empty;
 __block TBSMJoin *join;
 
 describe(@"TBSMCompoundTransition", ^{
@@ -21,14 +22,19 @@ describe(@"TBSMCompoundTransition", ^{
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];
         parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
+        TBSMStateMachine *subMachineA = [TBSMStateMachine stateMachineWithName:@"subMachineA"];
+        subMachineA.states = @[a];
+        parallel.stateMachines = @[subMachineA];
+        empty = [TBSMParallelState parallelStateWithName:@"empty"];
         join = [TBSMJoin joinWithName:@"join"];
-        [join setSourceStates:@[a] target:b];
+        [join setSourceStates:@[a] inRegion:parallel target:b];
     });
     
     afterEach(^{
         a = nil;
         b = nil;
         parallel = nil;
+        empty = nil;
         join = nil;
     });
     
@@ -72,6 +78,15 @@ describe(@"TBSMCompoundTransition", ^{
         expect(transition.guard).to.equal(guard);
     });
 
+    it(@"throws an exception when transition has ambiguous attributes.", ^{
+        join = [TBSMJoin joinWithName:@"join"];
+        [join setSourceStates:@[a] inRegion:empty target:b];
+        TBSMCompoundTransition *transition = [TBSMCompoundTransition compoundTransitionWithSourceState:a targetPseudoState:join action:nil guard:nil];
+        
+        expect(^{
+            [transition performTransitionWithData:nil];
+        }).to.raise(TBSMException);
+    });
 });
 
 SpecEnd

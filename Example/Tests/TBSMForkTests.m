@@ -14,6 +14,7 @@ __block TBSMState *a;
 __block TBSMState *b;
 __block TBSMState *c;
 __block TBSMParallelState *parallel;
+__block TBSMParallelState *empty;
 
 describe(@"TBSMFork", ^{
     
@@ -22,6 +23,12 @@ describe(@"TBSMFork", ^{
         b = [TBSMState stateWithName:@"b"];
         c = [TBSMState stateWithName:@"c"];
         parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
+        TBSMStateMachine *submachineA = [TBSMStateMachine stateMachineWithName:@"submachineA"];
+        TBSMStateMachine *submachineB = [TBSMStateMachine stateMachineWithName:@"submachineB"];
+        submachineA.states = @[a];
+        submachineB.states = @[b];
+        parallel.stateMachines = @[submachineA, submachineB];
+        empty = [TBSMParallelState parallelStateWithName:@"empty"];
     });
     
     afterEach(^{
@@ -29,6 +36,7 @@ describe(@"TBSMFork", ^{
         b = nil;
         c = nil;
         parallel = nil;
+        empty = nil;
     });
 
     describe(@"Exception handling.", ^{

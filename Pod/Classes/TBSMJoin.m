@@ -37,12 +37,18 @@
     return self.target;
 }
 
-- (void)setSourceStates:(NSArray *)sourceStates target:(TBSMState *)target
+- (NSArray *)sourceStates
 {
-    if (sourceStates == nil || sourceStates.count == 0 || target == nil) {
+    return self.priv_sourceStates.copy;
+}
+
+- (void)setSourceStates:(NSArray *)sourceStates inRegion:(TBSMParallelState *)region target:(TBSMState *)target
+{
+    if (sourceStates == nil || sourceStates.count == 0 || region == nil || target == nil) {
         @throw [NSException tb_ambiguousCompoundTransitionAttributes:self.name];
     }
     _priv_sourceStates = sourceStates;
+    _region = region;
     _target = target;
 }
 

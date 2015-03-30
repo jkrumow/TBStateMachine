@@ -14,6 +14,7 @@ __block TBSMState *a;
 __block TBSMState *b;
 __block TBSMState *c;
 __block TBSMParallelState *parallel;
+__block TBSMParallelState *empty;
 
 describe(@"TBSMJoin", ^{
 
@@ -22,6 +23,12 @@ describe(@"TBSMJoin", ^{
         b = [TBSMState stateWithName:@"b"];
         c = [TBSMState stateWithName:@"c"];
         parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
+        TBSMStateMachine *submachineA = [TBSMStateMachine stateMachineWithName:@"submachineA"];
+        TBSMStateMachine *submachineB = [TBSMStateMachine stateMachineWithName:@"submachineB"];
+        submachineA.states = @[a];
+        submachineB.states = @[b];
+        parallel.stateMachines = @[submachineA, submachineB];
+        empty = [TBSMParallelState parallelStateWithName:@"empty"];
     });
     
     afterEach(^{
@@ -29,6 +36,7 @@ describe(@"TBSMJoin", ^{
         b = nil;
         c = nil;
         parallel = nil;
+        empty = nil;
     });
     
     describe(@"Exception handling.", ^{
@@ -53,17 +61,17 @@ describe(@"TBSMJoin", ^{
             
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-                [join setSourceStates:nil target:c];
+                [join setSourceStates:nil inRegion:parallel target:c];
             }).to.raise(TBSMException);
             
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-                [join setSourceStates:@[] target:c];
+                [join setSourceStates:@[] inRegion:parallel target:c];
             }).to.raise(TBSMException);
             
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-                [join setSourceStates:@[a, b] target:nil];
+                [join setSourceStates:@[a, b] inRegion:parallel target:nil];
             }).to.raise(TBSMException);
         });
     });
@@ -77,7 +85,7 @@ describe(@"TBSMJoin", ^{
     
         it(@"returns YES if all source states have been joined.", ^{
             TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-            [join setSourceStates:@[a, b] target:c];
+            [join setSourceStates:@[a, b] inRegion:parallel target:c];
             expect([join joinSourceState:a]).to.equal(NO);
             expect([join joinSourceState:b]).to.equal(YES);
         });

@@ -18,6 +18,8 @@
  */
 @interface TBSMJoin : TBSMPseudoState
 
+@property (nonatomic, strong, readonly) TBSMParallelState *region;
+
 /**
  *  Creates a `TBSMJoin` instance from a given name.
  *
@@ -29,15 +31,18 @@
  */
 + (TBSMJoin *)joinWithName:(NSString *)name;
 
+- (NSArray *)sourceStates;
+
 /**
  *  Sets the source states of the join transition.
  *
  *  Throws an exception when parameters are invalid.
  *
  *  @param sourceStates An Array of TBSMState objects.
+ *  @param region       The orthogonal region containing the source states.
  *  @param target       The target state.
  */
-- (void)setSourceStates:(NSArray *)sourceStates target:(TBSMState *)target;
+- (void)setSourceStates:(NSArray *)sourceStates inRegion:(TBSMParallelState *)region target:(TBSMState *)target;
 
 /**
  *  Performs the transition towards the join pseudostate for a given source state.

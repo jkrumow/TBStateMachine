@@ -163,7 +163,7 @@ TBSMFork *fork = [TBSMFork forkWithName:@"fork"];
 TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
 [stateA addHandlerForEvent:@"EventA" target:join];
 [stateB addHandlerForEvent:@"EventB" target:join];
-[join setSourceStates:@[stateA, stateB] target:stateC];
+[join setSourceStates:@[stateA, stateB] inRegion:parallel target:stateC];
 ```
 
 ### Notifications

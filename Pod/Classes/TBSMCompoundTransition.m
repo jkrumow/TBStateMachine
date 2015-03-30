@@ -47,10 +47,12 @@
     if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
         if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
             TBSMFork *fork = (TBSMFork *)self.targetPseudoState;
+            [self _validatePseudoState:fork states:fork.targetStates region:fork.region];
             TBSMStateMachine *lca = [self findLeastCommonAncestor];
             [lca switchState:self.sourceState targetStates:fork.targetStates region:(TBSMParallelState *)fork.targetState action:self.action data:data];
         } else if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {
             TBSMJoin *join = (TBSMJoin *)self.targetPseudoState;
+            [self _validatePseudoState:join states:join.sourceStates region:join.region];
             if ([join joinSourceState:self.sourceState]) {
                 TBSMStateMachine *lca = [self findLeastCommonAncestor];
                 [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
@@ -59,6 +61,15 @@
         return YES;
     }
     return NO;
+}
+
+- (void)_validatePseudoState:(TBSMPseudoState *)pseudoState states:(NSArray *)states region:(TBSMParallelState *)region
+{
+    for (TBSMState *state in states) {
+        if (![state.path containsObject:region]) {
+            @throw [NSException tb_ambiguousCompoundTransitionAttributes:pseudoState.name];
+        }
+    }
 }
 
 @end
