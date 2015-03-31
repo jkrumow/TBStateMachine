@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Pod/Classes'
 
   s.subspec 'DebugSupport' do |sub|
-    sub.source_files = "Pod/Classes/DebugSupport"
+    sub.source_files = "Pod/DebugSupport"
   end
 
 end

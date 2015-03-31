@@ -385,7 +385,6 @@ describe(@"TBSMStateMachine", ^{
         
         stateMachine.states = @[a, b, c];
         [stateMachine setUp:nil];
-        [stateMachine logDebugOutput:YES];
         
         executionSequence = [NSMutableArray new];
     });
