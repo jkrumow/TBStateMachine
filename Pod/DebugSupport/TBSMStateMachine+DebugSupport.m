@@ -125,13 +125,13 @@
 - (void)_logEvent:(TBSMEvent *)event
 {
     self.timeInterval = @(CACurrentMediaTime());
-    NSLog(@"Will handle event '%@' with data: %@", event.name, event.data.description);
+    NSLog(@"Statemachine '%@' will handle event '%@' with data: %@", self.name, event.name, event.data.description);
 }
 
 - (void)_logCompletion
 {
-    NSLog(@"Run to completion took %f milliseconds.", (CACurrentMediaTime() - self.timeInterval.doubleValue) * 1000);
-    NSLog(@"Number of remaining events in queue: %lu", (unsigned long)self.scheduledEventsQueue.operationCount - 1);
+    NSLog(@"Statemachine '%@': Run to completion took %f milliseconds.", self.name, (CACurrentMediaTime() - self.timeInterval.doubleValue) * 1000);
+    NSLog(@"Statemachine '%@': Number of remaining events in queue: %lu", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);
 }
 
 - (void)_logSwitch:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data
@@ -146,7 +146,9 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
-    object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+    if (self.parentNode == nil) {
+        object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+    }
     event.completionBlock = completion;
     [self tb_scheduleEvent:event];
 }
@@ -155,7 +157,9 @@
 
 - (void)tb_scheduleEvent:(TBSMEvent *)event
 {
-    object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+    if (self.parentNode == nil) {
+        object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+    }
     [self tb_scheduleEvent:event];
 }
 
