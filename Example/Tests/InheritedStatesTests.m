@@ -7,7 +7,7 @@
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
-#import "TBSMStateMachine+TestHelper.h"
+#import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
 
 #import "StateA.h"
 #import "StateB.h"

@@ -102,8 +102,7 @@
 - (void)setStates:(NSArray *)states;
 
 /**
- *  Schedules an event.
- *  The state machine will queue all events it receives until processing of the current event has finished.
+ *  Adds an event to the event queue.
  *
  *  @param event The given `TBSMEvent` instance.
  */

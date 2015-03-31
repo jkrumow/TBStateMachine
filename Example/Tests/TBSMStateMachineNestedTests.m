@@ -7,8 +7,7 @@
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
-
-#import "TBSMStateMachine+TestHelper.h"
+#import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
 
 SpecBegin(TBSMStateMachineNested)
 
@@ -386,6 +385,7 @@ describe(@"TBSMStateMachine", ^{
         
         stateMachine.states = @[a, b, c];
         [stateMachine setUp:nil];
+        [stateMachine logDebugOutput:YES];
         
         executionSequence = [NSMutableArray new];
     });
