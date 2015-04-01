@@ -15,6 +15,28 @@
 @implementation TBSMStateMachine (DebugSupport)
 @dynamic timeInterval;
 
+- (NSNumber *)timeInterval
+{
+    return objc_getAssociatedObject(self, @selector(timeInterval));
+}
+
+- (void)setTimeInterval:(NSNumber *)timeInterval
+{
+    objc_setAssociatedObject(self, @selector(timeInterval), timeInterval, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
+{
+    // This method will only be swizzled on top-statemachines.
+    if (self.parentNode == nil) {
+        object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+    }
+    event.completionBlock = completion;
+    [self tb_scheduleEvent:event];
+}
+
+#pragma mark - Method swizzling
+
 + (void)load
 {
     static dispatch_once_t onceToken;
@@ -108,55 +130,9 @@
     });
 }
 
-#pragma mark - Getters and setters
-
-- (NSNumber *)timeInterval
-{
-    return objc_getAssociatedObject(self, @selector(timeInterval));
-}
-
-- (void)setTimeInterval:(NSNumber *)timeInterval
-{
-    objc_setAssociatedObject(self, @selector(timeInterval), timeInterval, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-#pragma mark - Logging
-
-- (void)_logEvent:(TBSMEvent *)event
-{
-    self.timeInterval = @(CACurrentMediaTime());
-    NSLog(@"Statemachine '%@' will handle event '%@' with data: %@", self.name, event.name, event.data.description);
-}
-
-- (void)_logCompletion
-{
-    NSLog(@"Statemachine '%@': Run to completion took %f milliseconds.", self.name, (CACurrentMediaTime() - self.timeInterval.doubleValue) * 1000);
-    NSLog(@"Statemachine '%@': Number of remaining events in queue: %lu", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);
-}
-
-- (void)_logSwitch:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data
-{
-    NSLog(@"StateMachine '%@' will perform transition from '%@' to '%@' with action '%@' data '%@'", self.name, sourceState.name, targetState.name, action, data.description);
-}
-
-- (void)_logSwitch:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data
-{
-    NSLog(@"StateMachine '%@' will perform transition from '%@' to '%@' in region '%@' with action '%@' data '%@'", self.name, sourceState.name, targetStates.description, region.name, action, data.description);
-}
-
-- (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
-{
-    if (self.parentNode == nil) {
-        object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
-    }
-    event.completionBlock = completion;
-    [self tb_scheduleEvent:event];
-}
-
-#pragma mark - Swizzled methods
-
 - (void)tb_scheduleEvent:(TBSMEvent *)event
 {
+    // This method will only be swizzled on top-statemachines.
     if (self.parentNode == nil) {
         object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
     }
@@ -165,6 +141,7 @@
 
 - (BOOL)tb_handleEvent:(TBSMEvent *)event
 {
+
     [self _logEvent:event];
     
     BOOL hasHandledEvent = [self tb_handleEvent:event];
@@ -188,6 +165,31 @@
 {
     [self _logSwitch:sourceState targetStates:targetStates region:region action:action data:data];
     [self tb_switchState:sourceState targetStates:targetStates region:region action:action data:data];
+}
+
+#pragma mark - Logging
+
+- (void)_logEvent:(TBSMEvent *)event
+{
+    self.timeInterval = @(CACurrentMediaTime());
+    NSLog(@"'%@' will handle event '%@' with data: %@", self.name, event.name, event.data.description);
+}
+
+- (void)_logCompletion
+{
+    NSLog(@"'%@': Run to completion took %f milliseconds.", self.name, (CACurrentMediaTime() - self.timeInterval.doubleValue) * 1000);
+    NSLog(@"'%@': Number of remaining events in queue: %lu", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);
+}
+
+- (void)_logSwitch:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data
+{
+    NSLog(@"'%@' will perform transition from '%@' to '%@' with action '%@' data '%@'", self.name, sourceState.name, targetState.name, action, data.description);
+}
+
+- (void)_logSwitch:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data
+{
+    NSString *targetNames = [[targetStates valueForKeyPath:@"name"] componentsJoinedByString:@", "];
+    NSLog(@"'%@' will perform transition from '%@' to '%@' in region '%@' with action '%@' data '%@'", self.name, sourceState.name, targetNames, region.name, action, data.description);
 }
 
 @end
