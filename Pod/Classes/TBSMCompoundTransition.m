@@ -42,6 +42,21 @@
     return self;
 }
 
+- (NSString *)name
+{
+    NSString *source = nil;
+    NSString *target = nil;
+    if ([self.targetPseudoState respondsToSelector:@selector(sourceStates)]) {
+        source = [NSString stringWithFormat:@"[%@]", [[[self.targetPseudoState performSelector:@selector(sourceStates)] valueForKeyPath:@"name"] componentsJoinedByString:@","]];
+        target = self.targetState.name;
+    }
+    if ([self.targetPseudoState respondsToSelector:@selector(targetStates)]) {
+        source = self.sourceState.name;
+        target = [NSString stringWithFormat:@"[%@]", [[[self.targetPseudoState performSelector:@selector(targetStates)] valueForKeyPath:@"name"] componentsJoinedByString:@","]];
+    }
+    return [NSString stringWithFormat:@"%@ --> %@ --> %@", source, self.targetPseudoState.name, target];
+}
+
 - (BOOL)performTransitionWithData:(NSDictionary *)data
 {
     if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
