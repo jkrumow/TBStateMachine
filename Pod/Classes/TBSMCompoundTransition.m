@@ -46,13 +46,15 @@
 {
     NSString *source = nil;
     NSString *target = nil;
-    if ([self.targetPseudoState respondsToSelector:@selector(sourceStates)]) {
-        source = [NSString stringWithFormat:@"[%@]", [[[self.targetPseudoState performSelector:@selector(sourceStates)] valueForKeyPath:@"name"] componentsJoinedByString:@","]];
+    if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {
+        TBSMJoin *join = (TBSMJoin *)self.targetPseudoState;
+        source = [NSString stringWithFormat:@"[%@](%@)", [[join.sourceStates valueForKeyPath:@"name"] componentsJoinedByString:@","], join.region.name];
         target = self.targetState.name;
     }
-    if ([self.targetPseudoState respondsToSelector:@selector(targetStates)]) {
+    if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
+        TBSMFork *fork = (TBSMFork *)self.targetPseudoState;
         source = self.sourceState.name;
-        target = [NSString stringWithFormat:@"[%@]", [[[self.targetPseudoState performSelector:@selector(targetStates)] valueForKeyPath:@"name"] componentsJoinedByString:@","]];
+        target = [NSString stringWithFormat:@"[%@](%@)", [[fork.targetStates valueForKeyPath:@"name"] componentsJoinedByString:@","], fork.region.name];
     }
     return [NSString stringWithFormat:@"%@ --> %@ --> %@", source, self.targetPseudoState.name, target];
 }
