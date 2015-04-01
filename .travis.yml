@@ -1,12 +1,10 @@
 # reference: http://www.objc.io/issue-6/travis-ci.html
 
-sudo: false
-
 language: objective-c
 
 before_install:
-  - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
-  - gem install slather --no-rdoc --no-ri --no-document --quiet
+  - gem install cocoapods --version 0.35 --no-rdoc --no-ri --no-document --quiet
+  - gem install slather --version 1.5.4 --no-rdoc --no-ri --no-document --quiet
   - cd Example && pod install && cd $TRAVIS_BUILD_DIR
 
 script:
