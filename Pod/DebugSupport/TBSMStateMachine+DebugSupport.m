@@ -9,8 +9,6 @@
 #import <objc/runtime.h>
 
 #import "TBSMStateMachine+DebugSupport.h"
-#import "TBSMDebugStateMachine.h"
-
 
 @implementation TBSMStateMachine (DebugSupport)
 @dynamic timeInterval;
@@ -182,13 +180,13 @@
 
 - (void)_logSwitch:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data
 {
-    NSLog(@"'%@' will perform transition from '%@' to '%@' with action '%@' data '%@'", self.name, sourceState.name, targetState.name, action, data.description);
+    NSLog(@"'%@' will switch from '%@' to '%@' with action '%@' data '%@'", self.name, sourceState.name, targetState.name, action, data.description);
 }
 
 - (void)_logSwitch:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data
 {
     NSString *targetNames = [[targetStates valueForKeyPath:@"name"] componentsJoinedByString:@", "];
-    NSLog(@"'%@' will perform transition from '%@' to '%@' in region '%@' with action '%@' data '%@'", self.name, sourceState.name, targetNames, region.name, action, data.description);
+    NSLog(@"'%@' will switch from '%@' to '%@' in region '%@' with action '%@' data '%@'", self.name, sourceState.name, targetNames, region.name, action, data.description);
 }
 
 @end
