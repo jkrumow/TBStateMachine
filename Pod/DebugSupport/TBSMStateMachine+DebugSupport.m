@@ -141,7 +141,6 @@
 
 - (BOOL)tb_handleEvent:(TBSMEvent *)event
 {
-
     [self _logEvent:event];
     
     BOOL hasHandledEvent = [self tb_handleEvent:event];
