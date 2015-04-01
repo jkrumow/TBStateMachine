@@ -12,8 +12,10 @@ SpecBegin(TBSMCompoundTransition)
 
 __block TBSMState *a;
 __block TBSMState *b;
+__block TBSMState *c;
 __block TBSMParallelState *parallel;
 __block TBSMParallelState *empty;
+__block TBSMFork *fork;
 __block TBSMJoin *join;
 
 describe(@"TBSMCompoundTransition", ^{
@@ -21,26 +23,36 @@ describe(@"TBSMCompoundTransition", ^{
     beforeEach(^{
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];
+        c = [TBSMState stateWithName:@"c"];
         parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
         TBSMStateMachine *subMachineA = [TBSMStateMachine stateMachineWithName:@"subMachineA"];
         subMachineA.states = @[a];
         parallel.stateMachines = @[subMachineA];
         empty = [TBSMParallelState parallelStateWithName:@"empty"];
+        fork = [TBSMFork forkWithName:@"fork"];
+        [fork setTargetStates:@[a, b] inRegion:parallel];
         join = [TBSMJoin joinWithName:@"join"];
-        [join setSourceStates:@[a] inRegion:parallel target:b];
+        [join setSourceStates:@[a, b] inRegion:parallel target:c];
     });
     
     afterEach(^{
         a = nil;
         b = nil;
+        c = nil;
         parallel = nil;
         empty = nil;
+        fork = nil;
         join = nil;
     });
     
-    it (@"returns its name.", ^{
+    it (@"returns its name from a fork transition.", ^{
+        TBSMCompoundTransition *transition = [TBSMCompoundTransition compoundTransitionWithSourceState:c targetPseudoState:fork action:nil guard:nil];
+        expect(transition.name).to.equal(@"c --> fork --> [a,b]");
+    });
+    
+    it (@"returns its name from a join transition.", ^{
         TBSMCompoundTransition *transition = [TBSMCompoundTransition compoundTransitionWithSourceState:a targetPseudoState:join action:nil guard:nil];
-        expect(transition.name).to.equal(@"a_to_b");
+        expect(transition.name).to.equal(@"[a,b] --> join --> c");
     });
     
     it (@"returns source state.", ^{
@@ -55,7 +67,7 @@ describe(@"TBSMCompoundTransition", ^{
     
     it (@"returns target state .", ^{
         TBSMCompoundTransition *transition = [TBSMCompoundTransition compoundTransitionWithSourceState:a targetPseudoState:join action:nil guard:nil];
-        expect(transition.targetState).to.equal(b);
+        expect(transition.targetState).to.equal(c);
     });
     
     it (@"returns action block.", ^{

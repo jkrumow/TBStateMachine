@@ -43,7 +43,7 @@
     if (self.targetState == nil) {
         return self.sourceState.name;
     }
-    return [NSString stringWithFormat:@"%@_to_%@", self.sourceState.name, self.targetState.name];
+    return [NSString stringWithFormat:@"%@ --> %@", self.sourceState.name, self.targetState.name];
 }
 
 - (TBSMStateMachine *)findLeastCommonAncestor

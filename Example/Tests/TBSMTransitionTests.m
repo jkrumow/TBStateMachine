@@ -31,7 +31,7 @@ describe(@"TBSMTransition", ^{
         expect(transition.name).to.equal(@"a");
         
         transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
-        expect(transition.name).to.equal(@"a_to_b");
+        expect(transition.name).to.equal(@"a --> b");
     });
     
     it (@"returns source state.", ^{
