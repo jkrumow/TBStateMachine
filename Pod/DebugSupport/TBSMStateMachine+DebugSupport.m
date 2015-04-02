@@ -23,8 +23,12 @@
     objc_setAssociatedObject(self, @selector(startTime), startTime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-+ (void)load
++ (void)activateDebugSupport
 {
+    [TBSMCompoundTransition activateDebugSupport];
+    [TBSMState activateDebugSupport];
+    [TBSMTransition activateDebugSupport];
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
@@ -50,6 +54,7 @@
             method_exchangeImplementations(originalMethod, swizzledMethod);
         }
         
+        class = [TBSMStateMachine class];
         originalSelector = @selector(scheduleEvent:);
         swizzledSelector = @selector(tb_scheduleEvent:);
         
@@ -71,7 +76,6 @@
             method_exchangeImplementations(originalMethod, swizzledMethod);
         }
         
-        class = [TBSMStateMachine class];
         originalSelector = @selector(setUp:);
         swizzledSelector = @selector(tb_setUp:);
         
@@ -121,8 +125,8 @@
     // This method will only be swizzled on top-statemachines.
     if (self.parentNode == nil) {
         object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+        event.completionBlock = completion;
     }
-    event.completionBlock = completion;
     [self tb_scheduleEvent:event];
 }
 
@@ -161,8 +165,8 @@
 
 - (void)tb_tearDown:(NSDictionary *)data
 {
-    [self tb_tearDown:data];
     NSLog(@"Teardown '%@' data: %@", self.name, data.description);
+    [self tb_tearDown:data];
 }
 
 @end

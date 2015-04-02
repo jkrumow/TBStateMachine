@@ -9,5 +9,5 @@
 #import "TBSMCompoundTransition.h"
 
 @interface TBSMCompoundTransition (DebugSupport)
-
++ (void)activateDebugSupport;
 @end

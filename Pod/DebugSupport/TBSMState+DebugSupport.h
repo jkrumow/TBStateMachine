@@ -9,5 +9,5 @@
 #import "TBSMState.h"
 
 @interface TBSMState (DebugSupport)
-
++ (void)activateDebugSupport;
 @end

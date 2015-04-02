@@ -13,7 +13,7 @@
 
 @implementation TBSMTransition (DebugSupport)
 
-+ (void)load
++ (void)activateDebugSupport
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
