@@ -37,6 +37,10 @@ __block NSMutableArray *executionSequence;
 
 describe(@"InheritedStates", ^{
     
+    beforeAll(^{
+        [TBSMStateMachine activateDebugSupport];
+    });
+    
     beforeEach(^{
         
         executionSequence = [NSMutableArray new];

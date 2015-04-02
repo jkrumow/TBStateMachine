@@ -85,6 +85,10 @@ __block NSMutableArray *executionSequence;
 
 describe(@"TBSMStateMachine", ^{
     
+    beforeAll(^{
+        [TBSMStateMachine activateDebugSupport];
+    });
+    
     beforeEach(^{
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
