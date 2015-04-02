@@ -122,6 +122,7 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
+    [TBSMStateMachine activateDebugSupport];
     // This method will only be swizzled on top-statemachines.
     if (self.parentNode == nil) {
         object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
