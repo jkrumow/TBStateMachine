@@ -9,6 +9,7 @@
 #import "TBSMEvent+DebugSupport.h"
 #import "TBSMCompoundTransition+DebugSupport.h"
 #import "TBSMTransition+DebugSupport.h"
+#import "TBSMState+DebugSupport.h"
 #import "TBSMDebugStateMachine.h"
 #import "TBSMStateMachine.h"
 
@@ -18,7 +19,7 @@
  */
 @interface TBSMStateMachine (DebugSupport)
 
-@property (nonatomic, strong) NSNumber *timeInterval;
+@property (nonatomic, strong) NSNumber *startTime;
 
 /**
  *  Adds an event to the event queue and calls the completion handler afterwards.

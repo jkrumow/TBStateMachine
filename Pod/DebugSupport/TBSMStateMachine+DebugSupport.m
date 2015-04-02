@@ -11,29 +11,17 @@
 #import "TBSMStateMachine+DebugSupport.h"
 
 @implementation TBSMStateMachine (DebugSupport)
-@dynamic timeInterval;
+@dynamic startTime;
 
-- (NSNumber *)timeInterval
+- (NSNumber *)startTime
 {
-    return objc_getAssociatedObject(self, @selector(timeInterval));
+    return objc_getAssociatedObject(self, @selector(startTime));
 }
 
-- (void)setTimeInterval:(NSNumber *)timeInterval
+- (void)setStartTime:(NSNumber *)startTime
 {
-    objc_setAssociatedObject(self, @selector(timeInterval), timeInterval, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(startTime), startTime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-
-- (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
-{
-    // This method will only be swizzled on top-statemachines.
-    if (self.parentNode == nil) {
-        object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
-    }
-    event.completionBlock = completion;
-    [self tb_scheduleEvent:event];
-}
-
-#pragma mark - Method swizzling
 
 + (void)load
 {
@@ -84,8 +72,8 @@
         }
         
         class = [TBSMStateMachine class];
-        originalSelector = @selector(switchState:targetState:action:data:);
-        swizzledSelector = @selector(tb_switchState:targetState:action:data:);
+        originalSelector = @selector(setUp:);
+        swizzledSelector = @selector(tb_setUp:);
         
         originalMethod = class_getInstanceMethod(class, originalSelector);
         swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
@@ -105,8 +93,8 @@
             method_exchangeImplementations(originalMethod, swizzledMethod);
         }
         
-        originalSelector = @selector(switchState:targetStates:region:action:data:);
-        swizzledSelector = @selector(tb_switchState:targetStates:region:action:data:);
+        originalSelector = @selector(tearDown:);
+        swizzledSelector = @selector(tb_tearDown:);
         
         originalMethod = class_getInstanceMethod(class, originalSelector);
         swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
@@ -128,6 +116,16 @@
     });
 }
 
+- (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
+{
+    // This method will only be swizzled on top-statemachines.
+    if (self.parentNode == nil) {
+        object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+    }
+    event.completionBlock = completion;
+    [self tb_scheduleEvent:event];
+}
+
 - (void)tb_scheduleEvent:(TBSMEvent *)event
 {
     // This method will only be swizzled on top-statemachines.
@@ -139,54 +137,32 @@
 
 - (BOOL)tb_handleEvent:(TBSMEvent *)event
 {
-    [self _logEvent:event];
+    NSLog(@"'%@' will handle event '%@' with data: %@", self.name, event.name, event.data.description);
     
+    self.startTime = @(CACurrentMediaTime());
     BOOL hasHandledEvent = [self tb_handleEvent:event];
+    NSTimeInterval timeInterval = ((CACurrentMediaTime() - self.startTime.doubleValue) * 1000);
+    
+    NSLog(@"'%@': Run to completion took %f milliseconds.", self.name, timeInterval);
+    NSLog(@"'%@': Number of remaining events in queue: %lu", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);
+    
     TBSMDebugCompletionBlock completionBlock = event.completionBlock;
-    
-    [self _logCompletion];
-    
     if (completionBlock) {
         completionBlock();
     }
     return hasHandledEvent;
 }
 
-- (void)tb_switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data
+- (void)tb_setUp:(NSDictionary *)data
 {
-    [self _logSwitch:sourceState targetState:targetState action:action data:data];
-    [self tb_switchState:sourceState targetState:targetState action:action data:data];
+    NSLog(@"Setup '%@' data: %@", self.name, data.description);
+    [self tb_setUp:data];
 }
 
-- (void)tb_switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data
+- (void)tb_tearDown:(NSDictionary *)data
 {
-    [self _logSwitch:sourceState targetStates:targetStates region:region action:action data:data];
-    [self tb_switchState:sourceState targetStates:targetStates region:region action:action data:data];
-}
-
-#pragma mark - Logging
-
-- (void)_logEvent:(TBSMEvent *)event
-{
-    self.timeInterval = @(CACurrentMediaTime());
-    NSLog(@"'%@' will handle event '%@' with data: %@", self.name, event.name, event.data.description);
-}
-
-- (void)_logCompletion
-{
-    NSLog(@"'%@': Run to completion took %f milliseconds.", self.name, (CACurrentMediaTime() - self.timeInterval.doubleValue) * 1000);
-    NSLog(@"'%@': Number of remaining events in queue: %lu", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);
-}
-
-- (void)_logSwitch:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data
-{
-    NSLog(@"'%@' will switch from '%@' to '%@' with action '%@' data '%@'", self.name, sourceState.name, targetState.name, action, data.description);
-}
-
-- (void)_logSwitch:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data
-{
-    NSString *targetNames = [[targetStates valueForKeyPath:@"name"] componentsJoinedByString:@", "];
-    NSLog(@"'%@' will switch from '%@' to '%@' in region '%@' with action '%@' data '%@'", self.name, sourceState.name, targetNames, region.name, action, data.description);
+    [self tb_tearDown:data];
+    NSLog(@"Teardown '%@' data: %@", self.name, data.description);
 }
 
 @end
