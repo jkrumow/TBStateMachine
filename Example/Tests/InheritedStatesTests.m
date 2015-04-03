@@ -3,11 +3,11 @@
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 22.01.15.
-//  Copyright (c) 2015 Julian Krumow. All rights reserved.
+//  Copyright (c) 2014-2015 Julian Krumow. All rights reserved.
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
-#import "TBSMStateMachine+TestHelper.h"
+#import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
 
 #import "StateA.h"
 #import "StateB.h"
@@ -74,6 +74,9 @@ describe(@"InheritedStates", ^{
         b.stateMachines = @[subStateMachineB];
         
         stateMachine.states = @[a, b];
+        
+        [stateMachine activateDebugSupport];
+        
         [stateMachine setUp:nil];
         
         [executionSequence removeAllObjects];

@@ -42,30 +42,32 @@ it, simply add the following line to your Podfile:
 
 ### Configuration
 
+```objc
+#import <TBStateMachine/TBSMStateMachine.h>
+```
+
 Create a state, set enter and exit blocks:
 
-```objective-c
+```objc
 TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
 stateA.enterBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
-        
-    // ...
+
 };
     
 stateA.exitBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
-        
-    // ...
+
 };
 ```
 
 Create a state machine:
 
-```objective-c
+```objc
 TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"Main"];
 ```
 
 Add states and set state machine up. The state machine will always set the first state in the given array as the initial state unless you set the initial state explicitly:
 
-```objective-c
+```objc
 stateMachine.states = @[stateA, stateB, ...];
 stateMachine.initialState = stateB;
 [stateMachine setUp:nil];
@@ -75,17 +77,16 @@ stateMachine.initialState = stateB;
 
 You can add event handlers which trigger transitions to specified target states:
 
-```objective-c
+```objc
 [stateA addHandlerForEvent:@"EventA" target:stateB];
 ```
 
 You can also add event handlers with additional action and guard blocks:
 
-```objective-c
+```objc
 
 TBSMActionBlock action = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
-                
-    // ...
+
 };
 
 TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, NSDictionary *data) {
@@ -102,7 +103,7 @@ If you register multiple handlers for the same event the guard blocks decide whi
 
 By default transitions are external. To define a transition kind explicitly choose one of the three kind attributes:
 
-```objective-c
+```objc
 [stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
 [stateA addHandlerForEvent:@"EventA" target:stateA kind:TBSMTransitionInternal action:action guard:guard];
 [stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionLocal action:action guard:guard];
@@ -112,12 +113,12 @@ By default transitions are external. To define a transition kind explicitly choo
 
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
-```objective-c
+```objc
 TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:@{@"myPayload":aPayloadObject}];
 [stateMachine scheduleEvent:event];
 ```
 
-Event processing follows the Run to Completion model. All events will be queued until processing of the current event has finished.
+Event processing follows the Run-to-Completion model. All events will be queued until processing of the current event has finished.
 
 The payload will be available in all action, guard, enter and exit blocks which are executed until the event is successfully handled.
 
@@ -125,7 +126,7 @@ The payload will be available in all action, guard, enter and exit blocks which 
 
 `TBSMState` instances can also be nested by using the `TBSMSubState` wrapper class:
 
-```objective-c
+```objc
 TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState"];
 substate.stateMachine = subMachine;
 
@@ -138,7 +139,7 @@ You can also register events, add enter and exit blocks on `TBSMSubState`, since
 
 To build orthogonal regions you will use the `TBSMParallelState`:
 
-```objective-c
+```objc
 TBSMParallelState *parallel = [TBSMParallelState parallelStateWithName:@"ParallelState"];
 parallel.stateMachines = @[subMachineA, subMachineB, subMachineC];
     
@@ -151,7 +152,7 @@ TBStateMachine supports fork and join pseudo states to construct compound transi
 
 #### Fork
 
-```objective-c
+```objc
 TBSMFork *fork = [TBSMFork forkWithName:@"fork"];
 [stateA addHandlerForEvent:@"EventA" target:fork];
 [fork setTargetStates:@[stateB,stateC] inRegion:parallel];
@@ -159,7 +160,7 @@ TBSMFork *fork = [TBSMFork forkWithName:@"fork"];
 
 #### Join
 
-```objective-c
+```objc
 TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
 [stateA addHandlerForEvent:@"EventA" target:join];
 [stateB addHandlerForEvent:@"EventB" target:join];
@@ -175,7 +176,7 @@ TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
 
 The notification's `userInfo` contains:
 
-```objective-c
+```objc
 {
     TBSMSourceStateUserInfo:theSourceState,
     TBSMTargetStateUserInfo:theTargetState,
@@ -185,30 +186,49 @@ The notification's `userInfo` contains:
 
 To receive a notification:
 
-```objective-c
+```objc
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myHandler:) name:TBSMStateDidEnterNotification object:stateA];
 
 - (void)myHandler:(NSNotification *)notification
 {
     NSDictionary *data = notification.userInfo[TBSMDataUserInfo];
-    
     id myPayloadObject = data[@"myPayload"];
-    
-    // ...
 }
 ```
 
 ### Thread Safety and Concurrency
 
-`TBStateMachine` is thread safe. Each event is processed following the RTC (Run To Completion) model, encapsulated in a block which is dispatched asynchronously to the main queue by default.
+`TBStateMachine` is thread safe. Each event is processed in a single Run-to-Completion step, encapsulated in a block which is dispatched asynchronously to the main queue by default.
 
 To use a custom queue simply set:
 
-```objective-c
+```objc
 NSOperationQueue *queue = [NSOperationQueue new];
 queue.name = @"com.mycompany.queue";
 queue.maxConcurrentOperationCount = 1;
 stateMachine.scheduledEventsQueue = queue;
+```
+
+### Debug Support
+
+TBStateMachine offers debug support through an extra category `TBSMStateMachine+DebugSupport`. Simply include this category and activate debug support on the state machine at the top of the hierarchy:
+
+```objc
+#import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
+
+[stateMachine activateDebugSupport];
+```
+
+The category will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
+
+```
+[Main]: will handle event 'EventA' data: (null)
+[Main] will perform transition: stateA --> stateCc data: (null)
+    Exit 'stateB' source: 'stateA' target: 'stateCc' data: (null)
+	Enter 'stateC' source: 'stateA' target: 'stateCc' data: (null)
+	Enter 'stateCc' source: 'stateA' target: 'stateCc' data: (null)
+[Main]: run-to-completion step took 1.15 milliseconds
+[Main]: remaining events in queue: 0
 ```
 
 ## Author
