@@ -23,8 +23,10 @@
     objc_setAssociatedObject(self, @selector(startTime), startTime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-+ (void)activateDebugSupport
+- (void)activateDebugSupport
 {
+    object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+    
     [TBSMCompoundTransition activateDebugSupport];
     [TBSMState activateDebugSupport];
     [TBSMTransition activateDebugSupport];
@@ -33,6 +35,8 @@
     dispatch_once(&onceToken, ^{
         
         Class class = [TBSMDebugStateMachine class];
+        
+        // handleEvent:
         SEL originalSelector = @selector(handleEvent:);
         SEL swizzledSelector = @selector(tb_handleEvent:);
         
@@ -55,27 +59,8 @@
         }
         
         class = [TBSMStateMachine class];
-        originalSelector = @selector(scheduleEvent:);
-        swizzledSelector = @selector(tb_scheduleEvent:);
         
-        originalMethod = class_getInstanceMethod(class, originalSelector);
-        swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        
-        didAddMethod =
-        class_addMethod(class,
-                        originalSelector,
-                        method_getImplementation(swizzledMethod),
-                        method_getTypeEncoding(swizzledMethod));
-        
-        if (didAddMethod) {
-            class_replaceMethod(class,
-                                swizzledSelector,
-                                method_getImplementation(originalMethod),
-                                method_getTypeEncoding(originalMethod));
-        } else {
-            method_exchangeImplementations(originalMethod, swizzledMethod);
-        }
-        
+        // -setUp:
         originalSelector = @selector(setUp:);
         swizzledSelector = @selector(tb_setUp:);
         
@@ -97,6 +82,7 @@
             method_exchangeImplementations(originalMethod, swizzledMethod);
         }
         
+        // -tearDown:
         originalSelector = @selector(tearDown:);
         swizzledSelector = @selector(tb_tearDown:);
         
@@ -122,22 +108,9 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
-    [TBSMStateMachine activateDebugSupport];
-    // This method will only be swizzled on top-statemachines.
-    if (self.parentNode == nil) {
-        object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
-        event.completionBlock = completion;
-    }
-    [self tb_scheduleEvent:event];
-}
-
-- (void)tb_scheduleEvent:(TBSMEvent *)event
-{
-    // This method will only be swizzled on top-statemachines.
-    if (self.parentNode == nil) {
-        object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
-    }
-    [self tb_scheduleEvent:event];
+    [self activateDebugSupport];
+    event.completionBlock = completion;
+    [self scheduleEvent:event];
 }
 
 - (BOOL)tb_handleEvent:(TBSMEvent *)event

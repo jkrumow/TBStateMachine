@@ -37,10 +37,6 @@ __block NSMutableArray *executionSequence;
 
 describe(@"InheritedStates", ^{
     
-    beforeAll(^{
-        [TBSMStateMachine activateDebugSupport];
-    });
-    
     beforeEach(^{
         
         executionSequence = [NSMutableArray new];
@@ -78,6 +74,9 @@ describe(@"InheritedStates", ^{
         b.stateMachines = @[subStateMachineB];
         
         stateMachine.states = @[a, b];
+        
+        [stateMachine activateDebugSupport];
+        
         [stateMachine setUp:nil];
         
         [executionSequence removeAllObjects];

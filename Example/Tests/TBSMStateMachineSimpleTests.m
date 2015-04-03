@@ -23,12 +23,11 @@ __block NSDictionary *data;
 
 describe(@"TBSMStateMachine", ^{
     
-    beforeAll(^{
-        [TBSMStateMachine activateDebugSupport];
-    });
-    
     beforeEach(^{
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
+        
+        [stateMachine activateDebugSupport];
+        
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];
         c = [TBSMState stateWithName:@"c"];

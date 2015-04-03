@@ -85,10 +85,6 @@ __block NSMutableArray *executionSequence;
 
 describe(@"TBSMStateMachine", ^{
     
-    beforeAll(^{
-        [TBSMStateMachine activateDebugSupport];
-    });
-    
     beforeEach(^{
         
         eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
@@ -388,6 +384,9 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineC.states = @[c1, c2];
         
         stateMachine.states = @[a, b, c];
+        
+        [stateMachine activateDebugSupport];
+        
         [stateMachine setUp:nil];
         
         executionSequence = [NSMutableArray new];

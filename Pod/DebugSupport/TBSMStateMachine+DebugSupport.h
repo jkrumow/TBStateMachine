@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong) NSNumber *startTime;
 
-+ (void)activateDebugSupport;
+- (void)activateDebugSupport;
 
 /**
  *  Adds an event to the event queue and calls the completion handler afterwards.
