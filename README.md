@@ -211,7 +211,16 @@ stateMachine.scheduledEventsQueue = queue;
 
 ### Debug Support
 
-TBStateMachine offers debug support through an extra category `TBSMStateMachine+DebugSupport`. Simply include this category and activate debug support on the state machine at the top of the hierarchy:
+`TBStateMachine` offers debug support through the subspec `DebugSupport`. Simply add it to your `Podfile` (most likely to a beta target to keep it out of production code):
+
+```
+target 'MyBetaApp', :exclusive => true do
+  pod "TBStateMachine"
+  pod "TBStateMachine/DebugSupport"
+end
+```
+
+Then include `TBSMStateMachine+DebugSupport.h` and activate the debug support features on the state machine **at the top of the hierarchy**:
 
 ```objc
 #import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
