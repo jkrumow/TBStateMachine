@@ -4,6 +4,7 @@
 
 - support for pseudo states
 - implementation of fork and join pseudo states
+- debug support for logging and performance measurements
 
 ## 5.2.1
 

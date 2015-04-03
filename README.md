@@ -42,6 +42,12 @@ it, simply add the following line to your Podfile:
 
 ### Configuration
 
+Import TBSMStateMachine.h
+
+```objective-c
+#import <TBStateMachine/TBSMStateMachine.h>
+```
+
 Create a state, set enter and exit blocks:
 
 ```objective-c
@@ -117,7 +123,7 @@ TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:@{@"myPayload":aPaylo
 [stateMachine scheduleEvent:event];
 ```
 
-Event processing follows the Run to Completion model. All events will be queued until processing of the current event has finished.
+Event processing follows the Run-to-Completion model. All events will be queued until processing of the current event has finished.
 
 The payload will be available in all action, guard, enter and exit blocks which are executed until the event is successfully handled.
 
@@ -200,7 +206,7 @@ To receive a notification:
 
 ### Thread Safety and Concurrency
 
-`TBStateMachine` is thread safe. Each event is processed following the RTC (Run To Completion) model, encapsulated in a block which is dispatched asynchronously to the main queue by default.
+`TBStateMachine` is thread safe. Each event is processed in a single Run-to-Completion step, encapsulated in a block which is dispatched asynchronously to the main queue by default.
 
 To use a custom queue simply set:
 
@@ -209,6 +215,29 @@ NSOperationQueue *queue = [NSOperationQueue new];
 queue.name = @"com.mycompany.queue";
 queue.maxConcurrentOperationCount = 1;
 stateMachine.scheduledEventsQueue = queue;
+```
+
+### Debug Support
+
+TBStateMachine offers debug support through an extra category `TBSMStateMachine+DebugSupport`. Simply include this category and activate debug support on the state machine at the top of the hierarchy:
+
+```
+#import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
+
+
+[stateMachine activateDebugSupport];
+```
+
+The category will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
+
+```sh
+[Main]: will handle event 'transition_8' data: (null)
+[Main] will perform transition: stateA --> stateCc data: (null)
+    Exit 'stateB' source: 'stateA' target: 'stateCc' data: (null)
+	Enter 'stateC' source: 'stateA' target: 'stateCc' data: (null)
+	Enter 'stateCc' source: 'stateA' target: 'stateCc' data: (null)
+[Main]: run-to-completion step took 1.15 milliseconds
+[Main]: remaining events in queue: 0
 ```
 
 ## Author
