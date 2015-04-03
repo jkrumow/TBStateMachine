@@ -56,7 +56,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
         // We use a dedicated subclass to swizzle certain methods only on the top state machine.
         Class class = [TBSMDebugStateMachine class];
         
-        // handleEvent:
+        // -handleEvent:
         SEL originalSelector = @selector(handleEvent:);
         SEL swizzledSelector = @selector(tb_handleEvent:);
         

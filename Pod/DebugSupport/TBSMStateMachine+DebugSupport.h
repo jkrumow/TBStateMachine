@@ -16,14 +16,14 @@
 FOUNDATION_EXPORT NSString * const TBSMDebugSupportException;
 
 /**
- *  This category adds debug support to the TBStateMachine library.
+ *  This category adds debug support to the `TBStateMachine` library.
  *
  *  Features:
  *
  *  - log output for handled event, performed transition and execution of setup, teardown, enter and exit handlers
  *  - time mesurement in milliseconds for each Run-to-Completion step
  *
- *  Just import it and call -activateDebugSupport on the top statemachine.
+ *  Just import it and call `-activateDebugSupport` on the top statemachine.
  */
 @interface TBSMStateMachine (DebugSupport)
 

@@ -52,7 +52,7 @@
 
 - (void)_logTransitionWithData:(NSDictionary *)data
 {
-    NSLog(@"[%@] will perform transition: %@ data: %@", [[self findLeastCommonAncestor] name], self.name, data.description);
+    NSLog(@"[%@] will perform compound transition: %@ data: %@", [[self findLeastCommonAncestor] name], self.name, data.description);
 }
 
 @end

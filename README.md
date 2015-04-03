@@ -42,8 +42,6 @@ it, simply add the following line to your Podfile:
 
 ### Configuration
 
-Import TBSMStateMachine.h
-
 ```objc
 #import <TBStateMachine/TBSMStateMachine.h>
 ```
@@ -224,7 +222,7 @@ TBStateMachine offers debug support through an extra category `TBSMStateMachine+
 The category will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
 
 ```
-[Main]: will handle event 'transition_8' data: (null)
+[Main]: will handle event 'EventA' data: (null)
 [Main] will perform transition: stateA --> stateCc data: (null)
     Exit 'stateB' source: 'stateA' target: 'stateCc' data: (null)
 	Enter 'stateC' source: 'stateA' target: 'stateCc' data: (null)
