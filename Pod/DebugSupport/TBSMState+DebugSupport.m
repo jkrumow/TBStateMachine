@@ -65,13 +65,13 @@
 
 - (void)tb_enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    NSLog(@"\t\tEnter '%@' source: '%@' target: '%@' data: %@", self.name, sourceState.name, targetState.name, data.description);
+    NSLog(@"\tEnter '%@' source: '%@' target: '%@' data: %@", self.name, sourceState.name, targetState.name, data.description);
     [self tb_enter:sourceState targetState:targetState data:data];
 }
 
 - (void)tb_exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
 {
-    NSLog(@"\t\tExit '%@' source: '%@' target: '%@' data: %@", self.name, sourceState.name, targetState.name, data.description);
+    NSLog(@"\tExit '%@' source: '%@' target: '%@' data: %@", self.name, sourceState.name, targetState.name, data.description);
     [self tb_exit:sourceState targetState:targetState data:data];
 }
 
