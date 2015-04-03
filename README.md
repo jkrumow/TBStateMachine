@@ -53,13 +53,11 @@ Create a state, set enter and exit blocks:
 ```objc
 TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
 stateA.enterBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
-        
-    // ...
+
 };
     
 stateA.exitBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
-        
-    // ...
+
 };
 ```
 
@@ -90,8 +88,7 @@ You can also add event handlers with additional action and guard blocks:
 ```objc
 
 TBSMActionBlock action = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
-                
-    // ...
+
 };
 
 TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, NSDictionary *data) {
@@ -197,10 +194,7 @@ To receive a notification:
 - (void)myHandler:(NSNotification *)notification
 {
     NSDictionary *data = notification.userInfo[TBSMDataUserInfo];
-    
     id myPayloadObject = data[@"myPayload"];
-    
-    // ...
 }
 ```
 
@@ -223,7 +217,6 @@ TBStateMachine offers debug support through an extra category `TBSMStateMachine+
 
 ```objc
 #import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
-
 
 [stateMachine activateDebugSupport];
 ```
