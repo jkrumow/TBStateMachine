@@ -9,5 +9,6 @@
 #import "TBSMTransition.h"
 
 @interface TBSMTransition (DebugSupport)
+
 + (void)activateDebugSupport;
 @end

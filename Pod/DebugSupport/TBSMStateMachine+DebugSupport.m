@@ -10,8 +10,21 @@
 
 #import "TBSMStateMachine+DebugSupport.h"
 
+NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
+
 @implementation TBSMStateMachine (DebugSupport)
+@dynamic debugSupportEnabled;
 @dynamic startTime;
+
+- (NSNumber *)debugSupportEnabled
+{
+    return objc_getAssociatedObject(self, @selector(debugSupportEnabled));
+}
+
+- (void)setDebugSupportEnabled:(NSNumber *)debugSupportEnabled
+{
+    objc_setAssociatedObject(self, @selector(debugSupportEnabled), debugSupportEnabled, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 - (NSNumber *)startTime
 {
@@ -25,6 +38,12 @@
 
 - (void)activateDebugSupport
 {
+    self.debugSupportEnabled = @YES;
+    
+    if (self.parentNode) {
+        @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Debug support not available on sub-statemachines." userInfo:nil];
+    }
+    
     object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
     
     [TBSMCompoundTransition activateDebugSupport];
@@ -34,6 +53,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
+        // We use a dedicated subclass to swizzle certain methods only on the top state machine.
         Class class = [TBSMDebugStateMachine class];
         
         // handleEvent:
@@ -108,21 +128,23 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
-    [self activateDebugSupport];
+    if (self.debugSupportEnabled.boolValue == NO) {
+        @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Method only available with activated DebugSupport." userInfo:nil];
+    }
     event.completionBlock = completion;
     [self scheduleEvent:event];
 }
 
 - (BOOL)tb_handleEvent:(TBSMEvent *)event
 {
-    NSLog(@"'%@' will handle event '%@' with data: %@", self.name, event.name, event.data.description);
+    NSLog(@"[%@]: will handle event '%@' data: %@", self.name, event.name, event.data.description);
     
     self.startTime = @(CACurrentMediaTime());
     BOOL hasHandledEvent = [self tb_handleEvent:event];
     NSTimeInterval timeInterval = ((CACurrentMediaTime() - self.startTime.doubleValue) * 1000);
     
-    NSLog(@"'%@': Run to completion took %f milliseconds.", self.name, timeInterval);
-    NSLog(@"'%@': Number of remaining events in queue: %lu", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);
+    NSLog(@"[%@]: run-to-completion step took %f milliseconds", self.name, timeInterval);
+    NSLog(@"[%@]: remaining events in queue: %lu\n\n", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);
     
     TBSMDebugCompletionBlock completionBlock = event.completionBlock;
     if (completionBlock) {
@@ -133,13 +155,13 @@
 
 - (void)tb_setUp:(NSDictionary *)data
 {
-    NSLog(@"Setup '%@' data: %@", self.name, data.description);
+    NSLog(@"[%@] setup data: %@", self.name, data.description);
     [self tb_setUp:data];
 }
 
 - (void)tb_tearDown:(NSDictionary *)data
 {
-    NSLog(@"Teardown '%@' data: %@", self.name, data.description);
+    NSLog(@"[%@] teardown data: %@", self.name, data.description);
     [self tb_tearDown:data];
 }
 

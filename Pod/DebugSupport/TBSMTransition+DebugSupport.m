@@ -46,13 +46,21 @@
 - (BOOL)tb_performTransitionWithData:(NSDictionary *)data
 {
     [self _logTransitionWithData:data];
-    
     return [self tb_performTransitionWithData:data];
 }
 
 - (void)_logTransitionWithData:(NSDictionary *)data
 {
-    NSLog(@"'%@' will perform transition: %@ data: %@", [[self findLeastCommonAncestor] name], self.name, data.description);
+    TBSMStateMachine *lca = nil;
+    
+    @try {
+        lca = [self findLeastCommonAncestor];
+    }
+    @catch (NSException *exception) {
+        // swallow exception in case lca could not be found since we do not want to interfere with the running application.
+    }
+    
+    NSLog(@"[%@] will perform transition: %@ data: %@", lca.name, self.name, data.description);
 }
 
 @end
