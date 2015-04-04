@@ -492,12 +492,15 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
+            a3.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+                [executionSequence addObject:@"a3_enter"];
+                done();
+            };
+            
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:EVENT_DATA_VALUE}] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_2 data:nil] withCompletion:^{
-                done();
-            }];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_2 data:nil]];
         });
         
         NSArray *expectedExecutionSequence = @[@"a2_exit",
