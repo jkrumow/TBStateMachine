@@ -14,13 +14,14 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
   s.requires_arc = true
-  s.source_files = 'Pod/Classes'
 
-  s.default_subspec = 'Plain'
-  s.subspec 'Plain' do |sub|
+  s.default_subspec = 'Core'
+  s.subspec 'Core' do |core|
+    core.source_files = 'Pod/Core'
   end
 
-  s.subspec 'DebugSupport' do |sub|
-    sub.source_files = "Pod/DebugSupport"
+  s.subspec 'DebugSupport' do |debug|
+    debug.source_files = "Pod/DebugSupport"
+    debug.dependency 'TBStateMachine/Core'
   end
 end
