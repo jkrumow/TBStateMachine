@@ -23,7 +23,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)setDebugSupportEnabled:(NSNumber *)debugSupportEnabled
 {
-    objc_setAssociatedObject(self, @selector(debugSupportEnabled), debugSupportEnabled, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(debugSupportEnabled), debugSupportEnabled, OBJC_ASSOCIATION_RETAIN);
 }
 
 - (NSNumber *)startTime
@@ -33,7 +33,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)setStartTime:(NSNumber *)startTime
 {
-    objc_setAssociatedObject(self, @selector(startTime), startTime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(startTime), startTime, OBJC_ASSOCIATION_RETAIN);
 }
 
 - (void)activateDebugSupport
