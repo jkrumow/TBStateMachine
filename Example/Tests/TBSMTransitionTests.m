@@ -64,7 +64,7 @@ describe(@"TBSMTransition", ^{
         expect(transition.guard).to.equal(guard);
     });
     
-    it(@"throws an exception if no lca was found.", ^{
+    it(@"Throws a `TBSMException` if no lca was found.", ^{
     
         expect(^{
             TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];

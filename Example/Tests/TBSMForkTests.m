@@ -57,7 +57,7 @@ describe(@"TBSMFork", ^{
             
         });
         
-        it(@"throws an exception when source and target states are invalid.", ^{
+        it(@"Throws a `TBSMException` when source and target states are invalid.", ^{
             
             expect(^{
                 TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];

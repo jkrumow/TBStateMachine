@@ -19,7 +19,7 @@
 /**
  *  Creates a `TBSMParallelState` instance from a given name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The specified parallel wrapper name.
  *
@@ -30,7 +30,7 @@
 /**
  *  Initializes a `TBSMParallelState` with a specified name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The name of this wrapper. Must be unique.
  *

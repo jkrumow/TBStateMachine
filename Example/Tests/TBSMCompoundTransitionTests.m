@@ -90,7 +90,7 @@ describe(@"TBSMCompoundTransition", ^{
         expect(transition.guard).to.equal(guard);
     });
 
-    it(@"throws an exception when transition has ambiguous attributes.", ^{
+    it(@"Throws a `TBSMException` when transition has ambiguous attributes.", ^{
         join = [TBSMJoin joinWithName:@"join"];
         [join setSourceStates:@[a] inRegion:empty target:b];
         TBSMCompoundTransition *transition = [TBSMCompoundTransition compoundTransitionWithSourceState:a targetPseudoState:join action:nil guard:nil];

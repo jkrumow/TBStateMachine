@@ -35,14 +35,14 @@
  *  The operation queue to handle the run to completion steps.
  *  Should be serial.
  *
- *  Throws an exception when trying to set a queue which is not serial.
+ *  Throws a `TBSMException` when trying to set a queue which is not serial.
  */
 @property (nonatomic, strong) NSOperationQueue *scheduledEventsQueue;
 
 /**
  *  The state the state machine wil enter on setup (by default the first state in the provided array will be set).
  *
- *  Throws an exception if the state does not exist in the statemachine.
+ *  Throws a `TBSMException` if the state does not exist in the statemachine.
  */
 @property (nonatomic, strong) TBSMState *initialState;
 
@@ -54,7 +54,7 @@
 /**
  *  Creates a `TBSMStateMachine` instance from a given name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The specified state machine name.
  *
@@ -65,7 +65,7 @@
 /**
  *  Initializes a `TBSMStateMachine` with a specified name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The name of the state machine. Must be unique.
  *

@@ -55,7 +55,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Creates a `TBSMState` instance from a given name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The specified state name.
  *
@@ -66,7 +66,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Initializes a `TBSMState` with a specified name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The name of the state. Must be unique.
  *
@@ -86,7 +86,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Registers an event of a given name for transition to a specified target state.
  *
- *  Throws an exception if the parameters are ambiguous.
+ *  Throws a `TBSMException` if the parameters are ambiguous.
  *
  *  @param event  The given event name.
  *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
@@ -97,7 +97,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Registers an event of a given name for transition to a specified target state.
  *
- *  Throws an exception if the parameters are ambiguous.
+ *  Throws a `TBSMException` if the parameters are ambiguous.
  *
  *  @param event  The given event name.
  *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.
@@ -109,7 +109,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
 /**
  *  Registers an event of a given name for transition to a specified target state.
  *
- *  Throws an exception if the parameters are ambiguous.
+ *  Throws a `TBSMException` if the parameters are ambiguous.
  *
  *  @param event  The given event name.
  *  @param target The target `TBSMState` instance. Can be `nil` for internal transitions.

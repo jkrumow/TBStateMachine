@@ -24,12 +24,12 @@
 /**
  *  Creates a `TBSMCompoundTransition` instance from a given source and target state, action and guard.
  *
- *  @param sourceState The specified source state.
- *  @param targetState The specified target state.
- *  @param action      The action associated with this transition.
- *  @param guard       The guard function associated with the transition.
+ *  @param sourceState       The specified source state.
+ *  @param targetPseudoState The specified target pseudostate.
+ *  @param action            The action associated with this transition.
+ *  @param guard             The guard function associated with the transition.
  *
- *  @return The transition object.
+ *  @return The created compound transition instance.
  */
 + (TBSMCompoundTransition *)compoundTransitionWithSourceState:(TBSMState *)sourceState
                                             targetPseudoState:(TBSMPseudoState *)targetPseudoState
@@ -39,12 +39,12 @@
 /**
  *  Initializes a `TBSMCompoundTransition` instance from a given source and target state, action and guard.
  *
- *  @param sourceState The specified source state.
- *  @param targetState The specified target state.
- *  @param action      The action associated with this transition.
- *  @param guard       The guard function associated with the transition.
+ *  @param sourceState       The specified source state.
+ *  @param targetPseudoState The specified target pseudostate.
+ *  @param action            The action associated with this transition.
+ *  @param guard             The guard function associated with the transition.
  *
- *  @return The transition object.
+ *  @return The initialized compound transition instance.
  */
 - (instancetype)initWithSourceState:(TBSMState *)sourceState
                   targetPseudoState:(TBSMPseudoState *)targetPseudoState

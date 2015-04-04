@@ -57,7 +57,7 @@ describe(@"TBSMJoin", ^{
             
         });
         
-        it(@"throws an exception when source and target states are invalid.", ^{
+        it(@"Throws a `TBSMException` when source and target states are invalid.", ^{
             
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];

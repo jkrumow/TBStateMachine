@@ -46,7 +46,7 @@
 /**
  *  Creates a `TBSMEventHandler` instance from a given event name, target, action and guard.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name   The name of this event. Must be unique.
  *  @param target The target state.
@@ -61,7 +61,7 @@
 /**
  *  Initializes a `TBSMEventHandler` from a given event name, target, action and guard.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name   The name of this event. Must be unique.
  *  @param target The target state.

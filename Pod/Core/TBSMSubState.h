@@ -25,7 +25,7 @@
 /**
  *  Creates a `TBSMSUBState` with a specified name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The name of this wrapper. Must be unique.
  *

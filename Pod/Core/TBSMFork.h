@@ -23,7 +23,7 @@
 /**
  *  Creates a `TBSMFork` instance from a given name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The specified fork name.
  *
@@ -41,7 +41,7 @@
 /**
  *  Sets the target states for the fork transition.
  *
- *  Throws an exception when parameters are invalid.
+ *  Throws a `TBSMException` when parameters are invalid.
  *
  *  @param targetStates The states to enter.
  *  @param region       The containing region.

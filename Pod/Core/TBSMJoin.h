@@ -23,7 +23,7 @@
 /**
  *  Creates a `TBSMJoin` instance from a given name.
  *
- *  Throws an exception when name is nil or an empty string.
+ *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name The specified join name.
  *
@@ -31,12 +31,17 @@
  */
 + (TBSMJoin *)joinWithName:(NSString *)name;
 
+/**
+ *  The join's source states inside the region.
+ *
+ *  @return An array containing the source states.
+ */
 - (NSArray *)sourceStates;
 
 /**
  *  Sets the source states of the join transition.
  *
- *  Throws an exception when parameters are invalid.
+ *  Throws a `TBSMException` when parameters are invalid.
  *
  *  @param sourceStates An Array of TBSMState objects.
  *  @param region       The orthogonal region containing the source states.

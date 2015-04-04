@@ -11,6 +11,9 @@
 
 @class TBSMParallelState;
 
+/**
+ *  This protocol describes a subtype of `TBSMNode` in the state machine hierarchy which can contain other `TBSMNode`s.
+ */
 @protocol TBSMContainingNode <TBSMNode>
 
 /**
