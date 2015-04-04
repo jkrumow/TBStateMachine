@@ -38,11 +38,10 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)activateDebugSupport
 {
-    self.debugSupportEnabled = @YES;
-    
     if (self.parentNode) {
         @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Debug support not available on sub-statemachines." userInfo:nil];
     }
+    self.debugSupportEnabled = @YES;
     
     object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
     

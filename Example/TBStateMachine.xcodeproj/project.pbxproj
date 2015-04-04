@@ -12,6 +12,7 @@
 		155BB54A19C610D200EB1C74 /* TBSMStateMachineSimpleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */; };
 		155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */; };
 		155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54D19C612A400EB1C74 /* TBSMEventTests.m */; };
+		157AB33B1AD00215006A86AA /* TBStateMachineDebugSupportTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 157AB33A1AD00215006A86AA /* TBStateMachineDebugSupportTests.m */; };
 		1593A9921A71A6F1002F6AED /* InheritedStatesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9911A71A6F1002F6AED /* InheritedStatesTests.m */; };
 		1593A9C21A71A815002F6AED /* ParallelA.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9B11A71A815002F6AED /* ParallelA.m */; };
 		1593A9C31A71A815002F6AED /* StateA.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9B31A71A815002F6AED /* StateA.m */; };
@@ -36,6 +37,7 @@
 		155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineSimpleTests.m; sourceTree = "<group>"; };
 		155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateTests.m; sourceTree = "<group>"; };
 		155BB54D19C612A400EB1C74 /* TBSMEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMEventTests.m; sourceTree = "<group>"; };
+		157AB33A1AD00215006A86AA /* TBStateMachineDebugSupportTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineDebugSupportTests.m; sourceTree = "<group>"; };
 		1593A9911A71A6F1002F6AED /* InheritedStatesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InheritedStatesTests.m; sourceTree = "<group>"; };
 		1593A9B01A71A815002F6AED /* ParallelA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelA.h; sourceTree = "<group>"; };
 		1593A9B11A71A815002F6AED /* ParallelA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParallelA.m; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				155BB54D19C612A400EB1C74 /* TBSMEventTests.m */,
 				150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */,
 				15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */,
+				157AB33A1AD00215006A86AA /* TBStateMachineDebugSupportTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -301,6 +304,7 @@
 				15CC17F21ABCB72E009ABEEC /* TBSMForkTests.m in Sources */,
 				1593A9C31A71A815002F6AED /* StateA.m in Sources */,
 				15CC17F01ABCB6B3009ABEEC /* TBSMJoinTests.m in Sources */,
+				157AB33B1AD00215006A86AA /* TBStateMachineDebugSupportTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
