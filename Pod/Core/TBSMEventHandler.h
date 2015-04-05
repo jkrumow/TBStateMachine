@@ -23,7 +23,7 @@
 @property (nonatomic, copy) NSString *name;
 
 /**
- *  The target state of the transition triggered by the event.
+ *  The target vertex of the transition triggered by the event.
  */
 @property (nonatomic, strong) id <TBSMTransitionVertex> target;
 
@@ -49,7 +49,7 @@
  *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name   The name of this event. Must be unique.
- *  @param target The target state.
+ *  @param target The target vertex.
  *  @param type   The kind of transition.
  *  @param action The action.
  *  @param guard  The guard function.
@@ -64,7 +64,7 @@
  *  Throws a `TBSMException` when name is nil or an empty string.
  *
  *  @param name   The name of this event. Must be unique.
- *  @param target The target state.
+ *  @param target The target vertex.
  *  @param kind   The kind of transition.
  *  @param action The action.
  *  @param guard  The guard function.
