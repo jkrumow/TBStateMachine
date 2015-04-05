@@ -113,8 +113,8 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)activeStatemachineConfiguration:(TBSMStateMachine *)stateMachine string:(NSMutableString *)string
 {
-    [string appendFormat:@"%@%@\n", [self indentationForLevel:stateMachine.path.count], stateMachine.name];
     TBSMState *state = stateMachine.currentState;
+    [string appendFormat:@"%@%@\n", [self indentationForLevel:state.path.count-1], stateMachine.name];
     [string appendFormat:@"%@%@\n", [self indentationForLevel:state.path.count], state.name];
     
     if ([state isKindOfClass:[TBSMSubState class]]) {

@@ -240,6 +240,19 @@ The category will then output a log message for every event, transition, setup, 
 [Main]: remaining events in queue: 0
 ```
 
+When calling `-activeStateConfiguration` you will get the current active state configuration of the whole hierarchy:
+
+```objc
+[stateMachine activeStateConfiguration];
+```
+
+```
+Main
+    stateC
+        subMachineC
+            stateCc
+```
+
 ## Author
 
 Julian Krumow, julian.krumow@tarbrain.com

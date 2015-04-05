@@ -72,7 +72,7 @@ describe(@"DebugSupport", ^{
         
         it(@"returns an NSArray containing all names of the currently activated states and their containing state machines.", ^{
             
-            NSString *expectedConfiguration = @"main\n\ts\n\tsub\n\t\t\tp\n\t\tparaB\n\t\t\t\t\tb\n\t\tparaC\n\t\t\t\t\tc\n";
+            NSString *expectedConfiguration = @"main\n\ts\n\t\tsub\n\t\t\tp\n\t\t\t\tparaB\n\t\t\t\t\tb\n\t\t\t\tparaC\n\t\t\t\t\tc\n";
             
             NSString *configuration = [stateMachine activeStateConfiguration];
             expect(configuration).to.equal(expectedConfiguration);
