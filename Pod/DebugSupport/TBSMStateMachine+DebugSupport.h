@@ -38,6 +38,13 @@ FOUNDATION_EXPORT NSString * const TBSMDebugSupportException;
 - (void)activateDebugSupport;
 
 /**
+ *  Returns the active state configuration.
+ *
+ *  @return An NSString containing all names of the currently activated states and their containing state machines.
+ */
+- (NSString *)activeStateConfiguration;
+
+/**
  *  Adds an event to the event queue and calls the completion handler afterwards.
  *
  *  Throws a `TBSMDebugSupportException` when `-activateDebugSupport` was not called beforehand.

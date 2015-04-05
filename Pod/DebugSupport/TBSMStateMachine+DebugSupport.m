@@ -104,6 +104,39 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     });
 }
 
+- (NSString *)activeStateConfiguration
+{
+    NSMutableString *string = [NSMutableString new];
+    [self activeStatemachineConfiguration:self string:string];
+    return string;
+}
+
+- (void)activeStatemachineConfiguration:(TBSMStateMachine *)stateMachine string:(NSMutableString *)string
+{
+    [string appendFormat:@"%@%@\n", [self indentationForLevel:stateMachine.path.count], stateMachine.name];
+    TBSMState *state = stateMachine.currentState;
+    [string appendFormat:@"%@%@\n", [self indentationForLevel:state.path.count], state.name];
+    
+    if ([state isKindOfClass:[TBSMSubState class]]) {
+        TBSMSubState *subState = (TBSMSubState *)state;
+        [self activeStatemachineConfiguration:subState.stateMachine string:string];
+    } else if ([state isKindOfClass:[TBSMParallelState class]]) {
+        TBSMParallelState *parallelState = (TBSMParallelState *)state;
+        for (TBSMStateMachine *subMachine in parallelState.stateMachines) {
+            [self activeStatemachineConfiguration:subMachine string:string];
+        }
+    }
+}
+
+- (NSString *)indentationForLevel:(NSUInteger)level
+{
+    NSMutableString *indentation = [NSMutableString new];
+    for (NSUInteger i=0; i < level-1; i++) {
+        [indentation appendString:@"\t"];
+    }
+    return indentation;
+}
+
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
     if (self.debugSupportEnabled.boolValue == NO) {
