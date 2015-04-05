@@ -108,6 +108,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 {
     NSMutableString *string = [NSMutableString new];
     [self activeStatemachineConfiguration:self string:string];
+    NSLog(@"%@", string);
     return string;
 }
 
