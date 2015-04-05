@@ -390,6 +390,8 @@ describe(@"TBSMStateMachine", ^{
         [stateMachine setUp:nil];
         
         executionSequence = [NSMutableArray new];
+        
+        NSLog(@"############ %@", [stateMachine activeStateConfiguration]);
     });
     
     afterEach(^{
