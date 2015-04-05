@@ -108,7 +108,6 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 {
     NSMutableString *string = [NSMutableString new];
     [self activeStatemachineConfiguration:self string:string];
-    NSLog(@"%@", string);
     return string;
 }
 
@@ -141,7 +140,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
     if (self.debugSupportEnabled.boolValue == NO) {
-        @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Method only available with activated DebugSupport." userInfo:nil];
+        @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Method only available with activated debug support." userInfo:nil];
     }
     event.completionBlock = completion;
     [self scheduleEvent:event];

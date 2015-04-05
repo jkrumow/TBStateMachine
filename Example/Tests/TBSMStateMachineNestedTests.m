@@ -492,8 +492,8 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            a3.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-                [executionSequence addObject:@"a3_enter"];
+            a1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+                [executionSequence addObject:@"a1_enter"];
                 done();
             };
             
