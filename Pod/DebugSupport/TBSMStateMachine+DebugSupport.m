@@ -23,7 +23,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)setDebugSupportEnabled:(NSNumber *)debugSupportEnabled
 {
-    objc_setAssociatedObject(self, @selector(debugSupportEnabled), debugSupportEnabled, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @selector(debugSupportEnabled), debugSupportEnabled, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (NSNumber *)startTime
@@ -33,7 +33,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)setStartTime:(NSNumber *)startTime
 {
-    objc_setAssociatedObject(self, @selector(startTime), startTime, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @selector(startTime), startTime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)activateDebugSupport
@@ -43,7 +43,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     }
     self.debugSupportEnabled = @YES;
     
-    object_setClass(self, objc_getClass("TBSMDebugStateMachine"));
+    object_setClass(self, TBSMDebugStateMachine.class);
     
     [TBSMCompoundTransition activateDebugSupport];
     [TBSMState activateDebugSupport];

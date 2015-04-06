@@ -20,7 +20,7 @@
 
 - (void)setCompletionBlock:(TBSMDebugCompletionBlock)completionBlock
 {
-    objc_setAssociatedObject(self, @selector(completionBlock), completionBlock, OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, @selector(completionBlock), completionBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 @end
