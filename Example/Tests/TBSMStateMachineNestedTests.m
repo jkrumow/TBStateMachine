@@ -356,7 +356,9 @@ describe(@"TBSMStateMachine", ^{
         [a3 addHandlerForEvent:TRANSITION_14 target:b322];
         
         // fork into parallel state
-        [a addHandlerForEvent:TRANSITION_15 target:fork];
+        [a addHandlerForEvent:TRANSITION_15 target:fork kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"a_to_fork_action"];
+        }];
         [fork setTargetStates:@[c212, c222] inRegion:c2];
         
         // join out of parallel state
@@ -737,6 +739,17 @@ describe(@"TBSMStateMachine", ^{
                 done();
             }];
         });
+        
+        NSArray *expectedExecutionSequence = @[@"a1_exit",
+                                               @"a_exit",
+                                               @"a_to_fork_action",
+                                               @"c_enter",
+                                               @"c2_enter",
+                                               @"c212_enter",
+                                               @"c222_enter"];
+        
+        expect(executionSequence).to.equal(expectedExecutionSequence);
+        
         expect(stateMachine.currentState).to.equal(c);
         expect(c.stateMachine.currentState).to.equal(c2);
         expect(subStateMachineC21.currentState).to.equal(c212);
@@ -755,6 +768,7 @@ describe(@"TBSMStateMachine", ^{
                 done();
             }];
         });
+        
         expect(stateMachine.currentState).to.equal(b);
     });
 });
