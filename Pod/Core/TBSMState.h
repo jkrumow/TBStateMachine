@@ -89,7 +89,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  Throws a `TBSMException` if the parameters are ambiguous.
  *
  *  @param event  The given event name.
- *  @param target The target vertex. Can be `nil` for internal transitions.
+ *  @param target The target vertex.
  *  @param kind   The kind of transition.
  */
 - (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind;
@@ -100,7 +100,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  Throws a `TBSMException` if the parameters are ambiguous.
  *
  *  @param event  The given event name.
- *  @param target The target vertex. Can be `nil` for internal transitions.
+ *  @param target The target vertex.
  *  @param kind   The kind of transition.
  *  @param action The action block associated with this event.
  */
@@ -112,7 +112,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  Throws a `TBSMException` if the parameters are ambiguous.
  *
  *  @param event  The given event name.
- *  @param target The target vertex. Can be `nil` for internal transitions.
+ *  @param target The target vertex.
  *  @param kind   The kind of transition.
  *  @param action The action block associated with this event.
  *  @param guard  The guard block associated with this event.

@@ -53,6 +53,10 @@ describe(@"TBSMState", ^{
             }).to.raise(TBSMException);
             
             expect(^{
+                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
+            }).to.raise(TBSMException);
+            
+            expect(^{
                 [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionExternal];
             }).to.raise(TBSMException);
             
@@ -84,7 +88,7 @@ describe(@"TBSMState", ^{
     
     it(@"should return YES if an event can be handled.", ^{
         
-        [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
+        [a addHandlerForEvent:EVENT_NAME_A target:a kind:TBSMTransitionInternal];
         BOOL canHandle = [a hasHandlerForEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
         expect(canHandle).to.equal(YES);
         canHandle = [a hasHandlerForEvent:[TBSMEvent eventWithName:EVENT_NAME_B data:nil]];
@@ -94,7 +98,7 @@ describe(@"TBSMState", ^{
     
     it(@"should return an array of TBSMEventHandler instances containing source and target state for a given event.", ^{
         
-        [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
+        [a addHandlerForEvent:EVENT_NAME_A target:a kind:TBSMTransitionInternal];
         [a addHandlerForEvent:EVENT_NAME_B target:a];
         
         NSArray *resultA = [a eventHandlersForEvent:[TBSMEvent eventWithName:EVENT_NAME_A data:nil]];
