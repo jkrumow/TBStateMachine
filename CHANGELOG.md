@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.3.1
+
+- fixed bug which caused a statemachine to perform a compound transition when the event handler's target was 'nil'
+
 ## 5.3.0
 
 - support for pseudo states

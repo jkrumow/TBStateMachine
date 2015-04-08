@@ -42,12 +42,11 @@
     [self.priv_parallelStateMachines removeAllObjects];
     
     for (TBSMStateMachine *stateMachine in stateMachines) {
-        if ([stateMachine isKindOfClass:[TBSMStateMachine class]]) {
-            stateMachine.parentNode = self;
-            [self.priv_parallelStateMachines addObject:stateMachine];
-        } else {
+        if (![stateMachine isKindOfClass:[TBSMStateMachine class]]) {
             @throw ([NSException tb_notAStateMachineException:stateMachine]);
         }
+        stateMachine.parentNode = self;
+        [self.priv_parallelStateMachines addObject:stateMachine];
     }
 }
 

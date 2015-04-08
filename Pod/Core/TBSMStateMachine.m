@@ -45,13 +45,12 @@
     [self.priv_states removeAllObjects];
     
     for (id object in states) {
-        if ([object isKindOfClass:[TBSMState class]])  {
-            TBSMState *state = object;
-            [state setParentNode:self];
-            [self.priv_states setObject:state forKey:state.name];
-        } else {
+        if (![object isKindOfClass:[TBSMState class]])  {
             @throw ([NSException tb_notOfTypeStateException:object]);
         }
+        TBSMState *state = object;
+        [state setParentNode:self];
+        [self.priv_states setObject:state forKey:state.name];
     }
     if (states.count > 0) {
         _initialState = states[0];
@@ -60,11 +59,10 @@
 
 - (void)setInitialState:(TBSMState *)initialState
 {
-    if ([self.priv_states objectForKey:initialState.name]) {
-        _initialState = initialState;
-    } else {
+    if (![self.priv_states objectForKey:initialState.name]) {
         @throw [NSException tb_nonExistingStateException:initialState.name];
     }
+    _initialState = initialState;
 }
 
 - (void)setScheduledEventsQueue:(NSOperationQueue *)scheduledEventsQueue
@@ -77,11 +75,10 @@
 
 - (void)setUp:(NSDictionary *)data
 {
-    if (self.initialState) {
-        [self enter:nil targetState:self.initialState data:data];
-    } else {
+    if (!self.initialState) {
         @throw [NSException tb_noInitialStateException:self.name];
     }
+    [self enter:nil targetState:self.initialState data:data];
 }
 
 - (void)tearDown:(NSDictionary *)data
@@ -123,7 +120,7 @@
                                                                   kind:eventHandler.kind action:eventHandler.action guard:eventHandler.guard];
             } else {
                 transition = [TBSMCompoundTransition compoundTransitionWithSourceState:self.currentState targetPseudoState:(TBSMPseudoState *)eventHandler.target
-                                                                          action:eventHandler.action guard:eventHandler.guard];
+                                                                                action:eventHandler.action guard:eventHandler.guard];
             }
             if ([transition performTransitionWithData:event.data]) {
                 return YES;

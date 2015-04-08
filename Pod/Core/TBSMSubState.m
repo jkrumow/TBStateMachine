@@ -20,12 +20,11 @@
 
 - (void)setStateMachine:(TBSMStateMachine *)stateMachine
 {
-    if ([stateMachine isKindOfClass:[TBSMStateMachine class]]) {
-        _stateMachine = stateMachine;
-        [_stateMachine setParentNode:self];
-    } else {
+    if (![stateMachine isKindOfClass:[TBSMStateMachine class]]) {
         @throw ([NSException tb_notAStateMachineException:stateMachine]);
     }
+    _stateMachine = stateMachine;
+    [_stateMachine setParentNode:self];
 }
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data

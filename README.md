@@ -215,7 +215,6 @@ stateMachine.scheduledEventsQueue = queue;
 
 ```
 target 'MyBetaApp', :exclusive => true do
-  pod "TBStateMachine"
   pod "TBStateMachine/DebugSupport"
 end
 ```
