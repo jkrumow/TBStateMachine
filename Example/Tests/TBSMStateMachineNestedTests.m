@@ -759,8 +759,11 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a join compound transition into the join target state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_15 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_15 data:nil] withCompletion:^{
+                [executionSequence removeAllObjects];
+            }];
             
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_16 data:nil]];
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_16 data:nil] withCompletion:^{
                 expect(stateMachine.currentState).to.equal(c);
             }];
@@ -768,6 +771,15 @@ describe(@"TBSMStateMachine", ^{
                 done();
             }];
         });
+        
+        NSArray *expectedExecutionSequence = @[@"c212_exit",
+                                               @"c222_exit",
+                                               @"c2_exit",
+                                               @"c_exit",
+                                               @"b_enter",
+                                               @"b1_enter"];
+        
+        expect(executionSequence).to.equal(expectedExecutionSequence);
         
         expect(stateMachine.currentState).to.equal(b);
     });

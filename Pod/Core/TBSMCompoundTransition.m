@@ -86,11 +86,7 @@
     [self _validatePseudoState:join states:join.sourceStates region:join.region];
     if ([join joinSourceState:self.sourceState]) {
         TBSMStateMachine *lca = [self findLeastCommonAncestor];
-        [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
-    } else {
-        if (self.action) {
-            self.action(self.sourceState, self.targetState, data);
-        }
+        [lca switchState:self.sourceState targetState:self.targetState action:nil data:data];
     }
 }
 
