@@ -11,8 +11,8 @@
 #import "TBSMParallelState.h"
 
 @interface TBSMJoin ()
-@property (nonatomic, strong) NSSet *priv_sourceStates;
-@property (nonatomic, strong) NSMutableSet *joinedSourceStates;
+@property (nonatomic, strong) NSOrderedSet *priv_sourceStates;
+@property (nonatomic, strong) NSMutableOrderedSet *joinedSourceStates;
 @property (nonatomic, strong) TBSMState *target;
 @end
 
@@ -27,7 +27,7 @@
 {
     self = [super initWithName:name];
     if (self) {
-        _joinedSourceStates = [NSMutableSet new];
+        _joinedSourceStates = [NSMutableOrderedSet new];
     }
     return self;
 }
@@ -39,7 +39,7 @@
 
 - (NSArray *)sourceStates
 {
-    return self.priv_sourceStates.allObjects;
+    return self.priv_sourceStates.array;
 }
 
 - (void)setSourceStates:(NSArray *)sourceStates inRegion:(TBSMParallelState *)region target:(TBSMState *)target
@@ -47,7 +47,7 @@
     if (sourceStates == nil || sourceStates.count == 0 || region == nil || target == nil) {
         @throw [NSException tb_ambiguousCompoundTransitionAttributes:self.name];
     }
-    _priv_sourceStates = [NSSet setWithArray:sourceStates];
+    _priv_sourceStates = [NSOrderedSet orderedSetWithArray:sourceStates];
     _region = region;
     _target = target;
 }
@@ -55,7 +55,7 @@
 - (BOOL)joinSourceState:(TBSMState *)sourceState
 {
     [self.joinedSourceStates addObject:sourceState];
-    return ([self.joinedSourceStates isEqualToSet:self.priv_sourceStates]);
+    return ([self.joinedSourceStates isEqualToOrderedSet:self.priv_sourceStates]);
 }
 
 @end
