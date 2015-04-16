@@ -19,7 +19,7 @@
 @implementation TBSMCompoundTransition
 
 + (TBSMCompoundTransition *)compoundTransitionWithSourceState:(TBSMState *)sourceState
-                                                  targetPseudoState:(TBSMPseudoState *)targetPseudoState
+                                            targetPseudoState:(TBSMPseudoState *)targetPseudoState
                                                        action:(TBSMActionBlock)action
                                                         guard:(TBSMGuardBlock)guard
 {
@@ -27,7 +27,7 @@
 }
 
 - (instancetype)initWithSourceState:(TBSMState *)sourceState
-                        targetPseudoState:(TBSMPseudoState *)targetPseudoState
+                  targetPseudoState:(TBSMPseudoState *)targetPseudoState
                              action:(TBSMActionBlock)action
                               guard:(TBSMGuardBlock)guard
 {
@@ -73,6 +73,10 @@
             if ([join joinSourceState:self.sourceState]) {
                 TBSMStateMachine *lca = [self findLeastCommonAncestor];
                 [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
+            } else {
+                if (self.action) {
+                    self.action(self.sourceState, self.targetState, data);
+                }
             }
         }
         return YES;
