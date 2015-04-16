@@ -17,7 +17,7 @@ __block TBSMParallelState *parallel;
 __block TBSMParallelState *empty;
 
 describe(@"TBSMJoin", ^{
-
+    
     beforeEach(^{
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];
@@ -82,10 +82,14 @@ describe(@"TBSMJoin", ^{
     });
     
     describe(@"managing source states.", ^{
-    
-        it(@"returns YES if all source states have been joined.", ^{
+        
+        it(@"returns YES if all source states have been joined and resets afterwards.", ^{
             TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
             [join setSourceStates:@[a, b] inRegion:parallel target:c];
+            expect([join joinSourceState:a]).to.equal(NO);
+            expect([join joinSourceState:a]).to.equal(NO);
+            expect([join joinSourceState:b]).to.equal(YES);
+            
             expect([join joinSourceState:a]).to.equal(NO);
             expect([join joinSourceState:a]).to.equal(NO);
             expect([join joinSourceState:b]).to.equal(YES);
