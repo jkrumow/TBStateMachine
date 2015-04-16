@@ -87,6 +87,7 @@ describe(@"TBSMJoin", ^{
             TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
             [join setSourceStates:@[a, b] inRegion:parallel target:c];
             expect([join joinSourceState:a]).to.equal(NO);
+            expect([join joinSourceState:a]).to.equal(NO);
             expect([join joinSourceState:b]).to.equal(YES);
         });
     });
