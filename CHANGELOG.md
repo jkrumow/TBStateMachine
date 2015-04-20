@@ -1,8 +1,12 @@
 # TBStateMachine CHANGELOG
 
+## 5.3.2
+
+- fixed a bug which caused a join transition to be triggered before all source transitions were performed
+
 ## 5.3.1
 
-- fixed bug which caused a statemachine to perform a compound transition when the event handler's target was 'nil'
+- fixed a bug which caused a statemachine to perform a compound transition when the event handler's target was 'nil'
 
 ## 5.3.0
 
