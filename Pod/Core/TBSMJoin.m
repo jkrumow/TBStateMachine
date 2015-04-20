@@ -54,12 +54,14 @@
 
 - (BOOL)joinSourceState:(TBSMState *)sourceState
 {
-    [self.joinedSourceStates addObject:sourceState];
-    BOOL isJoinComplete = [self.joinedSourceStates isEqualToSet:[NSSet setWithArray:self.priv_sourceStates]];
-    if (isJoinComplete) {
-        [self.joinedSourceStates removeAllObjects];
+    if ([self.joinedSourceStates containsObject:sourceState] == NO) {
+        [self.joinedSourceStates addObject:sourceState];
+        if ([self.joinedSourceStates isEqualToSet:[NSSet setWithArray:self.priv_sourceStates]]) {
+            [self.joinedSourceStates removeAllObjects];
+            return YES;
+        }
     }
-    return isJoinComplete;
+    return NO;
 }
 
 @end
