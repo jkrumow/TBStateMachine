@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.3.3
+
+- simplified debug support code
+
 ## 5.3.2
 
 - fixed a bug which caused a join transition to be triggered before all source transitions were performed
