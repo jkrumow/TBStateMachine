@@ -43,6 +43,9 @@
 
 - (void)addOutgoingPathWithTarget:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
+    if (target == nil || guard == nil) {
+        @throw [NSException tb_ambiguousCompoundTransitionAttributes:self.name];
+    }
     TBSMJunctionPath *outgoingPath = [TBSMJunctionPath new];
     outgoingPath.targetState = target;
     outgoingPath.action = action;
@@ -50,19 +53,14 @@
     [self.outgoingPaths addObject:outgoingPath];
 }
 
-- (id<TBSMTransitionVertex>)targetVertex
-{
-    return nil;
-}
-
-- (TBSMState *)targetVertexForTransition:(TBSMState *)source data:(NSDictionary *)data
+- (TBSMState *)targetStateForTransition:(TBSMState *)source data:(NSDictionary *)data
 {
     for (TBSMJunctionPath *outgoingPath in self.outgoingPaths) {
         if (outgoingPath.guard(source, outgoingPath.targetState, data)) {
             return outgoingPath.targetState;
         }
     }
-    return nil;
+    @throw [NSException tb_noOutgoingJunctionPathException:self.name];
 }
 
 @end

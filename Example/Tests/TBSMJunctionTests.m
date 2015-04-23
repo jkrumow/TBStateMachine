@@ -42,7 +42,6 @@ describe(@"TBSMJunction", ^{
             expect(^{
                 [TBSMJunction junctionWithName:nil];
             }).to.raise(TBSMException);
-            
         });
         
         it (@"throws a TBSMException when name is an empty string.", ^{
@@ -50,7 +49,38 @@ describe(@"TBSMJunction", ^{
             expect(^{
                 [TBSMJunction junctionWithName:@""];
             }).to.raise(TBSMException);
+        });
+        
+        it (@"throws a TBSMException when target is nil.", ^{
             
+            TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
+            
+            expect(^{
+                [junction addOutgoingPathWithTarget:nil action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+                    return YES;
+                }];
+            }).to.raise(TBSMException);
+        });
+        
+        it (@"throws a TBSMException when guard is nil.", ^{
+            
+            TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
+            
+            expect(^{
+                [junction addOutgoingPathWithTarget:a action:nil guard:nil];
+            }).to.raise(TBSMException);
+        });
+        
+        it (@"throws a TBSMException when no outgoing path coud be determined.", ^{
+            
+            TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
+            [junction addOutgoingPathWithTarget:b action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+                return NO;
+            }];
+            
+            expect(^{
+                [junction targetStateForTransition:a data:nil];
+            }).to.raise(TBSMException);
         });
     });
     

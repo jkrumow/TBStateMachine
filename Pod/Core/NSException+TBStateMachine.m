@@ -22,6 +22,7 @@ static NSString * const TBSMMissingStateMachineExceptionReason = @"Containing st
 static NSString * const TBSMNoLcaForTransitionExceptionReason = @"No transition possible for transition '%@'.";
 static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous transition attributes for event '%@' source '%@' target '%@'.";
 static NSString * const TBSMAmbiguousCompoundTransitionAttributesReason = @"Ambiguous compound transition attributes for pseudo state '%@'.";
+static NSString * const TBSMNoOutgoingJunctionPathReason = @"No outgoing path determined for junction '%@'.";
 static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue is not a serial queue '%@'.";
 
 @implementation NSException (TBStateMachine)
@@ -79,6 +80,11 @@ static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue
 + (NSException *)tb_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMAmbiguousCompoundTransitionAttributesReason, pseudoStateName] userInfo:nil];
+}
+
++ (NSException *)tb_noOutgoingJunctionPathException:(NSString *)junctionName
+{
+	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoOutgoingJunctionPathReason, junctionName] userInfo:nil];
 }
 
 + (NSException *)tb_noSerialQueueException:(NSString *)queueName

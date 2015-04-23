@@ -119,6 +119,15 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName;
 
 /**
+ *  Thrown when no outgoing path from a junction pseudo state could be determined.
+ *
+ *  @param junctionName The name of the junction pseudo state.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tb_noOutgoingJunctionPathException:(NSString *)junctionName;
+
+/**
  *  Thrown when an NSOperaionQueue has been set which is not serial.
  *
  *  @param queueName The name of the queue.
