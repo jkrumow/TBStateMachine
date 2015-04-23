@@ -19,7 +19,7 @@
 @implementation TBSMCompoundTransition
 
 + (TBSMCompoundTransition *)compoundTransitionWithSourceState:(TBSMState *)sourceState
-                                                  targetPseudoState:(TBSMPseudoState *)targetPseudoState
+                                            targetPseudoState:(TBSMPseudoState *)targetPseudoState
                                                        action:(TBSMActionBlock)action
                                                         guard:(TBSMGuardBlock)guard
 {
@@ -27,7 +27,7 @@
 }
 
 - (instancetype)initWithSourceState:(TBSMState *)sourceState
-                        targetPseudoState:(TBSMPseudoState *)targetPseudoState
+                  targetPseudoState:(TBSMPseudoState *)targetPseudoState
                              action:(TBSMActionBlock)action
                               guard:(TBSMGuardBlock)guard
 {
@@ -63,21 +63,31 @@
 {
     if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
         if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
-            TBSMFork *fork = (TBSMFork *)self.targetPseudoState;
-            [self _validatePseudoState:fork states:fork.targetStates region:fork.region];
-            TBSMStateMachine *lca = [self findLeastCommonAncestor];
-            [lca switchState:self.sourceState targetStates:fork.targetStates region:(TBSMParallelState *)fork.targetState action:self.action data:data];
+            [self _performForkTransitionWithData:data];
         } else if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {
-            TBSMJoin *join = (TBSMJoin *)self.targetPseudoState;
-            [self _validatePseudoState:join states:join.sourceStates region:join.region];
-            if ([join joinSourceState:self.sourceState]) {
-                TBSMStateMachine *lca = [self findLeastCommonAncestor];
-                [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
-            }
+            [self _performJoinTransitionWithData:data];
         }
         return YES;
     }
     return NO;
+}
+
+- (void)_performForkTransitionWithData:(NSDictionary *)data
+{
+    TBSMFork *fork = (TBSMFork *)self.targetPseudoState;
+    [self _validatePseudoState:fork states:fork.targetStates region:fork.region];
+    TBSMStateMachine *lca = [self findLeastCommonAncestor];
+    [lca switchState:self.sourceState targetStates:fork.targetStates region:(TBSMParallelState *)fork.targetState action:self.action data:data];
+}
+
+- (void)_performJoinTransitionWithData:(NSDictionary *)data
+{
+    TBSMJoin *join = (TBSMJoin *)self.targetPseudoState;
+    [self _validatePseudoState:join states:join.sourceStates region:join.region];
+    if ([join joinSourceState:self.sourceState]) {
+        TBSMStateMachine *lca = [self findLeastCommonAncestor];
+        [lca switchState:self.sourceState targetState:self.targetState action:nil data:data];
+    }
 }
 
 - (void)_validatePseudoState:(TBSMPseudoState *)pseudoState states:(NSArray *)states region:(TBSMParallelState *)region

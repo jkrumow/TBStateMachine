@@ -6,9 +6,8 @@
 //  Copyright (c) 2014-2015 Julian Krumow. All rights reserved.
 //
 
-#import <objc/runtime.h>
-
 #import "TBSMState+DebugSupport.h"
+#import "TBSMDebugSwizzler.h"
 
 @implementation TBSMState (DebugSupport)
 
@@ -17,32 +16,8 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        Class class = [TBSMState class];
-        SEL originalSelector = @selector(enter:targetState:data:);
-        SEL swizzledSelector = @selector(tb_enter:targetState:data:);
-        
-        Method originalMethod = class_getInstanceMethod(class, originalSelector);
-        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        
-        class_addMethod(class,
-                        originalSelector,
-                        method_getImplementation(swizzledMethod),
-                        method_getTypeEncoding(swizzledMethod));
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod);
-        
-        originalSelector = @selector(exit:targetState:data:);
-        swizzledSelector = @selector(tb_exit:targetState:data:);
-        
-        originalMethod = class_getInstanceMethod(class, originalSelector);
-        swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        
-        class_addMethod(class,
-                        originalSelector,
-                        method_getImplementation(swizzledMethod),
-                        method_getTypeEncoding(swizzledMethod));
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod);
+        [TBSMDebugSwizzler swizzleMethod:@selector(enter:targetState:data:) withMethod:@selector(tb_enter:targetState:data:) onClass:[TBSMState class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(exit:targetState:data:) withMethod:@selector(tb_exit:targetState:data:) onClass:[TBSMState class]];
     });
 }
 

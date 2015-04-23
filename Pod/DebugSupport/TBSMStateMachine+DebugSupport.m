@@ -6,9 +6,8 @@
 //  Copyright (c) 2015 Julian Krumow. All rights reserved.
 //
 
-#import <objc/runtime.h>
-
 #import "TBSMStateMachine+DebugSupport.h"
+#import "TBSMDebugSwizzler.h"
 
 NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
@@ -43,64 +42,19 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     }
     self.debugSupportEnabled = @YES;
     
-    object_setClass(self, TBSMDebugStateMachine.class);
-    
     [TBSMCompoundTransition activateDebugSupport];
     [TBSMState activateDebugSupport];
     [TBSMTransition activateDebugSupport];
+    
+    object_setClass(self, TBSMDebugStateMachine.class);
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
         // We use a dedicated subclass to swizzle certain methods only on the top state machine.
-        Class class = [TBSMDebugStateMachine class];
-        
-        // -handleEvent:
-        SEL originalSelector = @selector(handleEvent:);
-        SEL swizzledSelector = @selector(tb_handleEvent:);
-        
-        Method originalMethod = class_getInstanceMethod(class, originalSelector);
-        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        
-        class_addMethod(class,
-                        originalSelector,
-                        method_getImplementation(swizzledMethod),
-                        method_getTypeEncoding(swizzledMethod));
-        
-        class_replaceMethod(class,
-                            swizzledSelector,
-                            method_getImplementation(originalMethod),
-                            method_getTypeEncoding(originalMethod));
-        
-        class = [TBSMStateMachine class];
-        
-        // -setUp:
-        originalSelector = @selector(setUp:);
-        swizzledSelector = @selector(tb_setUp:);
-        
-        originalMethod = class_getInstanceMethod(class, originalSelector);
-        swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        
-        class_addMethod(class,
-                        originalSelector,
-                        method_getImplementation(swizzledMethod),
-                        method_getTypeEncoding(swizzledMethod));
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod);
-        
-        // -tearDown:
-        originalSelector = @selector(tearDown:);
-        swizzledSelector = @selector(tb_tearDown:);
-        
-        originalMethod = class_getInstanceMethod(class, originalSelector);
-        swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        
-        class_addMethod(class,
-                        originalSelector,
-                        method_getImplementation(swizzledMethod),
-                        method_getTypeEncoding(swizzledMethod));
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod);
+        [TBSMDebugSwizzler swizzleMethod:@selector(handleEvent:) withMethod:@selector(tb_handleEvent:) onClass:[TBSMDebugStateMachine class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(setUp:) withMethod:@selector(tb_setUp:) onClass:[TBSMStateMachine class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(tearDown:) withMethod:@selector(tb_tearDown:) onClass:[TBSMStateMachine class]];
     });
 }
 

@@ -12,7 +12,7 @@
 
 @interface TBSMJoin ()
 @property (nonatomic, strong) NSArray *priv_sourceStates;
-@property (nonatomic, strong) NSMutableArray *joinedSourceStates;
+@property (nonatomic, strong) NSMutableSet *joinedSourceStates;
 @property (nonatomic, strong) TBSMState *target;
 @end
 
@@ -27,7 +27,7 @@
 {
     self = [super initWithName:name];
     if (self) {
-        _joinedSourceStates = [NSMutableArray new];
+        _joinedSourceStates = [NSMutableSet new];
     }
     return self;
 }
@@ -54,8 +54,14 @@
 
 - (BOOL)joinSourceState:(TBSMState *)sourceState
 {
-    [self.joinedSourceStates addObject:sourceState];
-    return ([self.joinedSourceStates isEqualToArray:self.priv_sourceStates]);
+    if ([self.joinedSourceStates containsObject:sourceState] == NO) {
+        [self.joinedSourceStates addObject:sourceState];
+        if ([self.joinedSourceStates isEqualToSet:[NSSet setWithArray:self.priv_sourceStates]]) {
+            [self.joinedSourceStates removeAllObjects];
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end
