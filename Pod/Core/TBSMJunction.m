@@ -36,6 +36,11 @@
     return self;
 }
 
+- (NSArray *)targetStates
+{
+    return [self.outgoingPaths valueForKeyPath:@"targetState"];
+}
+
 - (void)addOutgoingPathWithTarget:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     TBSMJunctionPath *outgoingPath = [TBSMJunctionPath new];
@@ -53,7 +58,7 @@
 - (TBSMState *)targetVertexForTransition:(TBSMState *)source data:(NSDictionary *)data
 {
     for (TBSMJunctionPath *outgoingPath in self.outgoingPaths) {
-        if (outgoingPath.guard(source, nil, data)) {
+        if (outgoingPath.guard(source, outgoingPath.targetState, data)) {
             return outgoingPath.targetState;
         }
     }

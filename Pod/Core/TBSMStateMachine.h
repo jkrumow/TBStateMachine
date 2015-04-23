@@ -17,6 +17,7 @@
 #import "TBSMSubState.h"
 #import "TBSMFork.h"
 #import "TBSMJoin.h"
+#import "TBSMJunction.h"
 #import "NSException+TBStateMachine.h"
 
 /**

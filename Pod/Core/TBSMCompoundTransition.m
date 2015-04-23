@@ -11,6 +11,7 @@
 #import "TBSMState.h"
 #import "TBSMFork.h"
 #import "TBSMJoin.h"
+#import "TBSMJunction.h"
 
 @interface TBSMCompoundTransition ()
 
@@ -56,6 +57,11 @@
         source = self.sourceState.name;
         target = [NSString stringWithFormat:@"[%@](%@)", [[fork.targetStates valueForKeyPath:@"name"] componentsJoinedByString:@","], fork.region.name];
     }
+    if ([self.targetPseudoState isKindOfClass:[TBSMJunction class]]) {
+        TBSMJunction *junction = (TBSMJunction *)self.targetPseudoState;
+        source = self.sourceState.name;
+        target = [NSString stringWithFormat:@"[%@]", [[junction.targetStates valueForKeyPath:@"name"] componentsJoinedByString:@","]];
+    }
     return [NSString stringWithFormat:@"%@ --> %@ --> %@", source, self.targetPseudoState.name, target];
 }
 
@@ -66,6 +72,8 @@
             [self _performForkTransitionWithData:data];
         } else if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {
             [self _performJoinTransitionWithData:data];
+        } else if ([self.targetPseudoState isKindOfClass:[TBSMJunction class]]) {
+            [self _performJunctionTransitionWithData:data];
         }
         return YES;
     }
@@ -88,6 +96,14 @@
         TBSMStateMachine *lca = [self findLeastCommonAncestor];
         [lca switchState:self.sourceState targetState:self.targetState action:nil data:data];
     }
+}
+
+- (void)_performJunctionTransitionWithData:(NSDictionary *)data
+{
+    TBSMJunction *junction = (TBSMJunction *)self.targetPseudoState;
+    self.targetState = [junction targetVertexForTransition:self.sourceState data:data];
+    TBSMStateMachine *lca = [self findLeastCommonAncestor];
+    [lca switchState:self.sourceState targetState:self.targetState action:nil data:data];
 }
 
 - (void)_validatePseudoState:(TBSMPseudoState *)pseudoState states:(NSArray *)states region:(TBSMParallelState *)region

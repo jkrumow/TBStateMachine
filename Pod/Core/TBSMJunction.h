@@ -12,6 +12,8 @@
 
 + (TBSMJunction *)junctionWithName:(NSString *)name;
 
+- (NSArray *)targetStates;
+
 - (void)addOutgoingPathWithTarget:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 - (TBSMState *)targetVertexForTransition:(TBSMState *)source data:(NSDictionary *)data;
 @end

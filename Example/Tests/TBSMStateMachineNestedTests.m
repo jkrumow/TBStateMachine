@@ -29,6 +29,7 @@ NSString * const TRANSITION_14 = @"transition_14";
 NSString * const TRANSITION_15 = @"transition_15";
 NSString * const TRANSITION_16 = @"transition_16";
 NSString * const TRANSITION_17 = @"transition_17";
+NSString * const TRANSITION_18 = @"transition_18";
 
 NSString * const TRANSITION_BROKEN_LOCAL = @"transition_broken_local";
 
@@ -67,6 +68,7 @@ __block TBSMState *z;
 
 __block TBSMFork *fork;
 __block TBSMJoin *join;
+__block TBSMJunction *junction;
 
 __block TBSMStateMachine *subStateMachineA;
 __block TBSMStateMachine *subStateMachineB;
@@ -123,6 +125,7 @@ describe(@"TBSMStateMachine", ^{
         
         fork = [TBSMFork forkWithName:@"fork"];
         join = [TBSMJoin joinWithName:@"join"];
+        junction = [TBSMJunction junctionWithName:@"junction"];
         
         subStateMachineA = [TBSMStateMachine stateMachineWithName:@"smA"];
         subStateMachineB = [TBSMStateMachine stateMachineWithName:@"smB"];
@@ -366,6 +369,15 @@ describe(@"TBSMStateMachine", ^{
         [c222 addHandlerForEvent:TRANSITION_17 target:join];
         [join setSourceStates:@[c212, c222] inRegion:c2 target:b];
         
+        // junction between b1 and c2
+        [junction addOutgoingPathWithTarget:b1 action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            return (data[@"goB1"]);
+        }];
+        [junction addOutgoingPathWithTarget:c2 action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            return (data[@"goC2"]);
+        }];
+        [a addHandlerForEvent:TRANSITION_18 target:junction];
+        
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b311, b312];
         subStateMachineB32.states = @[b321, b322];
@@ -426,6 +438,10 @@ describe(@"TBSMStateMachine", ^{
         c222 = nil;
         
         z = nil;
+        
+        fork = nil;
+        join = nil;
+        junction = nil;
         
         subStateMachineA = nil;
         subStateMachineB = nil;
@@ -782,6 +798,48 @@ describe(@"TBSMStateMachine", ^{
         expect(executionSequence).to.equal(expectedExecutionSequence);
         
         expect(stateMachine.currentState).to.equal(b);
+    });
+    
+    it(@"performs a junction compound transition into the first target state.", ^{
+        
+        waitUntil(^(DoneCallback done) {
+            
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_18 data:@{@"goB1":@""}] withCompletion:^{
+                done();
+            }];
+        });
+        
+        NSArray *expectedExecutionSequence = @[@"a1_exit",
+                                               @"a_exit",
+                                               @"b_enter",
+                                               @"b1_enter"];
+        
+        expect(executionSequence).to.equal(expectedExecutionSequence);
+        
+        expect(stateMachine.currentState).to.equal(b);
+        expect(subStateMachineB.currentState).to.equal(b1);
+    });
+    
+    it(@"performs a junction compound transition into the second target state.", ^{
+        
+        waitUntil(^(DoneCallback done) {
+            
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_18 data:@{@"goC2":@""}] withCompletion:^{
+                done();
+            }];
+        });
+        
+        NSArray *expectedExecutionSequence = @[@"a1_exit",
+                                               @"a_exit",
+                                               @"c_enter",
+                                               @"c2_enter",
+                                               @"c211_enter",
+                                               @"c221_enter"];
+        
+        expect(executionSequence).to.equal(expectedExecutionSequence);
+        
+        expect(stateMachine.currentState).to.equal(c);
+        expect(subStateMachineC.currentState).to.equal(c2);
     });
 });
 

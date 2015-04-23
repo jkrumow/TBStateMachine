@@ -23,6 +23,7 @@
 		15C716CD1ABE08FB00E3076A /* TBSMPseudoStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */; };
 		15CC17F01ABCB6B3009ABEEC /* TBSMJoinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */; };
 		15CC17F21ABCB72E009ABEEC /* TBSMForkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */; };
+		15DCC5CB1AE992D900CF3750 /* TBSMJunctionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15DCC5CA1AE992D900CF3750 /* TBSMJunctionTests.m */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -53,6 +54,7 @@
 		15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMPseudoStateTests.m; sourceTree = "<group>"; };
 		15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMJoinTests.m; sourceTree = "<group>"; };
 		15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMForkTests.m; sourceTree = "<group>"; };
+		15DCC5CA1AE992D900CF3750 /* TBSMJunctionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMJunctionTests.m; sourceTree = "<group>"; };
 		45DE11B7756962DA59F9E54D /* Pods-TBStateMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TBStateMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-TBStateMachine/Pods-TBStateMachine.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -147,6 +149,7 @@
 				6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */,
 				15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */,
 				15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */,
+				15DCC5CA1AE992D900CF3750 /* TBSMJunctionTests.m */,
 				15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */,
 				155BB54D19C612A400EB1C74 /* TBSMEventTests.m */,
 				150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */,
@@ -295,6 +298,7 @@
 				151C5C0C19CDF6A4003D21AE /* TBSMSubStateTests.m in Sources */,
 				155BB54A19C610D200EB1C74 /* TBSMStateMachineSimpleTests.m in Sources */,
 				15C716CD1ABE08FB00E3076A /* TBSMPseudoStateTests.m in Sources */,
+				15DCC5CB1AE992D900CF3750 /* TBSMJunctionTests.m in Sources */,
 				155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */,
 				15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */,
 				1593A9C91A71A815002F6AED /* SubA.m in Sources */,

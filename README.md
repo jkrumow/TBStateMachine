@@ -14,7 +14,7 @@ A lightweight hierarchical state machine implementation in Objective-C.
 * Block based API
 * Wrapper class for nested states
 * Wrapper class for orthogonal regions
-* Pseudo states (fork and join)
+* Pseudo states (fork, join and junction)
 * External, internal and local transitions with guards and actions
 * State switching using least common ancestor algorithm (LCA)
 * Thread safe event handling
@@ -165,6 +165,21 @@ TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
 [stateA addHandlerForEvent:@"EventA" target:join];
 [stateB addHandlerForEvent:@"EventB" target:join];
 [join setSourceStates:@[stateA, stateB] inRegion:parallel target:stateC];
+```
+
+#### Junction
+
+```objc
+TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
+stateA addHandlerForEvent:@"EventA" target:junction];
+[junction addOutgoingPathWithTarget:stateB action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+    
+    return // ...
+}];
+[junction addOutgoingPathWithTarget:stateC action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+    
+    return // ...
+}];
 ```
 
 ### Notifications

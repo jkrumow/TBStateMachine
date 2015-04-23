@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.4.0
+
+- add juntion pseudo state
+
 ## 5.3.3
 
 - simplified debug support code
