@@ -44,25 +44,20 @@
 - (void)addOutgoingPathWithTarget:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     TBSMJunctionPath *outgoingPath = [TBSMJunctionPath new];
-    outgoingPath.targetState = target;
+    outgoingPath.targetState = target; // TODO: throw exception when nil
     outgoingPath.action = action;
-    outgoingPath.guard = guard;
+    outgoingPath.guard = guard; // TODO: throw exception when nil
     [self.outgoingPaths addObject:outgoingPath];
 }
 
-- (id<TBSMTransitionVertex>)targetVertex
-{
-    return nil;
-}
-
-- (TBSMState *)targetVertexForTransition:(TBSMState *)source data:(NSDictionary *)data
+- (TBSMState *)targetStateForTransition:(TBSMState *)source data:(NSDictionary *)data
 {
     for (TBSMJunctionPath *outgoingPath in self.outgoingPaths) {
         if (outgoingPath.guard(source, outgoingPath.targetState, data)) {
             return outgoingPath.targetState;
         }
     }
-    return nil;
+    return nil; // TODO: throw exception when nil
 }
 
 @end

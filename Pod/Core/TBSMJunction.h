@@ -15,5 +15,5 @@
 - (NSArray *)targetStates;
 
 - (void)addOutgoingPathWithTarget:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
-- (TBSMState *)targetVertexForTransition:(TBSMState *)source data:(NSDictionary *)data;
+- (TBSMState *)targetStateForTransition:(TBSMState *)source data:(NSDictionary *)data;
 @end

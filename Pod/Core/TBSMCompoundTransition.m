@@ -101,7 +101,7 @@
 - (void)_performJunctionTransitionWithData:(NSDictionary *)data
 {
     TBSMJunction *junction = (TBSMJunction *)self.targetPseudoState;
-    self.targetState = [junction targetVertexForTransition:self.sourceState data:data];
+    self.targetState = [junction targetStateForTransition:self.sourceState data:data];
     TBSMStateMachine *lca = [self findLeastCommonAncestor];
     [lca switchState:self.sourceState targetState:self.targetState action:nil data:data];
 }
