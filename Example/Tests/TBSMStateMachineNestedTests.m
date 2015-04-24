@@ -3,7 +3,7 @@
 //  TBStateMachineTests
 //
 //  Created by Julian Krumow on 18.09.14.
-//  Copyright (c) 2014 Julian Krumow. All rights reserved.
+//  Copyright (c) 2014-2015 Julian Krumow. All rights reserved.
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
@@ -373,10 +373,14 @@ describe(@"TBSMStateMachine", ^{
         [junction addOutgoingPathWithTarget:b1 action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             return (data[@"goB1"]);
         }];
-        [junction addOutgoingPathWithTarget:c2 action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [junction addOutgoingPathWithTarget:c2 action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"junction_to_c2_outgoing_path_action"];
+        } guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             return (data[@"goC2"]);
         }];
-        [a addHandlerForEvent:TRANSITION_18 target:junction];
+        [a addHandlerForEvent:TRANSITION_18 target:junction kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [executionSequence addObject:@"a_to_junction_ingoing_path_action"];
+        }];
         
         subStateMachineB2.states = @[b21, b22];
         subStateMachineB31.states = @[b311, b312];
@@ -811,6 +815,7 @@ describe(@"TBSMStateMachine", ^{
         
         NSArray *expectedExecutionSequence = @[@"a1_exit",
                                                @"a_exit",
+                                               @"a_to_junction_ingoing_path_action",
                                                @"b_enter",
                                                @"b1_enter"];
         
@@ -831,6 +836,8 @@ describe(@"TBSMStateMachine", ^{
         
         NSArray *expectedExecutionSequence = @[@"a1_exit",
                                                @"a_exit",
+                                               @"a_to_junction_ingoing_path_action",
+                                               @"junction_to_c2_outgoing_path_action",
                                                @"c_enter",
                                                @"c2_enter",
                                                @"c211_enter",

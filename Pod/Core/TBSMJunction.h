@@ -3,10 +3,11 @@
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 23.03.15.
-//  Copyright (c) 2014 Julian Krumow. All rights reserved.
+//  Copyright (c) 2014-2015 Julian Krumow. All rights reserved.
 //
 
 #import "TBSMPseudoState.h"
+#import "TBSMJunctionPath.h"
 
 @interface TBSMJunction : TBSMPseudoState
 
@@ -38,15 +39,15 @@
 - (void)addOutgoingPathWithTarget:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
 
 /**
- *  Returns the target state of the junction after evaluating all guards.
+ *  Returns the outgoing path of the junction after evaluating all guards.
  *
  *  Throws a `TBSMException` when no target state could be found.
  *
  *  @param source The source state to transition from.
  *  @param data   The payload data.
  *
- *  @return The target stae.
+ *  @return The outgoing path.
  */
-- (TBSMState *)targetStateForTransition:(TBSMState *)source data:(NSDictionary *)data;
+- (TBSMJunctionPath *)outgoingPathForTransition:(TBSMState *)source data:(NSDictionary *)data;
 
 @end

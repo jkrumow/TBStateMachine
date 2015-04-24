@@ -3,7 +3,7 @@
 //  TBStateMachineTests
 //
 //  Created by Julian Krumow on 01.08.2014.
-//  Copyright (c) 2014 Julian Krumow. All rights reserved.
+//  Copyright (c) 2014-2015 Julian Krumow. All rights reserved.
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
