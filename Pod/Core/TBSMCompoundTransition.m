@@ -101,9 +101,18 @@
 - (void)_performJunctionTransitionWithData:(NSDictionary *)data
 {
     TBSMJunction *junction = (TBSMJunction *)self.targetPseudoState;
-    self.targetState = [junction targetStateForTransition:self.sourceState data:data];
+    TBSMJunctionPath *outgoingPath = [junction outgoingPathForTransition:self.sourceState data:data];
+    self.targetState = outgoingPath.targetState;
     TBSMStateMachine *lca = [self findLeastCommonAncestor];
-    [lca switchState:self.sourceState targetState:self.targetState action:nil data:data];
+    TBSMActionBlock compoundAction = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        if (self.action) {
+            self.action(sourceState, targetState, data);
+        }
+        if (outgoingPath.action) {
+            outgoingPath.action(sourceState, targetState, data);
+        }
+    };
+    [lca switchState:self.sourceState targetState:self.targetState action:compoundAction data:data];
 }
 
 - (void)_validatePseudoState:(TBSMPseudoState *)pseudoState states:(NSArray *)states region:(TBSMParallelState *)region

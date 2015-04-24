@@ -3,18 +3,10 @@
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 23.03.15.
-//  Copyright (c) 2014 Julian Krumow. All rights reserved.
+//  Copyright (c) 2014-2015 Julian Krumow. All rights reserved.
 //
 
 #import "TBSMJunction.h"
-
-@interface TBSMJunctionPath : NSObject
-@property (nonatomic, strong) TBSMState *targetState;
-@property (nonatomic, copy) TBSMActionBlock action;
-@property (nonatomic, copy) TBSMGuardBlock guard;
-@end
-@implementation TBSMJunctionPath
-@end
 
 @interface TBSMJunction ()
 @property (nonatomic, strong) NSMutableArray *outgoingPaths;
@@ -53,11 +45,11 @@
     [self.outgoingPaths addObject:outgoingPath];
 }
 
-- (TBSMState *)targetStateForTransition:(TBSMState *)source data:(NSDictionary *)data
+- (TBSMJunctionPath *)outgoingPathForTransition:(TBSMState *)source data:(NSDictionary *)data
 {
     for (TBSMJunctionPath *outgoingPath in self.outgoingPaths) {
         if (outgoingPath.guard(source, outgoingPath.targetState, data)) {
-            return outgoingPath.targetState;
+            return outgoingPath;
         }
     }
     @throw [NSException tb_noOutgoingJunctionPathException:self.name];

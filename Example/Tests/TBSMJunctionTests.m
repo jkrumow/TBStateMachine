@@ -79,7 +79,7 @@ describe(@"TBSMJunction", ^{
             }];
             
             expect(^{
-                [junction targetStateForTransition:a data:nil];
+                [junction outgoingPathForTransition:a data:nil];
             }).to.raise(TBSMException);
         });
     });
