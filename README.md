@@ -104,9 +104,9 @@ If you register multiple handlers for the same event the guard blocks decide whi
 By default transitions are external. To define a transition kind explicitly choose one of the three kind attributes:
 
 ```
-- TBSMTransitionExternal
-- TBSMTransitionInternal
-- TBSMTransitionLocal
+TBSMTransitionExternal
+TBSMTransitionInternal
+TBSMTransitionLocal
 ```
 
 #### Scheduling Events
@@ -128,7 +128,7 @@ Events will be queued and processed one after the other.
 
 ### Nested States
 
-`TBSMState` instances can also be nested by using the `TBSMSubState` wrapper class:
+`TBSMState` instances can also be nested by using `TBSMSubState`:
 
 ```objc
 TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState"];
@@ -141,7 +141,7 @@ You can also register events, add enter and exit blocks on `TBSMSubState`, since
 
 ### Orthogonal Regions
 
-To build orthogonal regions you will use the `TBSMParallelState`:
+To build orthogonal regions you will use `TBSMParallelState`:
 
 ```objc
 TBSMParallelState *parallel = [TBSMParallelState parallelStateWithName:@"ParallelState"];
@@ -206,7 +206,7 @@ The notification's `userInfo` contains:
 To receive a notification:
 
 ```objc
-[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myHandler:) name:TBSMStateDidEnterNotification object:stateA];
+[[NSNotificationCenter defaultCenter] addObserver:myObject selector:@selector(myHandler:) name:TBSMStateDidEnterNotification object:stateA];
 
 - (void)myHandler:(NSNotification *)notification
 {
