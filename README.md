@@ -12,8 +12,8 @@ A lightweight hierarchical state machine implementation in Objective-C.
 ## Features
 
 * Block based API
-* Wrapper class for nested states
-* Wrapper class for orthogonal regions
+* Nested states
+* Orthogonal regions
 * Pseudo states (fork, join and junction)
 * External, internal and local transitions with guards and actions
 * State switching using least common ancestor algorithm (LCA)
@@ -103,10 +103,10 @@ If you register multiple handlers for the same event the guard blocks decide whi
 
 By default transitions are external. To define a transition kind explicitly choose one of the three kind attributes:
 
-```objc
-[stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
-[stateA addHandlerForEvent:@"EventA" target:stateA kind:TBSMTransitionInternal action:action guard:guard];
-[stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionLocal action:action guard:guard];
+```
+- TBSMTransitionExternal
+- TBSMTransitionInternal
+- TBSMTransitionLocal
 ```
 
 #### Scheduling Events
@@ -118,9 +118,13 @@ TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:@{@"myPayload":aPaylo
 [stateMachine scheduleEvent:event];
 ```
 
-Event processing follows the Run-to-Completion model. All events will be queued until processing of the current event has finished.
-
 The payload will be available in all action, guard, enter and exit blocks which are executed until the event is successfully handled.
+
+#### Run-to-Completion
+
+Event processing follows the Run-to-Completion model to ensure that only one event will be handled at a time. A single RTC-step encapsulates the whole logic from evaluating the event to performing the transition to executing guards, actions, exit and enter blocks.
+
+Events will be queued and processed one after the other.
 
 ### Nested States
 
@@ -155,7 +159,7 @@ TBStateMachine supports fork and join pseudo states to construct compound transi
 ```objc
 TBSMFork *fork = [TBSMFork forkWithName:@"fork"];
 [stateA addHandlerForEvent:@"EventA" target:fork];
-[fork setTargetStates:@[stateB,stateC] inRegion:parallel];
+[fork setTargetStates:@[stateB, stateC] inRegion:parallel];
 ```
 
 #### Join
@@ -213,9 +217,9 @@ To receive a notification:
 
 ### Thread Safety and Concurrency
 
-`TBStateMachine` is thread safe. Each event is processed in a single Run-to-Completion step, encapsulated in a block which is dispatched asynchronously to the main queue by default.
+`TBStateMachine` is thread safe. Each event is processed asynchronously on the main queue by default.
 
-To use a custom queue simply set:
+To use a custom serial queue simply set:
 
 ```objc
 NSOperationQueue *queue = [NSOperationQueue new];
@@ -257,7 +261,7 @@ The category will then output a log message for every event, transition, setup, 
 When calling `-activeStateConfiguration` you will get the current active state configuration of the whole hierarchy:
 
 ```objc
-[stateMachine activeStateConfiguration];
+NSLog(@"%@", [stateMachine activeStateConfiguration]);
 ```
 
 ```
