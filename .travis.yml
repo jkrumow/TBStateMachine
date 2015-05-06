@@ -3,8 +3,7 @@
 language: objective-c
 
 before_install:
-  - rvm use $RVM_RUBY_VERSION
-  - bundle install --without=documentation --path ../travis_bundle_dir
+  - bundle install --without=documentation
   - cd Example && pod install && cd $TRAVIS_BUILD_DIR
 
 script:
