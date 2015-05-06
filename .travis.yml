@@ -2,7 +2,7 @@
 
 language: objective-c
 
-before_install:
+install:
   - bundle install --without=documentation
   - cd Example && pod install && cd $TRAVIS_BUILD_DIR
 
