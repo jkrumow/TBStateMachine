@@ -3,9 +3,8 @@
 language: objective-c
 
 before_install:
-  - gem install activesupport
-  - gem install cocoapods --version 0.37 --no-rdoc --no-ri --no-document --quiet
-  - gem install slather --no-rdoc --no-ri --no-document --quiet
+  - rvm use $RVM_RUBY_VERSION
+  - bundle install --without=documentation --path ../travis_bundle_dir
   - cd Example && pod install && cd $TRAVIS_BUILD_DIR
 
 script:
