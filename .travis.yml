@@ -5,8 +5,8 @@ language: objective-c
 before_install: rvm use $RVM_RUBY_VERSION
 install: bundle install --without=documentation --path ../travis_bundle_dir
 
-podfile: $TRAVIS_BUILD_DIR/Example/
-xcode_workspace: $TRAVIS_BUILD_DIR/Example/TBStateMachine.xcworkspace
+podfile: Example/
+xcode_workspace: Example/TBStateMachine.xcworkspace
 xcode_scheme: TBStateMachine
 xcode_sdk: iphonesimulator8.1
 
