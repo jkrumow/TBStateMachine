@@ -2,12 +2,13 @@
 
 language: objective-c
 
-before_install: rvm use $RVM_RUBY_VERSION
-install: bundle install --without=documentation --path ../travis_bundle_dir
+before_install:
+  - rvm use $RVM_RUBY_VERSION
+  - bundle install --without=documentation --path ../travis_bundle_dir
+  - cd Example && pod install && cd $TRAVIS_BUILD_DIR
 
-podfile: Example/
-xcode_workspace: Example/TBStateMachine.xcworkspace
-xcode_scheme: TBStateMachine
-xcode_sdk: iphonesimulator8.1
+script:
+  - xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 
-after_success: slather
+after_success:
+  - slather
