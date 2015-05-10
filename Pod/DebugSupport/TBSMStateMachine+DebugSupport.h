@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Julian Krumow. All rights reserved.
 //
 
+#include <mach/mach_time.h>
+
 #import "TBSMEvent+DebugSupport.h"
 #import "TBSMCompoundTransition+DebugSupport.h"
 #import "TBSMTransition+DebugSupport.h"
@@ -28,7 +30,7 @@ FOUNDATION_EXPORT NSString * const TBSMDebugSupportException;
 @interface TBSMStateMachine (DebugSupport)
 
 @property (nonatomic, strong) NSNumber *debugSupportEnabled;
-@property (nonatomic, strong) NSNumber *startTime;
+@property (nonatomic, strong) NSNumber *millisecondsPerMachTime;
 
 /**
  *  Activates debug mode for the top statemachine. Call this method on the statemachine instance at the top of the hierarchy.

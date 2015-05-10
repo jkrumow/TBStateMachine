@@ -13,7 +13,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 @implementation TBSMStateMachine (DebugSupport)
 @dynamic debugSupportEnabled;
-@dynamic startTime;
+@dynamic millisecondsPerMachTime;
 
 - (NSNumber *)debugSupportEnabled
 {
@@ -25,14 +25,14 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     objc_setAssociatedObject(self, @selector(debugSupportEnabled), debugSupportEnabled, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (NSNumber *)startTime
+- (NSNumber *)millisecondsPerMachTime
 {
-    return objc_getAssociatedObject(self, @selector(startTime));
+    return objc_getAssociatedObject(self, @selector(millisecondsPerMachTime));
 }
 
-- (void)setStartTime:(NSNumber *)startTime
+- (void)setMillisecondsPerMachTime:(NSNumber *)millisecondsPerMachTime
 {
-    objc_setAssociatedObject(self, @selector(startTime), startTime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(millisecondsPerMachTime), millisecondsPerMachTime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)activateDebugSupport
@@ -41,6 +41,10 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
         @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Debug support not available on sub-statemachines." userInfo:nil];
     }
     self.debugSupportEnabled = @YES;
+    
+    mach_timebase_info_data_t timebase;
+    mach_timebase_info(&timebase);
+    self.millisecondsPerMachTime = @(timebase.numer / timebase.denom / 1e6);
     
     [TBSMState activateDebugSupport];
     [TBSMCompoundTransition activateDebugSupport];
@@ -104,9 +108,11 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 {
     NSLog(@"[%@]: will handle event '%@' data: %@", self.name, event.name, event.data.description);
     
-    self.startTime = @(CACurrentMediaTime());
+    uint64_t startTime = mach_absolute_time();
     BOOL hasHandledEvent = [self tb_handleEvent:event];
-    NSTimeInterval timeInterval = ((CACurrentMediaTime() - self.startTime.doubleValue) * 1000);
+    
+    uint64_t endTime = mach_absolute_time() - startTime;
+    NSTimeInterval timeInterval = endTime * self.millisecondsPerMachTime.doubleValue;
     
     NSLog(@"[%@]: run-to-completion step took %f milliseconds", self.name, timeInterval);
     NSLog(@"[%@]: remaining events in queue: %lu\n\n", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);

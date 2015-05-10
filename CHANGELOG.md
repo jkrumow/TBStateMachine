@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.4.1
+
+- using mach_time instead of CACurrentMediaTime for time measurement
+
 ## 5.4.0
 
 - add juntion pseudo state
