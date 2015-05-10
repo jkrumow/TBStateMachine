@@ -42,8 +42,8 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     }
     self.debugSupportEnabled = @YES;
     
-    [TBSMCompoundTransition activateDebugSupport];
     [TBSMState activateDebugSupport];
+    [TBSMCompoundTransition activateDebugSupport];
     [TBSMTransition activateDebugSupport];
     
     object_setClass(self, TBSMDebugStateMachine.class);
@@ -93,7 +93,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
-    if (self.debugSupportEnabled.boolValue == NO) {
+    if (!self.debugSupportEnabled.boolValue) {
         @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Method only available with activated debug support." userInfo:nil];
     }
     event.completionBlock = completion;

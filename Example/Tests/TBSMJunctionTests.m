@@ -71,7 +71,7 @@ describe(@"TBSMJunction", ^{
             }).to.raise(TBSMException);
         });
         
-        it (@"throws a TBSMException when no outgoing path coud be determined.", ^{
+        it (@"throws a TBSMException when no outgoing path could be determined.", ^{
             
             TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
             [junction addOutgoingPathWithTarget:b action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
