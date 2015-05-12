@@ -10,4 +10,4 @@ script:
   - xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 
 after_success:
-  - slather
+  - bundle exec slather
