@@ -175,7 +175,7 @@ TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
 
 ```objc
 TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
-stateA addHandlerForEvent:@"EventA" target:junction];
+[stateA addHandlerForEvent:@"EventA" target:junction];
 [junction addOutgoingPathWithTarget:stateB action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
     
     return // ...
