@@ -1,13 +1,15 @@
 # reference: http://www.objc.io/issue-6/travis-ci.html
 
 language: objective-c
+cache: cocoapods
 
 install:
   - bundle install --without=documentation
-  - cd Example && bundle exec pod install && cd $TRAVIS_BUILD_DIR
 
-script:
-  - xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+xcode_workspace: Example/TBStateMachine.xcworkspace
+xcode_scheme: TBStateMachine
+xcode_sdk: iphonesimulator
+podfile: Example/Podfile
 
 after_success:
   - bundle exec slather
