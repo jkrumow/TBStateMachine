@@ -3,7 +3,7 @@
 language: objective-c
 cache: cocoapods
 
-install:
+before_install:
   - bundle install --without=documentation
 
 xcode_workspace: Example/TBStateMachine.xcworkspace
