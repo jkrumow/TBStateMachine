@@ -371,12 +371,12 @@ describe(@"TBSMStateMachine", ^{
         
         // junction between b1 and c2
         [junction addOutgoingPathWithTarget:b1 action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            return (data[@"goB1"]);
+            return (data[@"goB1"] != nil);
         }];
         [junction addOutgoingPathWithTarget:c2 action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"junction_to_c2_outgoing_path_action"];
         } guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
-            return (data[@"goC2"]);
+            return (data[@"goC2"] != nil);
         }];
         [a addHandlerForEvent:TRANSITION_18 target:junction kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
             [executionSequence addObject:@"a_to_junction_ingoing_path_action"];
