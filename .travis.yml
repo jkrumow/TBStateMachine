@@ -7,7 +7,7 @@ install:
   - cd Example && bundle exec pod install && cd $TRAVIS_BUILD_DIR
 
 script:
-  - xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+  - xctool test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachine -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO GCC_INSTRUMENT_PROGRAM_FLOW_ARCS=YES GCC_GENERATE_TEST_COVERAGE_FILES=YES
 
 after_success:
   - bundle exec slather
