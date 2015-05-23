@@ -271,6 +271,11 @@ Main
             stateCc
 ```
 
+## Useful Theory on UML State Machines
+
+- http://en.wikipedia.org/wiki/UML_state_machine
+- http://www.omg.org/spec/UML/2.5/Beta2/
+
 ## Author
 
 Julian Krumow, julian.krumow@tarbrain.com
