@@ -6,7 +6,7 @@
 
 ## 5.4.0
 
-- add juntion pseudo state
+- add junction pseudo state
 
 ## 5.3.3
 
