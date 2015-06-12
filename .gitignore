@@ -26,3 +26,7 @@ DerivedData
 
 # Cocoapods
 Pods
+
+# Slather
+cobertura.xml
+html
