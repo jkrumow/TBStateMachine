@@ -57,7 +57,7 @@ describe(@"TBSMJoin", ^{
             
         });
         
-        it(@"Throws a `TBSMException` when source and target states are invalid.", ^{
+        it(@"Throws a `TBSMException` when source, region or target states are invalid.", ^{
             
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
@@ -67,6 +67,11 @@ describe(@"TBSMJoin", ^{
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
                 [join setSourceStates:@[] inRegion:parallel target:c];
+            }).to.raise(TBSMException);
+            
+            expect(^{
+                TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
+                [join setSourceStates:@[a, b] inRegion:nil target:c];
             }).to.raise(TBSMException);
             
             expect(^{
