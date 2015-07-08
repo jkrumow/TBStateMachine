@@ -9,6 +9,9 @@
 #import "TBSMPseudoState.h"
 #import "TBSMJunctionPath.h"
 
+/**
+ *  This class represents a 'junction' pseudo state in a state machine.
+ */
 @interface TBSMJunction : TBSMPseudoState
 
 /**
