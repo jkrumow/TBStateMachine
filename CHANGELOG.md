@@ -1,5 +1,10 @@
 # TBStateMachine CHANGELOG
 
+## 5.4.2
+
+- general house keeping and cleanup
+- upadated documentation
+
 ## 5.4.1
 
 - using mach_time instead of CACurrentMediaTime for time measurement
