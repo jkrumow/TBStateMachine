@@ -14,7 +14,19 @@
  */
 @interface TBSMJunctionPath : NSObject
 
+/**
+ *  The target state of this path.
+ */
 @property (nonatomic, strong) TBSMState *targetState;
+
+/**
+ *  The action block associated with this path.
+ */
 @property (nonatomic, copy) TBSMActionBlock action;
+
+/**
+ *  The guard block associated with this path.
+ */
 @property (nonatomic, copy) TBSMGuardBlock guard;
+
 @end
