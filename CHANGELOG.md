@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.5.0
+
+- add support for watchOS 2
+
 ## 5.4.2
 
 - general house keeping and cleanup
