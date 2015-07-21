@@ -11,6 +11,7 @@ A lightweight hierarchical state machine implementation in Objective-C.
 
 ## Features
 
+* **Support for watchOS** 🎉✨
 * Block based API
 * Nested states
 * Orthogonal regions
@@ -28,6 +29,7 @@ To run the example project, clone the repo, and run `pod install` from the `Exam
 ## Requirements
 
 * Xcode 6
+* watchOS 2.0
 * iOS 5.0
 * OS X 10.7
 
