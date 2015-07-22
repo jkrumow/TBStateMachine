@@ -7,7 +7,7 @@
 [![Coverage Status](https://img.shields.io/coveralls/tarbrain/TBStateMachine/master.svg?style=flat)](https://coveralls.io/r/tarbrain/TBStateMachine)
 
 
-A lightweight hierarchical state machine implementation in Objective-C.
+A lightweight hierarchical state machine framework in Objective-C.
 
 ## Features
 

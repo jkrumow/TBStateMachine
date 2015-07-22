@@ -1,21 +1,28 @@
 Pod::Spec.new do |s|
   s.name             = "TBStateMachine"
   s.version          = "5.5.0"
-  s.summary          = "A lightweight implementation of a hierarchical state machine in Objective-C."
+  s.summary          = "A lightweight hierarchical state machine framework in Objective-C."
   s.description      = <<-DESC
-                       A lightweight implementation of a hierarchical state machine in Objective-C.
-                       
+                       A lightweight hierarchical state machine framework in Objective-C.
+
+                       Supports all common features of a UML state machine like:
+
+                       - nested states
+                       - orthogonal regions
+                       - pseudo states
+                       - transitions with guards and actions
+                       - state switching using least common ancestor algorithm and run-to-completion model
                        DESC
   s.homepage         = "https://github.com/tarbrain/TBStateMachine"
   s.license          = 'MIT'
   s.author           = { "Julian Krumow" => "julian.krumow@tarbrain.com" }
-  s.source           = { :git => "https://github.com/tarbrain/TBStateMachine.git", :tag => s.version.to_s }
 
   s.ios.deployment_target = '5.0'
   s.watchos.deployment_target = '2.0'
   s.osx.deployment_target = '10.7'
 
   s.requires_arc = true
+  s.source = { :git => "https://github.com/tarbrain/TBStateMachine.git", :tag => s.version.to_s }
 
   s.default_subspec = 'Core'
   s.subspec 'Core' do |core|
