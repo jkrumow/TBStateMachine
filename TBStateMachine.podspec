@@ -3,8 +3,6 @@ Pod::Spec.new do |s|
   s.version          = "5.5.0"
   s.summary          = "A lightweight hierarchical state machine framework in Objective-C."
   s.description      = <<-DESC
-                       A lightweight hierarchical state machine framework in Objective-C.
-
                        Supports all common features of a UML state machine like:
 
                        - nested states
