@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "TBStateMachine"
-  s.version          = "5.4.2"
+  s.version          = "5.5.0"
   s.summary          = "A lightweight implementation of a hierarchical state machine in Objective-C."
   s.description      = <<-DESC
                        A lightweight implementation of a hierarchical state machine in Objective-C.
@@ -12,7 +12,9 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/tarbrain/TBStateMachine.git", :tag => s.version.to_s }
 
   s.ios.deployment_target = '5.0'
+  s.watchos.deployment_target = '2.0'
   s.osx.deployment_target = '10.7'
+
   s.requires_arc = true
 
   s.default_subspec = 'Core'
