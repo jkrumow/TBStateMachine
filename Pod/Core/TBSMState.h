@@ -25,7 +25,7 @@ FOUNDATION_EXPORT NSString * const TBSMDataUserInfo;
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data);
+typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, id data);
 
 /**
  *  This class represents a state in a state machine.

@@ -46,7 +46,7 @@ describe(@"TBSMTransition", ^{
     
     it (@"returns action block.", ^{
         
-        TBSMActionBlock action = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        TBSMActionBlock action = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             
         };
         
@@ -56,7 +56,7 @@ describe(@"TBSMTransition", ^{
     
     it (@"returns guard block.", ^{
         
-        TBSMGuardBlock guard = ^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        TBSMGuardBlock guard = ^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
             return YES;
         };
         

@@ -51,6 +51,6 @@
  *
  *  @return The outgoing path.
  */
-- (TBSMJunctionPath *)outgoingPathForTransition:(TBSMState *)source data:(NSDictionary *)data;
+- (TBSMJunctionPath *)outgoingPathForTransition:(TBSMState *)source data:(id)data;
 
 @end

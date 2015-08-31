@@ -11,7 +11,6 @@ A lightweight hierarchical state machine framework in Objective-C.
 
 ## Features
 
-* **Support for watchOS** 🎉✨
 * Block based API
 * Nested states
 * Orthogonal regions
@@ -52,11 +51,11 @@ Create a state, set enter and exit blocks:
 
 ```objc
 TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
-stateA.enterBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
+stateA.enterBlock = ^(TBSMState *source, TBSMState *target, id data) {
 
 };
     
-stateA.exitBlock = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
+stateA.exitBlock = ^(TBSMState *source, TBSMState *target, id data) {
 
 };
 ```
@@ -87,11 +86,11 @@ You can also add event handlers with additional action and guard blocks:
 
 ```objc
 
-TBSMActionBlock action = ^(TBSMState *source, TBSMState *target, NSDictionary *data) {
+TBSMActionBlock action = ^(TBSMState *source, TBSMState *target, id data) {
 
 };
 
-TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, NSDictionary *data) {
+TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, id data) {
 
     return YES;
 };
@@ -116,7 +115,7 @@ TBSMTransitionLocal
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
 
 ```objc
-TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:@{@"myPayload":aPayloadObject}];
+TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:aPayloadObject];
 [stateMachine scheduleEvent:event];
 ```
 
@@ -178,11 +177,11 @@ TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
 ```objc
 TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
 [stateA addHandlerForEvent:@"EventA" target:junction];
-[junction addOutgoingPathWithTarget:stateB action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+[junction addOutgoingPathWithTarget:stateB action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
     
     return // ...
 }];
-[junction addOutgoingPathWithTarget:stateC action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+[junction addOutgoingPathWithTarget:stateC action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
     
     return // ...
 }];

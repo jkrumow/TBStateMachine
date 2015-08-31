@@ -27,7 +27,7 @@
     [_stateMachine setParentNode:self];
 }
 
-- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     if (self.stateMachine == nil) {
         @throw [NSException tb_missingStateMachineException:self.name];
@@ -36,7 +36,7 @@
     [_stateMachine enter:sourceState targetState:targetState data:data];
 }
 
-- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(id)data
 {
     if (self.stateMachine == nil) {
         @throw [NSException tb_missingStateMachineException:self.name];
@@ -45,7 +45,7 @@
     [_stateMachine enter:sourceState targetStates:targetStates region:region data:data];
 }
 
-- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     if (self.stateMachine == nil) {
         @throw [NSException tb_missingStateMachineException:self.name];

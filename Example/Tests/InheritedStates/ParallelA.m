@@ -10,14 +10,14 @@
 
 @implementation ParallelA
 
-- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [self.executionSequence addObject:[NSString stringWithFormat:@"%@_enter", self.name]];
     
     [super enter:sourceState targetState:targetState data:data];
 }
 
-- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [super exit:sourceState targetState:targetState data:data];
     

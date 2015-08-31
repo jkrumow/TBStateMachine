@@ -138,185 +138,185 @@ describe(@"TBSMStateMachine", ^{
         subStateMachineC21 = [TBSMStateMachine stateMachineWithName:@"smC21"];
         subStateMachineC22 = [TBSMStateMachine stateMachineWithName:@"smC22"];
         
-        a.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        a.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a_enter"];
         };
         
-        a.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        a.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a_exit"];
         };
         
-        a1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        a1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a1_enter"];
         };
         
-        a1.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        a1.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a1_exit"];
         };
         
-        a2.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        a2.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a2_enter"];
         };
         
-        a2.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        a2.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a2_exit"];
         };
         
-        a3.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        a3.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a3_enter"];
         };
         
-        a3.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        a3.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a3_exit"];
         };
         
-        b.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b_enter"];
         };
         
-        b.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b_exit"];
         };
         
-        b1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b1_enter"];
         };
         
-        b1.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b1.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b1_exit"];
         };
         
-        b2.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b2.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b2_enter"];
         };
         
-        b2.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b2.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b2_exit"];
         };
         
-        b21.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b21.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b21_enter"];
         };
         
-        b21.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b21.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b21_exit"];
         };
         
-        b22.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b22.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b22_enter"];
         };
         
-        b22.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b22.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b22_exit"];
         };
         
-        b3.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b3.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b3_enter"];
         };
         
-        b3.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b3.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b3_exit"];
         };
         
-        b311.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b311.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b311_enter"];
         };
         
-        b311.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b311.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b311_exit"];
         };
         
-        b312.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b312.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b312_enter"];
         };
         
-        b312.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b312.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b312_exit"];
         };
         
-        b321.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b321.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b321_enter"];
         };
         
-        b321.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b321.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b321_exit"];
         };
         
-        b322.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b322.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b322_enter"];
         };
         
-        b322.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        b322.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b322_exit"];
         };
         
-        c.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c_enter"];
         };
         
-        c.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c_exit"];
         };
         
-        c1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c1_enter"];
         };
         
-        c1.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c1.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c1_exit"];
         };
         
-        c2.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c2.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c2_enter"];
         };
         
-        c2.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c2.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c2_exit"];
         };
         
-        c211.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c211.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c211_enter"];
         };
         
-        c211.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c211.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c211_exit"];
         };
         
-        c212.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c212.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c212_enter"];
         };
         
-        c212.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c212.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c212_exit"];
         };
         
-        c221.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c221.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c221_enter"];
         };
         
-        c221.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c221.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c221_exit"];
         };
         
-        c222.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c222.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c222_enter"];
         };
         
-        c222.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        c222.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"c222_exit"];
         };
         
         // superstates / substates guards
         [a addHandlerForEvent:TRANSITION_1 target:b];
-        [a1 addHandlerForEvent:TRANSITION_1 target:a2 kind:TBSMTransitionExternal action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a1 addHandlerForEvent:TRANSITION_1 target:a2 kind:TBSMTransitionExternal action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
             return (data && data[EVENT_DATA_KEY] == EVENT_DATA_VALUE);
         }];
-        [a1 addHandlerForEvent:TRANSITION_1 target:a3 kind:TBSMTransitionExternal action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a1 addHandlerForEvent:TRANSITION_1 target:a3 kind:TBSMTransitionExternal action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
             return (data && data[EVENT_DATA_KEY] != EVENT_DATA_VALUE);
         }];
         
         // run to completion test / queuing
-        [a2 addHandlerForEvent:TRANSITION_2 target:a3 kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a2 addHandlerForEvent:TRANSITION_2 target:a3 kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a2_to_a3_action"];
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_3 data:nil]];
         }];
@@ -338,14 +338,14 @@ describe(@"TBSMStateMachine", ^{
         [b addHandlerForEvent:TRANSITION_BROKEN_LOCAL target:a3 kind:TBSMTransitionLocal];
         
         // internal transitions
-        [a1 addHandlerForEvent:TRANSITION_10 target:a1 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a1 addHandlerForEvent:TRANSITION_10 target:a1 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a1_internal_action"];
         }];
         
-        [b311 addHandlerForEvent:TRANSITION_11 target:b311 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [b311 addHandlerForEvent:TRANSITION_11 target:b311 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b311_internal_action"];
         }];
-        [b321 addHandlerForEvent:TRANSITION_11 target:b321 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [b321 addHandlerForEvent:TRANSITION_11 target:b321 kind:TBSMTransitionInternal action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"b321_internal_action"];
         }];
         
@@ -359,7 +359,7 @@ describe(@"TBSMStateMachine", ^{
         [a3 addHandlerForEvent:TRANSITION_14 target:b322];
         
         // fork into parallel state
-        [a addHandlerForEvent:TRANSITION_15 target:fork kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a addHandlerForEvent:TRANSITION_15 target:fork kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a_to_fork_action"];
         }];
         [fork setTargetStates:@[c212, c222] inRegion:c2];
@@ -370,15 +370,15 @@ describe(@"TBSMStateMachine", ^{
         [join setSourceStates:@[c212, c222] inRegion:c2 target:b];
         
         // junction between b1 and c2
-        [junction addOutgoingPathWithTarget:b1 action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [junction addOutgoingPathWithTarget:b1 action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
             return (data[@"goB1"] != nil);
         }];
-        [junction addOutgoingPathWithTarget:c2 action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [junction addOutgoingPathWithTarget:c2 action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"junction_to_c2_outgoing_path_action"];
-        } guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        } guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
             return (data[@"goC2"] != nil);
         }];
-        [a addHandlerForEvent:TRANSITION_18 target:junction kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+        [a addHandlerForEvent:TRANSITION_18 target:junction kind:TBSMTransitionExternal action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
             [executionSequence addObject:@"a_to_junction_ingoing_path_action"];
         }];
         
@@ -514,7 +514,7 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            a1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            a1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
                 [executionSequence addObject:@"a1_enter"];
                 done();
             };

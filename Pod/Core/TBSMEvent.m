@@ -11,12 +11,12 @@
 
 @implementation TBSMEvent
 
-+ (TBSMEvent *)eventWithName:(NSString *)name data:(NSDictionary *)data
++ (TBSMEvent *)eventWithName:(NSString *)name data:(id)data
 {
     return [[TBSMEvent alloc] initWithName:name data:data];
 }
 
-- (instancetype)initWithName:(NSString *)name data:(NSDictionary *)data
+- (instancetype)initWithName:(NSString *)name data:(id)data
 {
     if (name == nil || [name isEqualToString:@""]) {
         @throw [NSException tb_noNameForEventException];

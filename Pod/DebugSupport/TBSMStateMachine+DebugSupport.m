@@ -106,7 +106,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (BOOL)tb_handleEvent:(TBSMEvent *)event
 {
-    NSLog(@"[%@]: will handle event '%@' data: %@", self.name, event.name, event.data.description);
+    NSLog(@"[%@]: will handle event '%@' data: %@", self.name, event.name, event.data);
     
     uint64_t startTime = mach_absolute_time();
     BOOL hasHandledEvent = [self tb_handleEvent:event];
@@ -124,15 +124,15 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     return hasHandledEvent;
 }
 
-- (void)tb_setUp:(NSDictionary *)data
+- (void)tb_setUp:(id)data
 {
-    NSLog(@"[%@] setup data: %@", self.name, data.description);
+    NSLog(@"[%@] setup data: %@", self.name, data);
     [self tb_setUp:data];
 }
 
-- (void)tb_tearDown:(NSDictionary *)data
+- (void)tb_tearDown:(id)data
 {
-    NSLog(@"[%@] teardown data: %@", self.name, data.description);
+    NSLog(@"[%@] teardown data: %@", self.name, data);
     [self tb_tearDown:data];
 }
 

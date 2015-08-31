@@ -73,7 +73,7 @@
     return lca;
 }
 
-- (BOOL)performTransitionWithData:(NSDictionary *)data
+- (BOOL)performTransitionWithData:(id)data
 {
     if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
         if (self.kind == TBSMTransitionInternal) {

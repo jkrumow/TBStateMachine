@@ -91,7 +91,7 @@ NSString * const TBSMDataUserInfo = @"data";
     return nil;
 }
 
-- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [self _postNotificationWithName:TBSMStateDidEnterNotification sourceState:sourceState targetState:targetState data:data];
     
@@ -100,7 +100,7 @@ NSString * const TBSMDataUserInfo = @"data";
     }
 }
 
-- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [self _postNotificationWithName:TBSMStateDidExitNotification sourceState:sourceState targetState:targetState data:data];
     
@@ -109,7 +109,7 @@ NSString * const TBSMDataUserInfo = @"data";
     }
 }
 
-- (void)_postNotificationWithName:(NSString *)name sourceState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)_postNotificationWithName:(NSString *)name sourceState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     NSMutableDictionary *userInfo = NSMutableDictionary.new;
     if (sourceState) {

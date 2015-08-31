@@ -65,7 +65,7 @@
     return [NSString stringWithFormat:@"%@ --> %@ --> %@", source, self.targetPseudoState.name, target];
 }
 
-- (BOOL)performTransitionWithData:(NSDictionary *)data
+- (BOOL)performTransitionWithData:(id)data
 {
     if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
         if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
@@ -80,7 +80,7 @@
     return NO;
 }
 
-- (void)_performForkTransitionWithData:(NSDictionary *)data
+- (void)_performForkTransitionWithData:(id)data
 {
     TBSMFork *fork = (TBSMFork *)self.targetPseudoState;
     [self _validatePseudoState:fork states:fork.targetStates region:fork.region];
@@ -88,7 +88,7 @@
     [lca switchState:self.sourceState targetStates:fork.targetStates region:(TBSMParallelState *)fork.targetState action:self.action data:data];
 }
 
-- (void)_performJoinTransitionWithData:(NSDictionary *)data
+- (void)_performJoinTransitionWithData:(id)data
 {
     TBSMJoin *join = (TBSMJoin *)self.targetPseudoState;
     [self _validatePseudoState:join states:join.sourceStates region:join.region];
@@ -98,13 +98,13 @@
     }
 }
 
-- (void)_performJunctionTransitionWithData:(NSDictionary *)data
+- (void)_performJunctionTransitionWithData:(id)data
 {
     TBSMJunction *junction = (TBSMJunction *)self.targetPseudoState;
     TBSMJunctionPath *outgoingPath = [junction outgoingPathForTransition:self.sourceState data:data];
     self.targetState = outgoingPath.targetState;
     TBSMStateMachine *lca = [self findLeastCommonAncestor];
-    TBSMActionBlock compoundAction = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+    TBSMActionBlock compoundAction = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
         if (self.action) {
             self.action(sourceState, targetState, data);
         }

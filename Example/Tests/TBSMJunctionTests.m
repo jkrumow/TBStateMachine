@@ -56,7 +56,7 @@ describe(@"TBSMJunction", ^{
             TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
             
             expect(^{
-                [junction addOutgoingPathWithTarget:nil action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+                [junction addOutgoingPathWithTarget:nil action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
                     return YES;
                 }];
             }).to.raise(TBSMException);
@@ -74,7 +74,7 @@ describe(@"TBSMJunction", ^{
         it (@"throws a TBSMException when no outgoing path could be determined.", ^{
             
             TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
-            [junction addOutgoingPathWithTarget:b action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            [junction addOutgoingPathWithTarget:b action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
                 return NO;
             }];
             

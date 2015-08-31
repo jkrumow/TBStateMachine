@@ -22,7 +22,7 @@
 /**
  *  The event's payload.
  */
-@property (nonatomic, strong) NSDictionary *data;
+@property (nonatomic, strong) id data;
 
 /**
  *  Creates a `TBSMEvent` instance from a given name.
@@ -34,7 +34,7 @@
  *
  *  @return The event instance.
  */
-+ (TBSMEvent *)eventWithName:(NSString *)name data:(NSDictionary *)data;
++ (TBSMEvent *)eventWithName:(NSString *)name data:(id)data;
 
 /**
  *  Initializes a `TBSMEvent` with a specified name.
@@ -46,6 +46,6 @@
  *
  *  @return An initialized `TBSMEvent` instance.
  */
-- (instancetype)initWithName:(NSString *)name data:(NSDictionary *)data;
+- (instancetype)initWithName:(NSString *)name data:(id)data;
 
 @end

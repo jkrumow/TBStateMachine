@@ -11,7 +11,7 @@
 
 @implementation StateB
 
-- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [super enter:sourceState targetState:targetState data:data];
     
@@ -20,7 +20,7 @@
     [parentStateMachine scheduleEvent:[TBSMEvent eventWithName:@"event_b2" data:nil]];
 }
 
-- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [super exit:sourceState targetState:targetState data:data];
     

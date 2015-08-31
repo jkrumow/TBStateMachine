@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.6.0
+
+- changed payload from NSDictionary to id
+
 ## 5.5.0
 
 - add support for watchOS 2

@@ -113,7 +113,7 @@ describe(@"InheritedStates", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            a1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data) {
+            a1.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
                 done();
             };
             

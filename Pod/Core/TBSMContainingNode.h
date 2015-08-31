@@ -24,7 +24,7 @@
  *  @param region      The target region.
  *  @param data        The payload data.
  */
-- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data;
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(id)data;
 
 /**
  *  Receives a specified `TBSMEvent` instance.

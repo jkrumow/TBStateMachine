@@ -50,7 +50,7 @@
     }
 }
 
-- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [super enter:sourceState targetState:targetState data:data];
     
@@ -66,7 +66,7 @@
     }
 }
 
-- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(id)data
 {
     [super enter:sourceState targetState:region data:data];
     
@@ -87,7 +87,7 @@
     }
 }
 
-- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     if (self.priv_parallelStateMachines.count == 0) {
         @throw [NSException tb_missingStateMachineException:self.name];

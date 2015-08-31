@@ -56,7 +56,7 @@
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data;
 
 /**
  *  Executes the exit block of the state.
@@ -67,6 +67,6 @@
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data;
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data;
 
 @end

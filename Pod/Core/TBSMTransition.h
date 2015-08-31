@@ -20,7 +20,7 @@
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-typedef void(^TBSMActionBlock)(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data);
+typedef void(^TBSMActionBlock)(TBSMState *sourceState, TBSMState *targetState, id data);
 
 /**
  *  This type represents a guard function of a `TBSMTransition`.
@@ -29,7 +29,7 @@ typedef void(^TBSMActionBlock)(TBSMState *sourceState, TBSMState *targetState, N
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NSDictionary *data);
+typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, id data);
 
 
 /**
@@ -110,7 +110,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, NS
  *
  *  @return Returns YES if the transition could be performed.
  */
-- (BOOL)performTransitionWithData:(NSDictionary *)data;
+- (BOOL)performTransitionWithData:(id)data;
 
 /**
  *  The transition's name.

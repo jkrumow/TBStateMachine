@@ -45,7 +45,7 @@
     [self.outgoingPaths addObject:outgoingPath];
 }
 
-- (TBSMJunctionPath *)outgoingPathForTransition:(TBSMState *)source data:(NSDictionary *)data
+- (TBSMJunctionPath *)outgoingPathForTransition:(TBSMState *)source data:(id)data
 {
     for (TBSMJunctionPath *outgoingPath in self.outgoingPaths) {
         if (outgoingPath.guard(source, outgoingPath.targetState, data)) {

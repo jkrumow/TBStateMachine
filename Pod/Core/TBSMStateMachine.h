@@ -79,12 +79,12 @@
  *
  *  Throws `TBSMException` if initial state has not been set beforehand.
  */
-- (void)setUp:(NSDictionary *)data;
+- (void)setUp:(id)data;
 
 /**
  *  Leaves the current state and shuts down the state machine.
  */
-- (void)tearDown:(NSDictionary *)data;
+- (void)tearDown:(id)data;
 
 /**
  *  Returns all states inside the state machine.
@@ -117,7 +117,7 @@
  *  @param action      The action to execute.
  *  @param data        The payload data.
  */
-- (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data;
+- (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(id)data;
 
 /**
  *  Switches between states defined in a specified transition.
@@ -128,6 +128,6 @@
  *  @param action       The action to execute.
  *  @param data         The payload data.
  */
-- (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data;
+- (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(id)data;
 
 @end

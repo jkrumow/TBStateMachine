@@ -73,7 +73,7 @@
     _scheduledEventsQueue = scheduledEventsQueue;
 }
 
-- (void)setUp:(NSDictionary *)data
+- (void)setUp:(id)data
 {
     if (!self.initialState) {
         @throw [NSException tb_noInitialStateException:self.name];
@@ -81,7 +81,7 @@
     [self enter:nil targetState:self.initialState data:data];
 }
 
-- (void)tearDown:(NSDictionary *)data
+- (void)tearDown:(id)data
 {
     [self.scheduledEventsQueue cancelAllOperations];
     [self exit:self.currentState targetState:nil data:data];
@@ -137,7 +137,7 @@
 
 #pragma mark - State switching
 
-- (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(NSDictionary *)data
+- (void)switchState:(TBSMState *)sourceState targetState:(TBSMState *)targetState action:(TBSMActionBlock)action data:(id)data
 {
     [self.currentState exit:sourceState targetState:targetState data:data];
     if (action) {
@@ -146,7 +146,7 @@
     [self enter:sourceState targetState:targetState data:data];
 }
 
-- (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(NSDictionary *)data
+- (void)switchState:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region action:(TBSMActionBlock)action data:(id)data
 {
     [self.currentState exit:sourceState targetState:region data:data];
     if (action) {
@@ -155,7 +155,7 @@
     [self enter:sourceState targetStates:targetStates region:region data:data];
 }
 
-- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     NSUInteger targetLevel = [[targetState.parentNode path] count];
     NSUInteger thisLevel = self.path.count;
@@ -172,7 +172,7 @@
     [self.currentState enter:sourceState targetState:targetState data:data];
 }
 
-- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(NSDictionary *)data
+- (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(id)data
 {
     NSUInteger targetLevel = [[region.parentNode path] count];
     NSUInteger thisLevel = self.path.count;
@@ -188,7 +188,7 @@
     [node enter:sourceState targetStates:targetStates region:region data:data];
 }
 
-- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(NSDictionary *)data
+- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [self.currentState exit:sourceState targetState:targetState data:data];
 }

@@ -21,13 +21,13 @@
     });
 }
 
-- (BOOL)tb_performTransitionWithData:(NSDictionary *)data
+- (BOOL)tb_performTransitionWithData:(id)data
 {
     [self _logTransitionWithData:data];
     return [self tb_performTransitionWithData:data];
 }
 
-- (void)_logTransitionWithData:(NSDictionary *)data
+- (void)_logTransitionWithData:(id)data
 {
     TBSMStateMachine *lca = nil;
     
@@ -38,7 +38,7 @@
         // swallow exception in case lca could not be found since we do not want to interfere with the running application.
     }
     
-    NSLog(@"[%@] attempt to perform transition: %@ data: %@", lca.name, self.name, data.description);
+    NSLog(@"[%@] attempt to perform transition: %@ data: %@", lca.name, self.name, data);
 }
 
 @end
