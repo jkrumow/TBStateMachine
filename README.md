@@ -211,8 +211,7 @@ To receive a notification:
 
 - (void)myHandler:(NSNotification *)notification
 {
-    NSDictionary *data = notification.userInfo[TBSMDataUserInfo];
-    id myPayloadObject = data[@"myPayload"];
+    id myPayloadObject = notification.userInfo[TBSMDataUserInfo];
 }
 ```
 
