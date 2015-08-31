@@ -112,7 +112,7 @@ TBSMTransitionLocal
 
 #### Scheduling Events
 
-To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an `NSDictionary` with payload:
+To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an object as payload:
 
 ```objc
 TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:aPayloadObject];
