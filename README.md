@@ -27,8 +27,9 @@ To run the example project, clone the repo, and run `pod install` from the `Exam
 
 ## Requirements
 
-* Xcode 6
+* Xcode 7
 * watchOS 2.0
+* tvOS 9.0
 * iOS 5.0
 * OS X 10.7
 

@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.7.0
+
+- Add support for tvOS 9.0
+
 ## 5.6.0
 
 - changed payload from NSDictionary to id
