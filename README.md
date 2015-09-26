@@ -27,7 +27,6 @@ To run the example project, clone the repo, and run `pod install` from the `Exam
 
 ## Requirements
 
-* Xcode 7
 * watchOS 2.0
 * tvOS 9.0
 * iOS 5.0
@@ -38,7 +37,9 @@ To run the example project, clone the repo, and run `pod install` from the `Exam
 TBStateMachine is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
-    pod 'TBStateMachine'
+```ruby
+pod 'TBStateMachine'
+```
 
 ## Usage
 
@@ -218,13 +219,13 @@ To receive a notification:
 
 ### Thread Safety and Concurrency
 
-`TBStateMachine` is thread safe. Each event is processed asynchronously on the main queue by default.
+`TBStateMachine` is thread safe. Each event is processed asynchronously on the main queue by default. This makes handling of UIKit components convenient.
 
-To use a custom serial queue simply set:
+To use a dedicated background queue simply set:
 
 ```objc
 NSOperationQueue *queue = [NSOperationQueue new];
-queue.name = @"com.mycompany.queue";
+queue.name = @"com.myproject.queue";
 queue.maxConcurrentOperationCount = 1;
 stateMachine.scheduledEventsQueue = queue;
 ```
@@ -233,7 +234,7 @@ stateMachine.scheduledEventsQueue = queue;
 
 `TBStateMachine` offers debug support through the subspec `DebugSupport`. Simply add it to your `Podfile` (most likely to a beta target to keep it out of production code):
 
-```
+```ruby
 target 'MyBetaApp', :exclusive => true do
   pod 'TBStateMachine/DebugSupport'
 end
@@ -247,14 +248,14 @@ Then include `TBSMStateMachine+DebugSupport.h` and activate the debug support fe
 [stateMachine activateDebugSupport];
 ```
 
-The category will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
+The statemachine will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
 
 ```
 [Main]: will handle event 'EventA' data: (null)
 [Main] will perform transition: stateA --> stateCc data: (null)
     Exit 'stateB' source: 'stateA' target: 'stateCc' data: (null)
-	Enter 'stateC' source: 'stateA' target: 'stateCc' data: (null)
-	Enter 'stateCc' source: 'stateA' target: 'stateCc' data: (null)
+    Enter 'stateC' source: 'stateA' target: 'stateCc' data: (null)
+    Enter 'stateCc' source: 'stateA' target: 'stateCc' data: (null)
 [Main]: run-to-completion step took 1.15 milliseconds
 [Main]: remaining events in queue: 0
 ```
