@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "TBStateMachine"
-  s.version          = "5.6.0"
+  s.version          = "5.7.0"
   s.summary          = "A lightweight hierarchical state machine framework in Objective-C."
   s.description      = <<-DESC
                        Supports all common features of a UML state machine like:
@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '5.0'
   s.watchos.deployment_target = '2.0'
+  s.tvos.deployment_target = '9.0'
   s.osx.deployment_target = '10.7'
 
   s.requires_arc = true

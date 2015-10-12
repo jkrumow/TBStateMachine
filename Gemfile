@@ -1,4 +1,4 @@
 source "https://rubygems.org"
 
-gem 'cocoapods', '~> 0.38'
-gem 'slather'
+gem 'cocoapods'
+# gem 'slather'
