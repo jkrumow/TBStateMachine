@@ -110,6 +110,14 @@
 - (void)scheduleEvent:(TBSMEvent *)event;
 
 /**
+ *  Adds an event to the event queue. Convenience method which receives the event name and payload.
+ *
+ *  @param name The specified event name.
+ *  @param data Optional payload data.
+ */
+- (void)scheduleEventNamed:(NSString *)name data:(id)data;
+
+/**
  *  Switches between states defined in a specified transition.
  *
  *  @param sourceState The source state.

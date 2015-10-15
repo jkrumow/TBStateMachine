@@ -1,12 +1,16 @@
 # TBStateMachine CHANGELOG
 
+## 5.8.0
+
+- Add convenience method `scheduleEventNamed:data:`
+
 ## 5.7.0
 
 - Add support for tvOS 9.0
 
 ## 5.6.0
 
-- changed payload from NSDictionary to id
+- changed payload from `NSDictionary` to id
 
 ## 5.5.0
 
@@ -19,7 +23,7 @@
 
 ## 5.4.1
 
-- using mach_time instead of CACurrentMediaTime for time measurement
+- using mach_time instead of `CACurrentMediaTime` for time measurement
 
 ## 5.4.0
 
@@ -41,7 +45,7 @@
 
 - support for pseudo states
 - implementation of fork and join pseudo states
-- optional 'DebugSupport' subspec for logging and performance measurements
+- optional `DebugSupport` subspec for logging and performance measurements
 
 ## 5.2.1
 

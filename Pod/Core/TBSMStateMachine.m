@@ -103,6 +103,11 @@
     }];
 }
 
+- (void)scheduleEventNamed:(NSString *)name data:(id)data
+{
+    [self scheduleEvent:[TBSMEvent eventWithName:name data:data]];
+}
+
 - (BOOL)handleEvent:(TBSMEvent *)event
 {
     if (self.currentState) {

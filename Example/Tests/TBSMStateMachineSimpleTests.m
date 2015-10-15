@@ -12,6 +12,7 @@
 SpecBegin(TBSMStateMachineSimple)
 
 NSString * const EVENT_A = @"DummyEventA";
+NSString * const EVENT_B = @"DummyEventA";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
 __block TBSMStateMachine *stateMachine;
@@ -76,7 +77,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"throws a TBSMException when the scheduledEventsQueue is not a serial queue.", ^{
             NSOperationQueue *queue = [NSOperationQueue new];
-            queue.maxConcurrentOperationCount = 10;
+            queue.maxConcurrentOperationCount = 2;
             
             expect(^{
                 stateMachine.scheduledEventsQueue = queue;
@@ -135,7 +136,7 @@ describe(@"TBSMStateMachine", ^{
         });
     });
     
-    describe(@"State switching.", ^{
+    describe(@"setUp:", ^{
         
         it(@"enters initial state on set up when it has been set explicitly.", ^{
             
@@ -157,6 +158,9 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachine.currentState).to.equal(stateMachine.initialState);
             expect(stateMachine.currentState).to.equal(a);
         });
+    });
+    
+    describe(@"tearDown:", ^{
         
         it(@"exits current state on tear down.", ^{
             
@@ -169,6 +173,30 @@ describe(@"TBSMStateMachine", ^{
             
             expect(stateMachine.currentState).to.beNil;
         });
+    });
+    
+    describe(@"scheduleEventNamed:data:", ^{
+    
+        it(@"creates an event object through convenienceMethod.", ^{
+            
+            [a addHandlerForEvent:EVENT_A target:b];
+            [b addHandlerForEvent:EVENT_B target:c];
+            
+            stateMachine.states = @[a, b, c];
+            [stateMachine setUp:nil];
+            
+            waitUntil(^(DoneCallback done) {
+                [stateMachine scheduleEventNamed:EVENT_A data:EVENT_DATA_VALUE];
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_B data:nil] withCompletion:^{
+                    done();
+                }];
+            });
+            
+            expect(stateMachine.currentState).to.equal(c);
+        });
+    });
+    
+    describe(@"scheduleEvent:", ^{
         
         it(@"switches to the specified state.", ^{
             
@@ -180,12 +208,9 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachine.currentState).to.equal(a);
             
             waitUntil(^(DoneCallback done) {
-                
-                // enters state B
                 [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
                     done();
                 }];
-                
             });
             
             expect(stateMachine.currentState).to.equal(b);
