@@ -74,7 +74,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *_Nullable sourceState, TBSMState *_Null
  *  @return The transition object.
  */
 + (nullable TBSMTransition *)transitionWithSourceState:(nonnull TBSMState *)sourceState
-                                  targetState:(nonnull TBSMState *)targetState
+                                  targetState:(nullable TBSMState *)targetState
                                          kind:(TBSMTransitionKind)kind
                                        action:(nullable TBSMActionBlock)action
                                         guard:(nullable TBSMGuardBlock)guard;
@@ -91,7 +91,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *_Nullable sourceState, TBSMState *_Null
  *  @return The transition object.
  */
 - (nullable instancetype)initWithSourceState:(nonnull TBSMState *)sourceState
-                        targetState:(nonnull TBSMState *)targetState
+                        targetState:(nullable TBSMState *)targetState
                                kind:(TBSMTransitionKind)kind
                              action:(nullable TBSMActionBlock)action
                               guard:(nullable TBSMGuardBlock)guard;
