@@ -38,7 +38,7 @@
  *
  *  Throws a `TBSMException` when trying to set a queue which is not serial.
  */
-@property (nonatomic, strong, readonly, nonnull) NSOperationQueue *scheduledEventsQueue;
+@property (nonatomic, strong, nonnull) NSOperationQueue *scheduledEventsQueue;
 
 /**
  *  The state the state machine wil enter on setup (by default the first state in the provided array will be set).

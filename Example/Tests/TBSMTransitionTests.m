@@ -27,7 +27,7 @@ describe(@"TBSMTransition", ^{
     });
     
     it (@"returns its name.", ^{
-        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:nil kind:TBSMTransitionInternal action:nil guard:nil];
+        TBSMTransition *transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionInternal action:nil guard:nil];
         expect(transition.name).to.equal(@"a");
         
         transition = [TBSMTransition transitionWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
