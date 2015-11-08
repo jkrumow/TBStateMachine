@@ -20,7 +20,7 @@
 /**
  *  The name of the pseudo state.
  */
-@property (nonatomic, copy, readonly) NSString *name;
+@property (nonatomic, copy, readonly, nonnull) NSString *name;
 
 /**
  *  Initializes a `TBSMPseudoState` with a specified name.
@@ -31,13 +31,13 @@
  *
  *  @return An initialized `TBSMPseudoState` instance.
  */
-- (instancetype)initWithName:(NSString *)name;
+- (nullable instancetype)initWithName:(nonnull NSString *)name;
 
 /**
  *  The state this pseudo state leads to inside a compound transition.
  *
  *  @return The target state instance.
  */
-- (TBSMState *)targetState;
+- (nonnull TBSMState *)targetState;
 
 @end

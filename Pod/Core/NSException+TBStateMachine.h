@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 FOUNDATION_EXPORT NSString * const TBSMException;
 
 /**
@@ -137,3 +139,4 @@ FOUNDATION_EXPORT NSString * const TBSMException;
 + (NSException *)tb_noSerialQueueException:(NSString *)queueName;
 
 @end
+NS_ASSUME_NONNULL_END

@@ -18,7 +18,7 @@
  */
 @interface TBSMJoin : TBSMPseudoState
 
-@property (nonatomic, strong, readonly) TBSMParallelState *region;
+@property (nonatomic, strong, readonly, nonnull) TBSMParallelState *region;
 
 /**
  *  Creates a `TBSMJoin` instance from a given name.
@@ -29,14 +29,14 @@
  *
  *  @return The join instance.
  */
-+ (TBSMJoin *)joinWithName:(NSString *)name;
++ (nullable TBSMJoin *)joinWithName:(nonnull NSString *)name;
 
 /**
  *  The join's source states inside the region.
  *
  *  @return An array containing the source states.
  */
-- (NSArray *)sourceStates;
+- (nonnull NSArray<__kindof TBSMState *> *)sourceStates;
 
 /**
  *  Sets the source states of the join transition.
@@ -47,7 +47,7 @@
  *  @param region       The orthogonal region containing the source states.
  *  @param target       The target state.
  */
-- (void)setSourceStates:(NSArray *)sourceStates inRegion:(TBSMParallelState *)region target:(TBSMState *)target;
+- (void)setSourceStates:(nonnull NSArray<__kindof TBSMState *> *)sourceStates inRegion:(nonnull TBSMParallelState *)region target:(nonnull TBSMState *)target;
 
 /**
  *  Performs the transition towards the join pseudostate for a given source state.
@@ -57,6 +57,6 @@
  *
  *  @return `YES` if the complete compound transition has been performed.
  */
-- (BOOL)joinSourceState:(TBSMState *)sourceState;
+- (BOOL)joinSourceState:(nonnull TBSMState *)sourceState;
 
 @end

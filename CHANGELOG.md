@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.8.1
+
+- Add nullability annotations and generics for improved Swift compatibility
+
 ## 5.8.0
 
 - Add convenience method `scheduleEventNamed:data:`

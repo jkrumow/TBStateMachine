@@ -12,11 +12,12 @@
 #import "TBSMTransitionKind.h"
 #import "TBSMTransitionVertex.h"
 
-FOUNDATION_EXPORT NSString * const TBSMStateDidEnterNotification;
-FOUNDATION_EXPORT NSString * const TBSMStateDidExitNotification;
-FOUNDATION_EXPORT NSString * const TBSMSourceStateUserInfo;
-FOUNDATION_EXPORT NSString * const TBSMTargetStateUserInfo;
-FOUNDATION_EXPORT NSString * const TBSMDataUserInfo;
+
+FOUNDATION_EXPORT NSString *_Nonnull const TBSMStateDidEnterNotification;
+FOUNDATION_EXPORT NSString *_Nonnull const TBSMStateDidExitNotification;
+FOUNDATION_EXPORT NSString *_Nonnull const TBSMSourceStateUserInfo;
+FOUNDATION_EXPORT NSString *_Nonnull const TBSMTargetStateUserInfo;
+FOUNDATION_EXPORT NSString *_Nonnull const TBSMDataUserInfo;
 
 /**
  *  This type represents a block that is executed on entry and exit of a `TBSMState`.
@@ -25,7 +26,9 @@ FOUNDATION_EXPORT NSString * const TBSMDataUserInfo;
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, id data);
+typedef void (^TBSMStateBlock)(TBSMState *_Nullable sourceState, TBSMState *_Nullable targetState, id _Nullable data);
+
+@class TBSMEventHandler;
 
 /**
  *  This class represents a state in a state machine.
@@ -40,17 +43,17 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
 /**
  *  Block that is executed when the state is entered.
  */
-@property (nonatomic, copy) TBSMStateBlock enterBlock;
+@property (nonatomic, copy, nullable) TBSMStateBlock enterBlock;
 
 /**
  *  Block that is executed when the state is exited.
  */
-@property (nonatomic, copy) TBSMStateBlock exitBlock;
+@property (nonatomic, copy, nullable) TBSMStateBlock exitBlock;
 
 /**
- *  All `TBSMEvent` instances registered to this state instance.
+ *  All `TBSMEventHandler` instances registered to this state instance.
  */
-@property (nonatomic, strong, readonly) NSDictionary *eventHandlers;
+@property (nonatomic, strong, readonly, nonnull) NSDictionary<NSString *, NSMutableArray<TBSMEventHandler *> *> *eventHandlers;
 
 /**
  *  Creates a `TBSMState` instance from a given name.
@@ -61,7 +64,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *
  *  @return The state instance.
  */
-+ (TBSMState *)stateWithName:(NSString *)name;
++ (nullable TBSMState *)stateWithName:(nonnull NSString *)name;
 
 /**
  *  Initializes a `TBSMState` with a specified name.
@@ -72,7 +75,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *
  *  @return An initialized `TBSMState` instance.
  */
-- (instancetype)initWithName:(NSString *)name;
+- (nullable instancetype)initWithName:(nonnull NSString *)name;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -81,7 +84,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *  @param event  The given event name.
  *  @param target The target vertex. Can be `nil` for internal transitions.
  */
-- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target;
+- (void)addHandlerForEvent:(nonnull NSString *)event target:(nonnull id <TBSMTransitionVertex>)target;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -92,7 +95,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *  @param target The target vertex.
  *  @param kind   The kind of transition.
  */
-- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind;
+- (void)addHandlerForEvent:(nonnull NSString *)event target:(nonnull id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -104,7 +107,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *  @param kind   The kind of transition.
  *  @param action The action block associated with this event.
  */
-- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action;
+- (void)addHandlerForEvent:(nonnull NSString *)event target:(nonnull id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(nullable TBSMActionBlock)action;
 
 /**
  *  Registers an event of a given name for transition to a specified target state.
@@ -117,7 +120,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *  @param action The action block associated with this event.
  *  @param guard  The guard block associated with this event.
  */
-- (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (void)addHandlerForEvent:(nonnull NSString *)event target:(nonnull id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
 
 /**
  *  Returns `YES` if a given event can be consumed by the state.
@@ -126,7 +129,7 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *
  *  @return `YES` if the event can be consumed.
  */
-- (BOOL)hasHandlerForEvent:(TBSMEvent *)event;
+- (BOOL)hasHandlerForEvent:(nonnull TBSMEvent *)event;
 
 /**
  *  Returns an array of `TBSMEventHandler` instances for a given event.
@@ -135,6 +138,6 @@ typedef void (^TBSMStateBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *
  *  @return The array containing the corresponding event handlers.
  */
-- (NSArray *)eventHandlersForEvent:(TBSMEvent *)event;
+- (nullable NSArray<TBSMEventHandler *> *)eventHandlersForEvent:(nonnull TBSMEvent *)event;
 
 @end

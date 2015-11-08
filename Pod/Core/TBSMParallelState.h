@@ -25,7 +25,7 @@
  *
  *  @return The parallel wrapper instance.
  */
-+ (TBSMParallelState *)parallelStateWithName:(NSString *)name;
++ (nullable TBSMParallelState *)parallelStateWithName:(nonnull NSString *)name;
 
 /**
  *  Initializes a `TBSMParallelState` with a specified name.
@@ -36,14 +36,14 @@
  *
  *  @return An initialized `TBSMParallelState` instance.
  */
-- (instancetype)initWithName:(NSString *)name;
+- (nullable instancetype)initWithName:(nonnull NSString *)name;
 
 /**
  *  Returns the state machines the parallel wrapper manages.
  *
  *  @return An NSArray containing all `TBSMStateMachine` instances.
  */
-- (NSArray *)stateMachines;
+- (nonnull NSArray<TBSMStateMachine *> *)stateMachines;
 
 /**
  *  Sets the `TBSMStateMachine` instances to wrap.
@@ -52,6 +52,6 @@
  *
  *  @param stateMachines An array of `TBSMStateMachine` instances.
  */
-- (void)setStateMachines:(NSArray *)stateMachines;
+- (void)setStateMachines:(nonnull NSArray<TBSMStateMachine *> *)stateMachines;
 
 @end

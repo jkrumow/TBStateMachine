@@ -19,7 +19,7 @@
 /**
  *  The target pseudo state.
  */
-@property (nonatomic, strong) TBSMPseudoState *targetPseudoState;
+@property (nonatomic, strong, nonnull) TBSMPseudoState *targetPseudoState;
 
 /**
  *  Creates a `TBSMCompoundTransition` instance from a given source and target state, action and guard.
@@ -31,10 +31,10 @@
  *
  *  @return The created compound transition instance.
  */
-+ (TBSMCompoundTransition *)compoundTransitionWithSourceState:(TBSMState *)sourceState
-                                            targetPseudoState:(TBSMPseudoState *)targetPseudoState
-                                                       action:(TBSMActionBlock)action
-                                                        guard:(TBSMGuardBlock)guard;
++ (nonnull TBSMCompoundTransition *)compoundTransitionWithSourceState:(nonnull TBSMState *)sourceState
+                                            targetPseudoState:(nonnull TBSMPseudoState *)targetPseudoState
+                                                       action:(nullable TBSMActionBlock)action
+                                                        guard:(nullable TBSMGuardBlock)guard;
 
 /**
  *  Initializes a `TBSMCompoundTransition` instance from a given source and target state, action and guard.
@@ -46,8 +46,8 @@
  *
  *  @return The initialized compound transition instance.
  */
-- (instancetype)initWithSourceState:(TBSMState *)sourceState
-                  targetPseudoState:(TBSMPseudoState *)targetPseudoState
-                             action:(TBSMActionBlock)action
-                              guard:(TBSMGuardBlock)guard;
+- (nullable instancetype)initWithSourceState:(nonnull TBSMState *)sourceState
+                  targetPseudoState:(nonnull TBSMPseudoState *)targetPseudoState
+                             action:(nullable TBSMActionBlock)action
+                              guard:(nullable TBSMGuardBlock)guard;
 @end

@@ -22,6 +22,6 @@
  *
  *  @return The name as a string.
  */
-- (NSString *)name;
+- (nonnull NSString *)name;
 
 @end

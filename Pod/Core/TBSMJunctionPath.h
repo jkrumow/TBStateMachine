@@ -17,16 +17,16 @@
 /**
  *  The target state of this path.
  */
-@property (nonatomic, strong) TBSMState *targetState;
+@property (nonatomic, strong, nonnull) TBSMState *targetState;
 
 /**
  *  The action block associated with this path.
  */
-@property (nonatomic, copy) TBSMActionBlock action;
+@property (nonatomic, copy, nullable) TBSMActionBlock action;
 
 /**
  *  The guard block associated with this path.
  */
-@property (nonatomic, copy) TBSMGuardBlock guard;
+@property (nonatomic, copy, nullable) TBSMGuardBlock guard;
 
 @end

@@ -20,7 +20,7 @@
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-typedef void(^TBSMActionBlock)(TBSMState *sourceState, TBSMState *targetState, id data);
+typedef void(^TBSMActionBlock)(TBSMState *_Nullable sourceState, TBSMState * _Nullable targetState, id _Nullable data);
 
 /**
  *  This type represents a guard function of a `TBSMTransition`.
@@ -29,7 +29,7 @@ typedef void(^TBSMActionBlock)(TBSMState *sourceState, TBSMState *targetState, i
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, id data);
+typedef BOOL(^TBSMGuardBlock)(TBSMState *_Nullable sourceState, TBSMState *_Nullable targetState, id _Nullable data);
 
 
 /**
@@ -55,12 +55,12 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, id
 /**
  *  The action associated with the transition.
  */
-@property (nonatomic, copy) TBSMActionBlock action;
+@property (nonatomic, copy, nullable) TBSMActionBlock action;
 
 /**
  *  The guard function associated with the transition.
  */
-@property (nonatomic, copy) TBSMGuardBlock guard;
+@property (nonatomic, copy, nullable) TBSMGuardBlock guard;
 
 /**
  *  Creates a `TBSMTransition` instance from a given source and target state, action and guard.
@@ -73,11 +73,11 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, id
  *
  *  @return The transition object.
  */
-+ (TBSMTransition *)transitionWithSourceState:(TBSMState *)sourceState
-                                  targetState:(TBSMState *)targetState
++ (nullable TBSMTransition *)transitionWithSourceState:(nonnull TBSMState *)sourceState
+                                  targetState:(nonnull TBSMState *)targetState
                                          kind:(TBSMTransitionKind)kind
-                                       action:(TBSMActionBlock)action
-                                        guard:(TBSMGuardBlock)guard;
+                                       action:(nullable TBSMActionBlock)action
+                                        guard:(nullable TBSMGuardBlock)guard;
 
 /**
  *  Initializes a `TBSMTransition` instance from a given source and target state, action and guard.
@@ -90,14 +90,14 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, id
  *
  *  @return The transition object.
  */
-- (instancetype)initWithSourceState:(TBSMState *)sourceState
-                        targetState:(TBSMState *)targetState
+- (nullable instancetype)initWithSourceState:(nonnull TBSMState *)sourceState
+                        targetState:(nonnull TBSMState *)targetState
                                kind:(TBSMTransitionKind)kind
-                             action:(TBSMActionBlock)action
-                              guard:(TBSMGuardBlock)guard;
+                             action:(nullable TBSMActionBlock)action
+                              guard:(nullable TBSMGuardBlock)guard;
 
 
-- (TBSMStateMachine *)findLeastCommonAncestor;
+- (nonnull TBSMStateMachine *)findLeastCommonAncestor;
 
 /**
  *  Performs the transition between source and target state.
@@ -110,13 +110,13 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *sourceState, TBSMState *targetState, id
  *
  *  @return Returns YES if the transition could be performed.
  */
-- (BOOL)performTransitionWithData:(id)data;
+- (BOOL)performTransitionWithData:(nullable id)data;
 
 /**
  *  The transition's name.
  *
  *  @return The name.
  */
-- (NSString *)name;
+- (nonnull NSString *)name;
 
 @end

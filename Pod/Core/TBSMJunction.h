@@ -23,14 +23,14 @@
  *
  *  @return The junction instance.
  */
-+ (TBSMJunction *)junctionWithName:(NSString *)name;
++ (nullable TBSMJunction *)junctionWithName:(nonnull NSString *)name;
 
 /**
  *  The junction's target states.
  *
  *  @return An array containing the target states.
  */
-- (NSArray *)targetStates;
+- (nonnull NSArray<__kindof TBSMState *> *)targetStates;
 
 /**
  *  Adds an outgoing path to the junction.
@@ -39,7 +39,7 @@
  *  @param action The action to perform.
  *  @param guard  The guard to evaluate for this path.
  */
-- (void)addOutgoingPathWithTarget:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard;
+- (void)addOutgoingPathWithTarget:(nonnull TBSMState *)target action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
 
 /**
  *  Returns the outgoing path of the junction after evaluating all guards.
@@ -51,6 +51,6 @@
  *
  *  @return The outgoing path.
  */
-- (TBSMJunctionPath *)outgoingPathForTransition:(TBSMState *)source data:(id)data;
+- (nullable TBSMJunctionPath *)outgoingPathForTransition:(nonnull TBSMState *)source data:(nullable id)data;
 
 @end

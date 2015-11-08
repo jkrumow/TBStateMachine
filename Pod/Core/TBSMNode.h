@@ -24,28 +24,28 @@
  *
  *  @return The name as a string.
  */
-- (NSString *)name;
+- (nonnull NSString *)name;
 
 /**
  *  Returns its path inside the state machine hierarchy containing all parent nodes in descending order.
  *
  *  @return An array containing all parent nodes.
  */
-- (NSMutableArray *)path;
+- (nonnull NSMutableArray<NSObject<TBSMNode> *> *)path;
 
 /**
  *  Returns the parent node in the state machine hierarchy.
  *
  *  @return The parent `TBSMNode`.
  */
-- (id<TBSMNode>)parentNode;
+- (nullable id<TBSMNode>)parentNode;
 
 /**
  *  Sets the parent node in the state machine hierarchy.
  *
  *  @param parentNode The parent node.
  */
-- (void)setParentNode:(id<TBSMNode>)parentNode;
+- (void)setParentNode:(nullable id<TBSMNode>)parentNode;
 
 /**
  *  Executes the enter block of the state.
@@ -56,7 +56,7 @@
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-- (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data;
+- (void)enter:(nullable TBSMState *)sourceState targetState:(nullable TBSMState *)targetState data:(nullable id)data;
 
 /**
  *  Executes the exit block of the state.
@@ -67,6 +67,6 @@
  *  @param targetState The target state.
  *  @param data        The payload data.
  */
-- (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data;
+- (void)exit:(nullable TBSMState *)sourceState targetState:(nullable TBSMState *)targetState data:(nullable id)data;
 
 @end

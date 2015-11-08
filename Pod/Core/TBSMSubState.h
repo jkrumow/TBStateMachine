@@ -20,7 +20,7 @@
 /**
  *  The `TBSMStateMachine` instance contained in this sub state.
  */
-@property (nonatomic, strong) TBSMStateMachine *stateMachine;
+@property (nonatomic, strong, nonnull) TBSMStateMachine *stateMachine;
 
 /**
  *  Creates a `TBSMSUBState` with a specified name.
@@ -31,6 +31,6 @@
  *
  *  @return A new `TBSMSubState` instance.
  */
-+ (TBSMSubState *)subStateWithName:(NSString *)name;
++ (nullable TBSMSubState *)subStateWithName:(nonnull NSString *)name;
 
 @end
