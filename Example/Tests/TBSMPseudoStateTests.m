@@ -14,15 +14,6 @@ describe(@"TBSMPseudoState", ^{
     
     describe(@"Exception handling.", ^{
         
-        it (@"throws a TBSMException when name is nil.", ^{
-            
-            expect(^{
-                TBSMPseudoState *pseudoState = [[TBSMPseudoState alloc] initWithName:nil];
-                pseudoState = nil;
-            }).to.raise(TBSMException);
-            
-        });
-        
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{

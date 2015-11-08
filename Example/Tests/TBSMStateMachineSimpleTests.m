@@ -42,12 +42,6 @@ describe(@"TBSMStateMachine", ^{
     
     describe(@"Exception handling on setup.", ^{
         
-        it (@"throws a TBSMException when name is nil.", ^{
-            expect(^{
-                stateMachine = [TBSMStateMachine stateMachineWithName:nil];
-            }).to.raise(TBSMException);
-        });
-        
         it (@"throws a TBSMException when name is an empty string.", ^{
             expect(^{
                 stateMachine = [TBSMStateMachine stateMachineWithName:@""];

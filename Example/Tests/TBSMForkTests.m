@@ -41,14 +41,6 @@ describe(@"TBSMFork", ^{
 
     describe(@"Exception handling.", ^{
         
-        it (@"throws a TBSMException when name is nil.", ^{
-            
-            expect(^{
-                [TBSMFork forkWithName:nil];
-            }).to.raise(TBSMException);
-            
-        });
-        
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
@@ -61,17 +53,7 @@ describe(@"TBSMFork", ^{
             
             expect(^{
                 TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];
-                [fork setTargetStates:nil inRegion:parallel];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];
                 [fork setTargetStates:@[] inRegion:parallel];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                TBSMFork *fork = [TBSMFork forkWithName:@"Fork"];
-                [fork setTargetStates:@[a, b] inRegion:nil];
             }).to.raise(TBSMException);
         });
     });

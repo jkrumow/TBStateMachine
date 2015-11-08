@@ -37,28 +37,10 @@ describe(@"TBSMJunction", ^{
     
     describe(@"Exception handling.", ^{
         
-        it (@"throws a TBSMException when name is nil.", ^{
-            
-            expect(^{
-                [TBSMJunction junctionWithName:nil];
-            }).to.raise(TBSMException);
-        });
-        
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
                 [TBSMJunction junctionWithName:@""];
-            }).to.raise(TBSMException);
-        });
-        
-        it (@"throws a TBSMException when target is nil.", ^{
-            
-            TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
-            
-            expect(^{
-                [junction addOutgoingPathWithTarget:nil action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
-                    return YES;
-                }];
             }).to.raise(TBSMException);
         });
         

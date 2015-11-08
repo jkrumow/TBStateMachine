@@ -14,14 +14,6 @@ describe(@"TBSMSubState", ^{
     
     describe(@"Exception handling on setup.", ^{
         
-        it (@"throws a TBSMException when name is nil.", ^{
-            
-            expect(^{
-                [TBSMSubState subStateWithName:nil];
-            }).to.raise(TBSMException);
-            
-        });
-        
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
@@ -41,6 +33,14 @@ describe(@"TBSMSubState", ^{
         
         it (@"throws a TBSMException when stateMachine is nil.", ^{
             
+            TBSMParallelState *parallelstate = [TBSMParallelState parallelStateWithName:@"parallelstate"];
+            TBSMState *a1 = [TBSMState stateWithName:@"a1"];
+            TBSMState *a2 = [TBSMState stateWithName:@"a2"];
+            
+            TBSMStateMachine *submachine = [TBSMStateMachine stateMachineWithName:@"submachine"];
+            submachine.states = @[a1, a2];
+            parallelstate.stateMachines = @[submachine];
+            
             expect(^{
                 TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
                 [subState enter:nil targetState:nil data:nil];
@@ -48,7 +48,7 @@ describe(@"TBSMSubState", ^{
             
             expect(^{
                 TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
-                [subState enter:nil targetStates:nil region:nil data:nil];
+                [subState enter:nil targetStates:@[a1, a2] region:parallelstate data:nil];
             }).to.raise(TBSMException);
             
             expect(^{

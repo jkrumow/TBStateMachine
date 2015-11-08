@@ -41,14 +41,6 @@ describe(@"TBSMJoin", ^{
     
     describe(@"Exception handling.", ^{
         
-        it (@"throws a TBSMException when name is nil.", ^{
-            
-            expect(^{
-                [TBSMJoin joinWithName:nil];
-            }).to.raise(TBSMException);
-            
-        });
-        
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
@@ -61,22 +53,7 @@ describe(@"TBSMJoin", ^{
             
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-                [join setSourceStates:nil inRegion:parallel target:c];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
                 [join setSourceStates:@[] inRegion:parallel target:c];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-                [join setSourceStates:@[a, b] inRegion:nil target:c];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
-                [join setSourceStates:@[a, b] inRegion:parallel target:nil];
             }).to.raise(TBSMException);
         });
     });

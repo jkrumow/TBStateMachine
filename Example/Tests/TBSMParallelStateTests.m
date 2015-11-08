@@ -54,14 +54,6 @@ describe(@"TBSMParallelState", ^{
     
     describe(@"Exception handling on setup.", ^{
         
-        it (@"throws a TBSMException when name is nil.", ^{
-            
-            expect(^{
-                [TBSMParallelState parallelStateWithName:nil];
-            }).to.raise(TBSMException);
-            
-        });
-        
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
@@ -85,7 +77,7 @@ describe(@"TBSMParallelState", ^{
             }).to.raise(TBSMException);
             
             expect(^{
-                [parallelStates enter:nil targetStates:nil region:nil data:nil];
+                [parallelStates enter:nil targetStates:@[a1, b1, c1] region:parallelStates data:nil];
             }).to.raise(TBSMException);
             
             expect(^{

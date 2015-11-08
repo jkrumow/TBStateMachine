@@ -30,14 +30,6 @@ describe(@"TBSMState", ^{
     
     describe(@"Exception handling.", ^{
         
-        it (@"throws a TBSMException when name is nil.", ^{
-            
-            expect(^{
-                [TBSMState stateWithName:nil];
-            }).to.raise(TBSMException);
-            
-        });
-        
         it (@"throws a TBSMException when name is an empty string.", ^{
             
             expect(^{
@@ -53,15 +45,7 @@ describe(@"TBSMState", ^{
             }).to.raise(TBSMException);
             
             expect(^{
-                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionInternal];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionExternal];
-            }).to.raise(TBSMException);
-            
-            expect(^{
-                [a addHandlerForEvent:EVENT_NAME_A target:nil kind:TBSMTransitionLocal];
+                [a addHandlerForEvent:EVENT_NAME_A target:b kind:TBSMTransitionInternal];
             }).to.raise(TBSMException);
         });
         
