@@ -10,6 +10,8 @@
 
 #import "TBSMTransitionKind.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class TBSMState;
 @class TBSMStateMachine;
 
@@ -73,7 +75,7 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *_Nullable sourceState, TBSMState *_Null
  *
  *  @return The transition object.
  */
-+ (nullable TBSMTransition *)transitionWithSourceState:(nonnull TBSMState *)sourceState
++ (TBSMTransition *)transitionWithSourceState:(TBSMState *)sourceState
                                   targetState:(nullable TBSMState *)targetState
                                          kind:(TBSMTransitionKind)kind
                                        action:(nullable TBSMActionBlock)action
@@ -90,14 +92,14 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *_Nullable sourceState, TBSMState *_Null
  *
  *  @return The transition object.
  */
-- (nullable instancetype)initWithSourceState:(nonnull TBSMState *)sourceState
+- (instancetype)initWithSourceState:(TBSMState *)sourceState
                         targetState:(nullable TBSMState *)targetState
                                kind:(TBSMTransitionKind)kind
                              action:(nullable TBSMActionBlock)action
                               guard:(nullable TBSMGuardBlock)guard;
 
 
-- (nonnull TBSMStateMachine *)findLeastCommonAncestor;
+- (TBSMStateMachine *)findLeastCommonAncestor;
 
 /**
  *  Performs the transition between source and target state.
@@ -117,6 +119,8 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *_Nullable sourceState, TBSMState *_Null
  *
  *  @return The name.
  */
-- (nonnull NSString *)name;
+- (NSString *)name;
 
 @end
+
+NS_ASSUME_NONNULL_END

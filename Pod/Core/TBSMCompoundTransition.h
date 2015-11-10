@@ -10,6 +10,7 @@
 #import "TBSMTransitionVertex.h"
 #import "TBSMPseudoState.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  This class represents a compound transition inside a state machine.
@@ -19,7 +20,7 @@
 /**
  *  The target pseudo state.
  */
-@property (nonatomic, strong, nonnull) TBSMPseudoState *targetPseudoState;
+@property (nonatomic, strong) TBSMPseudoState *targetPseudoState;
 
 /**
  *  Creates a `TBSMCompoundTransition` instance from a given source and target state, action and guard.
@@ -31,8 +32,8 @@
  *
  *  @return The created compound transition instance.
  */
-+ (nonnull TBSMCompoundTransition *)compoundTransitionWithSourceState:(nonnull TBSMState *)sourceState
-                                            targetPseudoState:(nonnull TBSMPseudoState *)targetPseudoState
++ (TBSMCompoundTransition *)compoundTransitionWithSourceState:(TBSMState *)sourceState
+                                            targetPseudoState:(TBSMPseudoState *)targetPseudoState
                                                        action:(nullable TBSMActionBlock)action
                                                         guard:(nullable TBSMGuardBlock)guard;
 
@@ -46,8 +47,9 @@
  *
  *  @return The initialized compound transition instance.
  */
-- (nullable instancetype)initWithSourceState:(nonnull TBSMState *)sourceState
-                  targetPseudoState:(nonnull TBSMPseudoState *)targetPseudoState
+- (instancetype)initWithSourceState:(TBSMState *)sourceState
+                  targetPseudoState:(TBSMPseudoState *)targetPseudoState
                              action:(nullable TBSMActionBlock)action
                               guard:(nullable TBSMGuardBlock)guard;
 @end
+NS_ASSUME_NONNULL_END

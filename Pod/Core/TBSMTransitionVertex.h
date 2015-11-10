@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  This protocol represents a vertex inside a compound transition.
  *
@@ -22,6 +24,7 @@
  *
  *  @return The name as a string.
  */
-- (nonnull NSString *)name;
+- (NSString *)name;
 
 @end
+NS_ASSUME_NONNULL_END

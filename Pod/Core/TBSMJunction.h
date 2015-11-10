@@ -9,6 +9,8 @@
 #import "TBSMPseudoState.h"
 #import "TBSMJunctionPath.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  This class represents a 'junction' pseudo state in a state machine.
  */
@@ -23,14 +25,14 @@
  *
  *  @return The junction instance.
  */
-+ (nullable TBSMJunction *)junctionWithName:(nonnull NSString *)name;
++ (TBSMJunction *)junctionWithName:(NSString *)name;
 
 /**
  *  The junction's target states.
  *
  *  @return An array containing the target states.
  */
-- (nonnull NSArray<__kindof TBSMState *> *)targetStates;
+- (NSArray<__kindof TBSMState *> *)targetStates;
 
 /**
  *  Adds an outgoing path to the junction.
@@ -39,7 +41,7 @@
  *  @param action The action to perform.
  *  @param guard  The guard to evaluate for this path.
  */
-- (void)addOutgoingPathWithTarget:(nonnull TBSMState *)target action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
+- (void)addOutgoingPathWithTarget:(TBSMState *)target action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
 
 /**
  *  Returns the outgoing path of the junction after evaluating all guards.
@@ -51,6 +53,7 @@
  *
  *  @return The outgoing path.
  */
-- (nullable TBSMJunctionPath *)outgoingPathForTransition:(nonnull TBSMState *)source data:(nullable id)data;
+- (TBSMJunctionPath *)outgoingPathForTransition:(TBSMState *)source data:(nullable id)data;
 
 @end
+NS_ASSUME_NONNULL_END

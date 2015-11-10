@@ -10,6 +10,8 @@
 #import "TBSMState.h"
 #import "TBSMContainingNode.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class TBSMStateMachine;
 
 /**
@@ -20,7 +22,7 @@
 /**
  *  The `TBSMStateMachine` instance contained in this sub state.
  */
-@property (nonatomic, strong, nonnull) TBSMStateMachine *stateMachine;
+@property (nonatomic, strong) TBSMStateMachine *stateMachine;
 
 /**
  *  Creates a `TBSMSUBState` with a specified name.
@@ -31,6 +33,7 @@
  *
  *  @return A new `TBSMSubState` instance.
  */
-+ (nullable TBSMSubState *)subStateWithName:(nonnull NSString *)name;
++ (TBSMSubState *)subStateWithName:(NSString *)name;
 
 @end
+NS_ASSUME_NONNULL_END

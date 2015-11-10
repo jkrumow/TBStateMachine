@@ -10,6 +10,8 @@
 #import "TBSMTransition.h"
 #import "TBSMEvent.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  This protocol defines a node in a state machine hierarchy.
  *
@@ -24,14 +26,14 @@
  *
  *  @return The name as a string.
  */
-- (nonnull NSString *)name;
+- (NSString *)name;
 
 /**
  *  Returns its path inside the state machine hierarchy containing all parent nodes in descending order.
  *
  *  @return An array containing all parent nodes.
  */
-- (nonnull NSMutableArray<NSObject<TBSMNode> *> *)path;
+- (NSMutableArray<NSObject<TBSMNode> *> *)path;
 
 /**
  *  Returns the parent node in the state machine hierarchy.
@@ -70,3 +72,4 @@
 - (void)exit:(nullable TBSMState *)sourceState targetState:(nullable TBSMState *)targetState data:(nullable id)data;
 
 @end
+NS_ASSUME_NONNULL_END

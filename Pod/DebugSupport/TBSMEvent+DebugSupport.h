@@ -8,9 +8,12 @@
 
 #import "TBSMEvent.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void (^TBSMDebugCompletionBlock)(void);
 
 @interface TBSMEvent (DebugSupport)
 
-@property (nonatomic, copy, nonnull) TBSMDebugCompletionBlock completionBlock;
+@property (nonatomic, copy) TBSMDebugCompletionBlock completionBlock;
 @end
+NS_ASSUME_NONNULL_END

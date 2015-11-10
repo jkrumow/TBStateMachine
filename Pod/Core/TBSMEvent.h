@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  This class represents an event in a state machine.
@@ -17,7 +18,7 @@
 /**
  *  The event's name.
  */
-@property (nonatomic, copy, readonly, nonnull) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 /**
  *  The event's payload.
@@ -34,7 +35,7 @@
  *
  *  @return The event instance.
  */
-+ (nullable TBSMEvent *)eventWithName:(nonnull NSString *)name data:(nullable id)data;
++ (TBSMEvent *)eventWithName:(NSString *)name data:(nullable id)data;
 
 /**
  *  Initializes a `TBSMEvent` with a specified name.
@@ -46,6 +47,7 @@
  *
  *  @return An initialized `TBSMEvent` instance.
  */
-- (nullable instancetype)initWithName:(nonnull NSString *)name data:(nullable id)data;
+- (instancetype)initWithName:(NSString *)name data:(nullable id)data;
 
 @end
+NS_ASSUME_NONNULL_END

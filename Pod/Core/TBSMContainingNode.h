@@ -11,6 +11,8 @@
 
 @class TBSMParallelState;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  This protocol describes a subtype of `TBSMNode` in the state machine hierarchy which can contain other `TBSMNode`s.
  */
@@ -24,7 +26,7 @@
  *  @param region      The target region.
  *  @param data        The payload data.
  */
-- (void)enter:(nullable TBSMState *)sourceState targetStates:(nonnull NSArray<__kindof TBSMState *> *)targetStates region:(nonnull TBSMParallelState *)region data:(nullable id)data;
+- (void)enter:(nullable TBSMState *)sourceState targetStates:(NSArray<__kindof TBSMState *> *)targetStates region:(TBSMParallelState *)region data:(nullable id)data;
 
 /**
  *  Receives a specified `TBSMEvent` instance.
@@ -33,6 +35,7 @@
  *
  *  @return `YES` if the event has been handled.
  */
-- (BOOL)handleEvent:(nonnull TBSMEvent *)event;
+- (BOOL)handleEvent:(TBSMEvent *)event;
 
 @end
+NS_ASSUME_NONNULL_END

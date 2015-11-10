@@ -11,6 +11,8 @@
 #import "TBSMState.h"
 #import "TBSMContainingNode.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  This class wraps multiple `TBSMStateMachine` instances to an orthogonal region.
  */
@@ -25,7 +27,7 @@
  *
  *  @return The parallel wrapper instance.
  */
-+ (nullable TBSMParallelState *)parallelStateWithName:(nonnull NSString *)name;
++ (TBSMParallelState *)parallelStateWithName:(NSString *)name;
 
 /**
  *  Initializes a `TBSMParallelState` with a specified name.
@@ -36,14 +38,14 @@
  *
  *  @return An initialized `TBSMParallelState` instance.
  */
-- (nullable instancetype)initWithName:(nonnull NSString *)name;
+- (instancetype)initWithName:(NSString *)name;
 
 /**
  *  Returns the state machines the parallel wrapper manages.
  *
  *  @return An NSArray containing all `TBSMStateMachine` instances.
  */
-- (nonnull NSArray<TBSMStateMachine *> *)stateMachines;
+- (NSArray<TBSMStateMachine *> *)stateMachines;
 
 /**
  *  Sets the `TBSMStateMachine` instances to wrap.
@@ -52,6 +54,7 @@
  *
  *  @param stateMachines An array of `TBSMStateMachine` instances.
  */
-- (void)setStateMachines:(nonnull NSArray<TBSMStateMachine *> *)stateMachines;
+- (void)setStateMachines:(NSArray<TBSMStateMachine *> *)stateMachines;
 
 @end
+NS_ASSUME_NONNULL_END

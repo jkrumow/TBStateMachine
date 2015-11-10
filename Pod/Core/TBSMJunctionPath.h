@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "TBSMTransition.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  This class represents a wrapper class for an outgoing path of a `TBSMJunction`.
  */
@@ -17,7 +19,7 @@
 /**
  *  The target state of this path.
  */
-@property (nonatomic, strong, nonnull) TBSMState *targetState;
+@property (nonatomic, strong) TBSMState *targetState;
 
 /**
  *  The action block associated with this path.
@@ -30,3 +32,4 @@
 @property (nonatomic, copy, nullable) TBSMGuardBlock guard;
 
 @end
+NS_ASSUME_NONNULL_END

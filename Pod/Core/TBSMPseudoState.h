@@ -11,6 +11,8 @@
 #import "TBSMTransitionVertex.h"
 #import "TBSMState.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  This class represents the base class for pseudo states.
  *  This class should not be used by itself.
@@ -20,7 +22,7 @@
 /**
  *  The name of the pseudo state.
  */
-@property (nonatomic, copy, readonly, nonnull) NSString *name;
+@property (nonatomic, copy, readonly) NSString *name;
 
 /**
  *  Initializes a `TBSMPseudoState` with a specified name.
@@ -31,13 +33,14 @@
  *
  *  @return An initialized `TBSMPseudoState` instance.
  */
-- (nullable instancetype)initWithName:(nonnull NSString *)name;
+- (instancetype)initWithName:(NSString *)name;
 
 /**
  *  The state this pseudo state leads to inside a compound transition.
  *
  *  @return The target state instance.
  */
-- (nonnull TBSMState *)targetState;
+- (TBSMState *)targetState;
 
 @end
+NS_ASSUME_NONNULL_END

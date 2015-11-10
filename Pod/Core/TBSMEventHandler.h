@@ -10,6 +10,7 @@
 #import "TBSMTransition.h"
 #import "TBSMState.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  This class represents an event handler object.
@@ -20,12 +21,12 @@
 /**
  *  The event's name.
  */
-@property (nonatomic, copy, nonnull) NSString *name;
+@property (nonatomic, copy) NSString *name;
 
 /**
  *  The target vertex of the transition triggered by the event.
  */
-@property (nonatomic, strong, nonnull) id <TBSMTransitionVertex> target;
+@property (nonatomic, strong) id <TBSMTransitionVertex> target;
 
 /**
  *  The kind of transition to perform.
@@ -56,7 +57,7 @@
  *
  *  @return The event handler instance.
  */
-+ (nullable instancetype)eventHandlerWithName:(nonnull NSString *)name target:(nonnull id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
++ (instancetype)eventHandlerWithName:(NSString *)name target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
 
 /**
  *  Initializes a `TBSMEventHandler` from a given event name, target, action and guard.
@@ -71,6 +72,7 @@
  *
  *  @return An initialized `TBSMEventHandler` instance.
  */
-- (nullable instancetype)initWithName:(nonnull NSString *)name target:(nonnull id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
+- (instancetype)initWithName:(NSString *)name target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
 
 @end
+NS_ASSUME_NONNULL_END
