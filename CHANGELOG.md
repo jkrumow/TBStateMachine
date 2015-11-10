@@ -1,5 +1,13 @@
 # TBStateMachine CHANGELOG
 
+## 5.10.0
+
+- Add nullability annotations and generics for improved Swift compatibility to sub spec `DebugSupport`
+
+## 5.9.0
+
+- Bugfixes
+
 ## 5.8.2
 
 - Bugfixes
