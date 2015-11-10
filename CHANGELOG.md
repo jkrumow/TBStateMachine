@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.11.0
+
+- Rework nullability by using audited regions
+
 ## 5.10.0
 
 - Add nullability annotations and generics for improved Swift compatibility to sub spec `DebugSupport`
