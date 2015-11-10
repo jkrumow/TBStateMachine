@@ -109,7 +109,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName source:(NSString *)sourceState target:(NSString *)targetState;
++ (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName source:(nullable NSString *)sourceState target:(nullable NSString *)targetState;
 
 /**
  *  Thrown when a compound transition is not well contructed.
