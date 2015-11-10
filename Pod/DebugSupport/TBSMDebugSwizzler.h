@@ -11,5 +11,5 @@
 
 @interface TBSMDebugSwizzler : NSObject
 
-+ (void)swizzleMethod:(SEL)originalSelector withMethod:(SEL)swizzledSelector onClass:(Class)class;
++ (void)swizzleMethod:(nonnull SEL)originalSelector withMethod:(nonnull SEL)swizzledSelector onClass:(nonnull Class)class;
 @end

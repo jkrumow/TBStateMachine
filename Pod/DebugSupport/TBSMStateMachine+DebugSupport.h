@@ -15,7 +15,7 @@
 #import "TBSMDebugStateMachine.h"
 #import "TBSMStateMachine.h"
 
-FOUNDATION_EXPORT NSString * const TBSMDebugSupportException;
+FOUNDATION_EXPORT NSString *_Nonnull const TBSMDebugSupportException;
 
 /**
  *  This category adds debug support to the `TBStateMachine` library.
@@ -29,8 +29,8 @@ FOUNDATION_EXPORT NSString * const TBSMDebugSupportException;
  */
 @interface TBSMStateMachine (DebugSupport)
 
-@property (nonatomic, strong) NSNumber *debugSupportEnabled;
-@property (nonatomic, strong) NSNumber *millisecondsPerMachTime;
+@property (nonatomic, strong, nonnull) NSNumber *debugSupportEnabled;
+@property (nonatomic, strong, nonnull) NSNumber *millisecondsPerMachTime;
 
 /**
  *  Activates debug mode for the top statemachine. Call this method on the statemachine instance at the top of the hierarchy.
@@ -44,7 +44,7 @@ FOUNDATION_EXPORT NSString * const TBSMDebugSupportException;
  *
  *  @return An NSString containing all names of the currently activated states and their containing state machines.
  */
-- (NSString *)activeStateConfiguration;
+- (nonnull NSString *)activeStateConfiguration;
 
 /**
  *  Adds an event to the event queue and calls the completion handler afterwards.
@@ -54,5 +54,5 @@ FOUNDATION_EXPORT NSString * const TBSMDebugSupportException;
  *  @param event      The given `TBSMEvent` instance.
  *  @param completion The completion handler to be executed when event has been handled.
  */
-- (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion;
+- (void)scheduleEvent:(nonnull TBSMEvent *)event withCompletion:(nullable TBSMDebugCompletionBlock)completion;
 @end

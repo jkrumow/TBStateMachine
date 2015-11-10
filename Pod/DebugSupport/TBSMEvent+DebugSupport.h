@@ -12,5 +12,5 @@ typedef void (^TBSMDebugCompletionBlock)(void);
 
 @interface TBSMEvent (DebugSupport)
 
-@property (nonatomic, copy) TBSMDebugCompletionBlock completionBlock;
+@property (nonatomic, copy, nonnull) TBSMDebugCompletionBlock completionBlock;
 @end
