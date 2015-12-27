@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.12.0
+
+- Remove superfluous factory methods
+
 ## 5.11.0
 
 - Rework nullability by using audited regions
