@@ -12,11 +12,6 @@
 
 @implementation TBSMEventHandler
 
-+ (instancetype)eventHandlerWithName:(NSString *)name target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
-{
-    return [[TBSMEventHandler alloc] initWithName:name target:target kind:kind action:action guard:guard];
-}
-
 - (instancetype)initWithName:(NSString *)name target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if (name == nil || [name isEqualToString:@""]) {

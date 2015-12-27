@@ -69,7 +69,7 @@ NSString * const TBSMDataUserInfo = @"data";
     if (kind == TBSMTransitionInternal && target != self) {
         @throw [NSException tb_ambiguousTransitionAttributes:event source:self.name target:target.name];
     }
-    TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:event target:target kind:kind action:action guard:guard];
+    TBSMEventHandler *eventHandler = [[TBSMEventHandler alloc] initWithName:event target:target kind:kind action:action guard:guard];
     NSMutableArray *eventHandlers = self.priv_eventHandlers[event];
     if (!eventHandlers) {
         eventHandlers = NSMutableArray.new;

@@ -19,14 +19,6 @@
 
 @implementation TBSMCompoundTransition
 
-+ (TBSMCompoundTransition *)compoundTransitionWithSourceState:(TBSMState *)sourceState
-                                            targetPseudoState:(TBSMPseudoState *)targetPseudoState
-                                                       action:(TBSMActionBlock)action
-                                                        guard:(TBSMGuardBlock)guard
-{
-    return [[TBSMCompoundTransition alloc] initWithSourceState:sourceState targetPseudoState:targetPseudoState action:action guard:guard];
-}
-
 - (instancetype)initWithSourceState:(TBSMState *)sourceState
                   targetPseudoState:(TBSMPseudoState *)targetPseudoState
                              action:(TBSMActionBlock)action

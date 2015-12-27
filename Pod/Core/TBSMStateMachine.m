@@ -121,16 +121,16 @@
             
             TBSMTransition *transition = nil;
             if ([eventHandler.target isKindOfClass:[TBSMState class]]) {
-                transition = [TBSMTransition transitionWithSourceState:self.currentState
-                                                           targetState:(TBSMState *)eventHandler.target
-                                                                  kind:eventHandler.kind
-                                                                action:eventHandler.action
-                                                                 guard:eventHandler.guard];
+                transition = [[TBSMTransition alloc] initWithSourceState:self.currentState
+                                                             targetState:(TBSMState *)eventHandler.target
+                                                                    kind:eventHandler.kind
+                                                                  action:eventHandler.action
+                                                                   guard:eventHandler.guard];
             } else {
-                transition = [TBSMCompoundTransition compoundTransitionWithSourceState:self.currentState
-                                                                     targetPseudoState:(TBSMPseudoState *)eventHandler.target
-                                                                                action:eventHandler.action
-                                                                                 guard:eventHandler.guard];
+                transition = [[TBSMCompoundTransition alloc] initWithSourceState:self.currentState
+                                                               targetPseudoState:(TBSMPseudoState *)eventHandler.target
+                                                                          action:eventHandler.action
+                                                                           guard:eventHandler.guard];
             }
             if ([transition performTransitionWithData:event.data]) {
                 return YES;

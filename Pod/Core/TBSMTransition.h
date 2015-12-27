@@ -65,23 +65,6 @@ typedef BOOL(^TBSMGuardBlock)(TBSMState *_Nullable sourceState, TBSMState *_Null
 @property (nonatomic, copy, nullable) TBSMGuardBlock guard;
 
 /**
- *  Creates a `TBSMTransition` instance from a given source and target state, action and guard.
- *
- *  @param sourceState The specified source state.
- *  @param targetState The specified target state.
- *  @param kind        The kind of transition.
- *  @param action      The action associated with this transition.
- *  @param guard       The guard function associated with the transition.
- *
- *  @return The transition object.
- */
-+ (TBSMTransition *)transitionWithSourceState:(TBSMState *)sourceState
-                                  targetState:(nullable TBSMState *)targetState
-                                         kind:(TBSMTransitionKind)kind
-                                       action:(nullable TBSMActionBlock)action
-                                        guard:(nullable TBSMGuardBlock)guard;
-
-/**
  *  Initializes a `TBSMTransition` instance from a given source and target state, action and guard.
  *
  *  @param sourceState The specified source state.

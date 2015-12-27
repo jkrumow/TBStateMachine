@@ -41,7 +41,8 @@ describe(@"TBSMEventHandler", ^{
             TBSMState *state = [TBSMState stateWithName:@"state"];
             
             expect(^{
-                [TBSMEventHandler eventHandlerWithName:@"" target:state kind:TBSMTransitionExternal action:nil guard:nil];
+                TBSMEventHandler *handler = [[TBSMEventHandler alloc] initWithName:@"" target:state kind:TBSMTransitionExternal action:nil guard:nil];
+                handler = nil;
             }).to.raise(TBSMException);
             
         });
@@ -49,7 +50,7 @@ describe(@"TBSMEventHandler", ^{
         it (@"returns its name.", ^{
             
             TBSMState *state = [TBSMState stateWithName:@"state"];
-            TBSMEventHandler *eventHandler = [TBSMEventHandler eventHandlerWithName:@"a" target:state kind:TBSMTransitionExternal action:nil guard:nil];
+            TBSMEventHandler *eventHandler = [[TBSMEventHandler alloc] initWithName:@"a" target:state kind:TBSMTransitionExternal action:nil guard:nil];
             expect(eventHandler.name).to.equal(@"a");
         });
     });

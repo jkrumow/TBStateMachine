@@ -43,22 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable) TBSMGuardBlock guard;
 
-
-/**
- *  Creates a `TBSMEventHandler` instance from a given event name, target, action and guard.
- *
- *  Throws a `TBSMException` when name is nil or an empty string.
- *
- *  @param name   The name of this event. Must be unique.
- *  @param target The target vertex.
- *  @param type   The kind of transition.
- *  @param action The action.
- *  @param guard  The guard function.
- *
- *  @return The event handler instance.
- */
-+ (instancetype)eventHandlerWithName:(NSString *)name target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(nullable TBSMActionBlock)action guard:(nullable TBSMGuardBlock)guard;
-
 /**
  *  Initializes a `TBSMEventHandler` from a given event name, target, action and guard.
  *
