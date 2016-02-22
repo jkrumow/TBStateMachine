@@ -23,9 +23,9 @@ NSString * const TBSMDataUserInfo = @"data";
 
 @implementation TBSMState
 
-+ (TBSMState *)stateWithName:(NSString *)name
++ (instancetype)stateWithName:(NSString *)name
 {
-    return [[TBSMState alloc] initWithName:name];
+    return [[[self class] alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name

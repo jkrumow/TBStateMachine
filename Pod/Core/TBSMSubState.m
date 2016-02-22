@@ -13,9 +13,9 @@
 
 @implementation TBSMSubState
 
-+ (TBSMSubState *)subStateWithName:(NSString *)name
++ (instancetype)subStateWithName:(NSString *)name
 {
-    return [[TBSMSubState alloc] initWithName:name];
+    return [[[self class] alloc] initWithName:name];
 }
 
 - (void)setStateMachine:(TBSMStateMachine *)stateMachine

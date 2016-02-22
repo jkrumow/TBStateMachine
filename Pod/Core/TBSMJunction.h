@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return The junction instance.
  */
-+ (TBSMJunction *)junctionWithName:(NSString *)name;
++ (instancetype)junctionWithName:(NSString *)name;
 
 /**
  *  The junction's target states.

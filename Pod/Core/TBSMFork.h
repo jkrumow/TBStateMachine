@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return The fork instance.
  */
-+ (TBSMFork *)forkWithName:(NSString *)name;
++ (instancetype)forkWithName:(NSString *)name;
 
 /**
  *  The fork's target states inside the region.

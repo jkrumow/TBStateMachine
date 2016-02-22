@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return The parallel wrapper instance.
  */
-+ (TBSMParallelState *)parallelStateWithName:(NSString *)name;
++ (instancetype)parallelStateWithName:(NSString *)name;
 
 /**
  *  Initializes a `TBSMParallelState` with a specified name.

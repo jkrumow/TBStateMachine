@@ -15,9 +15,9 @@
 
 @implementation TBSMFork
 
-+ (TBSMFork *)forkWithName:(NSString *)name
++ (instancetype)forkWithName:(NSString *)name
 {
-    return [[TBSMFork alloc] initWithName:name];
+    return [[[self class] alloc] initWithName:name];
 }
 
 - (TBSMState *)targetState

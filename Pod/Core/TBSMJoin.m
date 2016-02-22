@@ -18,9 +18,9 @@
 
 @implementation TBSMJoin
 
-+ (TBSMJoin *)joinWithName:(NSString *)name
++ (instancetype)joinWithName:(NSString *)name
 {
-    return [[TBSMJoin alloc] initWithName:name];
+    return [[[self class] alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name

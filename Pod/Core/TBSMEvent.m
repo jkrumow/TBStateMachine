@@ -11,9 +11,9 @@
 
 @implementation TBSMEvent
 
-+ (TBSMEvent *)eventWithName:(NSString *)name data:(id)data
++ (instancetype)eventWithName:(NSString *)name data:(id)data
 {
-    return [[TBSMEvent alloc] initWithName:name data:data];
+    return [[[self class] alloc] initWithName:name data:data];
 }
 
 - (instancetype)initWithName:(NSString *)name data:(id)data

@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return The event instance.
  */
-+ (TBSMEvent *)eventWithName:(NSString *)name data:(nullable id)data;
++ (instancetype)eventWithName:(NSString *)name data:(nullable id)data;
 
 /**
  *  Initializes a `TBSMEvent` with a specified name.

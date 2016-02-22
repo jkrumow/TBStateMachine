@@ -14,9 +14,9 @@
 
 @implementation TBSMJunction
 
-+ (TBSMJunction *)junctionWithName:(NSString *)name
++ (instancetype)junctionWithName:(NSString *)name
 {
-    return [[TBSMJunction alloc] initWithName:name];
+    return [[[self class] alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name

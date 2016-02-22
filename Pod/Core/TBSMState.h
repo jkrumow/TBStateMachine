@@ -65,7 +65,7 @@ typedef void (^TBSMStateBlock)(TBSMState *_Nullable sourceState, TBSMState *_Nul
  *
  *  @return The state instance.
  */
-+ (TBSMState *)stateWithName:(NSString *)name;
++ (instancetype)stateWithName:(NSString *)name;
 
 /**
  *  Initializes a `TBSMState` with a specified name.

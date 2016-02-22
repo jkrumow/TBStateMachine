@@ -18,9 +18,9 @@
 
 @synthesize parentNode = _parentNode;
 
-+ (TBSMParallelState *)parallelStateWithName:(NSString *)name
++ (instancetype)parallelStateWithName:(NSString *)name
 {
-    return [[TBSMParallelState alloc] initWithName:name];
+    return [[[self class] alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name

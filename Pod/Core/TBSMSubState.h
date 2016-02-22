@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return A new `TBSMSubState` instance.
  */
-+ (TBSMSubState *)subStateWithName:(NSString *)name;
++ (instancetype)subStateWithName:(NSString *)name;
 
 @end
 NS_ASSUME_NONNULL_END

@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return The join instance.
  */
-+ (TBSMJoin *)joinWithName:(NSString *)name;
++ (instancetype)joinWithName:(NSString *)name;
 
 /**
  *  The join's source states inside the region.

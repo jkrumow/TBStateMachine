@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return The state machine instance.
  */
-+ (TBSMStateMachine *)stateMachineWithName:(NSString *)name;
++ (instancetype)stateMachineWithName:(NSString *)name;
 
 /**
  *  Initializes a `TBSMStateMachine` with a specified name.

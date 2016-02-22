@@ -16,9 +16,9 @@
 
 @implementation TBSMStateMachine
 
-+ (TBSMStateMachine *)stateMachineWithName:(NSString *)name
++ (instancetype)stateMachineWithName:(NSString *)name
 {
-    return [[TBSMStateMachine alloc] initWithName:name];
+    return [[[self class] alloc] initWithName:name];
 }
 
 - (instancetype)initWithName:(NSString *)name
