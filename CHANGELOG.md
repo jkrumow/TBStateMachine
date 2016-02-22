@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 5.15.0
+
+- Cleanup interfaces for class methods. Using instancetype now.
+
 ## 5.12.0
 
 - Remove superfluous factory methods
