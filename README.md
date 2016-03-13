@@ -273,7 +273,7 @@ Main
 
 ## Development Setup
 
-Clone the repo and run `pod install` from the `Example` directory first. The project contains a unit test target for devlopment.
+Clone the repo and run `pod install` from the `Example` directory first. The project contains a unit test target for development.
 
 ## Useful Theory on UML State Machines
 
