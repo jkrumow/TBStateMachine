@@ -21,9 +21,7 @@ A lightweight hierarchical state machine framework in Objective-C.
 * Asynchronous event handling
 * NSNotificationCenter support
 
-## Example Project
-
-To run the example project, clone the repo, and run `pod install` from the `Example` directory first.
+![Features](https://raw.githubusercontent.com/tarbrain/TBStateMachine/master/Documentation/test_setup.png)
 
 ## Requirements
 
@@ -272,6 +270,10 @@ Main
         subMachineC
             stateCc
 ```
+
+## Development Setup
+
+Clone the repo and run `pod install` from the `Example` directory first. The project contains a unit test target for devlopment.
 
 ## Useful Theory on UML State Machines
 
