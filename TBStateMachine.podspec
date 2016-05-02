@@ -11,9 +11,9 @@ Pod::Spec.new do |s|
                        - transitions with guards and actions
                        - state switching using least common ancestor algorithm and run-to-completion model
                        DESC
-  s.homepage         = "https://github.com/tarbrain/TBStateMachine"
+  s.homepage         = "https://github.com/jkrumow/TBStateMachine"
   s.license          = 'MIT'
-  s.author           = { "Julian Krumow" => "julian.krumow@tarbrain.com" }
+  s.author           = { "Julian Krumow" => "julian.krumow@bogusmachine.com" }
 
   s.ios.deployment_target = '5.0'
   s.watchos.deployment_target = '2.0'
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.7'
 
   s.requires_arc = true
-  s.source = { :git => "https://github.com/tarbrain/TBStateMachine.git", :tag => s.version.to_s }
+  s.source = { :git => "https://github.com/jkrumow/TBStateMachine.git", :tag => s.version.to_s }
 
   s.default_subspec = 'Core'
   s.subspec 'Core' do |core|

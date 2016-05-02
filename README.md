@@ -3,8 +3,8 @@
 [![Version](https://img.shields.io/cocoapods/v/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![License](https://img.shields.io/cocoapods/l/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![Platform](https://img.shields.io/cocoapods/p/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
-[![Build Status](https://img.shields.io/travis/tarbrain/TBStateMachine/master.svg?style=flat)](https://travis-ci.org/tarbrain/TBStateMachine)
-[![Coverage Status](https://img.shields.io/coveralls/tarbrain/TBStateMachine/master.svg?style=flat)](https://coveralls.io/r/tarbrain/TBStateMachine)
+[![Build Status](https://img.shields.io/travis/jkrumow/TBStateMachine/master.svg?style=flat)](https://travis-ci.org/jkrumow/TBStateMachine)
+[![Coverage Status](https://img.shields.io/coveralls/jkrumow/TBStateMachine/master.svg?style=flat)](https://coveralls.io/r/jkrumow/TBStateMachine)
 
 
 A lightweight hierarchical state machine framework in Objective-C.
@@ -21,7 +21,7 @@ A lightweight hierarchical state machine framework in Objective-C.
 * Asynchronous event handling
 * NSNotificationCenter support
 
-![Features](https://raw.githubusercontent.com/tarbrain/TBStateMachine/master/Documentation/test_setup.png)
+![Features](https://raw.githubusercontent.com/jkrumow/TBStateMachine/master/Documentation/test_setup.png)
 
 ## Requirements
 
@@ -282,7 +282,7 @@ Clone the repo and run `pod install` from the `Example` directory first. The pro
 
 ## Author
 
-Julian Krumow, julian.krumow@tarbrain.com
+Julian Krumow, julian.krumow@bogusmachine.com
 
 ## License
 

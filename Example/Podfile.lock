@@ -20,6 +20,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
   Specta: ac94d110b865115fe60ff2c6d7281053c6f8e8a2
-  TBStateMachine: 7eb5775d1928f7b8f8b7827cf7b9a7a0ae374dd5
+  TBStateMachine: 2afbfcd5391aa3df9a759cf8f6bf1e2c4bd0f04a
 
 COCOAPODS: 0.39.0
