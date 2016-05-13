@@ -1,6 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'Tests', :exclusive => true do
+target 'Tests' do
   pod 'TBStateMachine', :path => '../'
   pod 'TBStateMachine/DebugSupport', :path => '../'
 

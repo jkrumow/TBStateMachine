@@ -1,10 +1,10 @@
 PODS:
   - Expecta (1.0.5)
   - Specta (1.0.5)
-  - TBStateMachine (5.15.0):
-    - TBStateMachine/Core (= 5.15.0)
-  - TBStateMachine/Core (5.15.0)
-  - TBStateMachine/DebugSupport (5.15.0):
+  - TBStateMachine (5.20.0):
+    - TBStateMachine/Core (= 5.20.0)
+  - TBStateMachine/Core (5.20.0)
+  - TBStateMachine/DebugSupport (5.20.0):
     - TBStateMachine/Core
 
 DEPENDENCIES:
@@ -20,6 +20,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
   Specta: ac94d110b865115fe60ff2c6d7281053c6f8e8a2
-  TBStateMachine: 2afbfcd5391aa3df9a759cf8f6bf1e2c4bd0f04a
+  TBStateMachine: 5956bd4fdc86052a818815f70588719ed52aab8e
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 80069df67c576d68202c983a37571f6aadda8f45
+
+COCOAPODS: 1.0.0
