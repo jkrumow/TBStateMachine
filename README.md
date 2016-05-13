@@ -4,7 +4,6 @@
 [![License](https://img.shields.io/cocoapods/l/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![Platform](https://img.shields.io/cocoapods/p/TBStateMachine.svg?style=flat)](http://cocoadocs.org/docsets/TBStateMachine)
 [![Build Status](https://img.shields.io/travis/jkrumow/TBStateMachine/master.svg?style=flat)](https://travis-ci.org/jkrumow/TBStateMachine)
-[![Coverage Status](https://img.shields.io/coveralls/jkrumow/TBStateMachine/master.svg?style=flat)](https://coveralls.io/r/jkrumow/TBStateMachine)
 
 
 A lightweight hierarchical state machine framework in Objective-C.

@@ -1,5 +1,0 @@
-coverage_service: coveralls
-xcodeproj: Example/TBStatemachine.xcodeproj
-source_directory: ./Pod/*
-ignore:
-  - Example/*
