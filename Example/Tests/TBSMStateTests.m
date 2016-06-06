@@ -38,7 +38,7 @@ describe(@"TBSMState", ^{
             
         });
         
-        it(@"Throws a `TBSMException` when attempting to add event handler which makes no sense.", ^{
+        it(@"throws a `TBSMException` when attempting to add event handler which makes no sense.", ^{
             
             expect(^{
                 [a addHandlerForEvent:EVENT_NAME_A target:b kind:TBSMTransitionInternal];

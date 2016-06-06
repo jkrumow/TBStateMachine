@@ -49,7 +49,7 @@ describe(@"TBSMJoin", ^{
             
         });
         
-        it(@"Throws a `TBSMException` when source, region or target states are invalid.", ^{
+        it(@"throws a `TBSMException` when source, region or target states are invalid.", ^{
             
             expect(^{
                 TBSMJoin *join = [TBSMJoin joinWithName:@"Join"];
