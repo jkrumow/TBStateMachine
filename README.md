@@ -50,11 +50,11 @@ Create a state, set enter and exit blocks:
 
 ```objc
 TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
-stateA.enterBlock = ^(TBSMState *source, TBSMState *target, id data) {
+stateA.enterBlock = ^(id data) {
 
 };
     
-stateA.exitBlock = ^(TBSMState *source, TBSMState *target, id data) {
+stateA.exitBlock = ^(id data) {
 
 };
 ```
@@ -85,11 +85,11 @@ You can also add event handlers with additional action and guard blocks:
 
 ```objc
 
-TBSMActionBlock action = ^(TBSMState *source, TBSMState *target, id data) {
+TBSMActionBlock action = ^(id data) {
 
 };
 
-TBSMGuardBlock guard = ^BOOL(TBSMState *source, TBSMState *target, id data) {
+TBSMGuardBlock guard = ^BOOL(id data) {
 
     return YES;
 };
@@ -176,11 +176,11 @@ TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
 ```objc
 TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
 [stateA addHandlerForEvent:@"EventA" target:junction];
-[junction addOutgoingPathWithTarget:stateB action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
+[junction addOutgoingPathWithTarget:stateB action:nil guard:^BOOL(id data) {
     
     return // ...
 }];
-[junction addOutgoingPathWithTarget:stateC action:nil guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
+[junction addOutgoingPathWithTarget:stateC action:nil guard:^BOOL(id data) {
     
     return // ...
 }];
@@ -197,8 +197,6 @@ The notification's `userInfo` contains:
 
 ```objc
 {
-    TBSMSourceStateUserInfo:theSourceState,
-    TBSMTargetStateUserInfo:theTargetState,
     TBSMDataUserInfo:theData
 }
 ```
@@ -248,11 +246,11 @@ Then include `TBSMStateMachine+DebugSupport.h` and activate the debug support fe
 The statemachine will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
 
 ```
-[Main]: will handle event 'EventA' data: (null)
-[Main] will perform transition: stateA --> stateCc data: (null)
-    Exit 'stateB' source: 'stateA' target: 'stateCc' data: (null)
-    Enter 'stateC' source: 'stateA' target: 'stateCc' data: (null)
-    Enter 'stateCc' source: 'stateA' target: 'stateCc' data: (null)
+[Main]: will handle event 'EventA' data: 12345
+[Main] attempt to perform transition: stateA --> stateCc data: 12345
+    Exit 'stateB' data: 12345
+    Enter 'stateC' data: 12345
+    Enter 'stateCc' data: 12345
 [Main]: run-to-completion step took 1.15 milliseconds
 [Main]: remaining events in queue: 0
 ```

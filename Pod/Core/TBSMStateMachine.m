@@ -146,7 +146,7 @@
 {
     [self.currentState exit:sourceState targetState:targetState data:data];
     if (action) {
-        action(sourceState, targetState, data);
+        action(data);
     }
     [self enter:sourceState targetState:targetState data:data];
 }
@@ -155,7 +155,7 @@
 {
     [self.currentState exit:sourceState targetState:region data:data];
     if (action) {
-        action(sourceState, region, data);
+        action(data);
     }
     [self enter:sourceState targetStates:targetStates region:region data:data];
 }

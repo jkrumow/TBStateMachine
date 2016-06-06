@@ -12,8 +12,6 @@
 
 NSString * const TBSMStateDidEnterNotification = @"TBSMStateDidEnterNotification";
 NSString * const TBSMStateDidExitNotification = @"TBSMStateDidExitNotification";
-NSString * const TBSMSourceStateUserInfo = @"sourceState";
-NSString * const TBSMTargetStateUserInfo = @"targetState";
 NSString * const TBSMDataUserInfo = @"data";
 
 @interface TBSMState ()
@@ -93,31 +91,25 @@ NSString * const TBSMDataUserInfo = @"data";
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
-    [self _postNotificationWithName:TBSMStateDidEnterNotification sourceState:sourceState targetState:targetState data:data];
+    [self _postNotificationWithName:TBSMStateDidEnterNotification data:data];
     
     if (_enterBlock) {
-        _enterBlock(sourceState, targetState, data);
+        _enterBlock(data);
     }
 }
 
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
-    [self _postNotificationWithName:TBSMStateDidExitNotification sourceState:sourceState targetState:targetState data:data];
+    [self _postNotificationWithName:TBSMStateDidExitNotification data:data];
     
     if (_exitBlock) {
-        _exitBlock(sourceState, targetState, data);
+        _exitBlock(data);
     }
 }
 
-- (void)_postNotificationWithName:(NSString *)name sourceState:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
+- (void)_postNotificationWithName:(NSString *)name data:(id)data
 {
     NSMutableDictionary *userInfo = NSMutableDictionary.new;
-    if (sourceState) {
-        [userInfo setObject:sourceState forKey:TBSMSourceStateUserInfo];
-    }
-    if (targetState) {
-        [userInfo setObject:targetState forKey:TBSMTargetStateUserInfo];
-    }
     if (data) {
         [userInfo setObject:data forKey:TBSMDataUserInfo];
     }

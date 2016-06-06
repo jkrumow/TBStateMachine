@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 6.0.0
+
+- Remove parameters `sourceState` and `targetState` from handlers and notification user info to simplify API.
+
 ## 5.15.0
 
 - Cleanup interfaces for class methods. Using instancetype now.

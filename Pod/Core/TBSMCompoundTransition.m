@@ -59,7 +59,7 @@
 
 - (BOOL)performTransitionWithData:(id)data
 {
-    if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
+    if (self.guard == nil || self.guard(data)) {
         if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
             [self _performForkTransitionWithData:data];
         } else if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {
@@ -96,12 +96,12 @@
     TBSMJunctionPath *outgoingPath = [junction outgoingPathForTransition:self.sourceState data:data];
     self.targetState = outgoingPath.targetState;
     TBSMStateMachine *lca = [self findLeastCommonAncestor];
-    TBSMActionBlock compoundAction = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
+    TBSMActionBlock compoundAction = ^(id data) {
         if (self.action) {
-            self.action(sourceState, targetState, data);
+            self.action(data);
         }
         if (outgoingPath.action) {
-            outgoingPath.action(sourceState, targetState, data);
+            outgoingPath.action(data);
         }
     };
     [lca switchState:self.sourceState targetState:self.targetState action:compoundAction data:data];

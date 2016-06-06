@@ -16,18 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 FOUNDATION_EXPORT NSString * const TBSMStateDidEnterNotification;
 FOUNDATION_EXPORT NSString * const TBSMStateDidExitNotification;
-FOUNDATION_EXPORT NSString * const TBSMSourceStateUserInfo;
-FOUNDATION_EXPORT NSString * const TBSMTargetStateUserInfo;
 FOUNDATION_EXPORT NSString * const TBSMDataUserInfo;
 
 /**
  *  This type represents a block that is executed on entry and exit of a `TBSMState`.
  *
- *  @param sourceState The source state.
- *  @param targetState The target state.
- *  @param data        The payload data.
+ *  @param data The payload data.
  */
-typedef void (^TBSMStateBlock)(TBSMState *_Nullable sourceState, TBSMState *_Nullable targetState, id _Nullable data);
+typedef void (^TBSMStateBlock)(id _Nullable data);
 
 @class TBSMEventHandler;
 

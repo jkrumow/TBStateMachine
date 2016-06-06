@@ -214,25 +214,25 @@ describe(@"TBSMStateMachine", ^{
             
             NSMutableString *executionSequence = [NSMutableString stringWithString:@""];
             
-            a.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
+            a.enterBlock = ^(id data) {
                 [executionSequence appendString:@"enterA"];
             };
             
-            a.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
+            a.exitBlock = ^(id data) {
                 [executionSequence appendString:@"-exitA"];
             };
             
-            b.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
+            b.enterBlock = ^(id data) {
                 [executionSequence appendString:@"-enterB"];
             };
             
             [a addHandlerForEvent:EVENT_A
                            target:b
                              kind:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
+                           action:^(id data) {
                                [executionSequence appendString:@"-actionA"];
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
+                            guard:^BOOL(id data) {
                                 [executionSequence appendString:@"-guardA"];
                                 return YES;
                             }];
@@ -259,10 +259,10 @@ describe(@"TBSMStateMachine", ^{
             [a addHandlerForEvent:EVENT_A
                            target:b
                              kind:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
+                           action:^(id data) {
                                didExecuteAction = YES;
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
+                            guard:^BOOL(id data) {
                                 return NO;
                             }];
             
@@ -289,20 +289,20 @@ describe(@"TBSMStateMachine", ^{
             [a addHandlerForEvent:EVENT_A
                            target:b
                              kind:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
+                           action:^(id data) {
                                didExecuteActionA = YES;
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
+                            guard:^BOOL(id data) {
                                 return NO;
                             }];
             
             [a addHandlerForEvent:EVENT_A
                            target:b
                              kind:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
+                           action:^(id data) {
                                didExecuteActionB = YES;
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
+                            guard:^BOOL(id data) {
                                 return YES;
                             }];
             
@@ -324,70 +324,44 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"passes source and target state and event data into the enter, exit, action and guard blocks of the involved states.", ^{
             
-            __block TBSMState *sourceStateEnter;
-            __block TBSMState *targetStateEnter;
             __block id stateDataEnter;
-            __block TBSMState *sourceStateExit;
-            __block TBSMState *targetStateExit;
             __block id stateDataExit;
-            
-            __block TBSMState *sourceStateGuard;
-            __block TBSMState *targetStateGuard;
-            __block TBSMState *sourceStateAction;
-            __block TBSMState *targetStateAction;
             __block id actionData;
             __block id guardData;
             
-            a.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
-                sourceStateEnter = sourceState;
-                targetStateEnter = targetState;
+            a.enterBlock = ^(id data) {
                 stateDataEnter = data;
             };
             
-            a.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
-                sourceStateExit = sourceState;
-                targetStateExit = targetState;
+            a.exitBlock = ^(id data) {
                 stateDataExit = data;
             };
             
-            a.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
-                sourceStateEnter = sourceState;
-                targetStateEnter = targetState;
+            a.enterBlock = ^(id data) {
                 stateDataEnter = data;
             };
             
-            a.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
-                sourceStateExit = sourceState;
-                targetStateExit = targetState;
+            a.exitBlock = ^(id data) {
                 stateDataExit = data;
             };
             
             [a addHandlerForEvent:EVENT_A
                            target:b
                              kind:TBSMTransitionExternal
-                           action:^(TBSMState *sourceState, TBSMState *targetState, id data) {
-                               sourceStateAction = sourceState;
-                               targetStateAction = targetState;
+                           action:^(id data) {
                                actionData = data;
                            }
-                            guard:^BOOL(TBSMState *sourceState, TBSMState *targetState, id data) {
-                                sourceStateGuard = sourceState;
-                                targetStateGuard = targetState;
+                            guard:^BOOL(id data) {
                                 guardData = data;
                                 return YES;
                             }];
             
-            b.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
-                sourceStateEnter = sourceState;
-                targetStateEnter = targetState;
+            b.enterBlock = ^(id data) {
                 stateDataEnter = data;
             };
             
             stateMachine.states = @[a, b];
             [stateMachine setUp:nil];
-            
-            expect(sourceStateEnter).to.beNil;
-            expect(targetStateEnter).to.equal(a);
             expect(stateDataEnter).to.beNil;
             
             waitUntil(^(DoneCallback done) {
@@ -398,15 +372,9 @@ describe(@"TBSMStateMachine", ^{
                 }];
                 
             });
-            expect(sourceStateExit).to.equal(a);
-            expect(targetStateExit).to.equal(b);
             expect(stateDataExit).to.equal(EVENT_DATA_VALUE);
-            
             expect(guardData).to.equal(EVENT_DATA_VALUE);
             expect(actionData).to.equal(EVENT_DATA_VALUE);
-            
-            expect(sourceStateEnter).to.equal(a);
-            expect(targetStateEnter).to.equal(b);
             expect(stateDataEnter).to.equal(EVENT_DATA_VALUE);
         });
         
@@ -415,11 +383,11 @@ describe(@"TBSMStateMachine", ^{
             __block BOOL didEnterStateA = NO;
             __block BOOL didExitStateA = NO;
             
-            a.enterBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
+            a.enterBlock = ^(id data) {
                 didEnterStateA = YES;
             };
             
-            a.exitBlock = ^(TBSMState *sourceState, TBSMState *targetState, id data) {
+            a.exitBlock = ^(id data) {
                 didExitStateA = YES;
             };
             
@@ -448,7 +416,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"posts a notification when entering the specified state.", ^{
             
-            NSNotification *notification = [NSNotification notificationWithName:TBSMStateDidEnterNotification object:a userInfo:@{TBSMTargetStateUserInfo:a, TBSMDataUserInfo:EVENT_DATA_VALUE}];
+            NSNotification *notification = [NSNotification notificationWithName:TBSMStateDidEnterNotification object:a userInfo:@{TBSMDataUserInfo:EVENT_DATA_VALUE}];
             
             stateMachine.states = @[a];
             
@@ -459,7 +427,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"posts a notification when exiting the specified state.", ^{
             
-            NSNotification *notification = [NSNotification notificationWithName:TBSMStateDidExitNotification object:a userInfo:@{TBSMSourceStateUserInfo:a, TBSMDataUserInfo:EVENT_DATA_VALUE}];
+            NSNotification *notification = [NSNotification notificationWithName:TBSMStateDidExitNotification object:a userInfo:@{TBSMDataUserInfo:EVENT_DATA_VALUE}];
             
             stateMachine.states = @[a];
             [stateMachine setUp:nil];

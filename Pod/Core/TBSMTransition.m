@@ -66,10 +66,10 @@
 
 - (BOOL)performTransitionWithData:(id)data
 {
-    if (self.guard == nil || self.guard(self.sourceState, self.targetState, data)) {
+    if (self.guard == nil || self.guard(data)) {
         if (self.kind == TBSMTransitionInternal) {
             if (self.action) {
-                self.action(self.sourceState, self.targetState, data);
+                self.action(data);
             }
         } else {
             TBSMStateMachine *lca = [self findLeastCommonAncestor];

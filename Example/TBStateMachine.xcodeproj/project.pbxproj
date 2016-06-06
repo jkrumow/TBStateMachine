@@ -13,11 +13,6 @@
 		155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */; };
 		155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54D19C612A400EB1C74 /* TBSMEventTests.m */; };
 		157AB33B1AD00215006A86AA /* TBStateMachineDebugSupportTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 157AB33A1AD00215006A86AA /* TBStateMachineDebugSupportTests.m */; };
-		1593A9921A71A6F1002F6AED /* InheritedStatesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9911A71A6F1002F6AED /* InheritedStatesTests.m */; };
-		1593A9C21A71A815002F6AED /* ParallelA.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9B11A71A815002F6AED /* ParallelA.m */; };
-		1593A9C31A71A815002F6AED /* StateA.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9B31A71A815002F6AED /* StateA.m */; };
-		1593A9C41A71A815002F6AED /* StateB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9B51A71A815002F6AED /* StateB.m */; };
-		1593A9C91A71A815002F6AED /* SubA.m in Sources */ = {isa = PBXBuildFile; fileRef = 1593A9BF1A71A815002F6AED /* SubA.m */; };
 		15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */; };
 		15C716CB1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */; };
 		15C716CD1ABE08FB00E3076A /* TBSMPseudoStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */; };
@@ -39,15 +34,6 @@
 		155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateTests.m; sourceTree = "<group>"; };
 		155BB54D19C612A400EB1C74 /* TBSMEventTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMEventTests.m; sourceTree = "<group>"; };
 		157AB33A1AD00215006A86AA /* TBStateMachineDebugSupportTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineDebugSupportTests.m; sourceTree = "<group>"; };
-		1593A9911A71A6F1002F6AED /* InheritedStatesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InheritedStatesTests.m; sourceTree = "<group>"; };
-		1593A9B01A71A815002F6AED /* ParallelA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelA.h; sourceTree = "<group>"; };
-		1593A9B11A71A815002F6AED /* ParallelA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParallelA.m; sourceTree = "<group>"; };
-		1593A9B21A71A815002F6AED /* StateA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateA.h; sourceTree = "<group>"; };
-		1593A9B31A71A815002F6AED /* StateA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateA.m; sourceTree = "<group>"; };
-		1593A9B41A71A815002F6AED /* StateB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateB.h; sourceTree = "<group>"; };
-		1593A9B51A71A815002F6AED /* StateB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateB.m; sourceTree = "<group>"; };
-		1593A9BE1A71A815002F6AED /* SubA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubA.h; sourceTree = "<group>"; };
-		1593A9BF1A71A815002F6AED /* SubA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubA.m; sourceTree = "<group>"; };
 		15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineNestedTests.m; sourceTree = "<group>"; };
 		15B1453719BCFDA700924D92 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMCompoundTransitionTests.m; sourceTree = "<group>"; };
@@ -87,21 +73,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1593A9AF1A71A815002F6AED /* InheritedStates */ = {
-			isa = PBXGroup;
-			children = (
-				1593A9B01A71A815002F6AED /* ParallelA.h */,
-				1593A9B11A71A815002F6AED /* ParallelA.m */,
-				1593A9B21A71A815002F6AED /* StateA.h */,
-				1593A9B31A71A815002F6AED /* StateA.m */,
-				1593A9B41A71A815002F6AED /* StateB.h */,
-				1593A9B51A71A815002F6AED /* StateB.m */,
-				1593A9BE1A71A815002F6AED /* SubA.h */,
-				1593A9BF1A71A815002F6AED /* SubA.m */,
-			);
-			path = InheritedStates;
-			sourceTree = "<group>";
-		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -136,8 +107,6 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				1593A9AF1A71A815002F6AED /* InheritedStates */,
-				1593A9911A71A6F1002F6AED /* InheritedStatesTests.m */,
 				155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */,
 				15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */,
 				155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */,
@@ -303,7 +272,6 @@
 			files = (
 				6003F5BC195388D20070C39A /* TBSMParallelStateTests.m in Sources */,
 				15C716CB1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m in Sources */,
-				1593A9C21A71A815002F6AED /* ParallelA.m in Sources */,
 				150FD64019D8543E00D9D1BA /* TBSMTransitionTests.m in Sources */,
 				151C5C0C19CDF6A4003D21AE /* TBSMSubStateTests.m in Sources */,
 				155BB54A19C610D200EB1C74 /* TBSMStateMachineSimpleTests.m in Sources */,
@@ -311,12 +279,8 @@
 				15DCC5CB1AE992D900CF3750 /* TBSMJunctionTests.m in Sources */,
 				155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */,
 				15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */,
-				1593A9C91A71A815002F6AED /* SubA.m in Sources */,
-				1593A9921A71A6F1002F6AED /* InheritedStatesTests.m in Sources */,
 				155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */,
-				1593A9C41A71A815002F6AED /* StateB.m in Sources */,
 				15CC17F21ABCB72E009ABEEC /* TBSMForkTests.m in Sources */,
-				1593A9C31A71A815002F6AED /* StateA.m in Sources */,
 				15CC17F01ABCB6B3009ABEEC /* TBSMJoinTests.m in Sources */,
 				157AB33B1AD00215006A86AA /* TBStateMachineDebugSupportTests.m in Sources */,
 			);

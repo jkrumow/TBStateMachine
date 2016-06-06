@@ -18,20 +18,16 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  This type represents an action of a `TBSMTransition`.
  *
- *  @param sourceState The source state.
- *  @param targetState The target state.
- *  @param data        The payload data.
+ *  @param data The payload data.
  */
-typedef void(^TBSMActionBlock)(TBSMState *_Nullable sourceState, TBSMState * _Nullable targetState, id _Nullable data);
+typedef void(^TBSMActionBlock)(id _Nullable data);
 
 /**
  *  This type represents a guard function of a `TBSMTransition`.
  *
- *  @param sourceState The source state.
- *  @param targetState The target state.
- *  @param data        The payload data.
+ *  @param data The payload data.
  */
-typedef BOOL(^TBSMGuardBlock)(TBSMState *_Nullable sourceState, TBSMState *_Nullable targetState, id _Nullable data);
+typedef BOOL(^TBSMGuardBlock)(id _Nullable data);
 
 
 /**
