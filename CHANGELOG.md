@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 6.1.0
+
+- Add asynchronous logging to `DebugSupport` to prevent logging from affecting performance measuring too much.
+
 ## 6.0.0
 
 - Remove parameters `sourceState` and `targetState` from handlers and notification user info to simplify API.
