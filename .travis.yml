@@ -6,4 +6,4 @@ install:
   - cd Example && bundle exec pod install && cd $TRAVIS_BUILD_DIR
 
 script:
-  - xcodebuild test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachineTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6' ONLY_ACTIVE_ARCH=NO
+  - xcodebuild test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachineTests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
