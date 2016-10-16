@@ -9,6 +9,7 @@
 #import "TBSMTransition+DebugSupport.h"
 #import "TBSMDebugSwizzler.h"
 #import "TBSMStateMachine.h"
+#import "TBSMDebugLogger.h"
 
 @implementation TBSMTransition (DebugSupport)
 
@@ -38,7 +39,7 @@
         // swallow exception in case lca could not be found since we do not want to interfere with the running application.
     }
     
-    NSLog(@"[%@] attempt to perform transition: %@ data: %@", lca.name, self.name, data);
+    [[TBSMDebugLogger sharedInstance] log:@"[%@] attempt to perform transition: %@ data: %@", lca.name, self.name, data];
 }
 
 @end

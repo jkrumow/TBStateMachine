@@ -8,6 +8,7 @@
 
 #import "TBSMState+DebugSupport.h"
 #import "TBSMDebugSwizzler.h"
+#import "TBSMDebugLogger.h"
 
 @implementation TBSMState (DebugSupport)
 
@@ -23,13 +24,13 @@
 
 - (void)tb_enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
-    NSLog(@"\tEnter '%@' data: %@", self.name, data);
+    [[TBSMDebugLogger sharedInstance] log:@"\tEnter '%@' data: %@", self.name, data];
     [self tb_enter:sourceState targetState:targetState data:data];
 }
 
 - (void)tb_exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
-    NSLog(@"\tExit '%@' data: %@", self.name, data);
+    [[TBSMDebugLogger sharedInstance] log:@"\tExit '%@' data: %@", self.name, data];
     [self tb_exit:sourceState targetState:targetState data:data];
 }
 

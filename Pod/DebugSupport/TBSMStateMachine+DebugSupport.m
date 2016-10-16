@@ -8,6 +8,7 @@
 
 #import "TBSMStateMachine+DebugSupport.h"
 #import "TBSMDebugSwizzler.h"
+#import "TBSMDebugLogger.h"
 
 NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
@@ -106,7 +107,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (BOOL)tb_handleEvent:(TBSMEvent *)event
 {
-    NSLog(@"[%@]: will handle event '%@' data: %@", self.name, event.name, event.data);
+    [[TBSMDebugLogger sharedInstance] log:@"[%@]: will handle event '%@' data: %@", self.name, event.name, event.data];
     
     uint64_t startTime = mach_absolute_time();
     BOOL hasHandledEvent = [self tb_handleEvent:event];
@@ -114,8 +115,8 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     uint64_t endTime = mach_absolute_time() - startTime;
     NSTimeInterval timeInterval = endTime * self.millisecondsPerMachTime.doubleValue;
     
-    NSLog(@"[%@]: run-to-completion step took %f milliseconds", self.name, timeInterval);
-    NSLog(@"[%@]: remaining events in queue: %lu\n\n", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1);
+    [[TBSMDebugLogger sharedInstance] log:@"[%@]: run-to-completion step took %f milliseconds", self.name, timeInterval];
+    [[TBSMDebugLogger sharedInstance] log:@"[%@]: remaining events in queue: %lu\n\n", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1];
     
     TBSMDebugCompletionBlock completionBlock = event.completionBlock;
     if (completionBlock) {
@@ -126,13 +127,13 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)tb_setUp:(id)data
 {
-    NSLog(@"[%@] setup data: %@", self.name, data);
+    [[TBSMDebugLogger sharedInstance] log:@"[%@] setup data: %@", self.name, data];
     [self tb_setUp:data];
 }
 
 - (void)tb_tearDown:(id)data
 {
-    NSLog(@"[%@] teardown data: %@", self.name, data);
+    [[TBSMDebugLogger sharedInstance] log:@"[%@] teardown data: %@", self.name, data];
     [self tb_tearDown:data];
 }
 

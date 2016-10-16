@@ -8,6 +8,7 @@
 
 #import "TBSMCompoundTransition+DebugSupport.h"
 #import "TBSMDebugSwizzler.h"
+#import "TBSMDebugLogger.h"
 #import "TBSMStateMachine.h"
 
 @implementation TBSMCompoundTransition (DebugSupport)
@@ -38,7 +39,7 @@
         // swallow exception in case lca could not be found since we do not want to interfere with the running application.
     }
     
-    NSLog(@"[%@] attempt to perform compound transition: %@ data: %@", lca.name, self.name, data);
+    [[TBSMDebugLogger sharedInstance] log:@"[%@] attempt to perform compound transition: %@ data: %@", lca.name, self.name, data];
 }
 
 @end
