@@ -52,7 +52,7 @@
 		6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TBSMParallelStateTests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		87FD92E345D309FDBC20769A /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		9DC2BD94630C4C24B2A9E9DE /* TBStateMachine.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TBStateMachine.podspec; path = ../TBStateMachine.podspec; sourceTree = "<group>"; };
+		9DC2BD94630C4C24B2A9E9DE /* TBStateMachine.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = TBStateMachine.podspec; path = ../TBStateMachine.podspec; sourceTree = "<group>"; };
 		AB6C8BF631C4AB669321B438 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E3051BECA66A486CA6E2E47E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		EE25D86ED8294FBD9000D76C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
