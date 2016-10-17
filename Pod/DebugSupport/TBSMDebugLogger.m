@@ -43,7 +43,7 @@
     va_end(args);
     
     dispatch_async(self.loggingQueue, ^{
-        NSLog(logMessage);
+        NSLog(@"%@", logMessage);
     });
 }
 @end
