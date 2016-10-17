@@ -10,10 +10,10 @@
 
 @interface TBSMDebugLogger ()
 
-#if OS_OBJECT_HAVE_OBJC_SUPPORT == 0
-@property (nonatomic, assign) dispatch_queue_t loggingQueue;
-#else
+#if OS_OBJECT_HAVE_OBJC_SUPPORT
 @property (nonatomic, strong) dispatch_queue_t loggingQueue;
+#else
+@property (nonatomic, assign) dispatch_queue_t loggingQueue;
 #endif
 
 @end
