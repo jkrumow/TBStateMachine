@@ -10,12 +10,7 @@
 
 @interface TBSMDebugLogger ()
 
-#if OS_OBJECT_HAVE_OBJC_SUPPORT
 @property (nonatomic, strong) dispatch_queue_t loggingQueue;
-#else
-@property (nonatomic, assign) dispatch_queue_t loggingQueue;
-#endif
-
 @end
 
 @implementation TBSMDebugLogger
@@ -37,13 +32,6 @@
         _loggingQueue = dispatch_queue_create("jkrumow.TBStateMachine.DebugLogger.loggingQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
-}
-
-- (void)dealloc
-{
-#if OS_OBJECT_HAVE_OBJC_SUPPORT == 0
-    dispatch_release(self.loggingQueue);
-#endif
 }
 
 - (void)log:(NSString *)format, ...
