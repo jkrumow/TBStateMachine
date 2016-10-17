@@ -26,8 +26,8 @@ A lightweight hierarchical state machine framework in Objective-C.
 
 * watchOS 2.0
 * tvOS 9.0
-* iOS 5.0
-* OS X 10.7
+* iOS 6.0
+* OS X 10.8
 
 ## Installation
 
