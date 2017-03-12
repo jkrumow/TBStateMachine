@@ -122,7 +122,7 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachineXYZ.name).to.equal(@"StateMachineXYZ");
         });
         
-        it(@"return the stored states.", ^{
+        it(@"returns the stored states.", ^{
             stateMachine.states = @[a, b];
             expect(stateMachine.states).haveCountOf(2);
             expect(stateMachine.states).contain(a);

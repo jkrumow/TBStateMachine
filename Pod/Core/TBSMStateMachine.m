@@ -11,7 +11,7 @@
 @interface TBSMStateMachine ()
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, weak) id<TBSMNode> parentNode;
-@property (nonatomic, strong) NSMutableDictionary *priv_states;
+@property (nonatomic, strong) NSMutableArray *priv_states;
 @end
 
 @implementation TBSMStateMachine
@@ -29,7 +29,7 @@
     self = [super init];
     if (self) {
         _name = name.copy;
-        _priv_states = [NSMutableDictionary new];
+        _priv_states = [NSMutableArray new];
         _scheduledEventsQueue = [NSOperationQueue mainQueue];
     }
     return self;
@@ -37,7 +37,7 @@
 
 - (NSArray *)states
 {
-    return [NSArray arrayWithArray:self.priv_states.allValues];
+    return self.priv_states.copy;
 }
 
 - (void)setStates:(NSArray *)states
@@ -50,7 +50,7 @@
         }
         TBSMState *state = object;
         [state setParentNode:self];
-        [self.priv_states setObject:state forKey:state.name];
+        [self.priv_states addObject:state];
     }
     if (states.count > 0) {
         _initialState = states[0];
@@ -59,7 +59,7 @@
 
 - (void)setInitialState:(TBSMState *)initialState
 {
-    if (![self.priv_states objectForKey:initialState.name]) {
+    if (![self.priv_states containsObject:initialState]) {
         @throw [NSException tb_nonExistingStateException:initialState.name];
     }
     _initialState = initialState;
