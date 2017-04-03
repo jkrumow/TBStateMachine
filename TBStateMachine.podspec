@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'DebugSupport' do |debug|
-    debug.source_files = "Pod/DebugSupport"
+    debug.source_files = 'Pod/DebugSupport'
     debug.dependency 'TBStateMachine/Core'
   end
 end
