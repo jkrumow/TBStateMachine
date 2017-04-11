@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  Enters a group of specified states inside a region.
  *
  *  @param sourceState The source state.
- *  @param targetState The target states inside the specified region.
+ *  @param targetStates The target states inside the specified region.
  *  @param region      The target region.
  *  @param data        The payload data.
  */
