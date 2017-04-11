@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 6.1.1
+
+- Minor bugfixes
+
 ## 6.1.0
 
 - Add asynchronous logging to `DebugSupport` to prevent logging from affecting performance measuring too much.
