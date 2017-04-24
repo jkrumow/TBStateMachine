@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return The target state instance.
  */
-- (TBSMState *)targetState;
+- (nonnull TBSMState *)targetState;
 
 @end
 NS_ASSUME_NONNULL_END

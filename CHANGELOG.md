@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 6.1.2
+
+- Minor bugfixes
+
 ## 6.1.1
 
 - Minor bugfixes
