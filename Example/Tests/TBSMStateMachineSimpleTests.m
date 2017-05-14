@@ -7,7 +7,7 @@
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
-#import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
+#import <TBStateMachine/TBSMDebugger.h>
 
 SpecBegin(TBSMStateMachineSimple)
 
@@ -25,7 +25,7 @@ describe(@"TBSMStateMachine", ^{
     beforeEach(^{
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
         
-        [stateMachine activateDebugSupport];
+        [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
         
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];

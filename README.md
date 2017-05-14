@@ -235,12 +235,12 @@ target 'MyBetaApp', :exclusive => true do
 end
 ```
 
-Then include `TBSMStateMachine+DebugSupport.h` and activate the debug support features on the state machine **at the top of the hierarchy**:
+Then include `TBSMStateMachine+Debugger.h` to the debug the state machine **at the top of the hierarchy**:
 
 ```objc
-#import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
+#import <TBStateMachine/TBSMStateMachine+Debugger.h>
 
-[stateMachine activateDebugSupport];
+[[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
 ```
 
 The statemachine will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
@@ -255,10 +255,10 @@ The statemachine will then output a log message for every event, transition, set
 [Main]: remaining events in queue: 0
 ```
 
-When calling `-activeStateConfiguration` you will get the current active state configuration of the whole hierarchy:
+When calling `-activeStateConfiguration` on the debugger instance you will get the current active state configuration of the whole hierarchy:
 
 ```objc
-NSLog(@"%@", [stateMachine activeStateConfiguration]);
+NSLog(@"%@", [[TBSMDebugger sharedInstance] activeStateConfiguration]);
 ```
 
 ```

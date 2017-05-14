@@ -7,7 +7,7 @@
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
-#import <TBStatemachine/TBSMStateMachine+DebugSupport.h>
+#import <TBStatemachine/TBSMDebugger.h>
 
 SpecBegin(DebugSupport)
 
@@ -53,17 +53,7 @@ describe(@"DebugSupport", ^{
         it (@"throws a TBSMException when activated on non-toplevel state machine.", ^{
             
             expect(^{
-                [s.stateMachine activateDebugSupport];
-            }).to.raise(TBSMDebugSupportException);
-        });
-    });
-    
-    describe(@"-scheduleEvent:withCompletion:", ^{
-        
-        it (@"throws a TBSMException when '-activateDebugSupport' was not called beforehand.", ^{
-            
-            expect(^{
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"test" data:nil] withCompletion:nil];
+                [[TBSMDebugger sharedInstance] debugStateMachine:s.stateMachine];
             }).to.raise(TBSMDebugSupportException);
         });
     });
@@ -74,7 +64,8 @@ describe(@"DebugSupport", ^{
             
             NSString *expectedConfiguration = @"main\n\ts\n\t\tsub\n\t\t\tp\n\t\t\t\tparaB\n\t\t\t\t\tb\n\t\t\t\tparaC\n\t\t\t\t\tc\n";
             
-            NSString *configuration = [stateMachine activeStateConfiguration];
+            [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
+            NSString *configuration = [[TBSMDebugger sharedInstance] activeStateConfiguration];
             expect(configuration).to.equal(expectedConfiguration);
         });
     });

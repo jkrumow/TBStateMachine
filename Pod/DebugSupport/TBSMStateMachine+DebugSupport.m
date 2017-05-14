@@ -7,13 +7,11 @@
 //
 
 #import "TBSMStateMachine+DebugSupport.h"
+#import "TBSMDebugStateMachine.h"
 #import "TBSMDebugSwizzler.h"
 #import "TBSMDebugLogger.h"
 
-NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
-
 @implementation TBSMStateMachine (DebugSupport)
-@dynamic debugSupportEnabled;
 @dynamic millisecondsPerMachTime;
 @dynamic eventDebugQueue;
 
@@ -52,71 +50,30 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     objc_setAssociatedObject(self, @selector(eventDebugQueue), eventDebugQueue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)activateDebugSupport
++ (void)activateDebugSupport
 {
-    if (self.parentNode) {
-        @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Debug support not available on sub-statemachines." userInfo:nil];
-    }
-    self.debugSupportEnabled = @YES;
-    
-    mach_timebase_info_data_t timebase;
-    mach_timebase_info(&timebase);
-    self.millisecondsPerMachTime = @(timebase.numer / timebase.denom / 1e6);
-    
-    [TBSMState activateDebugSupport];
-    [TBSMCompoundTransition activateDebugSupport];
-    [TBSMTransition activateDebugSupport];
-    
-    object_setClass(self, TBSMDebugStateMachine.class);
-    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        
-        // We use a dedicated subclass to swizzle certain methods only on the top state machine.
         [TBSMDebugSwizzler swizzleMethod:@selector(handleEvent:) withMethod:@selector(tb_handleEvent:) onClass:[TBSMDebugStateMachine class]];
         [TBSMDebugSwizzler swizzleMethod:@selector(setUp:) withMethod:@selector(tb_setUp:) onClass:[TBSMStateMachine class]];
         [TBSMDebugSwizzler swizzleMethod:@selector(tearDown:) withMethod:@selector(tb_tearDown:) onClass:[TBSMStateMachine class]];
     });
 }
 
-- (NSString *)activeStateConfiguration
+- (void)tb_setUp:(id)data
 {
-    NSMutableString *string = [NSMutableString new];
-    [self activeStatemachineConfiguration:self string:string];
-    return string;
+    [[TBSMDebugLogger sharedInstance] log:@"[%@] setup data: %@", self.name, data];
+    [self tb_setUp:data];
 }
 
-- (void)activeStatemachineConfiguration:(TBSMStateMachine *)stateMachine string:(NSMutableString *)string
+- (void)tb_tearDown:(id)data
 {
-    TBSMState *state = stateMachine.currentState;
-    [string appendFormat:@"%@%@\n", [self indentationForLevel:state.path.count-1], stateMachine.name];
-    [string appendFormat:@"%@%@\n", [self indentationForLevel:state.path.count], state.name];
-    
-    if ([state isKindOfClass:[TBSMSubState class]]) {
-        TBSMSubState *subState = (TBSMSubState *)state;
-        [self activeStatemachineConfiguration:subState.stateMachine string:string];
-    } else if ([state isKindOfClass:[TBSMParallelState class]]) {
-        TBSMParallelState *parallelState = (TBSMParallelState *)state;
-        for (TBSMStateMachine *subMachine in parallelState.stateMachines) {
-            [self activeStatemachineConfiguration:subMachine string:string];
-        }
-    }
-}
-
-- (NSString *)indentationForLevel:(NSUInteger)level
-{
-    NSMutableString *indentation = [NSMutableString new];
-    for (NSUInteger i=0; i < level-1; i++) {
-        [indentation appendString:@"\t"];
-    }
-    return indentation;
+    [[TBSMDebugLogger sharedInstance] log:@"[%@] teardown data: %@", self.name, data];
+    [self tb_tearDown:data];
 }
 
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
-    if (!self.debugSupportEnabled.boolValue) {
-        @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Method only available with activated debug support." userInfo:nil];
-    }
     event.completionBlock = completion;
     [self.eventDebugQueue addObject:event];
     [self scheduleEvent:event];
@@ -143,18 +100,6 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
         completionBlock();
     }
     return hasHandledEvent;
-}
-
-- (void)tb_setUp:(id)data
-{
-    [[TBSMDebugLogger sharedInstance] log:@"[%@] setup data: %@", self.name, data];
-    [self tb_setUp:data];
-}
-
-- (void)tb_tearDown:(id)data
-{
-    [[TBSMDebugLogger sharedInstance] log:@"[%@] teardown data: %@", self.name, data];
-    [self tb_tearDown:data];
 }
 
 @end

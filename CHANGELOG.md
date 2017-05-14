@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 6.3.0
+
+- Added TBSMDebugger to DebugSupport subspec for clearer debug API
+
 ## 6.2.0
 
 - Additional debug output for remaining events in queue

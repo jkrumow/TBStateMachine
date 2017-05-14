@@ -7,7 +7,7 @@
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
-#import <TBStateMachine/TBSMStateMachine+DebugSupport.h>
+#import <TBStateMachine/TBSMDebugger.h>
 
 SpecBegin(TBSMStateMachineNested)
 
@@ -403,7 +403,7 @@ describe(@"TBSMStateMachine", ^{
         
         stateMachine.states = @[a, b, c];
         
-        [stateMachine activateDebugSupport];
+        [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
         
         [stateMachine setUp:nil];
         
