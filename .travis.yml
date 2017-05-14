@@ -3,9 +3,8 @@ language: objective-c
 
 install:
   - bundle install --without=documentation
-  - bundle exec pod update
   - cd Example
-  - bundle exec pod install
+  - bundle exec pod update
   - cd $TRAVIS_BUILD_DIR
 
 script:
