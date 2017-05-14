@@ -92,8 +92,8 @@
     [self.eventDebugQueue removeObject:event];
     
     [[TBSMDebugLogger sharedInstance] log:@"[%@]: run-to-completion step took %f milliseconds", self.name, timeInterval];
-    [[TBSMDebugLogger sharedInstance] log:@"[%@]: remaining events in queue: %lu\n\n", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1];
-    [[TBSMDebugLogger sharedInstance] log:@"[%@]: %@", self.name, [self.eventDebugQueue valueForKeyPath:@"name"]];
+    [[TBSMDebugLogger sharedInstance] log:@"[%@]: remaining events in queue: %lu", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1];
+    [[TBSMDebugLogger sharedInstance] log:@"[%@]: %@\n\n", self.name, [self.eventDebugQueue valueForKeyPath:@"name"]];
     
     TBSMDebugCompletionBlock completionBlock = event.completionBlock;
     if (completionBlock) {
