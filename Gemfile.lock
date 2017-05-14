@@ -47,7 +47,7 @@ GEM
     fuzzy_match (2.0.4)
     gh_inspector (1.0.3)
     i18n (0.8.1)
-    minitest (5.10.1)
+    minitest (5.10.2)
     molinillo (0.5.7)
     nanaimo (0.2.3)
     nap (1.1.0)

@@ -15,6 +15,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 @implementation TBSMStateMachine (DebugSupport)
 @dynamic debugSupportEnabled;
 @dynamic millisecondsPerMachTime;
+@dynamic eventDebugQueue;
 
 - (NSNumber *)debugSupportEnabled
 {
@@ -34,6 +35,21 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 - (void)setMillisecondsPerMachTime:(NSNumber *)millisecondsPerMachTime
 {
     objc_setAssociatedObject(self, @selector(millisecondsPerMachTime), millisecondsPerMachTime, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableArray *)eventDebugQueue
+{
+    NSMutableArray *queue = objc_getAssociatedObject(self, @selector(eventDebugQueue));
+    if (queue == nil) {
+        queue = [NSMutableArray new];
+        self.eventDebugQueue = queue;
+    }
+    return queue;
+}
+
+- (void)setEventDebugQueue:(NSMutableArray *)eventDebugQueue
+{
+    objc_setAssociatedObject(self, @selector(eventDebugQueue), eventDebugQueue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)activateDebugSupport
@@ -102,6 +118,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
         @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Method only available with activated debug support." userInfo:nil];
     }
     event.completionBlock = completion;
+    [self.eventDebugQueue addObject:event];
     [self scheduleEvent:event];
 }
 
@@ -115,8 +132,11 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     uint64_t endTime = mach_absolute_time() - startTime;
     NSTimeInterval timeInterval = endTime * self.millisecondsPerMachTime.doubleValue;
     
+    [self.eventDebugQueue removeObject:event];
+    
     [[TBSMDebugLogger sharedInstance] log:@"[%@]: run-to-completion step took %f milliseconds", self.name, timeInterval];
     [[TBSMDebugLogger sharedInstance] log:@"[%@]: remaining events in queue: %lu\n\n", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1];
+    [[TBSMDebugLogger sharedInstance] log:@"[%@]: %@", self.name, [self.eventDebugQueue valueForKeyPath:@"name"]];
     
     TBSMDebugCompletionBlock completionBlock = event.completionBlock;
     if (completionBlock) {

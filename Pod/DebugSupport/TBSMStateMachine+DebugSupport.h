@@ -33,6 +33,7 @@ FOUNDATION_EXPORT NSString *const TBSMDebugSupportException;
 
 @property (nonatomic, strong) NSNumber *debugSupportEnabled;
 @property (nonatomic, strong) NSNumber *millisecondsPerMachTime;
+@property (nonatomic, strong) NSMutableArray *eventDebugQueue;
 
 /**
  *  Activates debug mode for the top statemachine. Call this method on the statemachine instance at the top of the hierarchy.
