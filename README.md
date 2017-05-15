@@ -235,10 +235,10 @@ target 'MyBetaApp', :exclusive => true do
 end
 ```
 
-Then include `TBSMStateMachine+Debugger.h` to the debug the state machine **at the top of the hierarchy**:
+Then include `TBSMDebugger.h` to the debug the state machine **at the top of the hierarchy**:
 
 ```objc
-#import <TBStateMachine/TBSMStateMachine+Debugger.h>
+#import <TBStateMachine/TBSMDebugger.h>
 
 [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
 ```
