@@ -72,10 +72,15 @@
     [self tb_tearDown:data];
 }
 
+- (void)tb_scheduleEvent:(TBSMEvent *)event
+{
+    [self.eventDebugQueue addObject:event];
+    [self tb_scheduleEvent:event];
+}
+
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
 {
     event.completionBlock = completion;
-    [self.eventDebugQueue addObject:event];
     [self scheduleEvent:event];
 }
 
