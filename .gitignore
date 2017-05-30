@@ -32,3 +32,4 @@ cobertura.xml
 html
 *.gcno
 *.gcda
+reports/
