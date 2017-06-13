@@ -64,9 +64,14 @@
     return lca;
 }
 
+- (BOOL)canPerformTransitionWithData:(id)data
+{
+    return (self.guard == nil || self.guard(data));
+}
+
 - (BOOL)performTransitionWithData:(id)data
 {
-    if (self.guard == nil || self.guard(data)) {
+    if ([self canPerformTransitionWithData:data]) {
         if (self.kind == TBSMTransitionInternal) {
             if (self.action) {
                 self.action(data);

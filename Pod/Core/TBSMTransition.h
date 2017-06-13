@@ -81,6 +81,15 @@ typedef BOOL(^TBSMGuardBlock)(id _Nullable data);
 - (TBSMStateMachine *)findLeastCommonAncestor;
 
 /**
+ *  Checks wether the transition can be performed by evaluating its guards.
+ *
+ *  @param data The payload data.
+ *
+ *  @return Returns YES if the transition can be performed.
+ */
+- (BOOL)canPerformTransitionWithData:(id)data;
+
+/**
  *  Performs the transition between source and target state.
  *  Evaluates guard and action blocks.
  *  Determines the lca considering the transiton kind.
@@ -89,7 +98,7 @@ typedef BOOL(^TBSMGuardBlock)(id _Nullable data);
  *
  *  @param data The payload data.
  *
- *  @return Returns YES if the transition could be performed.
+ *  @return Returns YES if the transition can be performed.
  */
 - (BOOL)performTransitionWithData:(nullable id)data;
 

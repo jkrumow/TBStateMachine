@@ -6,7 +6,6 @@
 //
 //
 
-#import "TBSMCompoundTransition+DebugSupport.h"
 #import "TBSMEvent+DebugSupport.h"
 #import "TBSMState+DebugSupport.h"
 #import "TBSMStateMachine+DebugSupport.h"

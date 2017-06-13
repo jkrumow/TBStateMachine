@@ -47,12 +47,12 @@ describe(@"TBSMCompoundTransition", ^{
     
     it (@"returns its name from a fork transition.", ^{
         TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:c targetPseudoState:fork action:nil guard:nil];
-        expect(transition.name).to.equal(@"c --> fork --> [a,b](parallel)");
+        expect(transition.name).to.equal(@"c --> fork --> parallel/[a,b]");
     });
     
     it (@"returns its name from a join transition.", ^{
         TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil];
-        expect(transition.name).to.equal(@"[a,b](parallel) --> join --> c");
+        expect(transition.name).to.equal(@"parallel/[a,b] --> join --> c");
     });
     
     it (@"returns source state.", ^{

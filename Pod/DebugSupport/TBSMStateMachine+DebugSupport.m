@@ -86,7 +86,7 @@
 
 - (BOOL)tb_handleEvent:(TBSMEvent *)event
 {
-    [[TBSMDebugLogger sharedInstance] log:@"[%@]: will handle event '%@' data: %@", self.name, event.name, event.data];
+    [[TBSMDebugLogger sharedInstance] log:@"[%@]: attempt to handle event '%@' data: %@", self.name, event.name, event.data];
     
     uint64_t startTime = mach_absolute_time();
     BOOL hasHandledEvent = [self tb_handleEvent:event];

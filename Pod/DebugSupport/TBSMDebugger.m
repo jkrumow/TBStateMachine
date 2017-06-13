@@ -32,7 +32,6 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
     object_setClass(self.stateMachine, TBSMDebugStateMachine.class);
     
     [TBSMState activateDebugSupport];
-    [TBSMCompoundTransition activateDebugSupport];
     [TBSMTransition activateDebugSupport];
     [TBSMStateMachine activateDebugSupport];
 }

@@ -41,13 +41,13 @@
     NSString *target = nil;
     if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {
         TBSMJoin *join = (TBSMJoin *)self.targetPseudoState;
-        source = [NSString stringWithFormat:@"[%@](%@)", [[join.sourceStates valueForKeyPath:@"name"] componentsJoinedByString:@","], join.region.name];
+        source = [NSString stringWithFormat:@"%@/[%@]", join.region.name, [[join.sourceStates valueForKeyPath:@"name"] componentsJoinedByString:@","]];
         target = self.targetState.name;
     }
     if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
         TBSMFork *fork = (TBSMFork *)self.targetPseudoState;
         source = self.sourceState.name;
-        target = [NSString stringWithFormat:@"[%@](%@)", [[fork.targetStates valueForKeyPath:@"name"] componentsJoinedByString:@","], fork.region.name];
+        target = [NSString stringWithFormat:@"%@/[%@]", fork.region.name, [[fork.targetStates valueForKeyPath:@"name"] componentsJoinedByString:@","]];
     }
     if ([self.targetPseudoState isKindOfClass:[TBSMJunction class]]) {
         TBSMJunction *junction = (TBSMJunction *)self.targetPseudoState;
@@ -59,7 +59,7 @@
 
 - (BOOL)performTransitionWithData:(id)data
 {
-    if (self.guard == nil || self.guard(data)) {
+    if ([self canPerformTransitionWithData:data]) {
         if ([self.targetPseudoState isKindOfClass:[TBSMFork class]]) {
             [self _performForkTransitionWithData:data];
         } else if ([self.targetPseudoState isKindOfClass:[TBSMJoin class]]) {

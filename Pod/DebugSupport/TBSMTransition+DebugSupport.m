@@ -18,17 +18,11 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        [TBSMDebugSwizzler swizzleMethod:@selector(performTransitionWithData:) withMethod:@selector(tb_performTransitionWithData:) onClass:[TBSMTransition class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(canPerformTransitionWithData:) withMethod:@selector(tb_canPerformTransitionWithData:) onClass:[TBSMTransition class]];
     });
 }
 
-- (BOOL)tb_performTransitionWithData:(id)data
-{
-    [self _logTransitionWithData:data];
-    return [self tb_performTransitionWithData:data];
-}
-
-- (void)_logTransitionWithData:(id)data
+- (BOOL)tb_canPerformTransitionWithData:(id)data
 {
     TBSMStateMachine *lca = nil;
     
@@ -39,7 +33,12 @@
         // swallow exception in case lca could not be found since we do not want to interfere with the running application.
     }
     
-    [[TBSMDebugLogger sharedInstance] log:@"[%@] attempt to perform transition: %@ data: %@", lca.name, self.name, data];
+    BOOL canPerform = [self tb_canPerformTransitionWithData:data];
+    
+    if (canPerform) {
+        [[TBSMDebugLogger sharedInstance] log:@"[%@] performing transition: %@ data: %@", lca.name, self.name, data];
+    }
+    return canPerform;
 }
 
 @end
