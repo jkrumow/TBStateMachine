@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 6.4.0
+
+- Improved log output
+
 ## 6.3.1
 
 - Fixed debug output when showing remaining events in queue
