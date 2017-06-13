@@ -246,13 +246,17 @@ Then include `TBSMDebugger.h` to the debug the state machine **at the top of the
 The statemachine will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
 
 ```
-[Main]: will handle event 'EventA' data: 12345
-[Main] attempt to perform transition: stateA --> stateCc data: 12345
+[Main]: attempt to handle event 'EventA' data: 12345
+[stateA] will handle event 'EventA' data: 12345
+[Main] performing transition: stateA --> stateCc data: 12345
     Exit 'stateB' data: 12345
     Enter 'stateC' data: 12345
     Enter 'stateCc' data: 12345
 [Main]: run-to-completion step took 1.15 milliseconds
-[Main]: remaining events in queue: 0
+[Main]: remaining events in queue: 1
+[Main]: (
+    EventB
+)
 ```
 
 When calling `-activeStateConfiguration` on the debugger instance you will get the current active state configuration of the whole hierarchy:

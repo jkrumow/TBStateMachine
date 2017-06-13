@@ -54,6 +54,7 @@
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        [TBSMDebugSwizzler swizzleMethod:@selector(scheduleEvent:) withMethod:@selector(tb_scheduleEvent:) onClass:[TBSMDebugStateMachine class]];
         [TBSMDebugSwizzler swizzleMethod:@selector(handleEvent:) withMethod:@selector(tb_handleEvent:) onClass:[TBSMDebugStateMachine class]];
         [TBSMDebugSwizzler swizzleMethod:@selector(setUp:) withMethod:@selector(tb_setUp:) onClass:[TBSMStateMachine class]];
         [TBSMDebugSwizzler swizzleMethod:@selector(tearDown:) withMethod:@selector(tb_tearDown:) onClass:[TBSMStateMachine class]];
@@ -97,7 +98,7 @@
     [self.eventDebugQueue removeObject:event];
     
     [[TBSMDebugLogger sharedInstance] log:@"[%@]: run-to-completion step took %f milliseconds", self.name, timeInterval];
-    [[TBSMDebugLogger sharedInstance] log:@"[%@]: remaining events in queue: %lu", self.name, (unsigned long)self.scheduledEventsQueue.operationCount - 1];
+    [[TBSMDebugLogger sharedInstance] log:@"[%@]: remaining events in queue: %i", self.name, self.eventDebugQueue.count];
     [[TBSMDebugLogger sharedInstance] log:@"[%@]: %@\n\n", self.name, [self.eventDebugQueue valueForKeyPath:@"name"]];
     
     TBSMDebugCompletionBlock completionBlock = event.completionBlock;
