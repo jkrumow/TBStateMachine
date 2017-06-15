@@ -666,10 +666,6 @@ describe(@"TBSMStateMachine", ^{
         waitUntil(^(DoneCallback done) {
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil] withCompletion:^{
                 done();
             }];
