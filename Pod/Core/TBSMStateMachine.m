@@ -162,7 +162,7 @@
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
-    NSUInteger targetLevel = [[targetState.parentNode path] count];
+    NSUInteger targetLevel = targetState.parentNode.path.count;
     NSUInteger thisLevel = self.path.count;
     
     if (targetLevel < thisLevel) {

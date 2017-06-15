@@ -7,7 +7,6 @@
 //
 
 #import "TBSMJoin.h"
-
 #import "TBSMParallelState.h"
 
 @interface TBSMJoin ()
