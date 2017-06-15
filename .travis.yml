@@ -8,4 +8,5 @@ install:
   - cd $TRAVIS_BUILD_DIR
 
 script:
-  - xcodebuild test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachineTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6' ONLY_ACTIVE_ARCH=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+  - xcrun instruments -w 'iPhone 7 (10.3)' || sleep 15
+  - xcodebuild test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachineTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7' ONLY_ACTIVE_ARCH=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
