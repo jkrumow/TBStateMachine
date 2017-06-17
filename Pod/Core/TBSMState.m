@@ -116,15 +116,15 @@ NSString * const TBSMDataUserInfo = @"data";
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
 
-#pragma mark - TBSMNode
+#pragma mark - TBSMHierarchyVertex
 
 - (NSArray *)path
 {
     NSMutableArray *path = [NSMutableArray new];
-    id<TBSMNode> state = self;
+    id<TBSMHierarchyVertex> state = self;
     while (state) {
         [path insertObject:state atIndex:0];
-        state = state.parentNode;
+        state = state.parentVertex;
     }
     return path;
 }

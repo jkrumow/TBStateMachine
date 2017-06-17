@@ -1,5 +1,5 @@
 //
-//  TBSMNode.h
+//  TBSMHierarchyVertex.h
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 16.06.14.
@@ -13,14 +13,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  This protocol defines a node in a state machine hierarchy.
+ *  This protocol defines a vertex in a state machine hierarchy.
  *
  *  Classes which implement this protocol can be managed inside a state machine heriarchy.
  */
-@protocol TBSMNode <NSObject>
+@protocol TBSMHierarchyVertex <NSObject>
 
 /**
- *  Returns the node's name.
+ *  Returns the vertex's name.
  *
  *  Classes which implement this method must return a unique name.
  *
@@ -29,25 +29,25 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)name;
 
 /**
- *  Returns its path inside the state machine hierarchy containing all parent nodes in descending order.
+ *  Returns its path inside the state machine hierarchy containing all parent vertexes in descending order.
  *
- *  @return An array containing all parent nodes.
+ *  @return An array containing all parent vertexes.
  */
-- (NSMutableArray<NSObject<TBSMNode> *> *)path;
+- (NSMutableArray<NSObject<TBSMHierarchyVertex> *> *)path;
 
 /**
- *  Returns the parent node in the state machine hierarchy.
+ *  Returns the parent vertex in the state machine hierarchy.
  *
- *  @return The parent `TBSMNode`.
+ *  @return The parent `TBSMHierarchyVertex`.
  */
-- (nullable id<TBSMNode>)parentNode;
+- (nullable id<TBSMHierarchyVertex>)parentVertex;
 
 /**
- *  Sets the parent node in the state machine hierarchy.
+ *  Sets the parent vertex in the state machine hierarchy.
  *
- *  @param parentNode The parent node.
+ *  @param parentVertex The parent vertex.
  */
-- (void)setParentNode:(nullable id<TBSMNode>)parentNode;
+- (void)setParentVertex:(nullable id<TBSMHierarchyVertex>)parentVertex;
 
 /**
  *  Executes the enter block of the state.

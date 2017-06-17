@@ -24,7 +24,7 @@
         @throw ([NSException tb_notAStateMachineException:stateMachine]);
     }
     _stateMachine = stateMachine;
-    [_stateMachine setParentNode:self];
+    [_stateMachine setParentVertex:self];
 }
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data

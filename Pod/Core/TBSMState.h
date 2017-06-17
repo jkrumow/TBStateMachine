@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TBSMNode.h"
+#import "TBSMHierarchyVertex.h"
 #import "TBSMTransitionKind.h"
 #import "TBSMTransitionVertex.h"
 
@@ -30,12 +30,12 @@ typedef void (^TBSMStateBlock)(id _Nullable data);
 /**
  *  This class represents a state in a state machine.
  */
-@interface TBSMState : NSObject<TBSMNode, TBSMTransitionVertex>
+@interface TBSMState : NSObject<TBSMHierarchyVertex, TBSMTransitionVertex>
 
 /**
- *  The state's parent state inside the state machine hierarchy.
+ *  The state's parent vertex inside the state machine hierarchy.
  */
-@property (nonatomic, weak) id<TBSMNode> parentNode;
+@property (nonatomic, weak) id<TBSMHierarchyVertex> parentVertex;
 
 /**
  *  Block that is executed when the state is entered.

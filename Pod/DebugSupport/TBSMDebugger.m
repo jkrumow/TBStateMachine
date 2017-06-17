@@ -24,7 +24,7 @@ NSString * const TBSMDebugSupportException = @"TBSMDebugSupportException";
 
 - (void)debugStateMachine:(TBSMStateMachine *)stateMachine
 {
-    if (stateMachine.parentNode) {
+    if (stateMachine.parentVertex) {
         @throw [NSException exceptionWithName:TBSMDebugSupportException reason:@"Debug support not available on sub-statemachines." userInfo:nil];
     }
     _stateMachine = stateMachine;

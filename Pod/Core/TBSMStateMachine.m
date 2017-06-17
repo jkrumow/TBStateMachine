@@ -10,7 +10,7 @@
 
 @interface TBSMStateMachine ()
 @property (nonatomic, copy, readonly) NSString *name;
-@property (nonatomic, weak) id<TBSMNode> parentNode;
+@property (nonatomic, weak) id<TBSMHierarchyVertex> parentVertex;
 @property (nonatomic, strong) NSMutableArray *priv_states;
 @end
 
@@ -49,7 +49,7 @@
             @throw ([NSException tb_notOfTypeStateException:object]);
         }
         TBSMState *state = object;
-        [state setParentNode:self];
+        [state setParentVertex:self];
         [self.priv_states addObject:state];
     }
     if (states.count > 0) {
@@ -92,8 +92,8 @@
 
 - (void)scheduleEvent:(TBSMEvent *)event
 {
-    if (self.parentNode) {
-        TBSMStateMachine *topStateMachine = (TBSMStateMachine *)[self.parentNode parentNode];
+    if (self.parentVertex) {
+        TBSMStateMachine *topStateMachine = (TBSMStateMachine *)[self.parentVertex parentVertex];
         [topStateMachine scheduleEvent:event];
         return;
     }
@@ -162,7 +162,7 @@
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
-    NSUInteger targetLevel = targetState.parentNode.path.count;
+    NSUInteger targetLevel = targetState.parentVertex.path.count;
     NSUInteger thisLevel = self.path.count;
     
     if (targetLevel < thisLevel) {
@@ -170,27 +170,27 @@
     } else if (targetLevel == thisLevel) {
         _currentState = targetState;
     } else {
-        NSArray *targetPath = [targetState.parentNode path];
-        id<TBSMNode> node = targetPath[thisLevel];
-        _currentState = (TBSMState *)node.parentNode;
+        NSArray *targetPath = [targetState.parentVertex path];
+        id<TBSMHierarchyVertex> vertex = targetPath[thisLevel];
+        _currentState = (TBSMState *)vertex.parentVertex;
     }
     [self.currentState enter:sourceState targetState:targetState data:data];
 }
 
 - (void)enter:(TBSMState *)sourceState targetStates:(NSArray *)targetStates region:(TBSMParallelState *)region data:(id)data
 {
-    NSUInteger targetLevel = [[region.parentNode path] count];
+    NSUInteger targetLevel = [[region.parentVertex path] count];
     NSUInteger thisLevel = self.path.count;
     
     if (targetLevel == thisLevel) {
         _currentState = region;
     } else if (targetLevel > thisLevel) {
-        NSArray *targetPath = [region.parentNode path];
-        id<TBSMNode> node = targetPath[thisLevel];
-        _currentState = (TBSMState *)node.parentNode;
+        NSArray *targetPath = [region.parentVertex path];
+        id<TBSMHierarchyVertex> vertex = targetPath[thisLevel];
+        _currentState = (TBSMState *)vertex.parentVertex;
     }
-    id<TBSMContainingNode> node = (id <TBSMContainingNode>)_currentState;
-    [node enter:sourceState targetStates:targetStates region:region data:data];
+    id<TBSMContainingVertex> vertex = (id <TBSMContainingVertex>)_currentState;
+    [vertex enter:sourceState targetStates:targetStates region:region data:data];
 }
 
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
@@ -198,7 +198,7 @@
     [self.currentState exit:sourceState targetState:targetState data:data];
 }
 
-#pragma mark - TBSMNode
+#pragma mark - TBSMHierarchyVertex
 
 - (NSArray *)path
 {
@@ -206,7 +206,7 @@
     TBSMStateMachine *stateMachine = self;
     while (stateMachine) {
         [path insertObject:stateMachine atIndex:0];
-        stateMachine = (TBSMStateMachine *)stateMachine.parentNode.parentNode;
+        stateMachine = (TBSMStateMachine *)stateMachine.parentVertex.parentVertex;
     }
     return path;
 }

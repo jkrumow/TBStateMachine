@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  - call -setUp: to activate the state machine
  *  - call -tearDown: to deactivate the state machine
  */
-@interface TBSMStateMachine : NSObject <TBSMContainingNode>
+@interface TBSMStateMachine : NSObject <TBSMContainingVertex>
 
 /**
  *  The operation queue to handle the run to completion steps.

@@ -1,5 +1,5 @@
 //
-//  TBSMContainingNode.h
+//  TBSMContainingVertex.h
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 23.03.15.
@@ -7,24 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TBSMNode.h"
+#import "TBSMHierarchyVertex.h"
 
 @class TBSMParallelState;
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  This protocol describes a subtype of `TBSMNode` in the state machine hierarchy which can contain other `TBSMNode`s.
+ *  This protocol describes a subtype of `TBSMHierarchyVertex` in the state machine hierarchy which can contain other `TBSMHierarchyVertex`s.
  */
-@protocol TBSMContainingNode <TBSMNode>
+@protocol TBSMContainingVertex <TBSMHierarchyVertex>
 
 /**
  *  Enters a group of specified states inside a region.
  *
- *  @param sourceState The source state.
+ *  @param sourceState  The source state.
  *  @param targetStates The target states inside the specified region.
- *  @param region      The target region.
- *  @param data        The payload data.
+ *  @param region       The target region.
+ *  @param data         The payload data.
  */
 - (void)enter:(nullable TBSMState *)sourceState targetStates:(NSArray<__kindof TBSMState *> *)targetStates region:(TBSMParallelState *)region data:(nullable id)data;
 

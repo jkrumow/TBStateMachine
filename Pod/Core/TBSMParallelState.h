@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 
 #import "TBSMState.h"
-#import "TBSMContainingNode.h"
+#import "TBSMContainingVertex.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  This class wraps multiple `TBSMStateMachine` instances to an orthogonal region.
  */
-@interface TBSMParallelState : TBSMState <TBSMContainingNode>
+@interface TBSMParallelState : TBSMState <TBSMContainingVertex>
 
 /**
  *  Creates a `TBSMParallelState` instance from a given name.

@@ -16,7 +16,7 @@
 
 @implementation TBSMParallelState
 
-@synthesize parentNode = _parentNode;
+@synthesize parentVertex = _parentVertex;
 
 + (instancetype)parallelStateWithName:(NSString *)name
 {
@@ -45,7 +45,7 @@
         if (![stateMachine isKindOfClass:[TBSMStateMachine class]]) {
             @throw ([NSException tb_notAStateMachineException:stateMachine]);
         }
-        stateMachine.parentNode = self;
+        stateMachine.parentVertex = self;
         [self.priv_parallelStateMachines addObject:stateMachine];
     }
 }

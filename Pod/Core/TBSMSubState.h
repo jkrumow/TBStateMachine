@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TBSMState.h"
-#import "TBSMContainingNode.h"
+#import "TBSMContainingVertex.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  This class allows the create nested states.
  */
-@interface TBSMSubState : TBSMState <TBSMContainingNode>
+@interface TBSMSubState : TBSMState <TBSMContainingVertex>
 
 /**
  *  The `TBSMStateMachine` instance contained in this sub state.
