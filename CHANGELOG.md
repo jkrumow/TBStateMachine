@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+## 6.4.1
+
+- Minor internal refactorings
+
 ## 6.4.0
 
 - Improved log output
