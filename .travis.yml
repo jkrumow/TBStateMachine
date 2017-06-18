@@ -1,7 +1,12 @@
-osx_image: xcode8.3
+osx_image: xcode8
 language: objective-c
 
-xcode_workspace: Example/TBStateMachine.xcworkspace
-xcode_scheme: TBStateMachineTests
-xcode_sdk: iphonesimulator10.3
-podfile: Example/Podfile
+install:
+  - bundle install --without=documentation
+  - cd Example
+  - bundle exec pod update
+  - cd $TRAVIS_BUILD_DIR
+
+script:
+  - xcrun instruments -w 'iPhone 7 (10.0)' || sleep 15
+  - xcodebuild test -workspace Example/TBStateMachine.xcworkspace -scheme TBStateMachineTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 7' ONLY_ACTIVE_ARCH=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
