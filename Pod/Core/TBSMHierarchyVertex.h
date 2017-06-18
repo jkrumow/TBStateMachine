@@ -13,9 +13,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  This protocol defines a vertex in a state machine hierarchy.
+ *  This protocol defines a vertex in a state model hierarchy.
  *
- *  Classes which implement this protocol can be managed inside a state machine heriarchy.
+ *  Classes which implement this protocol can be managed inside a state model heriarchy.
  */
 @protocol TBSMHierarchyVertex <NSObject>
 

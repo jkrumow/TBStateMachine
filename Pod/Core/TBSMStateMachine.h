@@ -24,13 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  This class represents a hierarchical state machine.
- *
- *  To set the state machine up properly:
- *
- *  - set at least one state via -setStates:
- *  - set an initial state (by default the first state in the provided array will be set)
- *  - call -setUp: to activate the state machine
- *  - call -tearDown: to deactivate the state machine
  */
 @interface TBSMStateMachine : NSObject <TBSMContainingVertex>
 

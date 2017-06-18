@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  This class represents the base class for pseudo states.
- *  This class should not be used by itself.
  */
 @interface TBSMPseudoState : NSObject  <TBSMTransitionVertex>
 

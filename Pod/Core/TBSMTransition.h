@@ -31,7 +31,7 @@ typedef BOOL(^TBSMGuardBlock)(id _Nullable data);
 
 
 /**
- *  This class represents a transition inside a state machine.
+ *  This class represents a transition between two states.
  */
 @interface TBSMTransition : NSObject
 

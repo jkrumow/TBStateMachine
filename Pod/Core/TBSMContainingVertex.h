@@ -14,7 +14,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  This protocol describes a subtype of `TBSMHierarchyVertex` in the state machine hierarchy which can contain other `TBSMHierarchyVertex`s.
+ *  This protocol describes a subtype of `TBSMHierarchyVertex` in the state machine hierarchy
+ *  which can contain other `TBSMHierarchyVertex`es.
  */
 @protocol TBSMContainingVertex <TBSMHierarchyVertex>
 

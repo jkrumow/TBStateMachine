@@ -13,7 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- *  This class represents a compound transition inside a state machine.
+ *  This class represents a compound transition between two states.
  */
 @interface TBSMCompoundTransition : TBSMTransition
 
