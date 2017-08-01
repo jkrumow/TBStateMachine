@@ -11,30 +11,30 @@
 
 SpecBegin(TBSMStateMachineNested)
 
-NSString * const TRANSITION_1 = @"transition_1";
-NSString * const TRANSITION_2 = @"transition_2";
-NSString * const TRANSITION_3 = @"transition_3";
-NSString * const TRANSITION_4 = @"transition_4";
-NSString * const TRANSITION_5 = @"transition_5";
-NSString * const TRANSITION_6 = @"transition_6";
-NSString * const TRANSITION_7 = @"transition_7";
-NSString * const TRANSITION_8 = @"transition_8";
-NSString * const TRANSITION_9 = @"transition_9";
-NSString * const TRANSITION_10 = @"transition_10";
-NSString * const TRANSITION_11 = @"transition_11";
-NSString * const TRANSITION_12 = @"transition_12";
-NSString * const TRANSITION_13 = @"transition_13";
-NSString * const TRANSITION_14 = @"transition_14";
+NSString * const transition_1 = @"transition_1";
+NSString * const transition_2 = @"transition_2";
+NSString * const transition_3 = @"transition_3";
+NSString * const transition_4 = @"transition_4";
+NSString * const transition_5 = @"transition_5";
+NSString * const transition_6 = @"transition_6";
+NSString * const transition_7 = @"transition_7";
+NSString * const transition_8 = @"transition_8";
+NSString * const transition_9 = @"transition_9";
+NSString * const transition_10 = @"transition_10";
+NSString * const transition_11 = @"transition_11";
+NSString * const transition_12 = @"transition_12";
+NSString * const transition_13 = @"transition_13";
+NSString * const transition_14 = @"transition_14";
 
-NSString * const TRANSITION_15 = @"transition_15";
-NSString * const TRANSITION_16 = @"transition_16";
-NSString * const TRANSITION_17 = @"transition_17";
-NSString * const TRANSITION_18 = @"transition_18";
+NSString * const transition_15 = @"transition_15";
+NSString * const transition_16 = @"transition_16";
+NSString * const transition_17 = @"transition_17";
+NSString * const transition_18 = @"transition_18";
 
-NSString * const TRANSITION_BROKEN_LOCAL = @"transition_broken_local";
+NSString * const transition_broken_local = @"transition_broken_local";
 
-NSString * const EVENT_DATA_KEY = @"DummyDataKey";
-NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
+NSString * const event_data_key = @"DummyDataKey";
+NSString * const event_data_value = @"DummyDataValue";
 
 __block TBSMStateMachine *stateMachine;
 
@@ -89,8 +89,8 @@ describe(@"TBSMStateMachine", ^{
     
     beforeEach(^{
         
-        eventDataA = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
-        eventDataB = @{EVENT_DATA_KEY : EVENT_DATA_VALUE};
+        eventDataA = @{event_data_key : event_data_value};
+        eventDataB = @{event_data_key : event_data_value};
         
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
         a = [TBSMSubState subStateWithName:@"a"];
@@ -307,66 +307,66 @@ describe(@"TBSMStateMachine", ^{
         };
         
         // superstates / substates guards
-        [a addHandlerForEvent:TRANSITION_1 target:b];
-        [a1 addHandlerForEvent:TRANSITION_1 target:a2 kind:TBSMTransitionExternal action:nil guard:^BOOL(id data) {
-            return (data && data[EVENT_DATA_KEY] == EVENT_DATA_VALUE);
+        [a addHandlerForEvent:transition_1 target:b];
+        [a1 addHandlerForEvent:transition_1 target:a2 kind:TBSMTransitionExternal action:nil guard:^BOOL(id data) {
+            return (data && data[event_data_key] == event_data_value);
         }];
-        [a1 addHandlerForEvent:TRANSITION_1 target:a3 kind:TBSMTransitionExternal action:nil guard:^BOOL(id data) {
-            return (data && data[EVENT_DATA_KEY] != EVENT_DATA_VALUE);
+        [a1 addHandlerForEvent:transition_1 target:a3 kind:TBSMTransitionExternal action:nil guard:^BOOL(id data) {
+            return (data && data[event_data_key] != event_data_value);
         }];
         
         // run to completion test / queuing
-        [a2 addHandlerForEvent:TRANSITION_2 target:a3 kind:TBSMTransitionExternal action:^(id data) {
+        [a2 addHandlerForEvent:transition_2 target:a3 kind:TBSMTransitionExternal action:^(id data) {
             [executionSequence addObject:@"a2_to_a3_action"];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_3 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_3 data:nil]];
         }];
-        [a3 addHandlerForEvent:TRANSITION_3 target:a1];
+        [a3 addHandlerForEvent:transition_3 target:a1];
         
         // lca
-        [a3 addHandlerForEvent:TRANSITION_4 target:b2];
-        [a3 addHandlerForEvent:TRANSITION_5 target:b22];
+        [a3 addHandlerForEvent:transition_4 target:b2];
+        [a3 addHandlerForEvent:transition_5 target:b22];
         
         // external transitions
-        [a addHandlerForEvent:TRANSITION_6 target:a2];
-        [a2 addHandlerForEvent:TRANSITION_7 target:a];
+        [a addHandlerForEvent:transition_6 target:a2];
+        [a2 addHandlerForEvent:transition_7 target:a];
         
         // local transitions
-        [b addHandlerForEvent:TRANSITION_8 target:b22 kind:TBSMTransitionLocal];
-        [b22 addHandlerForEvent:TRANSITION_9 target:b kind:TBSMTransitionLocal];
+        [b addHandlerForEvent:transition_8 target:b22 kind:TBSMTransitionLocal];
+        [b22 addHandlerForEvent:transition_9 target:b kind:TBSMTransitionLocal];
         
         // local transitions becoming external
-        [b addHandlerForEvent:TRANSITION_BROKEN_LOCAL target:a3 kind:TBSMTransitionLocal];
+        [b addHandlerForEvent:transition_broken_local target:a3 kind:TBSMTransitionLocal];
         
         // internal transitions
-        [a1 addHandlerForEvent:TRANSITION_10 target:a1 kind:TBSMTransitionInternal action:^(id data) {
+        [a1 addHandlerForEvent:transition_10 target:a1 kind:TBSMTransitionInternal action:^(id data) {
             [executionSequence addObject:@"a1_internal_action"];
         }];
         
-        [b311 addHandlerForEvent:TRANSITION_11 target:b311 kind:TBSMTransitionInternal action:^(id data) {
+        [b311 addHandlerForEvent:transition_11 target:b311 kind:TBSMTransitionInternal action:^(id data) {
             [executionSequence addObject:@"b311_internal_action"];
         }];
-        [b321 addHandlerForEvent:TRANSITION_11 target:b321 kind:TBSMTransitionInternal action:^(id data) {
+        [b321 addHandlerForEvent:transition_11 target:b321 kind:TBSMTransitionInternal action:^(id data) {
             [executionSequence addObject:@"b321_internal_action"];
         }];
         
         // out of parallel substate
-        [b311 addHandlerForEvent:TRANSITION_12 target:a1 kind:TBSMTransitionExternal];
+        [b311 addHandlerForEvent:transition_12 target:a1 kind:TBSMTransitionExternal];
         
         // parallel state with default setup
-        [b addHandlerForEvent:TRANSITION_13 target:b3];
+        [b addHandlerForEvent:transition_13 target:b3];
         
         // parallel state with deep switching
-        [a3 addHandlerForEvent:TRANSITION_14 target:b322];
+        [a3 addHandlerForEvent:transition_14 target:b322];
         
         // fork into parallel state
-        [a addHandlerForEvent:TRANSITION_15 target:fork kind:TBSMTransitionExternal action:^(id data) {
+        [a addHandlerForEvent:transition_15 target:fork kind:TBSMTransitionExternal action:^(id data) {
             [executionSequence addObject:@"a_to_fork_action"];
         }];
         [fork setTargetStates:@[c212, c222] inRegion:c2];
         
         // join out of parallel state
-        [c212 addHandlerForEvent:TRANSITION_16 target:join];
-        [c222 addHandlerForEvent:TRANSITION_17 target:join];
+        [c212 addHandlerForEvent:transition_16 target:join];
+        [c222 addHandlerForEvent:transition_17 target:join];
         [join setSourceStates:@[c212, c222] inRegion:c2 target:b];
         
         // junction between b1 and c2
@@ -378,7 +378,7 @@ describe(@"TBSMStateMachine", ^{
         } guard:^BOOL(id data) {
             return (data[@"goC2"] != nil);
         }];
-        [a addHandlerForEvent:TRANSITION_18 target:junction kind:TBSMTransitionExternal action:^(id data) {
+        [a addHandlerForEvent:transition_18 target:junction kind:TBSMTransitionExternal action:^(id data) {
             [executionSequence addObject:@"a_to_junction_ingoing_path_action"];
         }];
         
@@ -467,7 +467,7 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -484,7 +484,7 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:EVENT_DATA_VALUE}] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:@{event_data_key:event_data_value}] withCompletion:^{
                 done();
             }];
         });
@@ -499,7 +499,7 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:@{event_data_key:@(1)}] withCompletion:^{
                 done();
             }];
         });
@@ -519,10 +519,10 @@ describe(@"TBSMStateMachine", ^{
                 done();
             };
             
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:EVENT_DATA_VALUE}] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:@{event_data_key:event_data_value}] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_2 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_2 data:nil]];
         });
         
         NSArray *expectedExecutionSequence = @[@"a2_exit",
@@ -539,10 +539,10 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:@{event_data_key:@(1)}] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_4 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_4 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -559,10 +559,10 @@ describe(@"TBSMStateMachine", ^{
     it(@"switches even deeper from and into a specified sub state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:@{event_data_key:@(1)}] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_5 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_5 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -579,7 +579,7 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs an external transition from containing source state to contained target state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_6 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_6 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -595,10 +595,10 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs an external transition from contained source state to containing target state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:EVENT_DATA_VALUE}] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:@{event_data_key:event_data_value}] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_7 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_7 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -614,10 +614,10 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a local transition from containing source state to contained target state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:nil] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_8 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_8 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -632,11 +632,11 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a local transition from contained source state to containing target state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_5 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:@{event_data_key:@(1)}]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_5 data:nil] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_9 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_9 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -651,8 +651,8 @@ describe(@"TBSMStateMachine", ^{
     it(@"defaults to an external transition when source and target of a local transition are no ancestors.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_BROKEN_LOCAL data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_broken_local data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -664,9 +664,9 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs an internal transition.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_10 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_10 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_10 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_10 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -681,13 +681,13 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs parallel internal transitions.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_13 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_13 data:nil] withCompletion:^{
                 
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_11 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_11 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_11 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -703,11 +703,11 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a transition out of a parallel sub state into a top level state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_13 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_13 data:nil] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_12 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_12 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -725,8 +725,8 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a transition into a parallel state and enters default sub states.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_13 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_13 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -740,8 +740,8 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a transition into a parallel state and enters specified sub state while entering all other parallel machines with default state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_1 data:@{EVENT_DATA_KEY:@(1)}]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_14 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_1 data:@{event_data_key:@(1)}]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_14 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -755,7 +755,7 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a fork compound transition into the specified region.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_15 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_15 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -779,15 +779,15 @@ describe(@"TBSMStateMachine", ^{
     it(@"performs a join compound transition into the join target state.", ^{
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_15 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_15 data:nil] withCompletion:^{
                 [executionSequence removeAllObjects];
             }];
             
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_16 data:nil]];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_16 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_16 data:nil]];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_16 data:nil] withCompletion:^{
                 expect(stateMachine.currentState).to.equal(c);
             }];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_17 data:nil] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_17 data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -808,7 +808,7 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_18 data:@{@"goB1":@""}] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_18 data:@{@"goB1":@""}] withCompletion:^{
                 done();
             }];
         });
@@ -829,7 +829,7 @@ describe(@"TBSMStateMachine", ^{
         
         waitUntil(^(DoneCallback done) {
             
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:TRANSITION_18 data:@{@"goC2":@""}] withCompletion:^{
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_18 data:@{@"goC2":@""}] withCompletion:^{
                 done();
             }];
         });
