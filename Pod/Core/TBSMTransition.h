@@ -61,6 +61,12 @@ typedef BOOL(^TBSMGuardBlock)(id _Nullable data);
 @property (nonatomic, copy, nullable) TBSMGuardBlock guard;
 
 /**
+ *  The name of the event being handled.
+ *
+ */
+@property (nonatomic, strong) NSString *eventName;
+
+/**
  *  Initializes a `TBSMTransition` instance from a given source and target state, action and guard.
  *
  *  @param sourceState The specified source state.
@@ -68,6 +74,7 @@ typedef BOOL(^TBSMGuardBlock)(id _Nullable data);
  *  @param kind        The kind of transition.
  *  @param action      The action associated with this transition.
  *  @param guard       The guard function associated with the transition.
+ *  @param eventName   The name of the event being handled.
  *
  *  @return The transition object.
  */
@@ -75,7 +82,8 @@ typedef BOOL(^TBSMGuardBlock)(id _Nullable data);
                         targetState:(nullable TBSMState *)targetState
                                kind:(TBSMTransitionKind)kind
                              action:(nullable TBSMActionBlock)action
-                              guard:(nullable TBSMGuardBlock)guard;
+                              guard:(nullable TBSMGuardBlock)guard
+                          eventName:(NSString *)eventName;
 
 
 - (TBSMStateMachine *)findLeastCommonAncestor;

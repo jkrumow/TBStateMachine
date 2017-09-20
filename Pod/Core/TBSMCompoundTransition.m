@@ -23,6 +23,7 @@
                   targetPseudoState:(TBSMPseudoState *)targetPseudoState
                              action:(TBSMActionBlock)action
                               guard:(TBSMGuardBlock)guard
+                          eventName:(NSString *)eventName
 {
     self = [super init];
     if (self) {
@@ -31,6 +32,7 @@
         self.targetState = targetPseudoState.targetState;
         self.action = action;
         self.guard = guard;
+        self.eventName = eventName;
     }
     return self;
 }

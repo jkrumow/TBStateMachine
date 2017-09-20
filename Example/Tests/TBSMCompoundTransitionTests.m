@@ -10,6 +10,8 @@
 
 SpecBegin(TBSMCompoundTransition)
 
+NSString * const EVENT_NAME_A = @"DummyEventA";
+
 __block TBSMState *a;
 __block TBSMState *b;
 __block TBSMState *c;
@@ -46,27 +48,27 @@ describe(@"TBSMCompoundTransition", ^{
     });
     
     it (@"returns its name from a fork transition.", ^{
-        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:c targetPseudoState:fork action:nil guard:nil];
+        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:c targetPseudoState:fork action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.name).to.equal(@"c --> fork --> parallel/[a,b]");
     });
     
     it (@"returns its name from a join transition.", ^{
-        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil];
+        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.name).to.equal(@"parallel/[a,b] --> join --> c");
     });
     
     it (@"returns source state.", ^{
-        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil];
+        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.sourceState).to.equal(a);
     });
     
     it (@"returns target pseudo state .", ^{
-        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil];
+        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.targetPseudoState).to.equal(join);
     });
     
     it (@"returns target state .", ^{
-        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil];
+        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.targetState).to.equal(c);
     });
     
@@ -76,7 +78,7 @@ describe(@"TBSMCompoundTransition", ^{
             
         };
         
-        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:action guard:nil];
+        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:action guard:nil eventName:EVENT_NAME_A];
         expect(transition.action).to.equal(action);
     });
     
@@ -86,14 +88,14 @@ describe(@"TBSMCompoundTransition", ^{
             return YES;
         };
         
-        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:guard];
+        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:guard eventName:EVENT_NAME_A];
         expect(transition.guard).to.equal(guard);
     });
 
     it(@"throws a `TBSMException` when transition has ambiguous attributes.", ^{
         join = [TBSMJoin joinWithName:@"join"];
         [join setSourceStates:@[a] inRegion:empty target:b];
-        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil];
+        TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:nil guard:nil eventName:EVENT_NAME_A];
         
         expect(^{
             [transition performTransitionWithData:nil];

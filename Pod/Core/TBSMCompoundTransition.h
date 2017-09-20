@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithSourceState:(TBSMState *)sourceState
                   targetPseudoState:(TBSMPseudoState *)targetPseudoState
                              action:(nullable TBSMActionBlock)action
-                              guard:(nullable TBSMGuardBlock)guard;
+                              guard:(nullable TBSMGuardBlock)guard
+                          eventName:(NSString *)eventName;
 @end
 NS_ASSUME_NONNULL_END

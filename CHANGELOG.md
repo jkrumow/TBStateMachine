@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+### 6.5.0
+
+- Posting notification when performing internal transitions
+
 ## 6.4.1
 
 - Minor internal refactorings

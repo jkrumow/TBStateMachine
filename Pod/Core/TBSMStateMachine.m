@@ -125,12 +125,14 @@
                                                              targetState:(TBSMState *)eventHandler.target
                                                                     kind:eventHandler.kind
                                                                   action:eventHandler.action
-                                                                   guard:eventHandler.guard];
+                                                                   guard:eventHandler.guard
+                                                               eventName:event.name];
             } else {
                 transition = [[TBSMCompoundTransition alloc] initWithSourceState:self.currentState
                                                                targetPseudoState:(TBSMPseudoState *)eventHandler.target
                                                                           action:eventHandler.action
-                                                                           guard:eventHandler.guard];
+                                                                           guard:eventHandler.guard
+                                                                       eventName:event.name];
             }
             if ([transition performTransitionWithData:event.data]) {
                 return YES;

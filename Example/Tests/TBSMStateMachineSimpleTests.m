@@ -15,6 +15,7 @@ NSString * const EVENT_A = @"DummyEventA";
 NSString * const EVENT_B = @"DummyEventA";
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
+__block NSOperationQueue *testQueue;
 __block TBSMStateMachine *stateMachine;
 __block TBSMState *a;
 __block TBSMState *b;
@@ -23,6 +24,9 @@ __block TBSMState *c;
 describe(@"TBSMStateMachine", ^{
     
     beforeEach(^{
+        testQueue = [NSOperationQueue new];
+        testQueue.maxConcurrentOperationCount = 1;
+        
         stateMachine = [TBSMStateMachine stateMachineWithName:@"StateMachine"];
         
         [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
@@ -170,7 +174,7 @@ describe(@"TBSMStateMachine", ^{
     });
     
     describe(@"scheduleEventNamed:data:", ^{
-    
+        
         it(@"creates an event object through convenienceMethod.", ^{
             
             [a addHandlerForEvent:EVENT_A target:b];
@@ -435,6 +439,26 @@ describe(@"TBSMStateMachine", ^{
             expect(^{
                 [stateMachine tearDown:EVENT_DATA_VALUE];
             }).to.notify(notification);
+        });
+        
+        it(@"posts a notification when performing an internal transition.", ^{
+            
+            [a addHandlerForEvent:EVENT_A target:a kind:TBSMTransitionInternal];
+            
+            stateMachine.states = @[a];
+            [stateMachine setUp:nil];
+            
+            __block id payload = nil;
+            waitUntil(^(DoneCallback done) {
+                [[NSNotificationCenter defaultCenter] addObserverForName:EVENT_A object:a queue:testQueue usingBlock:^(NSNotification *notification) {
+                    payload = notification.userInfo[TBSMDataUserInfo];
+                    done();
+                }];
+                
+                [stateMachine scheduleEventNamed:EVENT_A data:EVENT_DATA_VALUE];
+            });
+            
+            expect(payload).to.equal(EVENT_DATA_VALUE);
         });
     });
 });

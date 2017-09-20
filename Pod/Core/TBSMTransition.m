@@ -17,6 +17,7 @@
                                kind:(TBSMTransitionKind)kind
                              action:(TBSMActionBlock)action
                               guard:(TBSMGuardBlock)guard
+                          eventName:(NSString *)eventName
 {
     self = [super init];
     if (self) {
@@ -25,6 +26,7 @@
         self.kind = kind;
         self.action = action;
         self.guard = guard;
+        self.eventName = eventName;
     }
     return self;
 }
@@ -76,6 +78,7 @@
             if (self.action) {
                 self.action(data);
             }
+            [self _postInternalTransitionActionNotificationWithData:data];
         } else {
             TBSMStateMachine *lca = [self findLeastCommonAncestor];
             [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
@@ -83,6 +86,16 @@
         return YES;
     }
     return NO;
+}
+
+- (void)_postInternalTransitionActionNotificationWithData:(id)data
+{
+    NSMutableDictionary *userInfo = NSMutableDictionary.new;
+    if (data) {
+        [userInfo setObject:data forKey:TBSMDataUserInfo];
+    }
+    NSLog(@"--- post ---");
+    [[NSNotificationCenter defaultCenter] postNotificationName:self.eventName object:self.targetState userInfo:userInfo];
 }
 
 @end

@@ -10,9 +10,10 @@
 
 SpecBegin(TBSMTransition)
 
+NSString * const EVENT_NAME_A = @"DummyEventA";
+
 __block TBSMState *a;
 __block TBSMState *b;
-
 
 describe(@"TBSMTransition", ^{
     
@@ -27,20 +28,20 @@ describe(@"TBSMTransition", ^{
     });
     
     it (@"returns its name.", ^{
-        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:nil kind:TBSMTransitionInternal action:nil guard:nil];
+        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:nil kind:TBSMTransitionInternal action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.name).to.equal(@"a");
         
-        transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
+        transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.name).to.equal(@"a --> b");
     });
     
     it (@"returns source state.", ^{
-        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
+        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.sourceState).to.equal(a);
     });
     
     it (@"returns target state.", ^{
-        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
+        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil eventName:EVENT_NAME_A];
         expect(transition.targetState).to.equal(b);
     });
     
@@ -50,7 +51,7 @@ describe(@"TBSMTransition", ^{
             
         };
         
-        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:action guard:nil];
+        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:action guard:nil eventName:EVENT_NAME_A];
         expect(transition.action).to.equal(action);
     });
     
@@ -60,14 +61,14 @@ describe(@"TBSMTransition", ^{
             return YES;
         };
         
-        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:guard];
+        TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:guard eventName:EVENT_NAME_A];
         expect(transition.guard).to.equal(guard);
     });
     
     it(@"throws a `TBSMException` if no lca was found.", ^{
     
         expect(^{
-            TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil];
+            TBSMTransition *transition = [[TBSMTransition alloc] initWithSourceState:a targetState:b kind:TBSMTransitionExternal action:nil guard:nil eventName:EVENT_NAME_A];
             [transition performTransitionWithData:nil];
         }).to.raise(TBSMException);
     
