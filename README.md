@@ -188,7 +188,7 @@ TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
 
 ### Notifications
 
-`TBSMState` posts NSNotifications on entry and exit:
+`TBSMState` posts an `NSNotification` on entry and exit:
 
 * TBSMStateDidEnterNotification
 * TBSMStateDidExitNotification
@@ -204,7 +204,18 @@ The notification's `userInfo` contains:
 To receive a notification:
 
 ```objc
-[[NSNotificationCenter defaultCenter] addObserver:myObject selector:@selector(myHandler:) name:TBSMStateDidEnterNotification object:stateA];
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myHandler:) name:TBSMStateDidEnterNotification object:stateA];
+
+- (void)myHandler:(NSNotification *)notification
+{
+    id myPayloadObject = notification.userInfo[TBSMDataUserInfo];
+}
+```
+
+`TBSMState` also posts an `NSNotification` with the event name when an internal transition has been performed:
+
+```objc
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myHandler:) name:@"EventA" object:stateA];
 
 - (void)myHandler:(NSNotification *)notification
 {
