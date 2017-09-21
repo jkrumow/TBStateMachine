@@ -94,7 +94,6 @@
     if (data) {
         [userInfo setObject:data forKey:TBSMDataUserInfo];
     }
-    NSLog(@"--- post ---");
     [[NSNotificationCenter defaultCenter] postNotificationName:self.eventName object:self.targetState userInfo:userInfo];
 }
 
