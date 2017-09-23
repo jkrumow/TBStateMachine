@@ -50,6 +50,17 @@
     }
 }
 
+- (void)setStates:(NSArray <NSArray<__kindof TBSMState *> *> *)states;
+{
+    _priv_parallelStateMachines = [NSMutableArray new];
+    [states enumerateObjectsUsingBlock:^(NSArray<__kindof TBSMState *> *array, NSUInteger idx, BOOL *stop) {
+        NSString *name = [NSString stringWithFormat:@"%@SubMachine-%lu",self.name, (unsigned long)idx];
+        TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:name];
+        stateMachine.states = array;
+        [self.priv_parallelStateMachines addObject:stateMachine];
+    }];
+}
+
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [super enter:sourceState targetState:targetState data:data];

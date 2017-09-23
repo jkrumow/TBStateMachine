@@ -56,5 +56,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)setStateMachines:(NSArray<TBSMStateMachine *> *)stateMachines;
 
+/**
+ *  Sets all states the parallel state will manage. First state in each array wil be set as initialState.
+ *  Creates state machines implicitly.
+ *
+ *  Throws `TBSMException` if states are not of type `TBSMState`.
+ *
+ *  @param states An `NSArray` containing arrays with state objects for the corresponding region.
+ */
+- (void)setStates:(NSArray <NSArray<__kindof TBSMState *> *> *)states;
+
 @end
 NS_ASSUME_NONNULL_END

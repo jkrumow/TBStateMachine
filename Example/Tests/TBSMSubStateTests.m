@@ -57,7 +57,21 @@ describe(@"TBSMSubState", ^{
             }).to.raise(TBSMException);
             
         });
+    });
+    
+    describe(@"Convenience setters", ^{
         
+        it(@"creates a state machine implicitly", ^{
+            
+            TBSMState *a1 = [TBSMState stateWithName:@"a1"];
+            TBSMState *a2 = [TBSMState stateWithName:@"a2"];
+            TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
+            subState.states = @[a1, a2];
+            
+            expect(subState.stateMachine).notTo.beNil();
+            expect(subState.stateMachine.name).to.equal(@"subStateSubMachine");
+            
+        });
     });
     
     it(@"enters and exits all initial states", ^{

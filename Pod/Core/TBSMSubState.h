@@ -35,5 +35,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)subStateWithName:(NSString *)name;
 
+/**
+ *  Sets all states the sub state will manage. First state in array wil be set as initialState.
+ *  Creates a state machine implicitly.
+ *
+ *  Throws `TBSMException` if states are not of type `TBSMState`.
+ *
+ *  @param states An `NSArray` containing all state objects.
+ */
+- (void)setStates:(NSArray<__kindof TBSMState *> *)states;
+
 @end
 NS_ASSUME_NONNULL_END

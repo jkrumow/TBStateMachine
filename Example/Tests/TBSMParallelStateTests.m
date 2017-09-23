@@ -98,6 +98,22 @@ describe(@"TBSMParallelState", ^{
         });
     });
     
+    describe(@"Convenience setters", ^{
+        
+        it(@"creates a state machine implicitly", ^{
+            
+            TBSMState *a1 = [TBSMState stateWithName:@"a1"];
+            TBSMState *a2 = [TBSMState stateWithName:@"a2"];
+            parallelStates.states = @[@[a1], @[a2]];
+            
+            expect(parallelStates.stateMachines.count).to.equal(2);
+            
+            TBSMStateMachine *first = parallelStates.stateMachines.firstObject;
+            TBSMStateMachine *second = parallelStates.stateMachines.lastObject;
+            expect(first.name).to.equal(@"pSubMachine-0");
+            expect(second.name).to.equal(@"pSubMachine-1");
+        });
+    });
     
     it(@"enters and exits all initial states", ^{
         

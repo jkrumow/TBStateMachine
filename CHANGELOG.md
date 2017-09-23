@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+### 6.6.0
+
+- Add convenience setter for states on and TBSMSubState TBSMParallelState
+
 ### 6.5.0
 
 - Posting notification when performing internal transitions

@@ -27,6 +27,13 @@
     [_stateMachine setParentVertex:self];
 }
 
+- (void)setStates:(NSArray<__kindof TBSMState *> *)states
+{
+    NSString *name = [self.name stringByAppendingString:@"SubMachine"];
+    self.stateMachine = [TBSMStateMachine stateMachineWithName:name];
+    self.stateMachine.states = states;
+}
+
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     if (self.stateMachine == nil) {
