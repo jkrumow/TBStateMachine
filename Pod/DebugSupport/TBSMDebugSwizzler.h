@@ -3,7 +3,7 @@
 //  TBStateMachine
 //
 //  Created by Julian Krumow on 22.04.15.
-//  Copyright (c) 2014-2016 Julian Krumow. All rights reserved.
+//  Copyright (c) 2014-2017 Julian Krumow. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
