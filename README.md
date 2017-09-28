@@ -120,6 +120,31 @@ TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:aPayloadObject];
 
 The payload will be available in all action, guard, enter and exit blocks which are executed until the event is successfully handled.
 
+### Enumerating events
+
+If you do not want to write string contants for every event like this:
+
+```objc
+FOUNDATION_EXPORT NSString * const EventA;
+
+NSString * const EventA = @"EventA";
+```
+
+you can also create a special enumeration type `StateMachineEvents `:
+
+```objc
+typedef NS_ENUM(NSInteger, StateMachineEvents) {
+    EVENT_A,
+    EVENT_B
+};
+```
+
+And access them using a macro of the same name:
+
+```objc
+[stateMachine scheduleEventNamed:StateMachineEvents(EVENT_A) data:aPayloadObject];
+```
+
 #### Run-to-Completion
 
 Event processing follows the Run-to-Completion model to ensure that only one event will be handled at a time. A single RTC-step encapsulates the whole logic from evaluating the event to performing the transition to executing guards, actions, exit and enter blocks.

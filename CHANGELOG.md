@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+### 6.7.0
+
+- Add preprocessor macro to enumerate statemachin events
+
 ### 6.6.0
 
 - Add convenience setter for states on and TBSMSubState TBSMParallelState

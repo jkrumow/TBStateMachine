@@ -11,8 +11,11 @@
 
 SpecBegin(TBSMStateMachineSimple)
 
-NSString * const EVENT_A = @"DummyEventA";
-NSString * const EVENT_B = @"DummyEventA";
+typedef NS_ENUM(NSInteger, StateMachineEvents) {
+    EVENT_A,
+    EVENT_B
+};
+
 NSString * const EVENT_DATA_VALUE = @"DummyDataValue";
 
 __block NSOperationQueue *testQueue;
@@ -177,15 +180,15 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"creates an event object through convenienceMethod.", ^{
             
-            [a addHandlerForEvent:EVENT_A target:b];
-            [b addHandlerForEvent:EVENT_B target:c];
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A) target:b];
+            [b addHandlerForEvent:StateMachineEvents(EVENT_B) target:c];
             
             stateMachine.states = @[a, b, c];
             [stateMachine setUp:nil];
             
             waitUntil(^(DoneCallback done) {
-                [stateMachine scheduleEventNamed:EVENT_A data:EVENT_DATA_VALUE];
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_B data:nil] withCompletion:^{
+                [stateMachine scheduleEventNamed:StateMachineEvents(EVENT_A) data:EVENT_DATA_VALUE];
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:StateMachineEvents(EVENT_B) data:nil] withCompletion:^{
                     done();
                 }];
             });
@@ -198,7 +201,7 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"switches to the specified state.", ^{
             
-            [a addHandlerForEvent:EVENT_A target:b kind:TBSMTransitionExternal];
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A) target:b kind:TBSMTransitionExternal];
             
             stateMachine.states = @[a, b];
             [stateMachine setUp:nil];
@@ -206,7 +209,7 @@ describe(@"TBSMStateMachine", ^{
             expect(stateMachine.currentState).to.equal(a);
             
             waitUntil(^(DoneCallback done) {
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:StateMachineEvents(EVENT_A) data:nil] withCompletion:^{
                     done();
                 }];
             });
@@ -230,7 +233,7 @@ describe(@"TBSMStateMachine", ^{
                 [executionSequence appendString:@"-enterB"];
             };
             
-            [a addHandlerForEvent:EVENT_A
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A)
                            target:b
                              kind:TBSMTransitionExternal
                            action:^(id data) {
@@ -247,7 +250,7 @@ describe(@"TBSMStateMachine", ^{
             waitUntil(^(DoneCallback done) {
                 
                 // will enter state B
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:StateMachineEvents(EVENT_A) data:nil] withCompletion:^{
                     done();
                 }];
                 
@@ -260,7 +263,7 @@ describe(@"TBSMStateMachine", ^{
             
             __block BOOL didExecuteAction = NO;
             
-            [a addHandlerForEvent:EVENT_A
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A)
                            target:b
                              kind:TBSMTransitionExternal
                            action:^(id data) {
@@ -276,7 +279,7 @@ describe(@"TBSMStateMachine", ^{
             waitUntil(^(DoneCallback done) {
                 
                 // will not enter state B
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:StateMachineEvents(EVENT_A) data:nil] withCompletion:^{
                     done();
                 }];
             });
@@ -290,7 +293,7 @@ describe(@"TBSMStateMachine", ^{
             __block BOOL didExecuteActionA = NO;
             __block BOOL didExecuteActionB = NO;
             
-            [a addHandlerForEvent:EVENT_A
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A)
                            target:b
                              kind:TBSMTransitionExternal
                            action:^(id data) {
@@ -300,7 +303,7 @@ describe(@"TBSMStateMachine", ^{
                                 return NO;
                             }];
             
-            [a addHandlerForEvent:EVENT_A
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A)
                            target:b
                              kind:TBSMTransitionExternal
                            action:^(id data) {
@@ -316,7 +319,7 @@ describe(@"TBSMStateMachine", ^{
             waitUntil(^(DoneCallback done) {
                 
                 // will enter state B through second transition
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:StateMachineEvents(EVENT_A) data:nil] withCompletion:^{
                     done();
                 }];
             });
@@ -349,7 +352,7 @@ describe(@"TBSMStateMachine", ^{
                 stateDataExit = data;
             };
             
-            [a addHandlerForEvent:EVENT_A
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A)
                            target:b
                              kind:TBSMTransitionExternal
                            action:^(id data) {
@@ -371,7 +374,7 @@ describe(@"TBSMStateMachine", ^{
             waitUntil(^(DoneCallback done) {
                 
                 // enters state B
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:EVENT_DATA_VALUE] withCompletion:^{
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:StateMachineEvents(EVENT_A) data:EVENT_DATA_VALUE] withCompletion:^{
                     done();
                 }];
                 
@@ -395,7 +398,7 @@ describe(@"TBSMStateMachine", ^{
                 didExitStateA = YES;
             };
             
-            [a addHandlerForEvent:EVENT_A target:a kind:TBSMTransitionExternal];
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A) target:a kind:TBSMTransitionExternal];
             
             stateMachine.states = @[a, b];
             
@@ -405,7 +408,7 @@ describe(@"TBSMStateMachine", ^{
             
             waitUntil(^(DoneCallback done) {
                 
-                [stateMachine scheduleEvent:[TBSMEvent eventWithName:EVENT_A data:nil] withCompletion:^{
+                [stateMachine scheduleEvent:[TBSMEvent eventWithName:StateMachineEvents(EVENT_A) data:nil] withCompletion:^{
                     done();
                 }];
             });
@@ -443,19 +446,19 @@ describe(@"TBSMStateMachine", ^{
         
         it(@"posts a notification when performing an internal transition.", ^{
             
-            [a addHandlerForEvent:EVENT_A target:a kind:TBSMTransitionInternal];
+            [a addHandlerForEvent:StateMachineEvents(EVENT_A) target:a kind:TBSMTransitionInternal];
             
             stateMachine.states = @[a];
             [stateMachine setUp:nil];
             
             __block id payload = nil;
             waitUntil(^(DoneCallback done) {
-                [[NSNotificationCenter defaultCenter] addObserverForName:EVENT_A object:a queue:testQueue usingBlock:^(NSNotification *notification) {
+                [[NSNotificationCenter defaultCenter] addObserverForName:StateMachineEvents(EVENT_A) object:a queue:testQueue usingBlock:^(NSNotification *notification) {
                     payload = notification.userInfo[TBSMDataUserInfo];
                     done();
                 }];
                 
-                [stateMachine scheduleEventNamed:EVENT_A data:EVENT_DATA_VALUE];
+                [stateMachine scheduleEventNamed:StateMachineEvents(EVENT_A) data:EVENT_DATA_VALUE];
             });
             
             expect(payload).to.equal(EVENT_DATA_VALUE);
