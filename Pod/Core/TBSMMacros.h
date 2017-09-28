@@ -9,8 +9,8 @@
 #ifndef TBSMMacros_h
 #define TBSMMacros_h
 
-#define StateMachineEvents(name) \
-^(StateMachineEvents event) { \
+#define StateMachineEvent(name) \
+^(StateMachineEvent event) { \
 switch (event) { \
 case name: \
 default: \
