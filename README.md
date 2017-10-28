@@ -130,7 +130,21 @@ FOUNDATION_EXPORT NSString * const EventA;
 NSString * const EventA = @"EventA";
 ```
 
-you can also create a special enumeration type `StateMachineEvents `:
+you can use a struct:
+
+```objc
+FOUNDATION_EXPORT const struct StateMachineEvents {
+    __unsafe_unretained NSString *EVENT_A;
+    __unsafe_unretained NSString *EVENT_B;
+} StateMachineEvents;
+
+const struct StateMachineEvents StateMachineEvents = {
+    .EVENT_A = @"event_a",
+    .EVENT_B = @"event_b"
+};
+```
+
+or you can also create a special enumeration type `StateMachineEvents `:
 
 ```objc
 typedef NS_ENUM(NSInteger, StateMachineEvents) {
