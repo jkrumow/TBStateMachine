@@ -137,5 +137,8 @@ typedef void (^TBSMStateBlock)(id _Nullable data);
  */
 - (nullable NSArray<TBSMEventHandler *> *)eventHandlersForEvent:(TBSMEvent *)event;
 
+- (void)removeAllEventHandlers;
+
 @end
 NS_ASSUME_NONNULL_END
+
