@@ -1,5 +1,11 @@
 # TBStateMachine CHANGELOG
 
+### 6.7.1
+
+- Break up cyclic references between states on deallocation of TBSMStateMachine
+- set parentVertex on states when setting states on TBSMParallelState 
+- set parentVertex on states when setting states on TBSMSubState
+
 ### 6.7.0
 
 - Add preprocessor macro to enumerate statemachin events
