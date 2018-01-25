@@ -39,6 +39,12 @@ NSString * const TBSMDataUserInfo = @"data";
     return self;
 }
 
+- (void)removeAllEventHandlers
+{
+    [self.priv_eventHandlers removeAllObjects];
+    self.priv_eventHandlers = nil;
+}
+
 - (NSDictionary *)eventHandlers
 {
     return self.priv_eventHandlers.copy;

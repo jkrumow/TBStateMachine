@@ -35,6 +35,13 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [self.priv_states makeObjectsPerformSelector:@selector(removeAllEventHandlers)];
+    [self.priv_states removeAllObjects];
+    self.priv_states = nil;
+}
+
 - (NSArray *)states
 {
     return self.priv_states.copy;

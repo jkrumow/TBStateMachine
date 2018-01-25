@@ -75,6 +75,11 @@ typedef void (^TBSMStateBlock)(id _Nullable data);
 - (instancetype)initWithName:(NSString *)name;
 
 /**
+ * Removes all event handlers to break up all cyclic references between states.
+ */
+- (void)removeAllEventHandlers;
+
+/**
  *  Registers an event of a given name for transition to a specified target state.
  *  Defaults to external transition.
  *
