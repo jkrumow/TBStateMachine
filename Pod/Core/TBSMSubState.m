@@ -30,8 +30,9 @@
 - (void)setStates:(NSArray<__kindof TBSMState *> *)states
 {
     NSString *name = [self.name stringByAppendingString:@"SubMachine"];
-    self.stateMachine = [TBSMStateMachine stateMachineWithName:name];
-    self.stateMachine.states = states;
+    TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:name];
+    stateMachine.states = states;
+    [self setStateMachine:stateMachine];
 }
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
