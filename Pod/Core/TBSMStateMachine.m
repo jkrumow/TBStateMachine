@@ -93,6 +93,9 @@
     [self.scheduledEventsQueue cancelAllOperations];
     [self exit:self.currentState targetState:nil data:data];
     _currentState = nil;
+    [self.priv_states makeObjectsPerformSelector:@selector(removeAllEventHandlers)];
+    [self.priv_states removeAllObjects];
+    self.priv_states = nil;
 }
 
 #pragma mark - handling events
@@ -221,3 +224,4 @@
 }
 
 @end
+

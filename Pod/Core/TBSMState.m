@@ -122,6 +122,11 @@ NSString * const TBSMDataUserInfo = @"data";
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
 
+-(void)removeAllEventHandlers {
+    [self.priv_eventHandlers removeAllObjects];
+    self.priv_eventHandlers = nil;
+}
+
 #pragma mark - TBSMHierarchyVertex
 
 - (NSArray *)path
@@ -136,3 +141,4 @@ NSString * const TBSMDataUserInfo = @"data";
 }
 
 @end
+
