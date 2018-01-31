@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+### 6.7.2
+
+- add recursive cleanup for transition vertexes to prevent memory leaks
+
 ### 6.7.1
 
 - Break up cyclic references between states on deallocation of TBSMStateMachine
