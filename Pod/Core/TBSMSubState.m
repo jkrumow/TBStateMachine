@@ -35,6 +35,12 @@
     [self setStateMachine:stateMachine];
 }
 
+- (void)removeTransitionVertexes
+{
+    [super removeTransitionVertexes];
+    [self.stateMachine removeTransitionVertexes];
+}
+
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     if (self.stateMachine == nil) {

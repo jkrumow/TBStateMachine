@@ -35,11 +35,15 @@
     return self;
 }
 
+- (void)removeTransitionVertexes
+{
+    [self.priv_states makeObjectsPerformSelector:@selector(removeTransitionVertexes)];
+    [self.priv_states removeAllObjects];
+}
+
 - (void)dealloc
 {
-    [self.priv_states makeObjectsPerformSelector:@selector(removeAllEventHandlers)];
-    [self.priv_states removeAllObjects];
-    self.priv_states = nil;
+    [self removeTransitionVertexes];
 }
 
 - (NSArray *)states

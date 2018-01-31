@@ -62,6 +62,12 @@
     [self setStateMachines:stateMachines];
 }
 
+- (void)removeTransitionVertexes
+{
+    [super removeTransitionVertexes];
+    [self.priv_parallelStateMachines makeObjectsPerformSelector:@selector(removeTransitionVertexes)];
+}
+
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     [super enter:sourceState targetState:targetState data:data];

@@ -50,6 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setParentVertex:(nullable id<TBSMHierarchyVertex>)parentVertex;
 
 /**
+ * Removes all transition vertexes to break up possible cyclic references between vertexes.
+ */
+- (void)removeTransitionVertexes;
+
+/**
  *  Executes the enter block of the state.
  *
  *  If you overwrite this method you will need to call the super implementation.

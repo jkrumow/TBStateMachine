@@ -39,7 +39,7 @@ NSString * const TBSMDataUserInfo = @"data";
     return self;
 }
 
-- (void)removeAllEventHandlers
+- (void)removeTransitionVertexes
 {
     [self.priv_eventHandlers removeAllObjects];
     self.priv_eventHandlers = nil;
