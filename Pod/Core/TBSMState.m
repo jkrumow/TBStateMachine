@@ -74,23 +74,21 @@ NSString * const TBSMDataUserInfo = @"data";
         @throw [NSException tb_ambiguousTransitionAttributes:event source:self.name target:target.name];
     }
     TBSMEventHandler *eventHandler = [[TBSMEventHandler alloc] initWithName:event target:target kind:kind action:action guard:guard];
-    NSMutableArray *eventHandlers = self.priv_eventHandlers[event];
-    if (!eventHandlers) {
-        eventHandlers = NSMutableArray.new;
-        [self.priv_eventHandlers setObject:eventHandlers forKey:event];
+    if (!self.priv_eventHandlers[event]) {
+        self.priv_eventHandlers[event] = NSMutableArray.new;
     }
-    [eventHandlers addObject:eventHandler];
+    [self.priv_eventHandlers[event] addObject:eventHandler];
 }
 
 - (BOOL)hasHandlerForEvent:(TBSMEvent *)event
 {
-    return ([self.priv_eventHandlers objectForKey:event.name] != nil);
+    return (self.priv_eventHandlers[event.name] != nil);
 }
 
 - (NSArray *)eventHandlersForEvent:(TBSMEvent *)event
 {
     if ([self hasHandlerForEvent:event]) {
-        return [self.priv_eventHandlers objectForKey:event.name];
+        return self.priv_eventHandlers[event.name];
     }
     return nil;
 }
@@ -117,7 +115,7 @@ NSString * const TBSMDataUserInfo = @"data";
 {
     NSMutableDictionary *userInfo = NSMutableDictionary.new;
     if (data) {
-        [userInfo setObject:data forKey:TBSMDataUserInfo];
+        userInfo[TBSMDataUserInfo] = data;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }

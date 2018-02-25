@@ -121,33 +121,35 @@
 
 - (BOOL)handleEvent:(TBSMEvent *)event
 {
-    if (self.currentState) {
-        if ([self.currentState respondsToSelector:@selector(handleEvent:)]) {
-            if ([self.currentState performSelector:@selector(handleEvent:) withObject:event]) {
-                return YES;
-            }
+    if (self.currentState == nil) {
+        return NO;
+    }
+    
+    if ([self.currentState respondsToSelector:@selector(handleEvent:)]) {
+        if ([self.currentState performSelector:@selector(handleEvent:) withObject:event]) {
+            return YES;
         }
-        NSArray *eventHandlers = [self.currentState eventHandlersForEvent:event];
-        for (TBSMEventHandler *eventHandler in eventHandlers) {
-            
-            TBSMTransition *transition = nil;
-            if ([eventHandler.target isKindOfClass:[TBSMState class]]) {
-                transition = [[TBSMTransition alloc] initWithSourceState:self.currentState
-                                                             targetState:(TBSMState *)eventHandler.target
-                                                                    kind:eventHandler.kind
-                                                                  action:eventHandler.action
-                                                                   guard:eventHandler.guard
-                                                               eventName:event.name];
-            } else {
-                transition = [[TBSMCompoundTransition alloc] initWithSourceState:self.currentState
-                                                               targetPseudoState:(TBSMPseudoState *)eventHandler.target
-                                                                          action:eventHandler.action
-                                                                           guard:eventHandler.guard
-                                                                       eventName:event.name];
-            }
-            if ([transition performTransitionWithData:event.data]) {
-                return YES;
-            }
+    }
+    NSArray *eventHandlers = [self.currentState eventHandlersForEvent:event];
+    for (TBSMEventHandler *eventHandler in eventHandlers) {
+        
+        TBSMTransition *transition = nil;
+        if ([eventHandler.target isKindOfClass:[TBSMState class]]) {
+            transition = [[TBSMTransition alloc] initWithSourceState:self.currentState
+                                                         targetState:(TBSMState *)eventHandler.target
+                                                                kind:eventHandler.kind
+                                                              action:eventHandler.action
+                                                               guard:eventHandler.guard
+                                                           eventName:event.name];
+        } else {
+            transition = [[TBSMCompoundTransition alloc] initWithSourceState:self.currentState
+                                                           targetPseudoState:(TBSMPseudoState *)eventHandler.target
+                                                                      action:eventHandler.action
+                                                                       guard:eventHandler.guard
+                                                                   eventName:event.name];
+        }
+        if ([transition performTransitionWithData:event.data]) {
+            return YES;
         }
     }
     return NO;

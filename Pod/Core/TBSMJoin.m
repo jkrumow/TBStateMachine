@@ -53,14 +53,15 @@
 
 - (BOOL)joinSourceState:(TBSMState *)sourceState
 {
-    if ([self.joinedSourceStates containsObject:sourceState] == NO) {
-        [self.joinedSourceStates addObject:sourceState];
-        if ([self.joinedSourceStates isEqualToSet:[NSSet setWithArray:self.priv_sourceStates]]) {
-            [self.joinedSourceStates removeAllObjects];
-            return YES;
-        }
+    if ([self.joinedSourceStates containsObject:sourceState]) {
+        return NO;
     }
-    return NO;
+    [self.joinedSourceStates addObject:sourceState];
+    if ([self.joinedSourceStates isEqualToSet:[NSSet setWithArray:self.priv_sourceStates]] == NO) {
+        return NO;
+    }
+    [self.joinedSourceStates removeAllObjects];
+    return YES;
 }
 
 @end

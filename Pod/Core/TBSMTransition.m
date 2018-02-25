@@ -73,26 +73,26 @@
 
 - (BOOL)performTransitionWithData:(id)data
 {
-    if ([self canPerformTransitionWithData:data]) {
-        if (self.kind == TBSMTransitionInternal) {
-            if (self.action) {
-                self.action(data);
-            }
-            [self _postInternalTransitionActionNotificationWithData:data];
-        } else {
-            TBSMStateMachine *lca = [self findLeastCommonAncestor];
-            [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
-        }
-        return YES;
+    if ([self canPerformTransitionWithData:data] == NO) {
+        return NO;
     }
-    return NO;
+    if (self.kind == TBSMTransitionInternal) {
+        if (self.action) {
+            self.action(data);
+        }
+        [self _postInternalTransitionActionNotificationWithData:data];
+    } else {
+        TBSMStateMachine *lca = [self findLeastCommonAncestor];
+        [lca switchState:self.sourceState targetState:self.targetState action:self.action data:data];
+    }
+    return YES;
 }
 
 - (void)_postInternalTransitionActionNotificationWithData:(id)data
 {
     NSMutableDictionary *userInfo = NSMutableDictionary.new;
     if (data) {
-        [userInfo setObject:data forKey:TBSMDataUserInfo];
+        userInfo[TBSMDataUserInfo] = data;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:self.eventName object:self.targetState userInfo:userInfo];
 }
