@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+### 6.7.3
+
+- minor code cleanup
+
 ### 6.7.2
 
 - add recursive cleanup for transition vertexes to prevent memory leaks
