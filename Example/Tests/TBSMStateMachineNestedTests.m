@@ -859,7 +859,7 @@ describe(@"TBSMStateMachine", ^{
         });
         
         NSString *path = @"c/c2|1/c222";
-        TBSMState *state = [stateMachine resolvePath:path];
+        TBSMState *state = [stateMachine stateWithPath:path];
         expect(state.name).to.equal(@"c222");
     });
     
@@ -873,11 +873,19 @@ describe(@"TBSMStateMachine", ^{
         });
         
         NSString *path = @"c/c2/c222";
-        TBSMState *state = [stateMachine resolvePath:path];
+        TBSMState *state = [stateMachine stateWithPath:path];
         expect(state.name).to.beNil();
         
         path = @"c/c1/c222";
-        state = [stateMachine resolvePath:path];
+        state = [stateMachine stateWithPath:path];
+        expect(state.name).to.beNil();
+        
+        path = @"";
+        state = [stateMachine stateWithPath:path];
+        expect(state.name).to.beNil();
+        
+        path = nil;
+        state = [stateMachine stateWithPath:path];
         expect(state.name).to.beNil();
     });
 });

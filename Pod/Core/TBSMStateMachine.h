@@ -19,7 +19,6 @@
 #import "TBSMJoin.h"
 #import "TBSMJunction.h"
 #import "TBSMMacros.h"
-#import "TBSMState+Notifications.h"
 #import "NSException+TBStateMachine.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -134,6 +133,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param data         The payload data.
  */
 - (void)switchState:(nullable TBSMState *)sourceState targetStates:(NSArray<__kindof TBSMState *> *)targetStates region:(TBSMParallelState *)region action:(nullable TBSMActionBlock)action data:(nullable id)data;
+
+- (void)addObserver:(NSObject *)observer selector:(nonnull SEL)selector name:(nullable NSNotificationName)name path:(NSString *)path;
+- (void)removeObserver:(NSObject *)observer name:(nullable NSNotificationName)name path:(NSString *)path;
+- (TBSMState *)stateWithPath:(NSString *)path;
 
 @end
 NS_ASSUME_NONNULL_END
