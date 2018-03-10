@@ -858,7 +858,7 @@ describe(@"TBSMStateMachine", ^{
             }];
         });
         
-        NSString *path = @"c/c2|1/c222";
+        NSString *path = @"c/c2@1/c222";
         TBSMState *state = [stateMachine stateWithPath:path];
         expect(state.name).to.equal(@"c222");
     });

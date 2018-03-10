@@ -242,7 +242,7 @@
     
     NSArray *components = [path componentsSeparatedByString:@"/"];
     for (NSString *component in components) {
-        NSArray *elements = [component componentsSeparatedByString:@"|"];
+        NSArray *elements = [component componentsSeparatedByString:@"@"];
         NSString *name = elements.firstObject;
         NSString *count = elements.lastObject;
         
