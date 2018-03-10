@@ -14,10 +14,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT NSString * const TBSMStateDidEnterNotification;
-FOUNDATION_EXPORT NSString * const TBSMStateDidExitNotification;
-FOUNDATION_EXPORT NSString * const TBSMDataUserInfo;
-
 /**
  *  This type represents a block that is executed on entry and exit of a `TBSMState`.
  *

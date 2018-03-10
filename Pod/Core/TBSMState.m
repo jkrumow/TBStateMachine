@@ -7,12 +7,9 @@
 //
 
 #import "TBSMState.h"
+#import "TBSMState+Notifications.h"
 #import "NSException+TBStateMachine.h"
 #import "TBSMEventHandler.h"
-
-NSString * const TBSMStateDidEnterNotification = @"TBSMStateDidEnterNotification";
-NSString * const TBSMStateDidExitNotification = @"TBSMStateDidExitNotification";
-NSString * const TBSMDataUserInfo = @"data";
 
 @interface TBSMState ()
 @property (nonatomic, copy) NSString *name;
@@ -95,7 +92,7 @@ NSString * const TBSMDataUserInfo = @"data";
 
 - (void)enter:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
-    [self _postNotificationWithName:TBSMStateDidEnterNotification data:data];
+    [self tbsm_postNotificationWithName:TBSMStateDidEnterNotification data:data];
     
     if (_enterBlock) {
         _enterBlock(data);
@@ -104,20 +101,11 @@ NSString * const TBSMDataUserInfo = @"data";
 
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
-    [self _postNotificationWithName:TBSMStateDidExitNotification data:data];
+    [self tbsm_postNotificationWithName:TBSMStateDidExitNotification data:data];
     
     if (_exitBlock) {
         _exitBlock(data);
     }
-}
-
-- (void)_postNotificationWithName:(NSString *)name data:(id)data
-{
-    NSMutableDictionary *userInfo = NSMutableDictionary.new;
-    if (data) {
-        userInfo[TBSMDataUserInfo] = data;
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:name object:self userInfo:userInfo];
 }
 
 #pragma mark - TBSMHierarchyVertex
