@@ -213,6 +213,57 @@
     [self.currentState exit:sourceState targetState:targetState data:data];
 }
 
+- (void)addObserver:(NSObject *)observer selector:(nonnull SEL)selector name:(nullable NSNotificationName)name path:(NSString *)path
+{
+    TBSMState *state = [self stateWithPath:path];
+    [[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:name object:state];
+}
+
+- (void)removeObserver:(NSObject *)observer name:(nullable NSNotificationName)name path:(NSString *)path
+{
+    TBSMState *state = [self stateWithPath:path];
+    [[NSNotificationCenter defaultCenter] removeObserver:observer name:name object:state];
+}
+
+- (TBSMState *)_stateWithName:(NSString *)name
+{
+    for (TBSMState *state in self.states) {
+        if ([state.name isEqualToString:name]) {
+            return state;
+        }
+    }
+    return nil;
+}
+
+- (TBSMState *)stateWithPath:(NSString *)path
+{
+    TBSMStateMachine *statemachine = self;
+    TBSMState *state;
+    
+    NSArray *components = [path componentsSeparatedByString:@"/"];
+    for (NSString *component in components) {
+        NSArray *elements = [component componentsSeparatedByString:@"@"];
+        NSString *name = elements.firstObject;
+        NSString *region = elements.lastObject;
+        
+        state = [statemachine _stateWithName:name];
+        
+        if ([state isKindOfClass:TBSMSubState.class]) {
+            TBSMSubState *sub = (TBSMSubState *)state;
+            statemachine = sub.stateMachine;
+        }
+        if ([state isKindOfClass:TBSMParallelState.class]) {
+            if (region == nil) {
+                return nil;
+            }
+            NSInteger index = region.integerValue;
+            TBSMParallelState *par = (TBSMParallelState *)state;
+            statemachine = par.stateMachines[index];
+        }
+    }
+    return state;
+}
+
 #pragma mark - TBSMHierarchyVertex
 
 - (NSArray *)path

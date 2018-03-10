@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+### 6.8.0
+
+- add path scheme to locate states inside the hierarchy
+
 ### 6.7.3
 
 - minor code cleanup

@@ -848,6 +848,46 @@ describe(@"TBSMStateMachine", ^{
         expect(stateMachine.currentState).to.equal(c);
         expect(subStateMachineC.currentState).to.equal(c2);
     });
+    
+    it(@"resolves a path", ^{
+        
+        waitUntil(^(DoneCallback done) {
+            
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_15 data:nil] withCompletion:^{
+                done();
+            }];
+        });
+        
+        NSString *path = @"c/c2@1/c222";
+        TBSMState *state = [stateMachine stateWithPath:path];
+        expect(state.name).to.equal(@"c222");
+    });
+    
+    it(@"fails to resolve a path", ^{
+        
+        waitUntil(^(DoneCallback done) {
+            
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:transition_15 data:nil] withCompletion:^{
+                done();
+            }];
+        });
+        
+        NSString *path = @"c/c2/c222";
+        TBSMState *state = [stateMachine stateWithPath:path];
+        expect(state.name).to.beNil();
+        
+        path = @"c/c1/c222";
+        state = [stateMachine stateWithPath:path];
+        expect(state.name).to.beNil();
+        
+        path = @"";
+        state = [stateMachine stateWithPath:path];
+        expect(state.name).to.beNil();
+        
+        path = nil;
+        state = [stateMachine stateWithPath:path];
+        expect(state.name).to.beNil();
+    });
 });
 
 SpecEnd
