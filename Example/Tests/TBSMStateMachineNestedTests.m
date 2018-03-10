@@ -114,7 +114,7 @@ describe(@"TBSMStateMachine", ^{
         b322 = [TBSMState stateWithName:@"b322"];
         
         c = [TBSMSubState subStateWithName:@"c"];
-        c1 = [TBSMState stateWithName:@"c2"];
+        c1 = [TBSMState stateWithName:@"c1"];
         c2 = [TBSMParallelState parallelStateWithName:@"c2"];
         c211 = [TBSMState stateWithName:@"c211"];
         c212 = [TBSMState stateWithName:@"c212"];
