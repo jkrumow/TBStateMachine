@@ -61,7 +61,7 @@
         }
     }
     if (!lca) {
-        @throw [NSException tb_noLcaForTransition:self.name];
+        @throw [NSException tbsm_noLcaForTransition:self.name];
     }
     return lca;
 }

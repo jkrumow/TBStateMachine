@@ -26,7 +26,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_notOfTypeStateException:(id)object;
++ (NSException *)tbsm_notOfTypeStateException:(id)object;
 
 /**
  *  Thrown when a specified `TBSMState` instance does not exist in the state machine.
@@ -37,7 +37,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_nonExistingStateException:(NSString *)stateName;
++ (NSException *)tbsm_nonExistingStateException:(NSString *)stateName;
 
 /**
  *  Thrown when no initial state has been set on the state machine.
@@ -48,28 +48,28 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_noInitialStateException:(NSString *)stateMachineName;
++ (NSException *)tbsm_noInitialStateException:(NSString *)stateMachineName;
 
 /**
  *  Thrown when no name was given to a `TBSMState` instance.
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_noNameForStateException;
++ (NSException *)tbsm_noNameForStateException;
 
 /**
  *  Thrown when no name was given to a pseudo state instance.
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_noNameForPseudoStateException;
++ (NSException *)tbsm_noNameForPseudoStateException;
 
 /**
  *  Thrown when no name was given to a `TBSMEvent` instance.
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_noNameForEventException;
++ (NSException *)tbsm_noNameForEventException;
 
 /**
  *  Thrown when a given object is not of type `TBSMStateMachine`.
@@ -80,7 +80,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_notAStateMachineException:(id)object;
++ (NSException *)tbsm_notAStateMachineException:(id)object;
 
 /**
  *  Thrown when a `TBSMSubState` or `TBSMParallelState` was instanciated without a sub-machine instance.
@@ -89,7 +89,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_missingStateMachineException:(NSString *)stateMachineName;
++ (NSException *)tbsm_missingStateMachineException:(NSString *)stateMachineName;
 
 /**
  *  Thrown when no least common ancestor could be found for a given transition.
@@ -98,7 +98,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_noLcaForTransition:(NSString *)transitionName;
++ (NSException *)tbsm_noLcaForTransition:(NSString *)transitionName;
 
 /**
  *  Thrown when an event handler has been added with contradicting or missing transition attributes.
@@ -109,7 +109,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName source:(nullable NSString *)sourceState target:(nullable NSString *)targetState;
++ (NSException *)tbsm_ambiguousTransitionAttributes:(NSString *)eventName source:(nullable NSString *)sourceState target:(nullable NSString *)targetState;
 
 /**
  *  Thrown when a compound transition is not well contructed.
@@ -118,7 +118,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName;
++ (NSException *)tbsm_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName;
 
 /**
  *  Thrown when no outgoing path from a junction pseudo state could be determined.
@@ -127,7 +127,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_noOutgoingJunctionPathException:(NSString *)junctionName;
++ (NSException *)tbsm_noOutgoingJunctionPathException:(NSString *)junctionName;
 
 /**
  *  Thrown when an NSOperaionQueue has been set which is not serial.
@@ -136,7 +136,7 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  *
  *  @return The `NSException` instance.
  */
-+ (NSException *)tb_noSerialQueueException:(NSString *)queueName;
++ (NSException *)tbsm_noSerialQueueException:(NSString *)queueName;
 
 @end
 NS_ASSUME_NONNULL_END

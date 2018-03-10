@@ -27,67 +27,67 @@ static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue
 
 @implementation NSException (TBStateMachine)
 
-+ (NSException *)tb_notOfTypeStateException:(id)object
++ (NSException *)tbsm_notOfTypeStateException:(id)object
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNotOfTypeStateExceptionReason, object] userInfo:nil];
 }
 
-+ (NSException *)tb_nonExistingStateException:(NSString *)stateName
++ (NSException *)tbsm_nonExistingStateException:(NSString *)stateName
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNonExistingStateExceptionReason, stateName] userInfo:nil];
 }
 
-+ (NSException *)tb_noInitialStateException:(NSString *)stateMachineName
++ (NSException *)tbsm_noInitialStateException:(NSString *)stateMachineName
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoInitialStateExceptionReason, stateMachineName] userInfo:nil];
 }
 
-+ (NSException *)tb_noNameForStateException
++ (NSException *)tbsm_noNameForStateException
 {
     return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForStateExceptionReason userInfo:nil];
 }
 
-+ (NSException *)tb_noNameForPseudoStateException
++ (NSException *)tbsm_noNameForPseudoStateException
 {
     return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForPseudoStateExceptionReason userInfo:nil];
 }
 
-+ (NSException *)tb_noNameForEventException
++ (NSException *)tbsm_noNameForEventException
 {
     return [NSException exceptionWithName:TBSMException reason:TBSMNoNameForEventExceptionReason userInfo:nil];
 }
 
-+ (NSException *)tb_notAStateMachineException:(id)object
++ (NSException *)tbsm_notAStateMachineException:(id)object
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNotAStateMachineExceptionReason, object] userInfo:nil];
 }
 
-+ (NSException *)tb_missingStateMachineException:(NSString *)stateName
++ (NSException *)tbsm_missingStateMachineException:(NSString *)stateName
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMMissingStateMachineExceptionReason, stateName] userInfo:nil];
 }
 
-+ (NSException *)tb_noLcaForTransition:(NSString *)transitionName
++ (NSException *)tbsm_noLcaForTransition:(NSString *)transitionName
 {
 	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoLcaForTransitionExceptionReason, transitionName] userInfo:nil];
 }
 
-+ (NSException *)tb_ambiguousTransitionAttributes:(NSString *)eventName source:(NSString *)sourceState target:(NSString *)targetState
++ (NSException *)tbsm_ambiguousTransitionAttributes:(NSString *)eventName source:(NSString *)sourceState target:(NSString *)targetState
 {
 	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMAmbiguousTransitionAttributesReason, eventName, sourceState, targetState] userInfo:nil];
 }
 
-+ (NSException *)tb_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName
++ (NSException *)tbsm_ambiguousCompoundTransitionAttributes:(NSString *)pseudoStateName
 {
     return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMAmbiguousCompoundTransitionAttributesReason, pseudoStateName] userInfo:nil];
 }
 
-+ (NSException *)tb_noOutgoingJunctionPathException:(NSString *)junctionName
++ (NSException *)tbsm_noOutgoingJunctionPathException:(NSString *)junctionName
 {
 	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoOutgoingJunctionPathReason, junctionName] userInfo:nil];
 }
 
-+ (NSException *)tb_noSerialQueueException:(NSString *)queueName
++ (NSException *)tbsm_noSerialQueueException:(NSString *)queueName
 {
 	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoSerialQueueExceptionReason, queueName] userInfo:nil];
 }

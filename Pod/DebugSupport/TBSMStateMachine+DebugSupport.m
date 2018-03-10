@@ -54,29 +54,29 @@
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [TBSMDebugSwizzler swizzleMethod:@selector(scheduleEvent:) withMethod:@selector(tb_scheduleEvent:) onClass:[TBSMDebugStateMachine class]];
-        [TBSMDebugSwizzler swizzleMethod:@selector(handleEvent:) withMethod:@selector(tb_handleEvent:) onClass:[TBSMDebugStateMachine class]];
-        [TBSMDebugSwizzler swizzleMethod:@selector(setUp:) withMethod:@selector(tb_setUp:) onClass:[TBSMStateMachine class]];
-        [TBSMDebugSwizzler swizzleMethod:@selector(tearDown:) withMethod:@selector(tb_tearDown:) onClass:[TBSMStateMachine class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(scheduleEvent:) withMethod:@selector(tbsm_scheduleEvent:) onClass:[TBSMDebugStateMachine class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(handleEvent:) withMethod:@selector(tbsm_handleEvent:) onClass:[TBSMDebugStateMachine class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(setUp:) withMethod:@selector(tbsm_setUp:) onClass:[TBSMStateMachine class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(tearDown:) withMethod:@selector(tbsm_tearDown:) onClass:[TBSMStateMachine class]];
     });
 }
 
-- (void)tb_setUp:(id)data
+- (void)tbsm_setUp:(id)data
 {
     [[TBSMDebugLogger sharedInstance] log:@"[%@] setup data: %@", self.name, data];
-    [self tb_setUp:data];
+    [self tbsm_setUp:data];
 }
 
-- (void)tb_tearDown:(id)data
+- (void)tbsm_tearDown:(id)data
 {
     [[TBSMDebugLogger sharedInstance] log:@"[%@] teardown data: %@", self.name, data];
-    [self tb_tearDown:data];
+    [self tbsm_tearDown:data];
 }
 
-- (void)tb_scheduleEvent:(TBSMEvent *)event
+- (void)tbsm_scheduleEvent:(TBSMEvent *)event
 {
     [self.eventDebugQueue addObject:event];
-    [self tb_scheduleEvent:event];
+    [self tbsm_scheduleEvent:event];
 }
 
 - (void)scheduleEvent:(TBSMEvent *)event withCompletion:(TBSMDebugCompletionBlock)completion
@@ -85,12 +85,12 @@
     [self scheduleEvent:event];
 }
 
-- (BOOL)tb_handleEvent:(TBSMEvent *)event
+- (BOOL)tbsm_handleEvent:(TBSMEvent *)event
 {
     [[TBSMDebugLogger sharedInstance] log:@"[%@]: attempt to handle event '%@' data: %@", self.name, event.name, event.data];
     
     uint64_t startTime = mach_absolute_time();
-    BOOL hasHandledEvent = [self tb_handleEvent:event];
+    BOOL hasHandledEvent = [self tbsm_handleEvent:event];
     
     uint64_t endTime = mach_absolute_time() - startTime;
     NSTimeInterval timeInterval = endTime * self.millisecondsPerMachTime.doubleValue;

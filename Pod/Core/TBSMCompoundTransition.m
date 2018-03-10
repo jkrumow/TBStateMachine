@@ -113,7 +113,7 @@
 {
     for (TBSMState *state in states) {
         if (![state.path containsObject:region]) {
-            @throw [NSException tb_ambiguousCompoundTransitionAttributes:pseudoState.name];
+            @throw [NSException tbsm_ambiguousCompoundTransitionAttributes:pseudoState.name];
         }
     }
 }

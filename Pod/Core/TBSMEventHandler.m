@@ -15,7 +15,7 @@
 - (instancetype)initWithName:(NSString *)name target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForEventException];
+        @throw [NSException tbsm_noNameForEventException];
     }
     self = [super init];
     if (self) {

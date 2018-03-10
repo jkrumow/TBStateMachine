@@ -14,7 +14,7 @@
 - (instancetype)initWithName:(NSString *)name
 {
     if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForPseudoStateException];
+        @throw [NSException tbsm_noNameForPseudoStateException];
     }
     self = [super init];
     if (self) {

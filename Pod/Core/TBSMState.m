@@ -29,7 +29,7 @@ NSString * const TBSMDataUserInfo = @"data";
 - (instancetype)initWithName:(NSString *)name
 {
     if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForStateException];
+        @throw [NSException tbsm_noNameForStateException];
     }
     self = [super init];
     if (self) {
@@ -68,10 +68,10 @@ NSString * const TBSMDataUserInfo = @"data";
 - (void)addHandlerForEvent:(NSString *)event target:(id <TBSMTransitionVertex>)target kind:(TBSMTransitionKind)kind action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if (target == nil) {
-        @throw [NSException tb_ambiguousTransitionAttributes:event source:self.name target:target.name];
+        @throw [NSException tbsm_ambiguousTransitionAttributes:event source:self.name target:target.name];
     }
     if (kind == TBSMTransitionInternal && target != self) {
-        @throw [NSException tb_ambiguousTransitionAttributes:event source:self.name target:target.name];
+        @throw [NSException tbsm_ambiguousTransitionAttributes:event source:self.name target:target.name];
     }
     TBSMEventHandler *eventHandler = [[TBSMEventHandler alloc] initWithName:event target:target kind:kind action:action guard:guard];
     if (!self.priv_eventHandlers[event]) {

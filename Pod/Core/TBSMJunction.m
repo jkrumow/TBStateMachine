@@ -36,7 +36,7 @@
 - (void)addOutgoingPathWithTarget:(TBSMState *)target action:(TBSMActionBlock)action guard:(TBSMGuardBlock)guard
 {
     if (target == nil || guard == nil) {
-        @throw [NSException tb_ambiguousCompoundTransitionAttributes:self.name];
+        @throw [NSException tbsm_ambiguousCompoundTransitionAttributes:self.name];
     }
     TBSMJunctionPath *outgoingPath = [TBSMJunctionPath new];
     outgoingPath.targetState = target;
@@ -52,7 +52,7 @@
             return outgoingPath;
         }
     }
-    @throw [NSException tb_noOutgoingJunctionPathException:self.name];
+    @throw [NSException tbsm_noOutgoingJunctionPathException:self.name];
 }
 
 @end

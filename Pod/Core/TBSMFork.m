@@ -33,7 +33,7 @@
 - (void)setTargetStates:(NSArray *)targetStates inRegion:(TBSMParallelState *)region
 {
     if (targetStates == nil || targetStates.count == 0 || region == nil) {
-        @throw [NSException tb_ambiguousCompoundTransitionAttributes:self.name];
+        @throw [NSException tbsm_ambiguousCompoundTransitionAttributes:self.name];
     }
     _priv_targetStates = targetStates;
     _region = region;

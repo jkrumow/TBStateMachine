@@ -43,7 +43,7 @@
     
     for (TBSMStateMachine *stateMachine in stateMachines) {
         if (![stateMachine isKindOfClass:[TBSMStateMachine class]]) {
-            @throw ([NSException tb_notAStateMachineException:stateMachine]);
+            @throw ([NSException tbsm_notAStateMachineException:stateMachine]);
         }
         stateMachine.parentVertex = self;
         [self.priv_parallelStateMachines addObject:stateMachine];
@@ -73,7 +73,7 @@
     [super enter:sourceState targetState:targetState data:data];
     
     if (self.priv_parallelStateMachines.count == 0) {
-        @throw [NSException tb_missingStateMachineException:self.name];
+        @throw [NSException tbsm_missingStateMachineException:self.name];
     }
     for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
         if ([targetState.path containsObject:stateMachine]) {
@@ -89,7 +89,7 @@
     [super enter:sourceState targetState:region data:data];
     
     if (self.priv_parallelStateMachines.count == 0) {
-        @throw [NSException tb_missingStateMachineException:self.name];
+        @throw [NSException tbsm_missingStateMachineException:self.name];
     }
     for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
         BOOL isEntered = NO;
@@ -108,7 +108,7 @@
 - (void)exit:(TBSMState *)sourceState targetState:(TBSMState *)targetState data:(id)data
 {
     if (self.priv_parallelStateMachines.count == 0) {
-        @throw [NSException tb_missingStateMachineException:self.name];
+        @throw [NSException tbsm_missingStateMachineException:self.name];
     }
     for (TBSMStateMachine *stateMachine in self.priv_parallelStateMachines) {
         [stateMachine tearDown:data];

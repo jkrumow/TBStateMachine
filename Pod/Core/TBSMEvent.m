@@ -19,7 +19,7 @@
 - (instancetype)initWithName:(NSString *)name data:(id)data
 {
     if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForEventException];
+        @throw [NSException tbsm_noNameForEventException];
     }
     self = [super init];
     if (self) {

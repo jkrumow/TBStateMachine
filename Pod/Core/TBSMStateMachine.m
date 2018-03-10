@@ -24,7 +24,7 @@
 - (instancetype)initWithName:(NSString *)name
 {
     if (name == nil || [name isEqualToString:@""]) {
-        @throw [NSException tb_noNameForStateException];
+        @throw [NSException tbsm_noNameForStateException];
     }
     self = [super init];
     if (self) {
@@ -57,7 +57,7 @@
     
     for (id object in states) {
         if (![object isKindOfClass:[TBSMState class]])  {
-            @throw ([NSException tb_notOfTypeStateException:object]);
+            @throw ([NSException tbsm_notOfTypeStateException:object]);
         }
         TBSMState *state = object;
         [state setParentVertex:self];
@@ -71,7 +71,7 @@
 - (void)setInitialState:(TBSMState *)initialState
 {
     if (![self.priv_states containsObject:initialState]) {
-        @throw [NSException tb_nonExistingStateException:initialState.name];
+        @throw [NSException tbsm_nonExistingStateException:initialState.name];
     }
     _initialState = initialState;
 }
@@ -79,7 +79,7 @@
 - (void)setScheduledEventsQueue:(NSOperationQueue *)scheduledEventsQueue
 {
     if (scheduledEventsQueue.maxConcurrentOperationCount > 1) {
-        @throw [NSException tb_noSerialQueueException:scheduledEventsQueue.name];
+        @throw [NSException tbsm_noSerialQueueException:scheduledEventsQueue.name];
     }
     _scheduledEventsQueue = scheduledEventsQueue;
 }
@@ -87,7 +87,7 @@
 - (void)setUp:(id)data
 {
     if (!self.initialState) {
-        @throw [NSException tb_noInitialStateException:self.name];
+        @throw [NSException tbsm_noInitialStateException:self.name];
     }
     [self enter:nil targetState:self.initialState data:data];
 }

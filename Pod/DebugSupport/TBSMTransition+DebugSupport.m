@@ -18,11 +18,11 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        [TBSMDebugSwizzler swizzleMethod:@selector(canPerformTransitionWithData:) withMethod:@selector(tb_canPerformTransitionWithData:) onClass:[TBSMTransition class]];
+        [TBSMDebugSwizzler swizzleMethod:@selector(canPerformTransitionWithData:) withMethod:@selector(tbsm_canPerformTransitionWithData:) onClass:[TBSMTransition class]];
     });
 }
 
-- (BOOL)tb_canPerformTransitionWithData:(id)data
+- (BOOL)tbsm_canPerformTransitionWithData:(id)data
 {
     TBSMStateMachine *lca = nil;
     
@@ -33,7 +33,7 @@
         // swallow exception in case lca could not be found since we do not want to interfere with the running application.
     }
     
-    BOOL canPerform = [self tb_canPerformTransitionWithData:data];
+    BOOL canPerform = [self tbsm_canPerformTransitionWithData:data];
     
     if (canPerform) {
         [[TBSMDebugLogger sharedInstance] log:@"[%@] performing transition: %@ data: %@", lca.name, self.name, data];
