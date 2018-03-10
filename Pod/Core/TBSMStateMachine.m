@@ -244,7 +244,7 @@
     for (NSString *component in components) {
         NSArray *elements = [component componentsSeparatedByString:@"@"];
         NSString *name = elements.firstObject;
-        NSString *count = elements.lastObject;
+        NSString *region = elements.lastObject;
         
         state = [statemachine _stateWithName:name];
         
@@ -253,11 +253,11 @@
             statemachine = sub.stateMachine;
         }
         if ([state isKindOfClass:TBSMParallelState.class]) {
-            if (count == nil) {
+            if (region == nil) {
                 return nil;
             }
+            NSInteger index = region.integerValue;
             TBSMParallelState *par = (TBSMParallelState *)state;
-            NSUInteger index = count.integerValue;
             statemachine = par.stateMachines[index];
         }
     }
