@@ -24,6 +24,7 @@ static NSString * const TBSMAmbiguousTransitionAttributesReason = @"Ambiguous tr
 static NSString * const TBSMAmbiguousCompoundTransitionAttributesReason = @"Ambiguous compound transition attributes for pseudo state '%@'.";
 static NSString * const TBSMNoOutgoingJunctionPathReason = @"No outgoing path determined for junction '%@'.";
 static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue is not a serial queue '%@'.";
+static NSString * const TBSMInvalidPathExceptionReason = @"Invalid path: '%@'.";
 
 @implementation NSException (TBStateMachine)
 
@@ -90,6 +91,11 @@ static NSString * const TBSMNoSerialQueueExceptionReason = @"The specified queue
 + (NSException *)tbsm_noSerialQueueException:(NSString *)queueName
 {
 	return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMNoSerialQueueExceptionReason, queueName] userInfo:nil];
+}
+
++ (NSException *)tbsm_invalidPath:(NSString *)path
+{
+    return [NSException exceptionWithName:TBSMException reason:[NSString stringWithFormat:TBSMInvalidPathExceptionReason, path] userInfo:nil];
 }
 
 @end

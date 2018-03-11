@@ -254,12 +254,18 @@
         }
         if ([state isKindOfClass:TBSMParallelState.class]) {
             if (region == nil) {
-                return nil;
+                @throw [NSException tbsm_invalidPath:path];
             }
-            NSInteger index = region.integerValue;
             TBSMParallelState *par = (TBSMParallelState *)state;
+            NSInteger index = region.integerValue;
+            if (index < 0 || index >= par.stateMachines.count) {
+                @throw [NSException tbsm_invalidPath:path];
+            }
             statemachine = par.stateMachines[index];
         }
+    }
+    if (state == nil) {
+        @throw [NSException tbsm_invalidPath:path];
     }
     return state;
 }

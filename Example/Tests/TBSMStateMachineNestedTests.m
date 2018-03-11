@@ -858,8 +858,7 @@ describe(@"TBSMStateMachine", ^{
             }];
         });
         
-        NSString *path = @"c/c2@1/c222";
-        TBSMState *state = [stateMachine stateWithPath:path];
+        TBSMState *state = [stateMachine stateWithPath:@"c/c2@1/c222"];
         expect(state.name).to.equal(@"c222");
     });
     
@@ -872,21 +871,29 @@ describe(@"TBSMStateMachine", ^{
             }];
         });
         
-        NSString *path = @"c/c2/c222";
-        TBSMState *state = [stateMachine stateWithPath:path];
-        expect(state.name).to.beNil();
+        expect(^{
+            [stateMachine stateWithPath:@"c/c2/c222"];
+        }).to.raise(TBSMException);
         
-        path = @"c/c1/c222";
-        state = [stateMachine stateWithPath:path];
-        expect(state.name).to.beNil();
+        expect(^{
+            [stateMachine stateWithPath:@"c/c2@5/c222"];
+        }).to.raise(TBSMException);
         
-        path = @"";
-        state = [stateMachine stateWithPath:path];
-        expect(state.name).to.beNil();
+        expect(^{
+            [stateMachine stateWithPath:@"c/c2@-1/c222"];
+        }).to.raise(TBSMException);
         
-        path = nil;
-        state = [stateMachine stateWithPath:path];
-        expect(state.name).to.beNil();
+        expect(^{
+            [stateMachine stateWithPath:@"c/c1/c222"];
+        }).to.raise(TBSMException);
+        
+        expect(^{
+            [stateMachine stateWithPath:@"c/c1/c222/cFoobar"];
+        }).to.raise(TBSMException);
+        
+        expect(^{
+            [stateMachine stateWithPath:@""];
+        }).to.raise(TBSMException);
     });
 });
 

@@ -138,5 +138,14 @@ FOUNDATION_EXPORT NSString * const TBSMException;
  */
 + (NSException *)tbsm_noSerialQueueException:(NSString *)queueName;
 
+/**
+ *  Thrown when a specified path could not be resolved to an existing state.
+ *
+ *  @param path The path that coud not be resolved.
+ *
+ *  @return The `NSException` instance.
+ */
++ (NSException *)tbsm_invalidPath:(NSString *)path;
+
 @end
 NS_ASSUME_NONNULL_END
