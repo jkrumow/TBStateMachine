@@ -134,9 +134,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)switchState:(nullable TBSMState *)sourceState targetStates:(NSArray<__kindof TBSMState *> *)targetStates region:(TBSMParallelState *)region action:(nullable TBSMActionBlock)action data:(nullable id)data;
 
-- (void)addObserver:(NSObject *)observer selector:(nonnull SEL)selector name:(nullable NSNotificationName)name path:(NSString *)path;
-- (void)removeObserver:(NSObject *)observer name:(nullable NSNotificationName)name path:(NSString *)path;
 - (TBSMState *)stateWithPath:(NSString *)path;
+- (void)subscribeToEntryAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
+- (void)subscribeToExitAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
+- (void)subscribeToAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
+
+- (void)unsubscribeFromEntryAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
+- (void)unsubscribeFromExitAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
+- (void)unsubscribeFromAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
 
 @end
 NS_ASSUME_NONNULL_END

@@ -213,16 +213,40 @@
     [self.currentState exit:sourceState targetState:targetState data:data];
 }
 
-- (void)addObserver:(NSObject *)observer selector:(nonnull SEL)selector name:(nullable NSNotificationName)name path:(NSString *)path
+- (void)subscribeToEntryAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
 {
     TBSMState *state = [self stateWithPath:path];
-    [[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:name object:state];
+    [[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:TBSMStateDidEnterNotification object:state];
 }
 
-- (void)removeObserver:(NSObject *)observer name:(nullable NSNotificationName)name path:(NSString *)path
+- (void)subscribeToExitAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
 {
     TBSMState *state = [self stateWithPath:path];
-    [[NSNotificationCenter defaultCenter] removeObserver:observer name:name object:state];
+    [[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:TBSMStateDidExitNotification object:state];
+}
+
+- (void)subscribeToAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
+{
+    TBSMState *state = [self stateWithPath:path];
+    [[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:action object:state];
+}
+
+- (void)unsubscribeFromEntryAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
+{
+    TBSMState *state = [self stateWithPath:path];
+    [[NSNotificationCenter defaultCenter] removeObserver:observer name:TBSMStateDidEnterNotification object:state];
+}
+
+- (void)unsubscribeFromExitAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
+{
+    TBSMState *state = [self stateWithPath:path];
+    [[NSNotificationCenter defaultCenter] removeObserver:observer name:TBSMStateDidExitNotification object:state];
+}
+
+- (void)unsubscribeFromAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
+{
+    TBSMState *state = [self stateWithPath:path];
+    [[NSNotificationCenter defaultCenter] removeObserver:observer name:action object:state];
 }
 
 - (TBSMState *)_stateWithName:(NSString *)name
