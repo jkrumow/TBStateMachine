@@ -231,19 +231,19 @@
     [[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:action object:state];
 }
 
-- (void)unsubscribeFromEntryAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
+- (void)unsubscribeFromEntryAtPath:(NSString *)path forObserver:(NSObject *)observer
 {
     TBSMState *state = [self stateWithPath:path];
     [[NSNotificationCenter defaultCenter] removeObserver:observer name:TBSMStateDidEnterNotification object:state];
 }
 
-- (void)unsubscribeFromExitAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
+- (void)unsubscribeFromExitAtPath:(NSString *)path forObserver:(NSObject *)observer
 {
     TBSMState *state = [self stateWithPath:path];
     [[NSNotificationCenter defaultCenter] removeObserver:observer name:TBSMStateDidExitNotification object:state];
 }
 
-- (void)unsubscribeFromAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector
+- (void)unsubscribeFromAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer
 {
     TBSMState *state = [self stateWithPath:path];
     [[NSNotificationCenter defaultCenter] removeObserver:observer name:action object:state];

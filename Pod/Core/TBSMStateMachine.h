@@ -139,9 +139,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)subscribeToExitAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
 - (void)subscribeToAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
 
-- (void)unsubscribeFromEntryAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
-- (void)unsubscribeFromExitAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
-- (void)unsubscribeFromAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
+- (void)unsubscribeFromEntryAtPath:(NSString *)path forObserver:(NSObject *)observer;
+- (void)unsubscribeFromExitAtPath:(NSString *)path forObserver:(NSObject *)observer;
+- (void)unsubscribeFromAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer;
 
 @end
 NS_ASSUME_NONNULL_END
