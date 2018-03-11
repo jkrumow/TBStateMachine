@@ -243,7 +243,8 @@ The notification's `userInfo` contains:
 To receive a notification:
 
 ```objc
-[self.stateMachine addObserver:self selector:@selector(myHandler:) name:TBSMStateDidEnterNotification path:@"c/c2@1/c222"];
+[self.stateMachine subscribeToEntryAtPath:@"c/c2@1/c222" forObserver:self selector:@selector(myHandler:)];
+[self.stateMachine subscribeToExitAtPath:@"c/c2@1/c222" forObserver:self selector:@selector(myHandler:)];
 
 - (void)myHandler:(NSNotification *)notification
 {
@@ -254,18 +255,18 @@ To receive a notification:
 `TBSMState` also posts an `NSNotification` with the event name when an internal transition has been performed:
 
 ```objc
-[self.stateMachine addObserver:self selector:@selector(myHandler:) name:@"EventA" path:@"c/c2@1/c222"];
+[self.stateMachine subscribeToAction:@"eventA" atPath:@"a/a1" forObserver:self selector:@selector(myHandler:)];
 ```
 
 To locate a specified state inside the hierarchy you can use the path scheme seen above. The path consists of names of the states separated by slashes:
 
-```objc
+```
 b/b2/b21
 ```
 
 In orthogonal regions an `@` sign and an index is added to select the particular child region:
 
-```objc
+```
 c/c2@1/c222
 ```
 
