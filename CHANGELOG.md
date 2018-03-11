@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+### 6.9.0
+
+- add methods to subscribe and unsubscribe to notifications
+
 ### 6.8.0
 
 - add path scheme to locate states inside the hierarchy
