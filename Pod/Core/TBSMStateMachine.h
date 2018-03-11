@@ -134,13 +134,80 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)switchState:(nullable TBSMState *)sourceState targetStates:(NSArray<__kindof TBSMState *> *)targetStates region:(TBSMParallelState *)region action:(nullable TBSMActionBlock)action data:(nullable id)data;
 
+/**
+ * Returns the state at the specified path.
+ *
+ * Throws `TBSMException` if state could not be found.
+ *
+ * @param path The specified path
+ *
+ * @return The specified state.
+ */
 - (TBSMState *)stateWithPath:(NSString *)path;
+
+/**
+ * Subscribe to a `TBSMStateDidEnterNotification` of the state at the specified path.
+ *
+ * Throws `TBSMException` if state could not be found.
+ *
+ * @param path     The path of the state to subscribe to.
+ * @param observer The observer to notify.
+ * @param selector The selector to execute when receiving the notification.
+ */
 - (void)subscribeToEntryAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
+
+/**
+ * Subscribe to a `TBSMStateDidExitNotification` of the state at the specified path.
+ *
+ * Throws `TBSMException` if state could not be found.
+ *
+ * @param path     The path of the state to subscribe to.
+ * @param observer The observer to notify.
+ * @param selector The selector to execute when receiving the notification.
+ */
 - (void)subscribeToExitAtPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
+
+/**
+ * Subscribe to an action of an internal transition of the state at the specified path.
+ *
+ * Throws `TBSMException` if state could not be found.
+ *
+ * @param action   The name of the internal transition.
+ * @param path     The path of the state to subscribe to.
+ * @param observer The observer to notify.
+ * @param selector The selector to execute when receiving the notification.
+ */
 - (void)subscribeToAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer selector:(nonnull SEL)selector;
 
+/**
+ * Unsubscribe from a `TBSMStateDidEnterNotification` of the state at the specified path.
+ *
+ * Throws `TBSMException` if state could not be found.
+ *
+ * @param path     The path of the state to unsubscribe from.
+ * @param observer The observer to notify.
+ */
 - (void)unsubscribeFromEntryAtPath:(NSString *)path forObserver:(NSObject *)observer;
+
+/**
+ * Unsubscribe from a `TBSMStateDidExitNotification` of the state at the specified path.
+ *
+ * Throws `TBSMException` if state could not be found.
+ *
+ * @param path     The path of the state to unsubscribe from.
+ * @param observer The observer to notify.
+ */
 - (void)unsubscribeFromExitAtPath:(NSString *)path forObserver:(NSObject *)observer;
+
+/**
+ * Unsubscribe from an action of an internal transition of the state at the specified path.
+ *
+ * Throws `TBSMException` if state could not be found.
+ *
+ * @param action   The name of the internal transition.
+ * @param path     The path of the state to unsubscribe from.
+ * @param observer The observer to notify.
+ */
 - (void)unsubscribeFromAction:(NSString *)action atPath:(NSString *)path forObserver:(NSObject *)observer;
 
 @end
