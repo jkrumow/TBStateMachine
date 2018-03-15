@@ -49,12 +49,12 @@ pod 'TBStateMachine'
 Create a state, set enter and exit blocks:
 
 ```objc
-TBSMState *stateA = [TBSMState stateWithName:@"StateA"];
-stateA.enterBlock = ^(id data) {
+TBSMState *a = [TBSMState stateWithName:@"a"];
+a.enterBlock = ^(id data) {
 
 };
     
-stateA.exitBlock = ^(id data) {
+a.exitBlock = ^(id data) {
 
 };
 ```
@@ -62,14 +62,14 @@ stateA.exitBlock = ^(id data) {
 Create a state machine:
 
 ```objc
-TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"Main"];
+TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"main"];
 ```
 
 Add states and set state machine up. The state machine will always set the first state in the given array as the initial state unless you set the initial state explicitly:
 
 ```objc
-stateMachine.states = @[stateA, stateB, ...];
-stateMachine.initialState = stateB;
+stateMachine.states = @[a, b, ...];
+stateMachine.initialState = a;
 [stateMachine setUp:nil];
 ```
 
@@ -78,7 +78,7 @@ stateMachine.initialState = stateB;
 You can add event handlers which trigger transitions to specified target states:
 
 ```objc
-[stateA addHandlerForEvent:@"EventA" target:stateB];
+[a addHandlerForEvent:@"transition_1" target:b];
 ```
 
 You can also add event handlers with additional action and guard blocks:
@@ -94,7 +94,7 @@ TBSMGuardBlock guard = ^BOOL(id data) {
     return YES;
 };
 
-[stateA addHandlerForEvent:@"EventA" target:stateB kind:TBSMTransitionExternal action:action guard:guard];
+[a addHandlerForEvent:@"transition_1" target:b kind:TBSMTransitionExternal action:action guard:guard];
 ```
 
 If you register multiple handlers for the same event the guard blocks decide which transition will be fired.
@@ -114,7 +114,7 @@ TBSMTransitionLocal
 To schedule the event call `scheduleEvent:` and pass the specified `TBSMEvent` instance and (optionally) an object as payload:
 
 ```objc
-TBSMEvent *event = [TBSMEvent eventWithName:@"EventA" data:aPayloadObject];
+TBSMEvent *event = [TBSMEvent eventWithName:@"transition_1" data:aPayloadObject];
 [stateMachine scheduleEvent:event];
 ```
 
@@ -125,22 +125,22 @@ The payload will be available in all action, guard, enter and exit blocks which 
 If you do not want to write string contants for every event like this:
 
 ```objc
-FOUNDATION_EXPORT NSString * const EventA;
+FOUNDATION_EXPORT NSString * const Transition_1;
 
-NSString * const EventA = @"EventA";
+NSString * const Transition_1 = @"transition_1";
 ```
 
 you can use a struct:
 
 ```objc
 FOUNDATION_EXPORT const struct StateMachineEvents {
-    __unsafe_unretained NSString *EVENT_A;
-    __unsafe_unretained NSString *EVENT_B;
+    __unsafe_unretained NSString *Transition_1;
+    __unsafe_unretained NSString *Transition_2;
 } StateMachineEvents;
 
 const struct StateMachineEvents StateMachineEvents = {
-    .EVENT_A = @"event_a",
-    .EVENT_B = @"event_b"
+    .Transition_1 = @"transition_1",
+    .Transition_2 = @"transition_2"
 };
 ```
 
@@ -148,15 +148,15 @@ or you can also create a special enumeration type `StateMachineEvents `:
 
 ```objc
 typedef NS_ENUM(NSInteger, StateMachineEvents) {
-    EVENT_A,
-    EVENT_B
+    Transition_1,
+    Transition_2
 };
 ```
 
 And access them using a macro of the same name:
 
 ```objc
-[stateMachine scheduleEventNamed:StateMachineEvents(EVENT_A) data:aPayloadObject];
+[stateMachine scheduleEventNamed:StateMachineEvents(Transition_1) data:aPayloadObject];
 ```
 
 #### Run-to-Completion
@@ -170,10 +170,8 @@ Events will be queued and processed one after the other.
 `TBSMState` instances can also be nested by using `TBSMSubState`:
 
 ```objc
-TBSMSubState *subState = [TBSMSubState subStateWithName:@"SubState"];
-substate.stateMachine = subMachine;
-
-stateMachine.states = @[stateA, stateB, subState];
+TBSMSubState *b2 = [TBSMSubState subStateWithName:@"b2"];
+b2.states = @[b21, b22];
 ```
 
 You can also register events, add enter and exit blocks on `TBSMSubState`, since it is a subtype of `TBSMState`.
@@ -183,10 +181,8 @@ You can also register events, add enter and exit blocks on `TBSMSubState`, since
 To build orthogonal regions you will use `TBSMParallelState`:
 
 ```objc
-TBSMParallelState *parallel = [TBSMParallelState parallelStateWithName:@"ParallelState"];
-parallel.stateMachines = @[subMachineA, subMachineB, subMachineC];
-    
-stateMachine.states = @[stateA, stateB, parallel];
+TBSMParallelState *b3 = [TBSMParallelState parallelStateWithName:@"b3"];
+b3.states = @[@[b311, b312], @[b321, b322]];
 ```
 
 ### Pseudo States
@@ -197,31 +193,29 @@ TBStateMachine supports fork and join pseudo states to construct compound transi
 
 ```objc
 TBSMFork *fork = [TBSMFork forkWithName:@"fork"];
-[stateA addHandlerForEvent:@"EventA" target:fork];
-[fork setTargetStates:@[stateB, stateC] inRegion:parallel];
+[a addHandlerForEvent:@"transition_15" target:fork];
+[fork setTargetStates:@[c212, c222] inRegion:c2];
 ```
 
 #### Join
 
 ```objc
 TBSMJoin *join = [TBSMJoin joinWithName:@"join"];
-[stateA addHandlerForEvent:@"EventA" target:join];
-[stateB addHandlerForEvent:@"EventB" target:join];
-[join setSourceStates:@[stateA, stateB] inRegion:parallel target:stateC];
+[c212 addHandlerForEvent:@"transition_16" target:join];
+[c222 addHandlerForEvent:@"transition_17" target:join];
+[join setSourceStates:@[c212, c222] inRegion:c2 target:b];
 ```
 
 #### Junction
 
 ```objc
 TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
-[stateA addHandlerForEvent:@"EventA" target:junction];
-[junction addOutgoingPathWithTarget:stateB action:nil guard:^BOOL(id data) {
-    
-    return // ...
+[a addHandlerForEvent:@"transition_18" target:junction];
+[junction addOutgoingPathWithTarget:b1 action:nil guard:^BOOL(id data) {
+    return (data[@"goB1"]);
 }];
-[junction addOutgoingPathWithTarget:stateC action:nil guard:^BOOL(id data) {
-    
-    return // ...
+[junction addOutgoingPathWithTarget:c2 action:nil guard:^BOOL(id data) {
+    return (data[@"goC2"]);
 }];
 ```
 
@@ -255,7 +249,7 @@ To receive a notification:
 `TBSMState` also posts an `NSNotification` with the event name when an internal transition has been performed:
 
 ```objc
-[self.stateMachine subscribeToAction:@"eventA" atPath:@"a/a1" forObserver:self selector:@selector(myHandler:)];
+[self.stateMachine subscribeToAction:@"transition_10" atPath:@"a/a1" forObserver:self selector:@selector(myHandler:)];
 ```
 
 To locate a specified state inside the hierarchy you can use the path scheme seen above. The path consists of names of the states separated by slashes:
@@ -304,16 +298,18 @@ Then include `TBSMDebugger.h` to the debug the state machine **at the top of the
 The statemachine will then output a log message for every event, transition, setup, teardown, enter and exit including the duration of the performed Run-to-Completion step:
 
 ```
-[Main]: attempt to handle event 'EventA' data: 12345
-[stateA] will handle event 'EventA' data: 12345
+[Main]: attempt to handle event 'transition_4' data: 12345
+[stateA] will handle event 'transition_4' data: 12345
 [Main] performing transition: stateA --> stateCc data: 12345
-    Exit 'stateB' data: 12345
-    Enter 'stateC' data: 12345
-    Enter 'stateCc' data: 12345
+    Exit 'a3' data: 12345
+    Exit 'a' data: 12345
+    Enter 'b' data: 12345
+    Enter 'b2' data: 12345
+    Enter 'b21' data: 12345
 [Main]: run-to-completion step took 1.15 milliseconds
 [Main]: remaining events in queue: 1
 [Main]: (
-    EventB
+    transition_8
 )
 ```
 
@@ -325,9 +321,11 @@ NSLog(@"%@", [[TBSMDebugger sharedInstance] activeStateConfiguration]);
 
 ```
 Main
-    stateC
-        subMachineC
-            stateCc
+    b
+        bSubMachine
+            b2
+            	b2Submachine
+            		b21
 ```
 
 ## Development Setup
