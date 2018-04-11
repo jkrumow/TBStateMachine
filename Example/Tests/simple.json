@@ -1,0 +1,38 @@
+{
+  "name": "main",
+  "states": [
+    {
+      "name": "a",
+      "type": "state"
+    },
+    {
+      "name": "b",
+      "type": "state"
+    },
+    {
+      "name": "c",
+      "type": "state"
+    }
+  ],
+  "transitions": [
+    {
+      "kind": "external",
+      "name": "aTOb",
+      "source": "a",
+      "target": "b"
+    },
+    {
+      "kind": "external",
+      "name": "bTOc",
+      "source": "b",
+      "target": "c"
+    },
+    {
+      "kind": "external",
+      "name": "cTOa",
+      "source": "c",
+      "target": "a"
+    }
+  ],
+  "type": "statemachine"
+}

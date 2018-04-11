@@ -19,6 +19,7 @@
 #import "TBSMJoin.h"
 #import "TBSMJunction.h"
 #import "TBSMMacros.h"
+#import "TBSMStateMachineBuilder.h"
 #import "NSException+TBStateMachine.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -47,6 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  The current state the state machine resides in. Set to be nil before -setUp: and after -tearDown: being called.
  */
 @property (nonatomic, strong, readonly, nullable) TBSMState *currentState;
+
++ (instancetype)buildFromFile:(NSString *)file;
 
 /**
  *  Creates a `TBSMStateMachine` instance from a given name.
