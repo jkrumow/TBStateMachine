@@ -121,45 +121,50 @@
 
 + (void)configureForkTransition:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
 {
+    
+    NSString *name = data[@"name"];
+    NSArray *vertices = data[@"vertices"];
     NSDictionary *pseudoState = data[@"pseudo_state"];
-    NSArray *sourceData = data[@"sources"];
-    NSArray *targetData = data[@"targets"];
-    NSString *regionData = data[@"region"];
+    NSString *regionPath = pseudoState[@"region"];
     
-    TBSMState *source = [stateMachine stateWithPath:sourceData.firstObject];
-    TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:regionData];
+    TBSMFork *fork = [TBSMFork forkWithName:pseudoState[@"name"]];
+    TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:regionPath];
     
+    __block NSString *sourcePath;
     NSMutableArray *targets = [NSMutableArray new];
-    [targetData enumerateObjectsUsingBlock:^(NSString * _Nonnull path, NSUInteger idx, BOOL * _Nonnull stop) {
+    [vertices enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull entry, NSUInteger idx, BOOL * _Nonnull stop) {
+        sourcePath = entry[@"source"];
+        NSString *path = entry[@"target"];
         TBSMState *target = [stateMachine stateWithPath:path];
         [targets addObject:target];
     }];
     
-    TBSMFork *fork = [TBSMFork forkWithName:pseudoState[@"name"]];
-    [source addHandlerForEvent:data[@"name"] target:fork];
+    TBSMState *source = [stateMachine stateWithPath:sourcePath];
+    [source addHandlerForEvent:name target:fork];
     [fork setTargetStates:targets inRegion:region];
 }
 
 + (void)configureJoinTransition:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
 {
     NSDictionary *pseudoState = data[@"pseudo_state"];
-    NSArray *sourceData = data[@"sources"];
-    NSArray *targetData = data[@"targets"];
-    NSString *regionData = data[@"region"];
+    NSArray *vertices = data[@"vertices"];
+    NSString *regionPath = pseudoState[@"region"];
     
+    TBSMJoin *join = [TBSMJoin joinWithName:pseudoState[@"name"]];
+    TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:regionPath];
+    
+    __block NSString *targetPath;
     NSMutableArray *sources = [NSMutableArray new];
-    [sourceData enumerateObjectsUsingBlock:^(NSString * _Nonnull path, NSUInteger idx, BOOL * _Nonnull stop) {
+    [vertices enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull entry, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *vertexName = entry[@"name"];
+        targetPath = entry[@"target"];
+        NSString *path = entry[@"source"];
         TBSMState *source = [stateMachine stateWithPath:path];
+        [source addHandlerForEvent:vertexName target:join];
         [sources addObject:source];
     }];
-    TBSMState *target = [stateMachine stateWithPath:targetData.firstObject];
     
-    TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:regionData];
-    TBSMJoin *join = [TBSMJoin joinWithName:pseudoState[@"name"]];
-    
-    [sources enumerateObjectsUsingBlock:^(TBSMState * _Nonnull source, NSUInteger idx, BOOL * _Nonnull stop) {
-        [source addHandlerForEvent:data[@"name"] target:join];
-    }];
+    TBSMState *target = [stateMachine stateWithPath:targetPath];
     [join setSourceStates:sources inRegion:region target:target];
 }
 

@@ -117,7 +117,8 @@ describe(@"TBSMStateMachineBuilder", ^{
         
         waitUntil(^(DoneCallback done) {
             [stateMachine scheduleEventNamed:@"forkTOb" data:nil];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"joinTOc" data:nil] withCompletion:^{
+            [stateMachine scheduleEventNamed:@"b11ToJoin" data:nil];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b21ToJoin" data:nil] withCompletion:^{
                 done();
             }];
         });
