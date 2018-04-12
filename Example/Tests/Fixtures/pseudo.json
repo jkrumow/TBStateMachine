@@ -51,32 +51,30 @@
       "target": "a/a2"
     },
     {
-      "type": "simple",
-      "kind": "external",
-      "name": "a1TOb",
+      "type": "fork",
+      "name": "forkTOb",
       "source": "a/a1",
-      "target": "b"
+      "fork": {
+        "name": "fork_1"
+      },
+      "region": "b",
+      "targets": [
+        "b@0/b11",
+        "b@1/b21"
+      ]
     },
     {
-      "type": "simple",
-      "kind": "external",
-      "name": "b11TOc",
-      "source": "b@0/b11",
+      "type": "join",
+      "name": "joinTOc",
+      "sources": [
+        "b@0/b11",
+        "b@1/b21"
+      ],
+      "join": {
+        "name": "join_1"
+      },
+      "region": "b",
       "target": "c"
-    },
-    {
-      "type": "simple",
-      "kind": "internal",
-      "name": "cInternal",
-      "source": "c",
-      "target": "c"
-    },
-    {
-      "type": "simple",
-      "kind": "local",
-      "name": "aLocal",
-      "source": "a",
-      "target": "a/a1"
     }
   ],
   "type": "statemachine"
