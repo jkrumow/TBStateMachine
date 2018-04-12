@@ -45,8 +45,14 @@
   "transitions": [
     {
       "kind": "external",
-      "name": "aTOb",
-      "source": "a",
+      "name": "a1TOa2",
+      "source": "a/a1",
+      "target": "a/a2"
+    },
+    {
+      "kind": "external",
+      "name": "a2TOb",
+      "source": "a/a2",
       "target": "b"
     },
     {
@@ -72,6 +78,18 @@
       "name": "b22TOc",
       "source": "b@1/b22",
       "target": "c"
+    },
+    {
+      "kind": "internal",
+      "name": "a1internal",
+      "source": "a/a1",
+      "target": "a/a1"
+    },
+    {
+      "kind": "local",
+      "name": "aLocal",
+      "source": "a",
+      "target": "a/a1"
     }
   ],
   "type": "statemachine"

@@ -84,9 +84,17 @@
 {
     NSArray *transitionConfigurations = data[@"transitions"];
     [transitionConfigurations enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull item, NSUInteger index, BOOL * _Nonnull stop) {
+        NSString *kindData = data[@"kind"];
+        TBSMTransitionKind kind = TBSMTransitionExternal;
+        if ([kindData isEqualToString:@"internal"]) {
+            kind = TBSMTransitionInternal;
+        }
+        if ([kindData isEqualToString:@"local"]) {
+            kind = TBSMTransitionLocal;
+        }
         TBSMState *source = [stateMachine stateWithPath:item[@"source"]];
         TBSMState *target = [stateMachine stateWithPath:item[@"target"]];
-        [source addHandlerForEvent:item[@"name"] target:target];
+        [source addHandlerForEvent:item[@"name"] target:target kind:kind];
     }];
 }
 

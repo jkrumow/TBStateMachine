@@ -80,9 +80,8 @@ describe(@"TBSMStateMachineBuilder", ^{
         [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine setUp:nil];
-            
-            [stateMachine scheduleEventNamed:@"a1TOb22" data:nil];
+            [stateMachine scheduleEventNamed:@"a1TOa2" data:nil];
+            [stateMachine scheduleEventNamed:@"a2TOb" data:nil];
             [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b22TOc" data:nil] withCompletion:^{
                 done();
             }];
