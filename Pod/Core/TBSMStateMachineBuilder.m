@@ -13,10 +13,8 @@
 + (TBSMStateMachine *)buildFromFile:(NSString *)file
 {
     NSDictionary *data = [self loadFile:file];
-    NSString *name = data[@"name"];
-    TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:name];
+    TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:data[@"name"]];
     stateMachine.states = [self buildStates:data[@"states"]];
-    
     [self configureTransitions:data forStateMachine:stateMachine];
     return stateMachine;
 }
@@ -121,11 +119,10 @@
 
 + (void)configureForkTransition:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
 {
-    
     NSString *name = data[@"name"];
-    NSArray *vertices = data[@"vertices"];
     NSDictionary *pseudoState = data[@"pseudo_state"];
     NSString *regionPath = pseudoState[@"region"];
+    NSArray *vertices = data[@"vertices"];
     
     TBSMFork *fork = [TBSMFork forkWithName:pseudoState[@"name"]];
     TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:regionPath];
@@ -147,8 +144,8 @@
 + (void)configureJoinTransition:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
 {
     NSDictionary *pseudoState = data[@"pseudo_state"];
-    NSArray *vertices = data[@"vertices"];
     NSString *regionPath = pseudoState[@"region"];
+    NSArray *vertices = data[@"vertices"];
     
     TBSMJoin *join = [TBSMJoin joinWithName:pseudoState[@"name"]];
     TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:regionPath];
