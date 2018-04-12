@@ -15,7 +15,7 @@
     NSDictionary *data = [self loadFile:file];
     NSString *name = data[@"name"];
     TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:name];
-    stateMachine.states = [self configureStates:data];
+    stateMachine.states = [self buildStates:data[@"states"]];
     
     [self configureTransitions:data forStatemachine:stateMachine];
     return stateMachine;
@@ -35,15 +35,49 @@
     return data;
 }
 
-+ (NSArray *)configureStates:(NSDictionary *)data
++ (NSArray *)buildStates:(NSArray *)data
 {
     NSMutableArray *states = [NSMutableArray new];
-    NSArray *stateConfigurations = data[@"states"];
-    [stateConfigurations enumerateObjectsUsingBlock:^(NSDictionary   * _Nonnull entry, NSUInteger index, BOOL * _Nonnull stop) {
-        TBSMState *state = [TBSMState stateWithName:entry[@"name"]];
+    [data enumerateObjectsUsingBlock:^(NSDictionary   * _Nonnull entry, NSUInteger index, BOOL * _Nonnull stop) {
+        TBSMState *state = [self buildState:entry];
         [states addObject:state];
     }];
     return states;
+}
+
++ (TBSMState *)buildState:(NSDictionary *)data
+{
+    NSString *type = data[@"type"];
+    if ([type isEqualToString:@"state"]) {
+        return [TBSMState stateWithName:data[@"name"]];
+    }
+    if ([type isEqualToString:@"sub"]) {
+        return [self buildSub:data];
+    }
+    if ([type isEqualToString:@"parallel"]) {
+        return [self buildParallel:data];
+    }
+    return nil;
+}
+
++ (TBSMSubState *)buildSub:(NSDictionary *)data
+{
+    TBSMSubState *state = [TBSMSubState subStateWithName:data[@"name"]];
+    state.states = [self buildStates:data[@"states"]];
+    return state;
+}
+
++ (TBSMParallelState *)buildParallel:(NSDictionary *)data
+{
+    TBSMParallelState *state = [TBSMParallelState parallelStateWithName:data[@"name"]];
+    NSArray *regionData = data[@"regions"];
+    NSMutableArray *regions = [NSMutableArray new];
+    [regionData enumerateObjectsUsingBlock:^(NSArray * _Nonnull entry, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSArray *states = [self buildStates:entry];
+        [regions addObject:states];
+    }];
+    [state setStates:regions];
+    return state;
 }
 
 + (void)configureTransitions:(NSDictionary *)data forStatemachine:(TBSMStateMachine *)stateMachine

@@ -11,22 +11,24 @@
 
 SpecBegin(TBSMStateMachineBuilderTests)
 
-__block NSString *file;
+__block NSString *simple;
+__block NSString *nested;
 __block TBSMStateMachine *stateMachine;
 
 describe(@"TBSMStateMachineBuilder", ^{
     
     beforeEach(^{
-        file = [[NSBundle bundleForClass:[self class]] pathForResource:@"simple" ofType:@"json"];
+        simple = [[NSBundle bundleForClass:[self class]] pathForResource:@"simple" ofType:@"json"];
+        nested = [[NSBundle bundleForClass:[self class]] pathForResource:@"nested" ofType:@"json"];
     });
     
     afterEach(^{
         [stateMachine tearDown:nil];
     });
     
-    it(@"loads a simple setup", ^{
+    it(@"builds a simple setup", ^{
         
-        stateMachine = [TBSMStateMachine buildFromFile:file];
+        stateMachine = [TBSMStateMachine buildFromFile:simple];
         expect(stateMachine.name).to.equal(@"main");
         expect(stateMachine.states.count).to.equal(3);
         
@@ -49,6 +51,44 @@ describe(@"TBSMStateMachineBuilder", ^{
         });
         
         expect(stateMachine.currentState).to.equal(a);
+    });
+    
+    it(@"builds a nested setup", ^{
+        
+        stateMachine = [TBSMStateMachine buildFromFile:nested];
+        expect(stateMachine.name).to.equal(@"main");
+        expect(stateMachine.states.count).to.equal(3);
+        
+        TBSMSubState *a = stateMachine.states[0];
+        TBSMParallelState *b = stateMachine.states[1];
+        TBSMState *c = stateMachine.states[2];
+        expect(a.name).to.equal(@"a");
+        expect(b.name).to.equal(@"b");
+        expect(c.name).to.equal(@"c");
+        
+        expect(a.stateMachine.states.count).to.equal(2);
+        expect(b.stateMachines[0].states.count).to.equal(1);
+        expect(b.stateMachines[1].states.count).to.equal(2);
+        
+        expect([stateMachine stateWithPath:@"a/a1"]).notTo.beNil();
+        expect([stateMachine stateWithPath:@"a/a2"]).notTo.beNil();
+        
+        expect([stateMachine stateWithPath:@"b@0/b11"]).notTo.beNil();
+        expect([stateMachine stateWithPath:@"b@1/b21"]).notTo.beNil();
+        expect([stateMachine stateWithPath:@"b@1/b22"]).notTo.beNil();
+        
+        [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
+        
+        waitUntil(^(DoneCallback done) {
+            [stateMachine setUp:nil];
+            
+            [stateMachine scheduleEventNamed:@"a1TOb22" data:nil];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b22TOc" data:nil] withCompletion:^{
+                done();
+            }];
+        });
+        
+        expect(stateMachine.currentState).to.equal(c);
     });
 });
 SpecEnd

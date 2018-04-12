@@ -1,0 +1,78 @@
+{
+  "name": "main",
+  "states": [
+    {
+      "name": "a",
+      "states": [
+        {
+          "name": "a1",
+          "type": "state"
+        },
+        {
+          "name": "a2",
+          "type": "state"
+        }
+      ],
+      "type": "sub"
+    },
+    {
+      "name": "b",
+      "regions": [
+        [
+          {
+            "name": "b11",
+            "type": "state"
+          }
+        ],
+        [
+          {
+            "name": "b21",
+            "type": "state"
+          },
+          {
+            "name": "b22",
+            "type": "state"
+          }
+        ]
+      ],
+      "type": "parallel"
+    },
+    {
+      "name": "c",
+      "type": "state"
+    }
+  ],
+  "transitions": [
+    {
+      "kind": "external",
+      "name": "aTOb",
+      "source": "a",
+      "target": "b"
+    },
+    {
+      "kind": "external",
+      "name": "bTOc",
+      "source": "b",
+      "target": "c"
+    },
+    {
+      "kind": "external",
+      "name": "cTOa",
+      "source": "c",
+      "target": "a"
+    },
+    {
+      "kind": "external",
+      "name": "a1TOb22",
+      "source": "a/a1",
+      "target": "b@1/b22"
+    },
+    {
+      "kind": "external",
+      "name": "b22TOc",
+      "source": "b@1/b22",
+      "target": "c"
+    }
+  ],
+  "type": "statemachine"
+}
