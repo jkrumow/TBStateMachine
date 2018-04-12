@@ -84,7 +84,7 @@
 {
     NSArray *transitionConfigurations = data[@"transitions"];
     [transitionConfigurations enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull item, NSUInteger index, BOOL * _Nonnull stop) {
-        NSString *kindData = data[@"kind"];
+        NSString *kindData = item[@"kind"];
         TBSMTransitionKind kind = TBSMTransitionExternal;
         if ([kindData isEqualToString:@"internal"]) {
             kind = TBSMTransitionInternal;

@@ -77,12 +77,20 @@ describe(@"TBSMStateMachineBuilder", ^{
         expect([stateMachine stateWithPath:@"b@1/b21"]).notTo.beNil();
         expect([stateMachine stateWithPath:@"b@1/b22"]).notTo.beNil();
         
+        expect(c.eventHandlers.count).to.equal(1);
+        TBSMEventHandler *handler = c.eventHandlers[@"cInternal"].firstObject;
+        expect(handler.target).to.equal(c);
+        expect(handler.kind).to.equal(TBSMTransitionInternal);
+        
+        
         [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
+        [stateMachine setUp:nil];
         
         waitUntil(^(DoneCallback done) {
             [stateMachine scheduleEventNamed:@"a1TOa2" data:nil];
-            [stateMachine scheduleEventNamed:@"a2TOb" data:nil];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b22TOc" data:nil] withCompletion:^{
+            [stateMachine scheduleEventNamed:@"aLocal" data:nil];
+            [stateMachine scheduleEventNamed:@"a1TOb" data:nil];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b11TOc" data:nil] withCompletion:^{
                 done();
             }];
         });

@@ -51,39 +51,21 @@
     },
     {
       "kind": "external",
-      "name": "a2TOb",
-      "source": "a/a2",
+      "name": "a1TOb",
+      "source": "a/a1",
       "target": "b"
     },
     {
       "kind": "external",
-      "name": "bTOc",
-      "source": "b",
-      "target": "c"
-    },
-    {
-      "kind": "external",
-      "name": "cTOa",
-      "source": "c",
-      "target": "a"
-    },
-    {
-      "kind": "external",
-      "name": "a1TOb22",
-      "source": "a/a1",
-      "target": "b@1/b22"
-    },
-    {
-      "kind": "external",
-      "name": "b22TOc",
-      "source": "b@1/b22",
+      "name": "b11TOc",
+      "source": "b@0/b11",
       "target": "c"
     },
     {
       "kind": "internal",
-      "name": "a1internal",
-      "source": "a/a1",
-      "target": "a/a1"
+      "name": "cInternal",
+      "source": "c",
+      "target": "c"
     },
     {
       "kind": "local",
