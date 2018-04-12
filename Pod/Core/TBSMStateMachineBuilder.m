@@ -17,7 +17,7 @@
     TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:name];
     stateMachine.states = [self buildStates:data[@"states"]];
     
-    [self configureTransitions:data forStatemachine:stateMachine];
+    [self configureTransitions:data forStateMachine:stateMachine];
     return stateMachine;
 }
 
@@ -80,22 +80,20 @@
     return state;
 }
 
-+ (void)configureTransitions:(NSDictionary *)data forStatemachine:(TBSMStateMachine *)stateMachine
++ (void)configureTransitions:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
 {
     NSArray *transitionConfigurations = data[@"transitions"];
     [transitionConfigurations enumerateObjectsUsingBlock:^(NSDictionary *  _Nonnull item, NSUInteger index, BOOL * _Nonnull stop) {
-        
         if ([item[@"type"] isEqualToString:@"simple"]) {
-            [self configureSimpleTransition:item forStatemachine:stateMachine];
-        } else if ([item[@"type"] isEqualToString:@"fork"]) {
-            [self configureForkTransition:item forStatemachine:stateMachine];
-        } else if ([item[@"type"] isEqualToString:@"join"]) {
-            [self configureJoinTransition:item forStatemachine:stateMachine];
+            [self configureSimpleTransition:item forStateMachine:stateMachine];
+        }
+        if ([item[@"type"] isEqualToString:@"compound"]) {
+            [self configureCompoundTransition:item forStateMachine:stateMachine];
         }
     }];
 }
 
-+ (void)configureSimpleTransition:(NSDictionary *)data forStatemachine:(TBSMStateMachine *)stateMachine
++ (void)configureSimpleTransition:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
 {
     NSString *kindData = data[@"kind"];
     TBSMTransitionKind kind = TBSMTransitionExternal;
@@ -110,37 +108,54 @@
     [source addHandlerForEvent:data[@"name"] target:target kind:kind];
 }
 
-+ (void)configureForkTransition:(NSDictionary *)data forStatemachine:(TBSMStateMachine *)stateMachine
++ (void)configureCompoundTransition:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
 {
-    TBSMState *source = [stateMachine stateWithPath:data[@"source"]];
+    NSDictionary *pseudoState = data[@"pseudo_state"];
+    if ([pseudoState[@"type"] isEqualToString:@"fork"]) {
+        [self configureForkTransition:data forStateMachine:stateMachine];
+    }
+    if ([pseudoState[@"type"] isEqualToString:@"join"]) {
+        [self configureJoinTransition:data forStateMachine:stateMachine];
+    }
+}
+
++ (void)configureForkTransition:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
+{
+    NSDictionary *pseudoState = data[@"pseudo_state"];
+    NSArray *sourceData = data[@"sources"];
     NSArray *targetData = data[@"targets"];
+    NSString *regionData = data[@"region"];
+    
+    TBSMState *source = [stateMachine stateWithPath:sourceData.firstObject];
+    TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:regionData];
+    
     NSMutableArray *targets = [NSMutableArray new];
     [targetData enumerateObjectsUsingBlock:^(NSString * _Nonnull path, NSUInteger idx, BOOL * _Nonnull stop) {
         TBSMState *target = [stateMachine stateWithPath:path];
         [targets addObject:target];
     }];
     
-    NSDictionary *forkData = data[@"fork"];
-    TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:data[@"region"]];
-    
-    TBSMFork *fork = [TBSMFork forkWithName:forkData[@"name"]];
+    TBSMFork *fork = [TBSMFork forkWithName:pseudoState[@"name"]];
     [source addHandlerForEvent:data[@"name"] target:fork];
     [fork setTargetStates:targets inRegion:region];
 }
 
-+ (void)configureJoinTransition:(NSDictionary *)data forStatemachine:(TBSMStateMachine *)stateMachine
++ (void)configureJoinTransition:(NSDictionary *)data forStateMachine:(TBSMStateMachine *)stateMachine
 {
+    NSDictionary *pseudoState = data[@"pseudo_state"];
     NSArray *sourceData = data[@"sources"];
+    NSArray *targetData = data[@"targets"];
+    NSString *regionData = data[@"region"];
+    
     NSMutableArray *sources = [NSMutableArray new];
     [sourceData enumerateObjectsUsingBlock:^(NSString * _Nonnull path, NSUInteger idx, BOOL * _Nonnull stop) {
         TBSMState *source = [stateMachine stateWithPath:path];
         [sources addObject:source];
     }];
-    TBSMState *target = [stateMachine stateWithPath:data[@"target"]];
+    TBSMState *target = [stateMachine stateWithPath:targetData.firstObject];
     
-    NSDictionary *joinData = data[@"join"];
-    TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:data[@"region"]];
-    TBSMJoin *join = [TBSMJoin joinWithName:joinData[@"name"]];
+    TBSMParallelState *region = (TBSMParallelState *)[stateMachine stateWithPath:regionData];
+    TBSMJoin *join = [TBSMJoin joinWithName:pseudoState[@"name"]];
     
     [sources enumerateObjectsUsingBlock:^(TBSMState * _Nonnull source, NSUInteger idx, BOOL * _Nonnull stop) {
         [source addHandlerForEvent:data[@"name"] target:join];

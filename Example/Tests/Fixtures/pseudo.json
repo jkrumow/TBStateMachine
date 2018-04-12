@@ -51,31 +51,36 @@
       "target": "a/a2"
     },
     {
-      "type": "fork",
+      "type": "compound",
       "name": "forkTOb",
-      "source": "a/a1",
-      "fork": {
+      "pseudo_state": {
+        "type": "fork",
         "name": "fork_1"
       },
       "region": "b",
+      "sources": [
+        "a/a1"
+      ],
       "targets": [
         "b@0/b11",
         "b@1/b21"
       ]
     },
     {
-      "type": "join",
+      "type": "compound",
       "name": "joinTOc",
+      "pseudo_state": {
+        "name": "join_1",
+        "type": "join"
+      },
+      "region": "b",
       "sources": [
         "b@0/b11",
         "b@1/b21"
       ],
-      "join": {
-        "name": "join_1"
-      },
-      "region": "b",
-      "target": "c"
+      "targets": [
+        "c"
+      ]
     }
-  ],
-  "type": "statemachine"
+  ]
 }

@@ -78,6 +78,5 @@
       "source": "a",
       "target": "a/a1"
     }
-  ],
-  "type": "statemachine"
+  ]
 }

@@ -33,6 +33,5 @@
       "source": "c",
       "target": "a"
     }
-  ],
-  "type": "statemachine"
+  ]
 }
