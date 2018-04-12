@@ -49,8 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly, nullable) TBSMState *currentState;
 
-+ (instancetype)buildFromFile:(NSString *)file;
-
 /**
  *  Creates a `TBSMStateMachine` instance from a given name.
  *

@@ -28,7 +28,7 @@ describe(@"TBSMStateMachineBuilder", ^{
     
     it(@"builds a simple setup", ^{
         
-        stateMachine = [TBSMStateMachine buildFromFile:simple];
+        stateMachine = [TBSMStateMachineBuilder buildFromFile:simple];
         expect(stateMachine.name).to.equal(@"main");
         expect(stateMachine.states.count).to.equal(3);
         
@@ -55,7 +55,7 @@ describe(@"TBSMStateMachineBuilder", ^{
     
     it(@"builds a nested setup", ^{
         
-        stateMachine = [TBSMStateMachine buildFromFile:nested];
+        stateMachine = [TBSMStateMachineBuilder buildFromFile:nested];
         expect(stateMachine.name).to.equal(@"main");
         expect(stateMachine.states.count).to.equal(3);
         

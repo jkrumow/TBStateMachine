@@ -16,11 +16,6 @@
 
 @implementation TBSMStateMachine
 
-+ (instancetype)buildFromFile:(NSString *)file
-{
-    return [TBSMStateMachineBuilder buildFromFile:file];
-}
-
 + (instancetype)stateMachineWithName:(NSString *)name
 {
     return [[[self class] alloc] initWithName:name];
