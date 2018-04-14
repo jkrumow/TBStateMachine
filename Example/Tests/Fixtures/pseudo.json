@@ -53,16 +53,22 @@
     {
       "type": "compound",
       "name": "forkTOb",
-      "vertices": [
-        {
-          "source": "a/a1",
-          "target": "b@0/b11"
-        },
-        {
-          "source": "a/a1",
-          "target": "b@1/b21"
-        }
-      ],
+      "vertices": {
+        "incoming": [
+          {
+            "source": "a/a1",
+            "name": "forkTOb"
+          }
+        ],
+        "outgoing": [
+          {
+            "target": "b@0/b11"
+          },
+          {
+            "target": "b@1/b21"
+          }
+        ]
+      },
       "pseudo_state": {
         "type": "fork",
         "name": "fork_1",
@@ -72,18 +78,23 @@
     {
       "type": "compound",
       "name": "joinTOc",
-      "vertices": [
-        {
-          "source": "b@0/b11",
-          "target": "c",
-          "name": "b11ToJoin"
-        },
-        {
-          "source": "b@1/b21",
-          "target": "c",
-          "name": "b21ToJoin"
-        }
-      ],
+      "vertices": {
+        "incoming": [
+          {
+            "source": "b@0/b11",
+            "name": "b11ToJoin"
+          },
+          {
+            "source": "b@1/b21",
+            "name": "b21ToJoin"
+          }
+        ],
+        "outgoing": [
+          {
+            "target": "c"
+          }
+        ]
+      },
       "pseudo_state": {
         "type": "join",
         "name": "join_1",

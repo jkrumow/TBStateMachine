@@ -1,5 +1,4 @@
 {
-  "id": "https://raw.githubusercontent.com/jkrumow/TBStateMachine/feature/statemachine_builder/Pod/Builder/Schema/schema#",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "state": {
@@ -118,24 +117,40 @@
           "type": "string"
         },
         "vertices": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "source": {
-                "type": "string"
-              },
-              "target": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
+          "type": "object",
+          "properties": {
+            "incoming": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "source",
+                  "name"
+                ]
               }
             },
-            "required": [
-              "source",
-              "target"
-            ]
+            "outgoing": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "target": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "target"
+                ]
+              }
+            }
           }
         },
         "pseudo_state": {
