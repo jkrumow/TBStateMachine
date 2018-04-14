@@ -16,18 +16,21 @@
   ],
   "transitions": [
     {
+      "type": "simple",
       "kind": "external",
       "name": "aTOb",
       "source": "a",
       "target": "b"
     },
     {
+      "type": "simple",
       "kind": "external",
       "name": "bTOc",
       "source": "b",
       "target": "c"
     },
     {
+      "type": "simple",
       "kind": "external",
       "name": "cTOa",
       "source": "c",
