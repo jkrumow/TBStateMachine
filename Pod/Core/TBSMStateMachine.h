@@ -19,7 +19,6 @@
 #import "TBSMJoin.h"
 #import "TBSMJunction.h"
 #import "TBSMMacros.h"
-#import "TBSMStateMachineBuilder.h"
 #import "NSException+TBStateMachine.h"
 
 NS_ASSUME_NONNULL_BEGIN

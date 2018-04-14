@@ -268,7 +268,13 @@ c/c2@1/c222
 
 A state machine can be configured via json file and built by `TBSMStateMachineBuilder`:
 
+```ruby
+pod 'TBStateMachine/DebugSupport'
+```
+
 ```objc
+#import <TBStateMachine/TBSMStateMachineBuilder.h>
+
 NSString *path = // path to file
 TBMSStateMachine *stateMachine = [TBSMStateMachineBuilder buildFromFile:path];
 ```

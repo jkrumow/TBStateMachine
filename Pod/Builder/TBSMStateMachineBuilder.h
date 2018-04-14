@@ -11,5 +11,4 @@
 @interface TBSMStateMachineBuilder : NSObject
 
 + (TBSMStateMachine *)buildFromFile:(NSString *)file;
-
 @end

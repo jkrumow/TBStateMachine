@@ -7,6 +7,7 @@
 //
 
 #import <TBStateMachine/TBSMStateMachine.h>
+#import <TBStateMachine/TBSMStateMachineBuilder.h>
 #import <TBStateMachine/TBSMDebugger.h>
 
 SpecBegin(TBSMStateMachineBuilderTests)

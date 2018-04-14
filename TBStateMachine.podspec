@@ -28,6 +28,12 @@ Pod::Spec.new do |s|
     core.source_files = 'Pod/Core'
   end
 
+  s.subspec 'Builder' do |builder|
+    builder.source_files = 'Pod/Builder'
+    builder.resource_bundle = { 'TBStateMachineBuilder' => 'Pod/Builder/Schema/*.json' }
+    builder.dependency 'TBStateMachine/Core'
+  end
+  
   s.subspec 'DebugSupport' do |debug|
     debug.source_files = 'Pod/DebugSupport'
     debug.dependency 'TBStateMachine/Core'
