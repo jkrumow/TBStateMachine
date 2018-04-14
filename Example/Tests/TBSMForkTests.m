@@ -12,31 +12,21 @@ SpecBegin(TBSMFork)
 
 __block TBSMState *a;
 __block TBSMState *b;
-__block TBSMState *c;
 __block TBSMParallelState *parallel;
-__block TBSMParallelState *empty;
 
 describe(@"TBSMFork", ^{
     
     beforeEach(^{
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];
-        c = [TBSMState stateWithName:@"c"];
         parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
-        TBSMStateMachine *submachineA = [TBSMStateMachine stateMachineWithName:@"submachineA"];
-        TBSMStateMachine *submachineB = [TBSMStateMachine stateMachineWithName:@"submachineB"];
-        submachineA.states = @[a];
-        submachineB.states = @[b];
-        parallel.stateMachines = @[submachineA, submachineB];
-        empty = [TBSMParallelState parallelStateWithName:@"empty"];
+        parallel.states = @[@[a], @[b]];
     });
     
     afterEach(^{
         a = nil;
         b = nil;
-        c = nil;
         parallel = nil;
-        empty = nil;
     });
 
     describe(@"Exception handling.", ^{

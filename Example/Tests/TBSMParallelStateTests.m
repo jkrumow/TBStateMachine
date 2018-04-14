@@ -16,10 +16,6 @@ __block TBSMState *b1;
 __block TBSMState *b2;
 __block TBSMState *c1;
 __block TBSMState *c2;
-
-__block TBSMStateMachine *subStateMachineA;
-__block TBSMStateMachine *subStateMachineB;
-__block TBSMStateMachine *subStateMachineC;
 __block TBSMParallelState *parallelStates;
 
 describe(@"TBSMParallelState", ^{
@@ -32,10 +28,6 @@ describe(@"TBSMParallelState", ^{
         b2 = [TBSMState stateWithName:@"b2"];
         c1 = [TBSMState stateWithName:@"c1"];
         c2 = [TBSMState stateWithName:@"c2"];
-        
-        subStateMachineA = [TBSMStateMachine stateMachineWithName:@"smA"];
-        subStateMachineB = [TBSMStateMachine stateMachineWithName:@"smB"];
-        subStateMachineC = [TBSMStateMachine stateMachineWithName:@"smC"];
     });
     
     afterEach(^{
@@ -46,10 +38,6 @@ describe(@"TBSMParallelState", ^{
         b2 = nil;
         c1 = nil;
         c2 = nil;
-        
-        subStateMachineA = nil;
-        subStateMachineB = nil;
-        subStateMachineC = nil;
     });
     
     describe(@"Exception handling on setup.", ^{
@@ -66,7 +54,7 @@ describe(@"TBSMParallelState", ^{
             
             id object = [[NSObject alloc] init];
             expect(^{
-                parallelStates.stateMachines = @[subStateMachineA, subStateMachineB, object];
+                parallelStates.stateMachines = @[@[], @[], object];
             }).to.raise(TBSMException);
         });
         
@@ -91,10 +79,9 @@ describe(@"TBSMParallelState", ^{
     describe(@"getters", ^{
         
         it(@"return the stored states.", ^{
-            parallelStates.stateMachines = @[subStateMachineA, subStateMachineB];
+            parallelStates.states = @[@[], @[]];
             expect(parallelStates.stateMachines).haveCountOf(2);
-            expect(parallelStates.stateMachines).contain(subStateMachineA);
-            expect(parallelStates.stateMachines).contain(subStateMachineB);
+            expect(parallelStates.stateMachines.count).equal(2);
         });
     });
     
@@ -117,38 +104,26 @@ describe(@"TBSMParallelState", ^{
     
     it(@"enters and exits all initial states", ^{
         
-        subStateMachineA.states = @[a1, a2];
-        subStateMachineB.states = @[b1, b2];
-        subStateMachineC.states = @[c1, c2];
-        
-        parallelStates.stateMachines = @[subStateMachineA, subStateMachineB, subStateMachineC];
+        parallelStates.states = @[@[a1, a2], @[b1, b2], @[c1, c2]];
         
         [parallelStates enter:nil targetState:nil data:nil];
         
-        expect(subStateMachineA.currentState).to.equal(a1);
-        expect(subStateMachineB.currentState).to.equal(b1);
-        expect(subStateMachineC.currentState).to.equal(c1);
+        expect(parallelStates.stateMachines[0].currentState).to.equal(a1);
+        expect(parallelStates.stateMachines[1].currentState).to.equal(b1);
+        expect(parallelStates.stateMachines[2].currentState).to.equal(c1);
         
         [parallelStates exit:nil targetState:nil data:nil];
-        
-        expect(subStateMachineA.currentState).to.beNil;
-        expect(subStateMachineB.currentState).to.beNil;
-        expect(subStateMachineC.currentState).to.beNil;
     });
     
     it(@"enters dedicated target states.", ^{
     
-        subStateMachineA.states = @[a1, a2];
-        subStateMachineB.states = @[b1, b2];
-        subStateMachineC.states = @[c1, c2];
-        
-        parallelStates.stateMachines = @[subStateMachineA, subStateMachineB, subStateMachineC];
+        parallelStates.states = @[@[a1, a2], @[b1, b2], @[c1, c2]];
         
         [parallelStates enter:nil targetStates:@[a2, b2] region:parallelStates data:nil];
     
-        expect(subStateMachineA.currentState).to.equal(a2);
-        expect(subStateMachineB.currentState).to.equal(b2);
-        expect(subStateMachineC.currentState).to.equal(c1);
+        expect(parallelStates.stateMachines[0].currentState).to.equal(a2);
+        expect(parallelStates.stateMachines[1].currentState).to.equal(b2);
+        expect(parallelStates.stateMachines[2].currentState).to.equal(c1);
     });
 });
 

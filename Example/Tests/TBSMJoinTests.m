@@ -14,7 +14,6 @@ __block TBSMState *a;
 __block TBSMState *b;
 __block TBSMState *c;
 __block TBSMParallelState *parallel;
-__block TBSMParallelState *empty;
 
 describe(@"TBSMJoin", ^{
     
@@ -23,12 +22,7 @@ describe(@"TBSMJoin", ^{
         b = [TBSMState stateWithName:@"b"];
         c = [TBSMState stateWithName:@"c"];
         parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
-        TBSMStateMachine *submachineA = [TBSMStateMachine stateMachineWithName:@"submachineA"];
-        TBSMStateMachine *submachineB = [TBSMStateMachine stateMachineWithName:@"submachineB"];
-        submachineA.states = @[a];
-        submachineB.states = @[b];
-        parallel.stateMachines = @[submachineA, submachineB];
-        empty = [TBSMParallelState parallelStateWithName:@"empty"];
+        parallel.states = @[@[a], @[b]];
     });
     
     afterEach(^{
@@ -36,7 +30,6 @@ describe(@"TBSMJoin", ^{
         b = nil;
         c = nil;
         parallel = nil;
-        empty = nil;
     });
     
     describe(@"Exception handling.", ^{
