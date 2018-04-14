@@ -1,0 +1,246 @@
+{
+  "name": "main",
+  "states": [
+    {
+      "name": "a",
+      "states": [
+        {
+          "name": "a1",
+          "type": "state"
+        },
+        {
+          "name": "a2",
+          "type": "state"
+        },
+        {
+          "name": "a3",
+          "type": "state"
+        }
+      ],
+      "type": "sub"
+    },
+    {
+      "name": "b",
+      "states": [
+        {
+          "name": "b1",
+          "type": "state"
+        },
+        {
+          "name": "b2",
+          "states": [
+            {
+              "name": "b21",
+              "type": "state"
+            },
+            {
+              "name": "b22",
+              "type": "state"
+            }
+          ],
+          "type": "sub"
+        },
+        {
+          "name": "b3",
+          "regions": [
+            [
+              {
+                "name": "b311",
+                "type": "state"
+              },
+              {
+                "name": "b312",
+                "type": "state"
+              }
+            ],
+            [
+              {
+                "name": "b321",
+                "type": "state"
+              },
+              {
+                "name": "b322",
+                "type": "state"
+              }
+            ]
+          ],
+          "type": "parallel"
+        }
+      ],
+      "type": "sub"
+    },
+    {
+      "name": "c",
+      "states": [
+        {
+          "name": "c1",
+          "type": "state"
+        },
+        {
+          "name": "c2",
+          "regions": [
+            [
+              {
+                "name": "c211",
+                "type": "state"
+              },
+              {
+                "name": "c212",
+                "type": "state"
+              }
+            ],
+            [
+              {
+                "name": "c221",
+                "type": "state"
+              },
+              {
+                "name": "c222",
+                "type": "state"
+              }
+            ]
+          ],
+          "type": "parallel"
+        }
+      ],
+      "type": "sub"
+    }
+  ],
+  "transitions": [
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a2_a",
+      "source": "a/a2",
+      "target": "a"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a_a2",
+      "source": "a",
+      "target": "a/a2"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a3_a1",
+      "source": "a/a3",
+      "target": "a/a1"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a_guard",
+      "source": "a",
+      "target": "b"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a3_b2",
+      "source": "a/a3",
+      "target": "b/b2"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a3_b22",
+      "source": "a/a3",
+      "target": "b/b2/b22"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "b_a3",
+      "source": "b",
+      "target": "a/a3"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "b311_a1",
+      "source": "b/b3@0/b311",
+      "target": "a/a1"
+    },
+    {
+      "type": "simple",
+      "kind": "local",
+      "name": "b22_b",
+      "source": "b/b2/b22",
+      "target": "b"
+    },
+    {
+      "type": "simple",
+      "kind": "local",
+      "name": "b_b22",
+      "source": "b",
+      "target": "b/b2/b22"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "b_b3",
+      "source": "b",
+      "target": "b/b3"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a3_b322",
+      "source": "a/a3",
+      "target": "b/b3@1/b322"
+    },
+    {
+      "type": "compound",
+      "name": "a_fork",
+      "vertices": {
+        "incoming": [
+          {
+            "source": "a",
+            "name": "a_fork"
+          }
+        ],
+        "outgoing": [
+          {
+            "target": "c/c2@0/c212"
+          },
+          {
+            "target": "c/c2@1/c222"
+          }
+        ]
+      },
+      "pseudo_state": {
+        "type": "fork",
+        "name": "fork_1",
+        "region": "c/c2"
+      }
+    },
+    {
+      "type": "compound",
+      "name": "join_c_b",
+      "vertices": {
+        "incoming": [
+          {
+            "source": "c/c2@0/c212",
+            "name": "c212_join"
+          },
+          {
+            "source": "c/c2@1/c222",
+            "name": "c222_join"
+          }
+        ],
+        "outgoing": [
+          {
+            "target": "b"
+          }
+        ]
+      },
+      "pseudo_state": {
+        "type": "join",
+        "name": "join_1",
+        "region": "c/c2"
+      }
+    }
+  ]
+}

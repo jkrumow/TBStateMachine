@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		150FD64019D8543E00D9D1BA /* TBSMTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */; };
+		15148CCF20827F0D0074F746 /* statemachine.json in Resources */ = {isa = PBXBuildFile; fileRef = 15148CCE20827F0D0074F746 /* statemachine.json */; };
 		151C5C0C19CDF6A4003D21AE /* TBSMSubStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */; };
 		155BB54A19C610D200EB1C74 /* TBSMStateMachineSimpleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */; };
 		155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMTransitionTests.m; sourceTree = "<group>"; };
+		15148CCE20827F0D0074F746 /* statemachine.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = statemachine.json; sourceTree = "<group>"; };
 		151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMSubStateTests.m; sourceTree = "<group>"; };
 		155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineSimpleTests.m; sourceTree = "<group>"; };
 		155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateTests.m; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 		15D7378E207ED83E00956525 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				15148CCE20827F0D0074F746 /* statemachine.json */,
 				15D7378F207ED83E00956525 /* simple.json */,
 				15D73790207ED83E00956525 /* nested.json */,
 				3BA1A93E207F6B69000FD073 /* pseudo.json */,
@@ -234,6 +237,7 @@
 				15D73791207ED83E00956525 /* simple.json in Resources */,
 				15D73792207ED83E00956525 /* nested.json in Resources */,
 				3BA1A93F207F6B69000FD073 /* pseudo.json in Resources */,
+				15148CCF20827F0D0074F746 /* statemachine.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
