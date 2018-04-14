@@ -46,35 +46,35 @@
     {
       "type": "simple",
       "kind": "external",
-      "name": "a1TOa2",
+      "name": "a1_a2",
       "source": "a/a1",
       "target": "a/a2"
     },
     {
       "type": "simple",
       "kind": "external",
-      "name": "a1TOb",
+      "name": "a1_b",
       "source": "a/a1",
       "target": "b"
     },
     {
       "type": "simple",
       "kind": "external",
-      "name": "b11TOc",
+      "name": "b11_c",
       "source": "b@0/b11",
       "target": "c"
     },
     {
       "type": "simple",
       "kind": "internal",
-      "name": "cInternal",
+      "name": "c_internal",
       "source": "c",
       "target": "c"
     },
     {
       "type": "simple",
       "kind": "local",
-      "name": "aLocal",
+      "name": "a_local",
       "source": "a",
       "target": "a/a1"
     }

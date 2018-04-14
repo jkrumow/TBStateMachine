@@ -19,7 +19,6 @@ describe(@"TBSMSubState", ^{
             expect(^{
                 [TBSMSubState subStateWithName:@""];
             }).to.raise(TBSMException);
-            
         });
         
         it(@"throws a TBSMException when adding an object which is not of type TBSMStateMachine.", ^{
@@ -33,13 +32,11 @@ describe(@"TBSMSubState", ^{
         
         it (@"throws a TBSMException when stateMachine is nil.", ^{
             
-            TBSMParallelState *parallelstate = [TBSMParallelState parallelStateWithName:@"parallelstate"];
             TBSMState *a1 = [TBSMState stateWithName:@"a1"];
             TBSMState *a2 = [TBSMState stateWithName:@"a2"];
             
-            TBSMStateMachine *submachine = [TBSMStateMachine stateMachineWithName:@"submachine"];
-            submachine.states = @[a1, a2];
-            parallelstate.stateMachines = @[submachine];
+            TBSMParallelState *p = [TBSMParallelState parallelStateWithName:@"parallelstate"];
+            p.states = @[@[a1, a2]];
             
             expect(^{
                 TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
@@ -48,14 +45,13 @@ describe(@"TBSMSubState", ^{
             
             expect(^{
                 TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
-                [subState enter:nil targetStates:@[a1, a2] region:parallelstate data:nil];
+                [subState enter:nil targetStates:@[a1, a2] region:p data:nil];
             }).to.raise(TBSMException);
             
             expect(^{
                 TBSMSubState *subState = [TBSMSubState subStateWithName:@"subState"];
                 [subState exit:nil targetState:nil data:nil];
             }).to.raise(TBSMException);
-            
         });
     });
     
@@ -70,7 +66,6 @@ describe(@"TBSMSubState", ^{
             
             expect(subState.stateMachine).notTo.beNil();
             expect(subState.stateMachine.name).to.equal(@"subStateSubMachine");
-            
         });
     });
     
@@ -79,20 +74,13 @@ describe(@"TBSMSubState", ^{
         TBSMSubState *a = [TBSMSubState subStateWithName:@"a"];
         TBSMState *a1 = [TBSMState stateWithName:@"a1"];
         TBSMState *a2 = [TBSMState stateWithName:@"a2"];
-        
-        TBSMStateMachine *subStateMachineA = [TBSMStateMachine stateMachineWithName:@"smA"];
-        
-        subStateMachineA.states = @[a1, a2];
-        
-        a.stateMachine = subStateMachineA;
+        a.states = @[a1, a2];
         
         [a enter:nil targetState:nil data:nil];
-        
-        expect(subStateMachineA.currentState).to.equal(a1);
+        expect(a.stateMachine.currentState).to.equal(a1);
         
         [a exit:nil targetState:nil data:nil];
-        
-        expect(subStateMachineA.currentState).to.beNil;
+        expect(a.stateMachine.currentState).to.beNil;
     });
 });
 

@@ -18,21 +18,21 @@
     {
       "type": "simple",
       "kind": "external",
-      "name": "aTOb",
+      "name": "a_b",
       "source": "a",
       "target": "b"
     },
     {
       "type": "simple",
       "kind": "external",
-      "name": "bTOc",
+      "name": "b_c",
       "source": "b",
       "target": "c"
     },
     {
       "type": "simple",
       "kind": "external",
-      "name": "cTOa",
+      "name": "c_a",
       "source": "c",
       "target": "a"
     }

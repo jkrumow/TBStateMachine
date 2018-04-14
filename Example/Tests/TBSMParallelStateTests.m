@@ -16,12 +16,12 @@ __block TBSMState *b1;
 __block TBSMState *b2;
 __block TBSMState *c1;
 __block TBSMState *c2;
-__block TBSMParallelState *parallelStates;
+__block TBSMParallelState *p;
 
 describe(@"TBSMParallelState", ^{
     
     beforeEach(^{
-        parallelStates = [TBSMParallelState parallelStateWithName:@"p"];
+        p = [TBSMParallelState parallelStateWithName:@"p"];
         a1 = [TBSMState stateWithName:@"a1"];
         a2 = [TBSMState stateWithName:@"a2"];
         b1 = [TBSMState stateWithName:@"b1"];
@@ -31,7 +31,7 @@ describe(@"TBSMParallelState", ^{
     });
     
     afterEach(^{
-        parallelStates = nil;
+        p = nil;
         a1 = nil;
         a2 = nil;
         b1 = nil;
@@ -54,22 +54,22 @@ describe(@"TBSMParallelState", ^{
             
             id object = [[NSObject alloc] init];
             expect(^{
-                parallelStates.stateMachines = @[@[], @[], object];
+                p.stateMachines = @[@[], @[], object];
             }).to.raise(TBSMException);
         });
         
         it (@"throws a TBSMException when instance does not contain one or more stateMachines.", ^{
             
             expect(^{
-                [parallelStates enter:nil targetState:nil data:nil];
+                [p enter:nil targetState:nil data:nil];
             }).to.raise(TBSMException);
             
             expect(^{
-                [parallelStates enter:nil targetStates:@[a1, b1, c1] region:parallelStates data:nil];
+                [p enter:nil targetStates:@[a1, b1, c1] region:p data:nil];
             }).to.raise(TBSMException);
             
             expect(^{
-                [parallelStates exit:nil targetState:nil data:nil];
+                [p exit:nil targetState:nil data:nil];
             }).to.raise(TBSMException);
             
         });
@@ -79,9 +79,9 @@ describe(@"TBSMParallelState", ^{
     describe(@"getters", ^{
         
         it(@"return the stored states.", ^{
-            parallelStates.states = @[@[], @[]];
-            expect(parallelStates.stateMachines).haveCountOf(2);
-            expect(parallelStates.stateMachines.count).equal(2);
+            p.states = @[@[], @[]];
+            expect(p.stateMachines).haveCountOf(2);
+            expect(p.stateMachines.count).equal(2);
         });
     });
     
@@ -91,12 +91,12 @@ describe(@"TBSMParallelState", ^{
             
             TBSMState *a1 = [TBSMState stateWithName:@"a1"];
             TBSMState *a2 = [TBSMState stateWithName:@"a2"];
-            parallelStates.states = @[@[a1], @[a2]];
+            p.states = @[@[a1], @[a2]];
             
-            expect(parallelStates.stateMachines.count).to.equal(2);
+            expect(p.stateMachines.count).to.equal(2);
             
-            TBSMStateMachine *first = parallelStates.stateMachines.firstObject;
-            TBSMStateMachine *second = parallelStates.stateMachines.lastObject;
+            TBSMStateMachine *first = p.stateMachines.firstObject;
+            TBSMStateMachine *second = p.stateMachines.lastObject;
             expect(first.name).to.equal(@"pSubMachine-0");
             expect(second.name).to.equal(@"pSubMachine-1");
         });
@@ -104,26 +104,26 @@ describe(@"TBSMParallelState", ^{
     
     it(@"enters and exits all initial states", ^{
         
-        parallelStates.states = @[@[a1, a2], @[b1, b2], @[c1, c2]];
+        p.states = @[@[a1, a2], @[b1, b2], @[c1, c2]];
         
-        [parallelStates enter:nil targetState:nil data:nil];
+        [p enter:nil targetState:nil data:nil];
         
-        expect(parallelStates.stateMachines[0].currentState).to.equal(a1);
-        expect(parallelStates.stateMachines[1].currentState).to.equal(b1);
-        expect(parallelStates.stateMachines[2].currentState).to.equal(c1);
+        expect(p.stateMachines[0].currentState).to.equal(a1);
+        expect(p.stateMachines[1].currentState).to.equal(b1);
+        expect(p.stateMachines[2].currentState).to.equal(c1);
         
-        [parallelStates exit:nil targetState:nil data:nil];
+        [p exit:nil targetState:nil data:nil];
     });
     
     it(@"enters dedicated target states.", ^{
     
-        parallelStates.states = @[@[a1, a2], @[b1, b2], @[c1, c2]];
+        p.states = @[@[a1, a2], @[b1, b2], @[c1, c2]];
         
-        [parallelStates enter:nil targetStates:@[a2, b2] region:parallelStates data:nil];
+        [p enter:nil targetStates:@[a2, b2] region:p data:nil];
     
-        expect(parallelStates.stateMachines[0].currentState).to.equal(a2);
-        expect(parallelStates.stateMachines[1].currentState).to.equal(b2);
-        expect(parallelStates.stateMachines[2].currentState).to.equal(c1);
+        expect(p.stateMachines[0].currentState).to.equal(a2);
+        expect(p.stateMachines[1].currentState).to.equal(b2);
+        expect(p.stateMachines[2].currentState).to.equal(c1);
     });
 });
 

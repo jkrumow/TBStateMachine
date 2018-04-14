@@ -46,9 +46,9 @@ describe(@"TBSMStateMachineBuilder", ^{
         [stateMachine setUp:nil];
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEventNamed:@"aTOb" data:nil];
-            [stateMachine scheduleEventNamed:@"bTOc" data:nil];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"cTOa" data:nil] withCompletion:^{
+            [stateMachine scheduleEventNamed:@"a_b" data:nil];
+            [stateMachine scheduleEventNamed:@"b_c" data:nil];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"c_a" data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -81,7 +81,7 @@ describe(@"TBSMStateMachineBuilder", ^{
         expect([stateMachine stateWithPath:@"b@1/b22"]).notTo.beNil();
         
         expect(c.eventHandlers.count).to.equal(1);
-        TBSMEventHandler *handler = c.eventHandlers[@"cInternal"].firstObject;
+        TBSMEventHandler *handler = c.eventHandlers[@"c_internal"].firstObject;
         expect(handler.target).to.equal(c);
         expect(handler.kind).to.equal(TBSMTransitionInternal);
         
@@ -89,10 +89,10 @@ describe(@"TBSMStateMachineBuilder", ^{
         [stateMachine setUp:nil];
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEventNamed:@"a1TOa2" data:nil];
-            [stateMachine scheduleEventNamed:@"aLocal" data:nil];
-            [stateMachine scheduleEventNamed:@"a1TOb" data:nil];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b11TOc" data:nil] withCompletion:^{
+            [stateMachine scheduleEventNamed:@"a1_a2" data:nil];
+            [stateMachine scheduleEventNamed:@"a_local" data:nil];
+            [stateMachine scheduleEventNamed:@"a1_b" data:nil];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b11_c" data:nil] withCompletion:^{
                 done();
             }];
         });
@@ -117,9 +117,9 @@ describe(@"TBSMStateMachineBuilder", ^{
         [stateMachine setUp:nil];
         
         waitUntil(^(DoneCallback done) {
-            [stateMachine scheduleEventNamed:@"forkTOb" data:nil];
-            [stateMachine scheduleEventNamed:@"b11ToJoin" data:nil];
-            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b21ToJoin" data:nil] withCompletion:^{
+            [stateMachine scheduleEventNamed:@"fork_b" data:nil];
+            [stateMachine scheduleEventNamed:@"b11_join" data:nil];
+            [stateMachine scheduleEvent:[TBSMEvent eventWithName:@"b21_join" data:nil] withCompletion:^{
                 done();
             }];
         });

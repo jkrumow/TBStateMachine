@@ -96,28 +96,23 @@ describe(@"TBSMState", ^{
     
     it(@"returns its path inside the state machine hierarchy containing all parent nodes in descending order", ^{
         
+        TBSMSubState *s = [TBSMSubState subStateWithName:@"s"];
+        s.states = @[b];
+        
+        TBSMParallelState *p = [TBSMParallelState parallelStateWithName:@"p"];
+        p.states = @[@[s]];
+        
         TBSMStateMachine *stateMachine = [TBSMStateMachine stateMachineWithName:@"stateMachine"];
-        TBSMStateMachine *subStateMachineA = [TBSMStateMachine stateMachineWithName:@"stateMachineA"];
-        TBSMStateMachine *subStateMachineB = [TBSMStateMachine stateMachineWithName:@"stateMachineB"];
-        TBSMParallelState *parallelStates = [TBSMParallelState parallelStateWithName:@"parallelStates"];
-        
-        TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB"];
-        
-        subStateMachineB.states = @[b];
-        subStateB.stateMachine = subStateMachineB;
-        subStateMachineA.states = @[subStateB];
-        
-        parallelStates.stateMachines = @[subStateMachineA];
-        stateMachine.states = @[parallelStates];
+        stateMachine.states = @[p];
         
         NSArray *path = [b path];
         
         expect(path.count).to.equal(6);
         expect(path[0]).to.equal(stateMachine);
-        expect(path[1]).to.equal(parallelStates);
-        expect(path[2]).to.equal(subStateMachineA);
-        expect(path[3]).to.equal(subStateB);
-        expect(path[4]).to.equal(subStateMachineB);
+        expect(path[1]).to.equal(p);
+        expect(path[2]).to.equal(p.stateMachines.firstObject);
+        expect(path[3]).to.equal(s);
+        expect(path[4]).to.equal(s.stateMachine);
         expect(path[5]).to.equal(b);
     });
 });

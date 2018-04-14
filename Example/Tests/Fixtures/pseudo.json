@@ -46,18 +46,18 @@
     {
       "type": "simple",
       "kind": "external",
-      "name": "a1TOa2",
+      "name": "a1_a2",
       "source": "a/a1",
       "target": "a/a2"
     },
     {
       "type": "compound",
-      "name": "forkTOb",
+      "name": "fork_b",
       "vertices": {
         "incoming": [
           {
             "source": "a/a1",
-            "name": "forkTOb"
+            "name": "fork_b"
           }
         ],
         "outgoing": [
@@ -77,16 +77,16 @@
     },
     {
       "type": "compound",
-      "name": "joinTOc",
+      "name": "join_c",
       "vertices": {
         "incoming": [
           {
             "source": "b@0/b11",
-            "name": "b11ToJoin"
+            "name": "b11_join"
           },
           {
             "source": "b@1/b21",
-            "name": "b21ToJoin"
+            "name": "b21_join"
           }
         ],
         "outgoing": [
