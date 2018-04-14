@@ -27,13 +27,13 @@
           "items": {
             "anyOf": [
               {
-                "ref": "#/definitions/state"
+                "$ref": "#/definitions/state"
               },
               {
-                "ref": "#/definitions/sub"
+                "$ref": "#/definitions/sub"
               },
               {
-                "ref": "#/definitions/parallel"
+                "$ref": "#/definitions/parallel"
               }
             ]
           }
@@ -61,13 +61,13 @@
             "items": {
               "anyOf": [
                 {
-                  "ref": "#/definitions/state"
+                  "$ref": "#/definitions/state"
                 },
                 {
-                  "ref": "#/definitions/sub"
+                  "$ref": "#/definitions/sub"
                 },
                 {
-                  "ref": "#/definitions/parallel"
+                  "$ref": "#/definitions/parallel"
                 }
               ]
             }
@@ -101,6 +101,7 @@
       },
       "required": [
         "name",
+        "kind",
         "type",
         "source",
         "target"
@@ -131,7 +132,6 @@
               }
             },
             "required": [
-              "name",
               "source",
               "target"
             ]
@@ -155,14 +155,14 @@
             "type",
             "region"
           ]
-        },
-        "required": [
-          "name",
-          "type",
-          "vertices",
-          "pseudo_state"
-        ]
-      }
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "vertices",
+        "pseudo_state"
+      ]
     }
   },
   "type": "object",
@@ -175,13 +175,13 @@
       "items": {
         "anyOf": [
           {
-            "ref": "#/definitions/state"
+            "$ref": "#/definitions/state"
           },
           {
-            "ref": "#/definitions/sub"
+            "$ref": "#/definitions/sub"
           },
           {
-            "ref": "#/definitions/parallel"
+            "$ref": "#/definitions/parallel"
           }
         ]
       }
@@ -191,10 +191,10 @@
       "items": {
         "anyOf": [
           {
-            "ref": "#/definitions/transition"
+            "$ref": "#/definitions/transition"
           },
           {
-            "ref": "#/definitions/compound_transition"
+            "$ref": "#/definitions/compound_transition"
           }
         ]
       }
