@@ -1,27 +1,35 @@
 PODS:
   - Expecta (1.0.6)
   - Specta (1.0.7)
-  - TBStateMachine (6.9.0):
-    - TBStateMachine/Core (= 6.9.0)
-  - TBStateMachine/Core (6.9.0)
-  - TBStateMachine/DebugSupport (6.9.0):
+  - TBStateMachine (6.10.0):
+    - TBStateMachine/Core (= 6.10.0)
+  - TBStateMachine/Builder (6.10.0):
+    - TBStateMachine/Core
+  - TBStateMachine/Core (6.10.0)
+  - TBStateMachine/DebugSupport (6.10.0):
     - TBStateMachine/Core
 
 DEPENDENCIES:
   - Expecta
   - Specta
   - TBStateMachine (from `../`)
+  - TBStateMachine/Builder (from `../`)
   - TBStateMachine/DebugSupport (from `../`)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Expecta
+    - Specta
 
 EXTERNAL SOURCES:
   TBStateMachine:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
   Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
-  TBStateMachine: 5e92033cb3633d1a2518398cba3ddf660f5e9a7b
+  TBStateMachine: da88f56bef7ecaf89e89f3c714d1eb1f5d8de53d
 
-PODFILE CHECKSUM: 0b8bb88eedca5d1fee38367f10ef60ba2a5629b9
+PODFILE CHECKSUM: 49783ab2ae73b624e701bb55acb71c21287cb6de
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0

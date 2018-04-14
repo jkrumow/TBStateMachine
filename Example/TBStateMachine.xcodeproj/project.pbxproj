@@ -8,17 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		150FD64019D8543E00D9D1BA /* TBSMTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */; };
+		15148CCF20827F0D0074F746 /* statemachine.json in Resources */ = {isa = PBXBuildFile; fileRef = 15148CCE20827F0D0074F746 /* statemachine.json */; };
 		151C5C0C19CDF6A4003D21AE /* TBSMSubStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */; };
 		155BB54A19C610D200EB1C74 /* TBSMStateMachineSimpleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */; };
 		155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */; };
 		155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 155BB54D19C612A400EB1C74 /* TBSMEventTests.m */; };
 		157AB33B1AD00215006A86AA /* TBStateMachineDebugSupportTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 157AB33A1AD00215006A86AA /* TBStateMachineDebugSupportTests.m */; };
 		15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */; };
+		15BC58FC207ECD2300722456 /* TBSMStateMachineBuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BC58FB207ECD2300722456 /* TBSMStateMachineBuilderTests.m */; };
 		15C716CB1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */; };
 		15C716CD1ABE08FB00E3076A /* TBSMPseudoStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */; };
 		15CC17F01ABCB6B3009ABEEC /* TBSMJoinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */; };
 		15CC17F21ABCB72E009ABEEC /* TBSMForkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */; };
+		15D73791207ED83E00956525 /* simple.json in Resources */ = {isa = PBXBuildFile; fileRef = 15D7378F207ED83E00956525 /* simple.json */; };
+		15D73792207ED83E00956525 /* nested.json in Resources */ = {isa = PBXBuildFile; fileRef = 15D73790207ED83E00956525 /* nested.json */; };
 		15DCC5CB1AE992D900CF3750 /* TBSMJunctionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15DCC5CA1AE992D900CF3750 /* TBSMJunctionTests.m */; };
+		3BA1A93F207F6B69000FD073 /* pseudo.json in Resources */ = {isa = PBXBuildFile; fileRef = 3BA1A93E207F6B69000FD073 /* pseudo.json */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -29,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMTransitionTests.m; sourceTree = "<group>"; };
+		15148CCE20827F0D0074F746 /* statemachine.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = statemachine.json; sourceTree = "<group>"; };
 		151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMSubStateTests.m; sourceTree = "<group>"; };
 		155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineSimpleTests.m; sourceTree = "<group>"; };
 		155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateTests.m; sourceTree = "<group>"; };
@@ -36,11 +42,15 @@
 		157AB33A1AD00215006A86AA /* TBStateMachineDebugSupportTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBStateMachineDebugSupportTests.m; sourceTree = "<group>"; };
 		15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineNestedTests.m; sourceTree = "<group>"; };
 		15B1453719BCFDA700924D92 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		15BC58FB207ECD2300722456 /* TBSMStateMachineBuilderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TBSMStateMachineBuilderTests.m; sourceTree = "<group>"; };
 		15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMCompoundTransitionTests.m; sourceTree = "<group>"; };
 		15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMPseudoStateTests.m; sourceTree = "<group>"; };
 		15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMJoinTests.m; sourceTree = "<group>"; };
 		15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMForkTests.m; sourceTree = "<group>"; };
+		15D7378F207ED83E00956525 /* simple.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = simple.json; sourceTree = "<group>"; };
+		15D73790207ED83E00956525 /* nested.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = nested.json; sourceTree = "<group>"; };
 		15DCC5CA1AE992D900CF3750 /* TBSMJunctionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBSMJunctionTests.m; sourceTree = "<group>"; };
+		3BA1A93E207F6B69000FD073 /* pseudo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pseudo.json; sourceTree = "<group>"; };
 		3E709A7175FE9AA2F9F088F5 /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -73,6 +83,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		15D7378E207ED83E00956525 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				15148CCE20827F0D0074F746 /* statemachine.json */,
+				15D7378F207ED83E00956525 /* simple.json */,
+				15D73790207ED83E00956525 /* nested.json */,
+				3BA1A93E207F6B69000FD073 /* pseudo.json */,
+			);
+			path = Fixtures;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -107,18 +128,20 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */,
-				15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */,
-				155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */,
-				151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */,
-				6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */,
+				15D7378E207ED83E00956525 /* Fixtures */,
+				15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */,
+				155BB54D19C612A400EB1C74 /* TBSMEventTests.m */,
 				15CC17F11ABCB72E009ABEEC /* TBSMForkTests.m */,
 				15CC17EF1ABCB6B3009ABEEC /* TBSMJoinTests.m */,
 				15DCC5CA1AE992D900CF3750 /* TBSMJunctionTests.m */,
+				6003F5BB195388D20070C39A /* TBSMParallelStateTests.m */,
 				15C716CC1ABE08FB00E3076A /* TBSMPseudoStateTests.m */,
-				155BB54D19C612A400EB1C74 /* TBSMEventTests.m */,
+				15BC58FB207ECD2300722456 /* TBSMStateMachineBuilderTests.m */,
+				15A2F99B19CB4CD600614B4E /* TBSMStateMachineNestedTests.m */,
+				155BB54919C610D200EB1C74 /* TBSMStateMachineSimpleTests.m */,
+				155BB54B19C6122B00EB1C74 /* TBSMStateTests.m */,
+				151C5C0B19CDF6A3003D21AE /* TBSMSubStateTests.m */,
 				150FD63F19D8543E00D9D1BA /* TBSMTransitionTests.m */,
-				15C716CA1ABE08EA00E3076A /* TBSMCompoundTransitionTests.m */,
 				157AB33A1AD00215006A86AA /* TBStateMachineDebugSupportTests.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
@@ -166,8 +189,7 @@
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				65C00FF41372798ED960354F /* [CP] Embed Pods Frameworks */,
-				878B65E80A8A248D6285A244 /* [CP] Copy Pods Resources */,
+				48EA3D322FA7CD1A049560F7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -212,36 +234,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */,
+				15D73791207ED83E00956525 /* simple.json in Resources */,
+				15D73792207ED83E00956525 /* nested.json in Resources */,
+				3BA1A93F207F6B69000FD073 /* pseudo.json in Resources */,
+				15148CCF20827F0D0074F746 /* statemachine.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		65C00FF41372798ED960354F /* [CP] Embed Pods Frameworks */ = {
+		48EA3D322FA7CD1A049560F7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		878B65E80A8A248D6285A244 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/TBStateMachine/TBStateMachineBuilder.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TBStateMachineBuilder.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -282,6 +296,7 @@
 				15DCC5CB1AE992D900CF3750 /* TBSMJunctionTests.m in Sources */,
 				155BB54E19C612A400EB1C74 /* TBSMEventTests.m in Sources */,
 				15A2F99C19CB4CD600614B4E /* TBSMStateMachineNestedTests.m in Sources */,
+				15BC58FC207ECD2300722456 /* TBSMStateMachineBuilderTests.m in Sources */,
 				155BB54C19C6122B00EB1C74 /* TBSMStateTests.m in Sources */,
 				15CC17F21ABCB72E009ABEEC /* TBSMForkTests.m in Sources */,
 				15CC17F01ABCB6B3009ABEEC /* TBSMJoinTests.m in Sources */,

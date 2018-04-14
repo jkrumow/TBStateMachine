@@ -105,24 +105,19 @@ describe(@"TBSMStateMachine", ^{
     describe(@"Location inside hierarchy.", ^{
         
         it(@"returns its path inside the state machine hierarchy containing all parent state machines in descending order.", ^{
+            TBSMSubState *s = [TBSMSubState subStateWithName:@"s"];
+            s.states = @[b];
             
-            TBSMStateMachine *subStateMachineA = [TBSMStateMachine stateMachineWithName:@"SubA"];
-            TBSMStateMachine *subStateMachineB = [TBSMStateMachine stateMachineWithName:@"SubB"];
-            TBSMParallelState *parallelStates = [TBSMParallelState parallelStateWithName:@"ParallelWrapper"];
-            subStateMachineB.states = @[b];
-            TBSMSubState *subStateB = [TBSMSubState subStateWithName:@"subStateB"];
-            subStateB.stateMachine = subStateMachineB;
-            subStateMachineA.states = @[subStateB];
+            TBSMParallelState *p = [TBSMParallelState parallelStateWithName:@"ParallelWrapper"];
+            p.states = @[@[s]];
+            stateMachine.states = @[p];
             
-            parallelStates.stateMachines = @[subStateMachineA];
-            stateMachine.states = @[parallelStates];
-            
-            NSArray *path = [subStateMachineB path];
+            NSArray *path = [s.stateMachine path];
             
             expect(path.count).to.equal(3);
             expect(path[0]).to.equal(stateMachine);
-            expect(path[1]).to.equal(subStateMachineA);
-            expect(path[2]).to.equal(subStateMachineB);
+            expect(path[1]).to.equal(p.stateMachines[0]);
+            expect(path[2]).to.equal(s.stateMachine);
         });
         
     });

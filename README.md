@@ -264,6 +264,21 @@ In orthogonal regions an `@` sign and an index is added to select the particular
 c/c2@1/c222
 ```
 
+### Configuration Files
+
+A state machine can be configured via json file and built by `TBSMStateMachineBuilder`:
+
+```ruby
+pod 'TBStateMachine/DebugSupport'
+```
+
+```objc
+#import <TBStateMachine/TBSMStateMachineBuilder.h>
+
+NSString *path = // path to file
+TBMSStateMachine *stateMachine = [TBSMStateMachineBuilder buildFromFile:path];
+```
+
 ### Thread Safety and Concurrency
 
 `TBStateMachine` is thread safe. Each event is processed asynchronously on the main queue by default. This makes handling of UIKit components convenient.

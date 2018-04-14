@@ -15,7 +15,7 @@ NSString * const EVENT_NAME_A = @"DummyEventA";
 __block TBSMState *a;
 __block TBSMState *b;
 __block TBSMState *c;
-__block TBSMParallelState *parallel;
+__block TBSMParallelState *p;
 __block TBSMParallelState *empty;
 __block TBSMFork *fork;
 __block TBSMJoin *join;
@@ -23,25 +23,25 @@ __block TBSMJoin *join;
 describe(@"TBSMCompoundTransition", ^{
     
     beforeEach(^{
+        
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];
         c = [TBSMState stateWithName:@"c"];
-        parallel = [TBSMParallelState parallelStateWithName:@"parallel"];
-        TBSMStateMachine *subMachineA = [TBSMStateMachine stateMachineWithName:@"subMachineA"];
-        subMachineA.states = @[a];
-        parallel.stateMachines = @[subMachineA];
+        p = [TBSMParallelState parallelStateWithName:@"parallel"];
         empty = [TBSMParallelState parallelStateWithName:@"empty"];
+        
+        p.states = @[@[a]];
         fork = [TBSMFork forkWithName:@"fork"];
-        [fork setTargetStates:@[a, b] inRegion:parallel];
+        [fork setTargetStates:@[a, b] inRegion:p];
         join = [TBSMJoin joinWithName:@"join"];
-        [join setSourceStates:@[a, b] inRegion:parallel target:c];
+        [join setSourceStates:@[a, b] inRegion:p target:c];
     });
     
     afterEach(^{
         a = nil;
         b = nil;
         c = nil;
-        parallel = nil;
+        p = nil;
         empty = nil;
         fork = nil;
         join = nil;
@@ -74,9 +74,7 @@ describe(@"TBSMCompoundTransition", ^{
     
     it (@"returns action block.", ^{
         
-        TBSMActionBlock action = ^(id data) {
-            
-        };
+        TBSMActionBlock action = ^(id data) {};
         
         TBSMCompoundTransition *transition = [[TBSMCompoundTransition alloc] initWithSourceState:a targetPseudoState:join action:action guard:nil eventName:EVENT_NAME_A];
         expect(transition.action).to.equal(action);

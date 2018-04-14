@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "TBStateMachine"
-  s.version          = "6.9.0"
+  s.version          = "6.10.0"
   s.summary          = "A lightweight hierarchical state machine framework in Objective-C."
   s.description      = <<-DESC
                        Supports all common features of a UML state machine like:
@@ -28,6 +28,12 @@ Pod::Spec.new do |s|
     core.source_files = 'Pod/Core'
   end
 
+  s.subspec 'Builder' do |builder|
+    builder.source_files = 'Pod/Builder'
+    builder.resource_bundle = { 'TBStateMachineBuilder' => 'Pod/Builder/Schema/*.json' }
+    builder.dependency 'TBStateMachine/Core'
+  end
+  
   s.subspec 'DebugSupport' do |debug|
     debug.source_files = 'Pod/DebugSupport'
     debug.dependency 'TBStateMachine/Core'

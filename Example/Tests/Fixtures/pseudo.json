@@ -1,0 +1,105 @@
+{
+  "name": "main",
+  "states": [
+    {
+      "name": "a",
+      "states": [
+        {
+          "name": "a1",
+          "type": "state"
+        },
+        {
+          "name": "a2",
+          "type": "state"
+        }
+      ],
+      "type": "sub"
+    },
+    {
+      "name": "b",
+      "regions": [
+        [
+          {
+            "name": "b11",
+            "type": "state"
+          }
+        ],
+        [
+          {
+            "name": "b21",
+            "type": "state"
+          },
+          {
+            "name": "b22",
+            "type": "state"
+          }
+        ]
+      ],
+      "type": "parallel"
+    },
+    {
+      "name": "c",
+      "type": "state"
+    }
+  ],
+  "transitions": [
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a1_a2",
+      "source": "a/a1",
+      "target": "a/a2"
+    },
+    {
+      "type": "compound",
+      "name": "fork_b",
+      "vertices": {
+        "incoming": [
+          {
+            "source": "a/a1",
+            "name": "fork_b"
+          }
+        ],
+        "outgoing": [
+          {
+            "target": "b@0/b11"
+          },
+          {
+            "target": "b@1/b21"
+          }
+        ]
+      },
+      "pseudo_state": {
+        "type": "fork",
+        "name": "fork_1",
+        "region": "b"
+      }
+    },
+    {
+      "type": "compound",
+      "name": "join_c",
+      "vertices": {
+        "incoming": [
+          {
+            "source": "b@0/b11",
+            "name": "b11_join"
+          },
+          {
+            "source": "b@1/b21",
+            "name": "b21_join"
+          }
+        ],
+        "outgoing": [
+          {
+            "target": "c"
+          }
+        ]
+      },
+      "pseudo_state": {
+        "type": "join",
+        "name": "join_1",
+        "region": "b"
+      }
+    }
+  ]
+}

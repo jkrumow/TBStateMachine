@@ -27,15 +27,8 @@ beforeEach(^{
     b = [TBSMState stateWithName:@"b"];
     c = [TBSMState stateWithName:@"c"];
     
-    TBSMStateMachine *paraB = [TBSMStateMachine stateMachineWithName:@"paraB"];
-    TBSMStateMachine *paraC = [TBSMStateMachine stateMachineWithName:@"paraC"];
-    paraB.states = @[b];
-    paraC.states = @[c];
-    p.stateMachines = @[paraB, paraC];
-    
-    s.stateMachine = [TBSMStateMachine stateMachineWithName:@"sub"];
-    s.stateMachine.states = @[p, a];
-    
+    p.states = @[@[b], @[c]];
+    s.states = @[p, a];
     stateMachine.states = @[s];
     [stateMachine setUp:nil];
 });
@@ -62,7 +55,7 @@ describe(@"DebugSupport", ^{
         
         it(@"returns an NSArray containing all names of the currently activated states and their containing state machines.", ^{
             
-            NSString *expectedConfiguration = @"main\n\ts\n\t\tsub\n\t\t\tp\n\t\t\t\tparaB\n\t\t\t\t\tb\n\t\t\t\tparaC\n\t\t\t\t\tc\n";
+            NSString *expectedConfiguration = @"main\n\ts\n\t\tsSubMachine\n\t\t\tp\n\t\t\t\tpSubMachine-0\n\t\t\t\t\tb\n\t\t\t\tpSubMachine-1\n\t\t\t\t\tc\n";
             
             [[TBSMDebugger sharedInstance] debugStateMachine:stateMachine];
             NSString *configuration = [[TBSMDebugger sharedInstance] activeStateConfiguration];

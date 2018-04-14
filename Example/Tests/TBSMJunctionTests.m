@@ -12,8 +12,6 @@ SpecBegin(TBSMJunction)
 
 __block TBSMState *a;
 __block TBSMState *b;
-__block TBSMState *c;
-__block TBSMState *d;
 __block TBSMStateMachine *stateMachine;
 
 describe(@"TBSMJunction", ^{
@@ -21,17 +19,13 @@ describe(@"TBSMJunction", ^{
     beforeEach(^{
         a = [TBSMState stateWithName:@"a"];
         b = [TBSMState stateWithName:@"b"];
-        c = [TBSMState stateWithName:@"c"];
-        d = [TBSMState stateWithName:@"d"];
         stateMachine = [TBSMStateMachine stateMachineWithName:@"stateMachine"];
-        stateMachine.states = @[a, b, c, d];
+        stateMachine.states = @[a, b];
     });
     
     afterEach(^{
         a = nil;
         b = nil;
-        c = nil;
-        d = nil;
         stateMachine = nil;
     });
     
@@ -56,12 +50,12 @@ describe(@"TBSMJunction", ^{
         it (@"throws a TBSMException when no outgoing path could be determined.", ^{
             
             TBSMJunction *junction = [TBSMJunction junctionWithName:@"junction"];
-            [junction addOutgoingPathWithTarget:b action:nil guard:^BOOL(id data) {
+            [junction addOutgoingPathWithTarget:a action:nil guard:^BOOL(id data) {
                 return NO;
             }];
             
             expect(^{
-                [junction outgoingPathForTransition:a data:nil];
+                [junction outgoingPathForTransition:b data:nil];
             }).to.raise(TBSMException);
         });
     });

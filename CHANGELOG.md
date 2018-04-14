@@ -1,5 +1,9 @@
 # TBStateMachine CHANGELOG
 
+### 6.10.0
+
+- add TBSMStateMachineBuilder class to configure statemachines via json
+
 ### 6.9.0
 
 - add methods to subscribe and unsubscribe to notifications

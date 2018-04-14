@@ -1,0 +1,40 @@
+{
+  "name": "main",
+  "states": [
+    {
+      "name": "a",
+      "type": "state"
+    },
+    {
+      "name": "b",
+      "type": "state"
+    },
+    {
+      "name": "c",
+      "type": "state"
+    }
+  ],
+  "transitions": [
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "a_b",
+      "source": "a",
+      "target": "b"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "b_c",
+      "source": "b",
+      "target": "c"
+    },
+    {
+      "type": "simple",
+      "kind": "external",
+      "name": "c_a",
+      "source": "c",
+      "target": "a"
+    }
+  ]
+}
