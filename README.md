@@ -279,6 +279,12 @@ NSString *path = // path to file
 TBMSStateMachine *stateMachine = [TBSMStateMachineBuilder buildFromFile:path];
 ```
 
+The format of the configuration file can be seen [in the test fixtures](https://github.com/jkrumow/TBStateMachine/tree/master/Example/Tests/Fixtures).
+
+The json of configuration file follows the json-schema defined in [Pod/Builder/Schema/schema.json](https://github.com/jkrumow/TBStateMachine/blob/master/Pod/Builder/Schema/schema.json).
+
+For further information to json schema in general see [http://json-schema.org](http://json-schema.org).
+
 ### Thread Safety and Concurrency
 
 `TBStateMachine` is thread safe. Each event is processed asynchronously on the main queue by default. This makes handling of UIKit components convenient.
