@@ -144,19 +144,10 @@ const struct StateMachineEvents StateMachineEvents = {
 };
 ```
 
-or you can also create a special enumeration type `StateMachineEvents `:
+And use it like this:
 
 ```objc
-typedef NS_ENUM(NSInteger, StateMachineEvents) {
-    Transition_1,
-    Transition_2
-};
-```
-
-And access them using a macro of the same name:
-
-```objc
-[stateMachine scheduleEventNamed:StateMachineEvents(Transition_1) data:aPayloadObject];
+[stateMachine scheduleEventNamed:StateMachineEvents.Transition_1 data:aPayloadObject];
 ```
 
 #### Run-to-Completion
