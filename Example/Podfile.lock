@@ -17,7 +17,7 @@ DEPENDENCIES:
   - TBStateMachine/DebugSupport (from `../`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - Expecta
     - Specta
 
@@ -28,8 +28,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
   Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
-  TBStateMachine: da88f56bef7ecaf89e89f3c714d1eb1f5d8de53d
+  TBStateMachine: 6d90c711c401d4700154b918292f5913618a9b2f
 
 PODFILE CHECKSUM: 49783ab2ae73b624e701bb55acb71c21287cb6de
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.6.1
