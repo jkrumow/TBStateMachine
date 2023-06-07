@@ -15,9 +15,7 @@ Pod::Spec.new do |s|
   s.license          = 'MIT'
   s.author           = { "Julian Krumow" => "julian.krumow@bogusmachine.com" }
 
-  s.ios.deployment_target = '10.0'
-  s.watchos.deployment_target = '5.0'
-  s.tvos.deployment_target = '10.0'
+  s.ios.deployment_target = '11.0'
   s.osx.deployment_target = '10.11'
 
   s.requires_arc = true
