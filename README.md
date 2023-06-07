@@ -254,7 +254,8 @@ c/c2@1/c222
 
 ### Configuration Files
 
-A state machine can be configured via json file and built by `TBSMStateMachineBuilder`:
+Instead of configuring the state machine in code you can define states and transitions via json file.
+This file is read `TBSMStateMachineBuilder` and builds a state machine instance:
 
 ```ruby
 pod 'TBStateMachine/Builder'
@@ -263,7 +264,7 @@ pod 'TBStateMachine/Builder'
 ```objc
 #import <TBStateMachine/TBSMStateMachineBuilder.h>
 
-NSString *path = // path to file
+NSString *path = // path to json file
 TBMSStateMachine *stateMachine = [TBSMStateMachineBuilder buildFromFile:path];
 ```
 
