@@ -252,10 +252,10 @@ In orthogonal regions an `@` sign and an index is added to select the particular
 c/c2@1/c222
 ```
 
-### Configuration Files
+### Configuration via JSON
 
-Instead of configuring the state machine in code you can define states and transitions via json file.
-This file is read `TBSMStateMachineBuilder` and builds a state machine instance:
+Instead of configuring the state machine in code you can define states and transitions via `json`.
+`TBSMStateMachineBuilder` reads the `json` file and builds a state machine instance from that:
 
 ```ruby
 pod 'TBStateMachine/Builder'
